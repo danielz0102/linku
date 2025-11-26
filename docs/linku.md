@@ -1,4 +1,6 @@
-# Linku - Requirements
+# Linku
+
+Linku is a real-time messaging web application that allows users to connect, chat, and share images with friends.
 
 ## Core Features
 
