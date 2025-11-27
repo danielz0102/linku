@@ -9,16 +9,22 @@ const meta = {
     layout: "centered",
   },
   args: { onChange: fn() },
-  render: (args) => (
-    <div className="w-2xs">
-      <ToggleSwitch {...args} />
-    </div>
-  ),
+  tags: ["autodocs"],
+  decorators: [
+    (Story) => (
+      <div className="w-2xs">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof ToggleSwitch>
 export default meta
 
 type Story = StoryObj<typeof meta>
 
+/**
+ * Normal toggle switch button
+ */
 export const Default: Story = {
   args: {
     textOn: "Option 1",
