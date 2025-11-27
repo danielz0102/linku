@@ -1,4 +1,5 @@
 import type { PropsWithChildren } from "react"
+import { useState } from "react"
 import { twMerge } from "tailwind-merge"
 
 interface ToggleSwitchProps {
@@ -12,21 +13,31 @@ export default function ToggleSwitch({
   textOff,
   onChange,
 }: ToggleSwitchProps) {
+  const [checked, setChecked] = useState(false)
+
   return (
     <label className="relative flex w-full cursor-pointer items-center overflow-hidden rounded-full bg-neutral-800">
       <input
         type="checkbox"
+        role="switch"
+        aria-checked={checked}
+        aria-label={`Switch between ${textOff} and ${textOn}`}
         className="peer sr-only"
         onChange={(e) => {
-          onChange?.(e.target.checked)
+          const newChecked = e.target.checked
+          setChecked(newChecked)
+          onChange?.(newChecked)
         }}
       />
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        {checked ? textOn : textOff}
+      </div>
       <Slider />
       <OptionText className="text-white peer-checked:text-neutral-300">
-        {textOn}
+        {textOff}
       </OptionText>
       <OptionText className="text-neutral-300 peer-checked:text-white">
-        {textOff}
+        {textOn}
       </OptionText>
     </label>
   )

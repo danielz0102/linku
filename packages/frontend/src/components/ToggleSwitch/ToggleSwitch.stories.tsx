@@ -27,7 +27,7 @@ type Story = StoryObj<typeof meta>
  */
 export const Default: Story = {
   args: {
-    textOn: "Option 1",
-    textOff: "Option 2",
+    textOff: "Option 1",
+    textOn: "Option 2",
   },
 }
