@@ -90,3 +90,53 @@ describe("FormField.Link", () => {
     expect(link).toHaveAttribute("rel", "noopener noreferrer")
   })
 })
+
+describe("FormField.Input validation", () => {
+  it("displays validation message from the Validation API when invalid", async () => {
+    const user = userEvent.setup()
+    render(
+      <form>
+        <FF.Input placeholder="Email" required />
+        <button type="submit">Submit</button>
+      </form>
+    )
+
+    const input = screen.getByPlaceholderText<HTMLInputElement>("Email")
+    input.setCustomValidity("Please fill out this field")
+
+    await user.click(screen.getByRole("button", { name: "Submit" }))
+
+    const errorMessage = screen.getByText("Please fill out this field")
+    expect(errorMessage).toBeVisible()
+  })
+
+  it("clears error message when input becomes valid", async () => {
+    const user = userEvent.setup()
+    render(
+      <form>
+        <FF.Input placeholder="Email" required />
+        <button type="submit">Submit</button>
+      </form>
+    )
+
+    const input = screen.getByPlaceholderText<HTMLInputElement>("Email")
+    input.setCustomValidity("Please fill out this field")
+
+    await user.click(screen.getByRole("button", { name: "Submit" }))
+
+    const errorContainer = screen.getByText("Please fill out this field")
+    expect(errorContainer).toBeVisible()
+
+    input.setCustomValidity("")
+    await user.type(input, "test@example.com")
+
+    expect(errorContainer).toBeEmptyDOMElement()
+  })
+
+  it("error message container has aria-live=polite for accessibility", () => {
+    render(<FF.Input placeholder="Email" required />)
+
+    const errorContainer = document.querySelector("[aria-live='polite']")
+    expect(errorContainer).toHaveAttribute("aria-atomic", "true")
+  })
+})
