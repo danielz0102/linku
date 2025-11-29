@@ -99,3 +99,61 @@ export const CompleteLoginForm: Story = {
     </div>
   ),
 }
+
+/**
+ * Required field validation. Submit the form with an empty field to see the error message.
+ */
+export const RequiredFieldValidation: Story = {
+  render: () => (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+      }}
+      className="flex flex-col gap-4"
+    >
+      <FormField>
+        <FormField.Label>Email</FormField.Label>
+        <FormField.Input
+          type="email"
+          placeholder="Enter your email"
+          required
+        />
+      </FormField>
+      <button
+        type="submit"
+        className="rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
+      >
+        Submit
+      </button>
+    </form>
+  ),
+}
+
+/**
+ * Email format validation. Enter an invalid email to see the error message.
+ */
+export const EmailValidation: Story = {
+  render: () => (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+      }}
+      className="flex flex-col gap-4"
+    >
+      <FormField>
+        <FormField.Label>Email</FormField.Label>
+        <FormField.Input
+          type="email"
+          placeholder="Enter your email"
+          defaultValue="invalid-email"
+        />
+      </FormField>
+      <button
+        type="submit"
+        className="rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
+      >
+        Submit
+      </button>
+    </form>
+  ),
+}

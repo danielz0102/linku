@@ -1,5 +1,5 @@
 import type { InputHTMLAttributes, PropsWithChildren } from "react"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { twMerge } from "tailwind-merge"
 import { Eye, EyeOff } from "lucide-react"
 
@@ -32,6 +32,8 @@ function FormFieldInput({
   ...props
 }: FormFieldInputProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
+  const inputRef = useRef<HTMLInputElement>(null)
   const isPasswordField = type === "password"
   const shouldShowToggle = isPasswordField && !hideVisibilityToggle
   const inputType = isPasswordField && isPasswordVisible ? "text" : type
@@ -41,31 +43,51 @@ function FormFieldInput({
     setIsPasswordVisible(newState)
   }
 
+  const updateValidationState = () => {
+    const input = inputRef.current
+    if (input) {
+      setErrorMessage(input.validationMessage)
+    }
+  }
+
   return (
-    <div className="relative">
-      <input
-        type={inputType}
-        className={twMerge(
-          "w-full rounded-lg bg-neutral-100 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:ring-2 focus:ring-indigo-600 focus:outline-none",
-          shouldShowToggle && "pr-12"
-        )}
-        {...props}
-      />
-      {shouldShowToggle && (
-        <button
-          type="button"
-          onClick={toggleVisibility}
-          aria-label={isPasswordVisible ? "Hide password" : "Show password"}
-          aria-live="polite"
-          className="absolute top-1/2 right-3 -translate-y-1/2 text-neutral-500 hover:text-neutral-700 focus:text-neutral-700 focus:outline-none"
-        >
-          {isPasswordVisible ? (
-            <EyeOff className="size-5" />
-          ) : (
-            <Eye className="size-5" />
+    <div className="flex flex-col gap-1">
+      <div className="relative">
+        <input
+          ref={inputRef}
+          type={inputType}
+          className={twMerge(
+            "w-full rounded-lg bg-neutral-100 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:ring-2 focus:ring-indigo-600 focus:outline-none",
+            shouldShowToggle && "pr-12",
+            errorMessage && "ring-2 ring-red-500"
           )}
-        </button>
-      )}
+          onInvalid={updateValidationState}
+          onChange={updateValidationState}
+          {...props}
+        />
+        {shouldShowToggle && (
+          <button
+            type="button"
+            onClick={toggleVisibility}
+            aria-label={isPasswordVisible ? "Hide password" : "Show password"}
+            aria-live="polite"
+            className="absolute top-1/2 right-3 -translate-y-1/2 text-neutral-500 hover:text-neutral-700 focus:text-neutral-700 focus:outline-none"
+          >
+            {isPasswordVisible ? (
+              <EyeOff className="size-5" />
+            ) : (
+              <Eye className="size-5" />
+            )}
+          </button>
+        )}
+      </div>
+      <span
+        className="text-sm text-red-500"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {errorMessage}
+      </span>
     </div>
   )
 }
