@@ -110,7 +110,7 @@ describe("FormField.Input validation", () => {
     expect(errorMessage).toBeVisible()
   })
 
-  it("clears error message when input becomes valid", async () => {
+  it("clears error message when input becomes valid and loses focus", async () => {
     const user = userEvent.setup()
     render(
       <form>
@@ -124,19 +124,33 @@ describe("FormField.Input validation", () => {
 
     await user.click(screen.getByRole("button", { name: "Submit" }))
 
-    const errorContainer = screen.getByText("Please fill out this field")
-    expect(errorContainer).toBeVisible()
+    const errorMessage = screen.getByText("Please fill out this field")
+    expect(errorMessage).toBeVisible()
 
     input.setCustomValidity("")
     await user.type(input, "test@example.com")
+    await user.tab()
 
-    expect(errorContainer).toBeEmptyDOMElement()
+    expect(errorMessage).toBeEmptyDOMElement()
   })
 
-  it("error message container has aria-live=polite for accessibility", () => {
-    render(<FF.Input placeholder="Email" required />)
+  it("supports custom error messages", async () => {
+    const user = userEvent.setup()
+    render(
+      <form action="">
+        <FF.Input
+          placeholder="Username"
+          required
+          setCustomError={(validity) =>
+            validity.valueMissing ? "Username is required" : ""
+          }
+        />
+        <button type="submit">Submit</button>
+      </form>
+    )
 
-    const errorContainer = document.querySelector("[aria-live='polite']")
-    expect(errorContainer).toHaveAttribute("aria-atomic", "true")
+    await user.click(screen.getByRole("button", { name: "Submit" }))
+
+    expect(screen.getByText("Username is required")).toBeVisible()
   })
 })

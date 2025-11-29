@@ -113,11 +113,7 @@ export const RequiredFieldValidation: Story = {
     >
       <FormField>
         <FormField.Label>Email</FormField.Label>
-        <FormField.Input
-          type="email"
-          placeholder="Enter your email"
-          required
-        />
+        <FormField.Input type="email" placeholder="Enter your email" required />
       </FormField>
       <button
         type="submit"
@@ -130,7 +126,7 @@ export const RequiredFieldValidation: Story = {
 }
 
 /**
- * Email format validation. Enter an invalid email to see the error message.
+ * Email format validation with custom error message. Enter an invalid email to see the error message.
  */
 export const EmailValidation: Story = {
   render: () => (
@@ -146,6 +142,13 @@ export const EmailValidation: Story = {
           type="email"
           placeholder="Enter your email"
           defaultValue="invalid-email"
+          setCustomError={(validity) => {
+            if (validity.typeMismatch) {
+              return "That's not an email!"
+            }
+
+            return ""
+          }}
         />
       </FormField>
       <button

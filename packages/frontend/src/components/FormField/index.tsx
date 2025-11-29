@@ -20,15 +20,22 @@ function FormFieldLabel({ children }: PropsWithChildren) {
   return <label className="text-sm font-medium text-white">{children}</label>
 }
 
+type OmittedInputProps = Pick<
+  InputHTMLAttributes<HTMLInputElement>,
+  "type" | "className" | "onInvalid" | "onBlur"
+>
+
 interface FormFieldInputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "className"> {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, keyof OmittedInputProps> {
   type?: "text" | "email" | "password"
   hideVisibilityToggle?: boolean
+  setCustomError?: (validity: ValidityState) => string
 }
 
 function FormFieldInput({
   type = "text",
   hideVisibilityToggle,
+  setCustomError,
   ...props
 }: FormFieldInputProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
@@ -45,9 +52,15 @@ function FormFieldInput({
 
   const updateValidationState = () => {
     const input = inputRef.current
-    if (input) {
-      setErrorMessage(input.validationMessage)
+
+    if (!input) {
+      throw new Error("Input ref is not assigned")
     }
+
+    const errorMessage = setCustomError
+      ? setCustomError(input.validity)
+      : input.validationMessage
+    setErrorMessage(errorMessage)
   }
 
   return (
@@ -61,8 +74,11 @@ function FormFieldInput({
             shouldShowToggle && "pr-12",
             errorMessage && "ring-2 ring-red-500"
           )}
-          onInvalid={updateValidationState}
-          onChange={updateValidationState}
+          onInvalid={(e) => {
+            e.preventDefault()
+            updateValidationState()
+          }}
+          onBlur={updateValidationState}
           {...props}
         />
         {shouldShowToggle && (
@@ -81,11 +97,7 @@ function FormFieldInput({
           </button>
         )}
       </div>
-      <span
-        className="text-sm text-red-500"
-        aria-live="polite"
-        aria-atomic="true"
-      >
+      <span className="text-sm text-red-500" role="alert">
         {errorMessage}
       </span>
     </div>
