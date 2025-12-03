@@ -47,6 +47,7 @@ export default defineConfig({
         test: {
           name: "unit",
           environment: "happy-dom",
+          globals: true,
           include: ["src/**/*.test.{ts,tsx}"],
           exclude: ["src/**/*.stories.{ts,tsx}", "node_modules"],
           setupFiles: ["src/test/setup.ts"],

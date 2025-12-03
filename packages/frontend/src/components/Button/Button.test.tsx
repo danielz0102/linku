@@ -1,4 +1,3 @@
-import { expect, vi, test } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import Button from "./index"
