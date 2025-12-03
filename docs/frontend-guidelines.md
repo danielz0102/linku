@@ -3,6 +3,7 @@
 ## Accessibility
 
 * Ensure all interactive elements whose content changes dynamically are properly announced to screen readers. Use ARIA attributes like `aria-live` and `aria-atomic`.
+* Do not overuse aria attributes. Prefer native HTML attributes and elements.
 
 ## Testing
 
@@ -10,3 +11,4 @@
 * Use `toHaveAttribute()` to verify element attributes instead of directly accessing properties.
 * Prefer use jest-matchers over previous gotten elements in assertions, instead of re-querying the DOM. For example, use `expect(toggle).toHaveAccessibleName("Hide password")` instead of `expect(screen.getByRole("button", { name: /hide password/i })).toBeInTheDocument()`.
 * Do not test for specific CSS classes in component tests. Focus on behavior and accessibility instead.
+* Do not test if SVG icon is in the document. Test the accessible name that should be present when the icon is shown.
