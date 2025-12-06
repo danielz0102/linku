@@ -51,6 +51,15 @@ export const PasswordField: Story = {
       />
     </FormField>
   ),
+  play: async ({ userEvent, canvas }) => {
+    const toggle = canvas.getByRole("button", { name: /show password/i })
+
+    await userEvent.click(toggle)
+
+    const input = canvas.getByLabelText("Password")
+    await expect(input).toHaveAttribute("type", "text")
+    await expect(toggle).toHaveAccessibleName(/hide password/i)
+  },
 }
 
 /**
