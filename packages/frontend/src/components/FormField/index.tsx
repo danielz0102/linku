@@ -16,8 +16,16 @@ function FormFieldLabelRow({ children }: PropsWithChildren) {
   return <div className="flex items-center justify-between">{children}</div>
 }
 
-function FormFieldLabel({ children }: PropsWithChildren) {
-  return <label className="text-sm font-medium text-white">{children}</label>
+interface FormFieldLabelProps extends PropsWithChildren {
+  htmlFor?: string
+}
+
+function FormFieldLabel({ children, htmlFor }: FormFieldLabelProps) {
+  return (
+    <label htmlFor={htmlFor} className="text-sm font-medium text-white">
+      {children}
+    </label>
+  )
 }
 
 type OmittedInputProps = Pick<

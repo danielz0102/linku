@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { fn } from "storybook/test"
+import { expect, fn } from "storybook/test"
 import Button from "./index"
 
 const meta = {
@@ -29,6 +29,10 @@ export const Default: Story = {
   args: {
     children: "Log In",
   },
+  play: async ({ args, userEvent, canvas }) => {
+    await userEvent.click(canvas.getByRole("button"))
+    await expect(args.onClick).toHaveBeenCalled()
+  },
 }
 
 /**
@@ -39,6 +43,11 @@ export const Loading: Story = {
     children: "Log In",
     isLoading: true,
   },
+  play: async ({ canvas }) => {
+    const button = canvas.getByRole("button", { name: /loading/i })
+    await expect(button).toBeVisible()
+    await expect(button).toBeDisabled()
+  },
 }
 
 /**
@@ -48,6 +57,11 @@ export const Disabled: Story = {
   args: {
     children: "Log In",
     disabled: true,
+  },
+  play: async ({ args, canvas, userEvent }) => {
+    const button = canvas.getByRole("button", { name: "Log In" })
+    await userEvent.click(button)
+    await expect(args.onClick).not.toHaveBeenCalled()
   },
 }
 

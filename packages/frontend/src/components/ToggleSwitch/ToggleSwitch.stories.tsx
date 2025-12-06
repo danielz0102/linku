@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { fn } from "storybook/test"
+import { expect, fn } from "storybook/test"
 import ToggleSwitch from "."
 
 const meta = {
@@ -29,5 +29,20 @@ export const Default: Story = {
   args: {
     textOff: "Option 1",
     textOn: "Option 2",
+  },
+  play: async ({ args, userEvent, canvas }) => {
+    const sw = canvas.getByRole("switch", {
+      name: "Switch between Option 1 and Option 2",
+    })
+
+    await userEvent.click(sw)
+
+    await expect(sw).toBeChecked()
+    await expect(args.onChange).toHaveBeenCalledWith(true)
+
+    await userEvent.keyboard(" ")
+
+    await expect(sw).not.toBeChecked()
+    await expect(args.onChange).toHaveBeenCalledWith(false)
   },
 }

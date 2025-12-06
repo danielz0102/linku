@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import FormField from "./index"
+import { expect } from "storybook/test"
 
 const meta = {
   title: "UI/FormField",
@@ -26,8 +27,12 @@ type Story = StoryObj<typeof meta>
 export const EmailField: Story = {
   render: () => (
     <FormField>
-      <FormField.Label>Email / Username</FormField.Label>
-      <FormField.Input type="text" placeholder="Enter your email or username" />
+      <FormField.Label htmlFor="email">Email / Username</FormField.Label>
+      <FormField.Input
+        id="email"
+        type="text"
+        placeholder="Enter your email or username"
+      />
     </FormField>
   ),
 }
@@ -38,8 +43,12 @@ export const EmailField: Story = {
 export const PasswordField: Story = {
   render: () => (
     <FormField>
-      <FormField.Label>Password</FormField.Label>
-      <FormField.Input type="password" placeholder="Enter your password" />
+      <FormField.Label htmlFor="password">Password</FormField.Label>
+      <FormField.Input
+        id="password"
+        type="password"
+        placeholder="Enter your password"
+      />
     </FormField>
   ),
 }
@@ -50,8 +59,9 @@ export const PasswordField: Story = {
 export const PasswordFieldWithoutToggle: Story = {
   render: () => (
     <FormField>
-      <FormField.Label>Password</FormField.Label>
+      <FormField.Label htmlFor="password">Password</FormField.Label>
       <FormField.Input
+        id="password"
         type="password"
         placeholder="Enter your password"
         hideVisibilityToggle
@@ -67,36 +77,15 @@ export const FieldWithLink: Story = {
   render: () => (
     <FormField>
       <FormField.LabelRow>
-        <FormField.Label>Password</FormField.Label>
+        <FormField.Label htmlFor="password">Password</FormField.Label>
         <FormField.Link href="#">Forgot Password?</FormField.Link>
       </FormField.LabelRow>
-      <FormField.Input type="password" placeholder="Enter your password" />
+      <FormField.Input
+        id="password"
+        type="password"
+        placeholder="Enter your password"
+      />
     </FormField>
-  ),
-}
-
-/**
- * Complete login form with email and password fields.
- */
-export const CompleteLoginForm: Story = {
-  render: () => (
-    <div className="flex flex-col gap-4">
-      <FormField>
-        <FormField.Label>Email / Username</FormField.Label>
-        <FormField.Input
-          type="text"
-          placeholder="Enter your email or username"
-        />
-      </FormField>
-
-      <FormField>
-        <FormField.LabelRow>
-          <FormField.Label>Password</FormField.Label>
-          <FormField.Link href="#">Forgot Password?</FormField.Link>
-        </FormField.LabelRow>
-        <FormField.Input type="password" placeholder="Enter your password" />
-      </FormField>
-    </div>
   ),
 }
 
@@ -112,8 +101,13 @@ export const RequiredFieldValidation: Story = {
       className="flex flex-col gap-4"
     >
       <FormField>
-        <FormField.Label>Email</FormField.Label>
-        <FormField.Input type="email" placeholder="Enter your email" required />
+        <FormField.Label htmlFor="email">Email</FormField.Label>
+        <FormField.Input
+          id="email"
+          type="email"
+          placeholder="Enter your email"
+          required
+        />
       </FormField>
       <button
         type="submit"
@@ -123,6 +117,11 @@ export const RequiredFieldValidation: Story = {
       </button>
     </form>
   ),
+  play: async ({ userEvent, canvas }) => {
+    const button = canvas.getByRole("button", { name: "Submit" })
+    await userEvent.click(button)
+    await expect(canvas.getByText("Please fill out this field.")).toBeVisible()
+  },
 }
 
 /**
@@ -137,8 +136,9 @@ export const EmailValidation: Story = {
       className="flex flex-col gap-4"
     >
       <FormField>
-        <FormField.Label>Email</FormField.Label>
+        <FormField.Label htmlFor="email">Email</FormField.Label>
         <FormField.Input
+          id="email"
           type="email"
           placeholder="Enter your email"
           defaultValue="invalid-email"
@@ -159,4 +159,9 @@ export const EmailValidation: Story = {
       </button>
     </form>
   ),
+  play: async ({ userEvent, canvas }) => {
+    const button = canvas.getByRole("button", { name: "Submit" })
+    await userEvent.click(button)
+    await expect(canvas.getByText("That's not an email!")).toBeVisible()
+  },
 }
