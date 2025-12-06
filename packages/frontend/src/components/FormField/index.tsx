@@ -17,7 +17,7 @@ function FormFieldLabelRow({ children }: PropsWithChildren) {
 }
 
 interface FormFieldLabelProps extends PropsWithChildren {
-  htmlFor?: string
+  htmlFor: string
 }
 
 function FormFieldLabel({ children, htmlFor }: FormFieldLabelProps) {
@@ -30,17 +30,19 @@ function FormFieldLabel({ children, htmlFor }: FormFieldLabelProps) {
 
 type OmittedInputProps = Pick<
   InputHTMLAttributes<HTMLInputElement>,
-  "type" | "className" | "onInvalid" | "onBlur"
+  "type" | "className" | "onInvalid" | "onBlur" | "id"
 >
 
 interface FormFieldInputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, keyof OmittedInputProps> {
+  id: string
   type?: "text" | "email" | "password"
   hideVisibilityToggle?: boolean
   setCustomError?: (validity: ValidityState) => string
 }
 
 function FormFieldInput({
+  id,
   type = "text",
   hideVisibilityToggle,
   setCustomError,
@@ -52,6 +54,7 @@ function FormFieldInput({
   const isPasswordField = type === "password"
   const shouldShowToggle = isPasswordField && !hideVisibilityToggle
   const inputType = isPasswordField && isPasswordVisible ? "text" : type
+  const errorMessageId = `${id}-error`
 
   const toggleVisibility = () => {
     const newState = !isPasswordVisible
@@ -76,12 +79,15 @@ function FormFieldInput({
       <div className="relative">
         <input
           ref={inputRef}
+          id={id}
           type={inputType}
           className={twMerge(
             "w-full rounded-lg bg-neutral-100 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:ring-2 focus:ring-indigo-600 focus:outline-none",
             shouldShowToggle && "pr-12",
             errorMessage && "ring-2 ring-red-500"
           )}
+          aria-invalid={errorMessage ? "true" : undefined}
+          aria-errormessage={errorMessage ? errorMessageId : undefined}
           onInvalid={(e) => {
             e.preventDefault()
             updateValidationState()
@@ -105,7 +111,7 @@ function FormFieldInput({
           </button>
         )}
       </div>
-      <span className="text-sm text-red-500" role="alert">
+      <span id={errorMessageId} className="text-sm text-red-500" role="alert">
         {errorMessage}
       </span>
     </div>

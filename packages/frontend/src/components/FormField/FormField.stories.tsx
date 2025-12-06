@@ -121,6 +121,9 @@ export const RequiredFieldValidation: Story = {
     const button = canvas.getByRole("button", { name: "Submit" })
     await userEvent.click(button)
     await expect(canvas.getByText("Please fill out this field.")).toBeVisible()
+
+    const field = canvas.getByLabelText("Email")
+    await expect(field).toBeInvalid()
   },
 }
 
