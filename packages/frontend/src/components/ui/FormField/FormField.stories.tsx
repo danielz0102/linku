@@ -3,7 +3,6 @@ import FormField from "./index"
 import { expect } from "storybook/test"
 
 const meta = {
-  title: "UI/FormField",
   component: FormField,
   parameters: {
     layout: "centered",

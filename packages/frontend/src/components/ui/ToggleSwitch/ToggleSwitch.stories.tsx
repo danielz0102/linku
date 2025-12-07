@@ -3,7 +3,6 @@ import { expect, fn } from "storybook/test"
 import ToggleSwitch from "."
 
 const meta = {
-  title: "UI/ToggleSwitch",
   component: ToggleSwitch,
   parameters: {
     layout: "centered",
