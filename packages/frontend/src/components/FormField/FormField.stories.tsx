@@ -120,7 +120,7 @@ export const RequiredFieldValidation: Story = {
       </FormField>
       <button
         type="submit"
-        className="rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
+        className="rounded-lg bg-indigo-600 px-4 py-2 text-neutral-50 hover:bg-indigo-700"
       >
         Submit
       </button>
@@ -165,7 +165,7 @@ export const EmailValidation: Story = {
       </FormField>
       <button
         type="submit"
-        className="rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
+        className="rounded-lg bg-indigo-600 px-4 py-2 text-neutral-50 hover:bg-indigo-700"
       >
         Submit
       </button>

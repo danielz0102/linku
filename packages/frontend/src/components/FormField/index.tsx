@@ -22,7 +22,7 @@ interface FormFieldLabelProps extends PropsWithChildren {
 
 function FormFieldLabel({ children, htmlFor }: FormFieldLabelProps) {
   return (
-    <label htmlFor={htmlFor} className="text-sm font-medium text-white">
+    <label htmlFor={htmlFor} className="text-sm font-medium text-neutral-50">
       {children}
     </label>
   )

@@ -33,10 +33,10 @@ export default function ToggleSwitch({
         {checked ? textOn : textOff}
       </div>
       <Slider />
-      <OptionText className="text-white peer-checked:text-neutral-300">
+      <OptionText className="text-neutral-50 peer-checked:text-neutral-300">
         {textOff}
       </OptionText>
-      <OptionText className="text-neutral-300 peer-checked:text-white">
+      <OptionText className="text-neutral-300 peer-checked:text-neutral-50">
         {textOn}
       </OptionText>
     </label>
