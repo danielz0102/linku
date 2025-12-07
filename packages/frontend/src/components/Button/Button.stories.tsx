@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { expect, fn } from "storybook/test"
 import Button from "./index"
+import { Google } from "../icons/Google"
 
 const meta = {
   title: "UI/Button",
@@ -96,4 +97,29 @@ export const CustomClassName: Story = {
       </div>
     ),
   ],
+}
+
+/**
+ * Secondary button variant with transparent background and white border
+ */
+export const Secondary: Story = {
+  args: {
+    children: "Secondary Button",
+    variant: "secondary",
+  },
+}
+
+/**
+ * Button with icon and text
+ */
+export const WithIcon: Story = {
+  args: {
+    variant: "secondary",
+    children: (
+      <div className="flex items-center gap-4">
+        <Google className="size-5" />
+        Sign in with Google
+      </div>
+    ),
+  },
 }
