@@ -1,7 +1,7 @@
 import type { InputHTMLAttributes, PropsWithChildren } from "react"
 import { useRef, useState } from "react"
-import { twMerge } from "tailwind-merge"
 import { Eye, EyeOff } from "lucide-react"
+import cn from "~/utils/cn"
 
 export default function FormField({ children }: PropsWithChildren) {
   return <div className="flex flex-col gap-2">{children}</div>
@@ -81,7 +81,7 @@ function FormFieldInput({
           ref={inputRef}
           id={id}
           type={inputType}
-          className={twMerge(
+          className={cn(
             "w-full rounded-lg bg-neutral-100 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:ring-2 focus:ring-indigo-600 focus:outline-none",
             shouldShowToggle && "pr-12",
             errorMessage && "ring-2 ring-red-500"
