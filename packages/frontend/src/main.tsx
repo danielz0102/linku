@@ -1,12 +1,13 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
+import { RouterProvider } from "react-router-dom"
 import "./index.css"
 import "@fontsource/poppins"
-import App from "./App.tsx"
+import { router } from "~/router"
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </StrictMode>
 )
