@@ -68,9 +68,8 @@ function FormFieldInput({
       throw new Error("Input ref is not assigned")
     }
 
-    const errorMessage = setCustomError
-      ? setCustomError(input.validity)
-      : input.validationMessage
+    const errorMessage =
+      setCustomError?.(input.validity) || input.validationMessage
     setErrorMessage(errorMessage)
   }
 
