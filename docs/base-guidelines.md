@@ -1,5 +1,9 @@
 # Base Guidelines
 
+## Development Environment
+
+- You can run `pnpm dev` at the root of the repository to start storybook and the frontend application
+
 ## Code Style
 
 - Do not include unnecessary comments that explain obvious code behavior

@@ -12,11 +12,14 @@ interface LoginFormProps {
   onSubmit?: (data: LoginFormData) => void
 }
 
+export const LOGIN_FORM_NAME = "login-form"
+
 export default function LoginForm({ onSubmit }: LoginFormProps) {
   const data = useRef<LoginFormData>({ identifier: "", password: "" })
 
   return (
     <form
+      name={LOGIN_FORM_NAME}
       onSubmit={(e) => {
         e.preventDefault()
         onSubmit?.(data.current)

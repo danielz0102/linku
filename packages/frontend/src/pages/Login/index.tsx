@@ -10,7 +10,7 @@ export default function Login() {
   return (
     <div className="flex min-h-dvh flex-col items-center gap-4 bg-linear-to-br from-violet-950 via-slate-900 to-slate-950 p-8">
       <Header />
-      <main className="flex flex-col gap-8 rounded-4xl border border-neutral-700/50 bg-neutral-800/50 p-8 shadow-2xl backdrop-blur-sm md:min-w-md">
+      <main className="flex flex-col gap-8 rounded-4xl border border-neutral-700/50 bg-neutral-800/50 p-8 shadow-2xl backdrop-blur-sm md:w-lg">
         <ToggleSwitch textOff="Login" textOn="Sign Up" onChange={setIsSignUp} />
         <Activity mode={isSignUp ? "hidden" : "visible"}>
           <LoginForm />

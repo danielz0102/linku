@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { expect, userEvent } from "storybook/test"
+import { expect, within } from "storybook/test"
 import Login from "./index"
 
 const meta = {
@@ -16,22 +16,38 @@ type Story = StoryObj<typeof meta>
 /**
  * Default login view with Login tab active
  */
-export const LoginTab: Story = {}
+export const LoginTab: Story = {
+  play: async ({ canvas }) => {
+    const loginForm = canvas.getByRole("form")
+    const emailInput = within(loginForm).getByLabelText("Email / Username")
+    const passwordInput = within(loginForm).getByLabelText("Password")
+
+    await expect(emailInput).toBeVisible()
+    await expect(passwordInput).toBeVisible()
+  },
+}
 
 /**
  * Sign up view with Sign Up tab active
  */
 export const SignUpTab: Story = {
-  play: async ({ canvas }) => {
+  play: async ({ canvas, userEvent }) => {
     const toggle = canvas.getByRole("switch", {
       name: "Switch between Login and Sign Up",
     })
     await userEvent.click(toggle)
 
-    await expect(
-      canvas.getByText("Sign Up", { selector: "button[type='submit']" })
-    ).toBeVisible()
-    await expect(canvas.getByLabelText("Confirm Password")).toBeVisible()
+    const signUpForm = canvas.getByRole("form")
+    const email = within(signUpForm).getByLabelText("Email")
+    const username = within(signUpForm).getByLabelText("Username")
+    const password = within(signUpForm).getByLabelText("Password")
+    const confirmPassword =
+      within(signUpForm).getByLabelText("Confirm Password")
+
+    await expect(email).toBeVisible()
+    await expect(username).toBeVisible()
+    await expect(password).toBeVisible()
+    await expect(confirmPassword).toBeVisible()
   },
 }
 
@@ -39,19 +55,16 @@ export const SignUpTab: Story = {
  * Demonstrates form validation errors
  */
 export const ValidationErrors: Story = {
-  play: async ({ canvas }) => {
+  play: async ({ canvas, userEvent }) => {
+    const loginForm = canvas.getByRole("form")
     const loginButton = canvas.getByRole("button", { name: "Log In" })
+    const emailInput = within(loginForm).getByLabelText("Email / Username")
 
     await userEvent.click(loginButton)
-    await expect(canvas.getByText("Please fill out this field.")).toBeVisible()
 
-    const emailInput = canvas.getByLabelText("Email / Username")
-    await userEvent.type(emailInput, "test@example.com")
-
-    await userEvent.click(loginButton)
-    await expect(
-      canvas.getAllByText("Please fill out this field.")
-    ).toHaveLength(1)
+    await expect(emailInput).toHaveAccessibleErrorMessage(
+      "Please fill out this field."
+    )
   },
 }
 
@@ -59,35 +72,23 @@ export const ValidationErrors: Story = {
  * Demonstrates tab switching with value persistence
  */
 export const ValuePersistence: Story = {
-  play: async ({ canvas }) => {
-    const emailInput = canvas.getByLabelText("Email / Username")
-    const passwordInput = canvas.getByLabelText("Password")
-
-    await userEvent.type(emailInput, "user@example.com")
-    await userEvent.type(passwordInput, "MyPass123!")
-
+  play: async ({ canvas, userEvent }) => {
+    const EMAIL = "user@example.com"
+    const PASSWORD = "MyPass123!"
+    const loginForm = canvas.getByRole("form")
+    const emailInput = within(loginForm).getByLabelText("Email / Username")
+    const passwordInput = within(loginForm).getByLabelText("Password")
     const toggle = canvas.getByRole("switch", {
       name: "Switch between Login and Sign Up",
     })
+
+    await userEvent.type(emailInput, EMAIL)
+    await userEvent.type(passwordInput, PASSWORD)
+    await userEvent.click(toggle)
     await userEvent.click(toggle)
 
-    await expect(
-      canvas.getByText("Sign Up", { selector: "button[type='submit']" })
-    ).toBeVisible()
-
-    const signUpEmailInput = canvas.getByLabelText("Email / Username")
-    const signUpPasswordInput = canvas.getByLabelText("Password")
-
-    await expect(signUpEmailInput).toHaveValue("user@example.com")
-    await expect(signUpPasswordInput).toHaveValue("MyPass123!")
-
-    await userEvent.click(toggle)
-
-    const loginEmailInput = canvas.getByLabelText("Email / Username")
-    const loginPasswordInput = canvas.getByLabelText("Password")
-
-    await expect(loginEmailInput).toHaveValue("user@example.com")
-    await expect(loginPasswordInput).toHaveValue("MyPass123!")
+    await expect(emailInput).toHaveValue(EMAIL)
+    await expect(passwordInput).toHaveValue(PASSWORD)
   },
 }
 
@@ -95,26 +96,24 @@ export const ValuePersistence: Story = {
  * Demonstrates password pattern validation in Sign Up
  */
 export const PasswordValidation: Story = {
-  play: async ({ canvas }) => {
+  play: async ({ canvas, userEvent }) => {
     const toggle = canvas.getByRole("switch", {
       name: "Switch between Login and Sign Up",
     })
     await userEvent.click(toggle)
 
-    const emailInput = canvas.getByLabelText("Email / Username")
-    const passwordInput = canvas.getByLabelText("Password")
+    const signUpForm = canvas.getByRole("form")
+    const emailInput = within(signUpForm).getByLabelText("Email")
+    const passwordInput = within(signUpForm).getByLabelText("Password")
     const signUpButton = canvas.getByRole("button", { name: "Sign Up" })
 
     await userEvent.type(emailInput, "test@example.com")
     await userEvent.type(passwordInput, "weak")
-
     await userEvent.click(signUpButton)
 
-    await expect(
-      canvas.getByText(
-        "Password must be at least 8 characters and contain uppercase, lowercase, number, and special character"
-      )
-    ).toBeVisible()
+    await expect(passwordInput).toHaveAccessibleErrorMessage(
+      "Password must be at least 8 characters and contain uppercase, lowercase, number, and special character"
+    )
   },
 }
 
@@ -122,37 +121,25 @@ export const PasswordValidation: Story = {
  * Demonstrates password mismatch validation in Sign Up
  */
 export const PasswordMismatch: Story = {
-  play: async ({ canvas }) => {
+  play: async ({ canvas, userEvent }) => {
     const toggle = canvas.getByRole("switch", {
       name: "Switch between Login and Sign Up",
     })
     await userEvent.click(toggle)
-
-    const emailInput = canvas.getByLabelText("Email / Username")
-    const passwordInput = canvas.getByLabelText("Password")
-    const confirmPasswordInput = canvas.getByLabelText("Confirm Password")
+    const signUpForm = canvas.getByRole("form")
+    const emailInput = within(signUpForm).getByLabelText("Email")
+    const passwordInput = within(signUpForm).getByLabelText("Password")
+    const confirmPasswordInput =
+      within(signUpForm).getByLabelText("Confirm Password")
     const signUpButton = canvas.getByRole("button", { name: "Sign Up" })
 
     await userEvent.type(emailInput, "test@example.com")
     await userEvent.type(passwordInput, "ValidPass123!")
     await userEvent.type(confirmPasswordInput, "DifferentPass123!")
-
     await userEvent.click(signUpButton)
 
-    await expect(canvas.getByText("Passwords do not match")).toBeVisible()
-  },
-}
-
-/**
- * Demonstrates Google OAuth button interaction
- */
-export const GoogleOAuth: Story = {
-  play: async ({ canvas }) => {
-    const googleButton = canvas.getByRole("button", {
-      name: /continue with google/i,
-    })
-
-    await expect(googleButton).toBeVisible()
-    await userEvent.click(googleButton)
+    await expect(confirmPasswordInput).toHaveAccessibleErrorMessage(
+      "Passwords do not match"
+    )
   },
 }

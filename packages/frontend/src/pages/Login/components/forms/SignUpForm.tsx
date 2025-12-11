@@ -15,11 +15,14 @@ interface SignUpFormProps {
   onSubmit?: (data: SignUpFormData) => void
 }
 
+export const SIGNUP_FORM_NAME = "sign-up-form"
+
 export default function SignUpForm({ onSubmit }: SignUpFormProps) {
   const data = useRef<SignUpFormData>({ email: "", username: "", password: "" })
 
   return (
     <form
+      name={SIGNUP_FORM_NAME}
       onSubmit={(e) => {
         e.preventDefault()
         onSubmit?.(data.current)
