@@ -16,7 +16,7 @@ export default function ToggleSwitch({
   const [checked, setChecked] = useState(false)
 
   return (
-    <label className="relative flex w-full cursor-pointer items-center overflow-hidden rounded-full bg-neutral-800">
+    <label className="relative flex w-full cursor-pointer items-center overflow-hidden rounded-full bg-neutral-900">
       <input
         type="checkbox"
         role="switch"

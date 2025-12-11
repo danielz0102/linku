@@ -2,7 +2,7 @@
   "name": "linku",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "pnpm --filter frontend storybook & pnpm --filter frontend dev"
   },
   "license": "ISC",
   "packageManager": "pnpm@10.18.1",

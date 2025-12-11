@@ -1,8 +1,8 @@
-import type { SVGProps } from "react"
+import type { IconProps } from "./types"
 
-const Google = (props: SVGProps<SVGSVGElement>) => (
+const Google = ({ size = 24 }: IconProps) => (
   <svg
-    {...props}
+    width={size}
     xmlnsXlink="http://www.w3.org/1999/xlink"
     xmlSpace="preserve"
     overflow="hidden"
