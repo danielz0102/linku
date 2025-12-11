@@ -11,7 +11,7 @@ export default function OAuthButtons() {
         <Separator className="flex-1" />
       </div>
 
-      <Button type="button" variant="secondary" className="w-full">
+      <Button type="button" variant="secondary">
         <Google />
         Continue with Google
       </Button>
