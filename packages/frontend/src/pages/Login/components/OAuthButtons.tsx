@@ -12,10 +12,8 @@ export default function OAuthButtons() {
       </div>
 
       <Button type="button" variant="secondary" className="w-full">
-        <div className="flex items-center justify-center gap-3">
-          <Google className="size-5" />
-          <span>Continue with Google</span>
-        </div>
+        <Google />
+        Continue with Google
       </Button>
     </div>
   )

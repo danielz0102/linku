@@ -115,10 +115,10 @@ export const WithIcon: Story = {
   args: {
     variant: "secondary",
     children: (
-      <div className="flex items-center gap-4">
-        <Google className="size-5" />
+      <>
+        <Google />
         Sign in with Google
-      </div>
+      </>
     ),
   },
 }
