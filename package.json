@@ -2,7 +2,7 @@
   "name": "linku",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter frontend storybook & pnpm --filter frontend dev"
+    "dev": "pnpm --filter frontend storybook & pnpm --filter frontend dev & pnpm --filter backend dev"
   },
   "license": "ISC",
   "packageManager": "pnpm@10.18.1",
