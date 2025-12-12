@@ -82,8 +82,10 @@ function FormFieldInput({
           type={inputType}
           className={cn(
             "w-full rounded-lg bg-neutral-100 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:ring-2 focus:ring-indigo-600 focus:outline-none",
-            shouldShowToggle && "pr-12",
-            errorMessage && "ring-2 ring-red-500"
+            {
+              "pr-12": shouldShowToggle,
+              "ring-2 ring-red-500": errorMessage,
+            }
           )}
           aria-invalid={errorMessage ? "true" : undefined}
           aria-errormessage={errorMessage ? errorMessageId : undefined}
