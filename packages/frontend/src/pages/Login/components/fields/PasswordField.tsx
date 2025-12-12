@@ -1,11 +1,8 @@
+import type { TextFieldProps } from "./types"
 import { useId } from "react"
 import FormField from "~/components/ui/FormField"
 
-interface PasswordFieldProps {
-  onChange: (value: string) => void
-}
-
-export default function PasswordField({ onChange }: PasswordFieldProps) {
+export default function PasswordField({ onChange }: TextFieldProps) {
   const id = useId()
   return (
     <FormField>

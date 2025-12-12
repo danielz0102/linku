@@ -1,11 +1,8 @@
+import type { TextFieldProps } from "./types"
 import { useId } from "react"
 import FormField from "~/components/ui/FormField"
 
-interface EmailFieldProps {
-  onChange: (value: string) => void
-}
-
-export default function EmailField({ onChange }: EmailFieldProps) {
+export default function EmailField({ onChange }: TextFieldProps) {
   const id = useId()
   return (
     <FormField>

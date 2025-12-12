@@ -1,3 +1,4 @@
+import type { TextFieldProps } from "./types"
 import { useId } from "react"
 import FormField from "~/components/ui/FormField"
 
@@ -7,11 +8,7 @@ const PASSWORD_PATTERN =
 const PASSWORD_ERROR_MESSAGE =
   "Password must be at least 8 characters and contain uppercase, lowercase, number, and special character"
 
-interface SecurePasswordProps {
-  onChange: (value: string) => void
-}
-
-export default function SecurePassword({ onChange }: SecurePasswordProps) {
+export default function SecurePassword({ onChange }: TextFieldProps) {
   const id = useId()
 
   return (
