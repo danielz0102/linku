@@ -4,13 +4,17 @@ import globals from "globals"
 import tseslint from "typescript-eslint"
 
 export default defineConfig(
-  globalIgnores(["dist", "node_modules", "vitest.config.ts"]),
+  globalIgnores(["dist", "node_modules"]),
   {
     files: ["**/*.ts"],
     extends: [js.configs.recommended, ...tseslint.configs.strictTypeChecked],
     languageOptions: {
       parserOptions: {
-        project: ["./tsconfig.app.json", "./tsconfig.test.json"],
+        project: [
+          "./tsconfig.app.json",
+          "./tsconfig.test.json",
+          "./tsconfig.node.json",
+        ],
         tsconfigRootDir: import.meta.dirname,
       },
       ecmaVersion: 2022,

@@ -1,8 +1,8 @@
-import { Router, type Request, type Response } from "express"
+import { Router, type Response } from "express"
 
 const router = Router()
 
-router.get("/health", (_: Request, res: Response) => {
+router.get("/health", (_, res: Response) => {
   res.status(200).send()
 })
 

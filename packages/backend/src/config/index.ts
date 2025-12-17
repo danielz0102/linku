@@ -9,6 +9,8 @@ const configSchema = z.object({
     .enum(["development", "production", "test"])
     .default("development"),
   CLIENT_ORIGIN: z.url().default("*"),
+  DATABASE_URL: z.url(),
 })
 
-export const { PORT, NODE_ENV, CLIENT_ORIGIN } = configSchema.parse(process.env)
+export const { PORT, NODE_ENV, CLIENT_ORIGIN, DATABASE_URL } =
+  configSchema.parse(process.env)
