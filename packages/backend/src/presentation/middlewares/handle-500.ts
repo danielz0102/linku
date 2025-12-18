@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express"
-import logger from "~/config/logger.js"
+import logger from "~/infraestructure/config/logger.js"
 
 export function handle500(
   err: Error,

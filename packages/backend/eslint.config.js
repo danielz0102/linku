@@ -24,7 +24,9 @@ export default defineConfig(
   {
     files: ["**/*.test.ts"],
     languageOptions: {
-      globals: globals.vitest,
+      globals: {
+        ...globals.vitest,
+      },
     },
   }
 )

@@ -9,7 +9,7 @@ export default defineConfig({
       provider: "v8",
       exclude: ["node_modules/", "dist/", "tests/", "**/*.test.ts"],
     },
-    include: ["tests/**/*.test.ts"],
+    include: ["**/*.test.ts"],
   },
   resolve: {
     alias: {
