@@ -1,16 +1,22 @@
 import type { Request, Response } from "express"
-import { registerUser as registerUseCase } from "~/application/use-cases/register-user.js"
-import User from "~/domain/entities/user.js"
-import { UserRepository } from "~/domain/repositories/user-repository.js"
+import { RegisterUser } from "~/application/use-cases/register-user.js"
+
+type RegisterUserBody = {
+  username: string
+  email: string
+  password: string
+}
 
 export class AuthController {
-  constructor(private repo: UserRepository) {}
+  constructor(private readonly register: RegisterUser) {}
 
   registerUser = async (
-    req: Request<unknown, unknown, User>,
+    req: Request<unknown, unknown, RegisterUserBody>,
     res: Response
   ) => {
-    await registerUseCase(req.body, this.repo)
-    res.sendStatus(201)
+    const userRegistered = await this.register.execute(req.body)
+
+    // TODO: return a proper DTO
+    res.status(201).json(userRegistered)
   }
 }

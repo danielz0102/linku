@@ -1,9 +1,12 @@
 import { Router } from "express"
-import { AuthController } from "./auth-controller.js"
+import { RegisterUser } from "~/application/use-cases/register-user.js"
+import { BcryptHasher } from "~/infraestructure/adapters/bcrypt-hasher.js"
 import { DrizzleUserRepository } from "~/infraestructure/repositories/drizzle-user-repository.js"
+import { AuthController } from "./auth-controller.js"
 
 const authRouter = Router()
-const controller = new AuthController(new DrizzleUserRepository())
+const registerUser = new RegisterUser(new DrizzleUserRepository(), BcryptHasher)
+const controller = new AuthController(registerUser)
 
 authRouter.post("/register", controller.registerUser)
 

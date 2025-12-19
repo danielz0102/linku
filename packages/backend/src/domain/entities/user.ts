@@ -15,7 +15,7 @@ export default class User {
   public email: string
   public passwordHash: string
   public profilePicUrl?: string
-  public status?: "online" | "offline"
+  public status: "online" | "offline"
 
   constructor(params: UserParams) {
     this.validate(params)

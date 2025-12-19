@@ -14,3 +14,10 @@ const configSchema = z.object({
 
 export const { PORT, NODE_ENV, CLIENT_ORIGIN, DATABASE_URL } =
   configSchema.parse(process.env)
+
+export const SALT = (() => {
+  if (NODE_ENV === "test") return 1
+  if (NODE_ENV === "production") return 12
+
+  return 10
+})()
