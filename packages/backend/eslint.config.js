@@ -20,6 +20,9 @@ export default defineConfig(
       ecmaVersion: 2022,
       globals: globals.node,
     },
+    rules: {
+      "@typescript-eslint/consistent-type-imports": "warn",
+    },
   },
   {
     files: ["**/*.test.ts"],

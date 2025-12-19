@@ -1,7 +1,7 @@
-import User from "~/domain/entities/user.js"
-import { UserRepository } from "~/domain/repositories/user-repository.js"
-import { RegisterUserInput } from "../dtos/register-user-input.js"
-import { PasswordHasher } from "../ports/password-hasher.js"
+import type User from "~/domain/entities/user.js"
+import type { UserRepository } from "~/domain/repositories/user-repository.js"
+import type { RegisterUserInput } from "../dtos/register-user-input.js"
+import type { PasswordHasher } from "../ports/password-hasher.js"
 
 export class RegisterUser {
   constructor(
