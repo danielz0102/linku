@@ -9,6 +9,8 @@ type UserParams = {
   status?: "online" | "offline"
 }
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export default class User {
   public readonly id: string
   public username: string
@@ -29,17 +31,21 @@ export default class User {
   }
 
   private validate(user: UserParams) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const { email, profilePicUrl } = user
 
-    if (!emailRegex.test(user.email)) {
-      throw new InvalidUserError("Invalid email format")
+    if (!EMAIL_PATTERN.test(email)) {
+      throw new InvalidUserError("Invalid email format", {
+        cause: { email },
+      })
     }
 
-    if (user.profilePicUrl) {
+    if (profilePicUrl) {
       try {
-        new URL(user.profilePicUrl)
+        new URL(profilePicUrl)
       } catch {
-        throw new InvalidUserError("Invalid profile picture URL")
+        throw new InvalidUserError("Invalid profile picture URL", {
+          cause: { profilePicUrl },
+        })
       }
     }
   }
