@@ -3,18 +3,28 @@ import type { UserRepository } from "~/domain/repositories/user-repository.js"
 import type { RegisterUserInput } from "../dtos/register-user-input.js"
 import type { PasswordHasher } from "../ports/password-hasher.js"
 
+import { Result } from "~/domain/primitives/result.js"
+import { BusinessError } from "../errors.js"
+
 export class RegisterUser {
   constructor(
     private repo: UserRepository,
     private hasher: PasswordHasher
   ) {}
 
-  async execute(user: RegisterUserInput): Promise<User> {
-    const hashedPassword = await this.hasher.hash(user.password)
+  async execute(user: RegisterUserInput): Promise<Result<User>> {
+    const userExists = await this.repo.exists(user.email, user.username)
 
-    return this.repo.register({
+    if (userExists) {
+      return Result.fail(new BusinessError("User already exists"))
+    }
+
+    const hashedPassword = await this.hasher.hash(user.password)
+    const registeredUser = await this.repo.register({
       ...user,
       passwordHash: hashedPassword,
     })
+
+    return Result.ok(registeredUser)
   }
 }

@@ -1,4 +1,4 @@
-import User from "../entities/user.js"
+import type User from "../entities/user.js"
 
 export type NewUser = {
   username: string
@@ -10,4 +10,5 @@ export type NewUser = {
 
 export interface UserRepository {
   register(user: NewUser): Promise<User>
+  exists(email: string, username: string): Promise<boolean>
 }
