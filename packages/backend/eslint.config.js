@@ -31,5 +31,8 @@ export default defineConfig(
         ...globals.vitest,
       },
     },
+    rules: {
+      "@typescript-eslint/unbound-method": "off",
+    },
   }
 )
