@@ -5,7 +5,7 @@ import { DrizzleUserRepository } from "~/infraestructure/repositories/drizzle-us
 import { AuthController } from "./auth-controller.js"
 
 const authRouter = Router()
-const registerUser = new RegisterUser(new DrizzleUserRepository(), BcryptHasher)
+const registerUser = new RegisterUser(DrizzleUserRepository, BcryptHasher)
 const controller = new AuthController(registerUser)
 
 authRouter.post("/register", controller.registerUser)

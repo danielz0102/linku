@@ -10,7 +10,7 @@ import db from "../db/drizzle/index.js"
 import { UserModelMapper } from "../db/drizzle/mappers.js"
 import { users } from "../db/drizzle/schema.js"
 
-export class DrizzleUserRepository implements UserRepository {
+export const DrizzleUserRepository: UserRepository = {
   async register(user: NewUser): Promise<User> {
     const [inserted] = await db.insert(users).values(user).returning()
 
@@ -21,8 +21,7 @@ export class DrizzleUserRepository implements UserRepository {
     }
 
     return UserModelMapper.toEntity(inserted)
-  }
-
+  },
   async exists(email: string, username: string): Promise<boolean> {
     return db
       .select()
@@ -30,5 +29,5 @@ export class DrizzleUserRepository implements UserRepository {
       .where(or(eq(users.email, email), eq(users.username, username)))
       .limit(1)
       .then((result) => result.length > 0)
-  }
+  },
 }
