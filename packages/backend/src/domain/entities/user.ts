@@ -1,4 +1,4 @@
-import { InvalidUserError } from "../errors.js"
+import { createCustomError } from "../utils/create-custom-error.js"
 
 type UserParams = {
   id: string
@@ -44,3 +44,5 @@ export default class User {
     }
   }
 }
+
+export const InvalidUserError = createCustomError("InvalidUserError")
