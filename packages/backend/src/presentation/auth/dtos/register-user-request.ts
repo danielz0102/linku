@@ -1,4 +1,5 @@
 import type { RegisterUserInput } from "~/application/dtos/register-user-input.js"
+import { Email } from "~/domain/value-objects/email.js"
 import { Password } from "~/domain/value-objects/password.js"
 
 export interface RegisterUserRequest {
@@ -10,7 +11,7 @@ export interface RegisterUserRequest {
 export const RegisterUserRequestMapper = {
   toInput(request: RegisterUserRequest): RegisterUserInput {
     return {
-      email: request.email,
+      email: new Email(request.email),
       username: request.username,
       password: new Password(request.password),
     }

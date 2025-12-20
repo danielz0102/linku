@@ -4,13 +4,14 @@ export class Password {
   public readonly value: string
 
   constructor(value: string) {
-    const validation = Password.validate(value)
+    const trimmedValue = value.trim()
+    const validation = Password.validate(trimmedValue)
 
     if (!validation.isValid) {
       throw new InvalidPasswordError(validation.errors.join("; "))
     }
 
-    this.value = value
+    this.value = trimmedValue
   }
 
   static validate(password: string): {

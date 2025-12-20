@@ -6,6 +6,16 @@ describe("Password", () => {
     expect(password.value).toBe("ValidPass123!")
   })
 
+  it("creates Password with exactly 8 characters when valid", () => {
+    const password = new Password("Valid12!")
+    expect(password.value).toHaveLength(8)
+  })
+
+  it("trims whitespace from password", () => {
+    const password = new Password("  ValidPass123!  ")
+    expect(password.value).toBe("ValidPass123!")
+  })
+
   it("throws InvalidPasswordError for invalid password", () => {
     expect(() => {
       new Password("short")
@@ -16,19 +26,6 @@ describe("Password", () => {
     expect(() => {
       new Password("invalid")
     }).toThrow(/Must be at least 8 characters long/)
-  })
-
-  it("creates Password with exactly 8 characters when valid", () => {
-    const password = new Password("Valid12!")
-    expect(password.value).toHaveLength(8)
-  })
-})
-
-describe("Password.value", () => {
-  it("is the original password value", () => {
-    const rawPassword = "SecurePass123!"
-    const password = new Password(rawPassword)
-    expect(password.value).toBe(rawPassword)
   })
 })
 

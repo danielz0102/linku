@@ -1,20 +1,19 @@
 import { createCustomError } from "../utils/create-custom-error.js"
+import type { Email } from "../value-objects/email.js"
 
 type UserParams = {
   id: string
   username: string
-  email: string
+  email: Email
   passwordHash: string
   profilePicUrl?: string
   status?: "online" | "offline"
 }
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
 export default class User {
   public readonly id: string
   public username: string
-  public email: string
+  public email: Email
   public passwordHash: string
   public profilePicUrl?: string
   public status: "online" | "offline"
@@ -31,13 +30,7 @@ export default class User {
   }
 
   private validate(user: UserParams) {
-    const { email, profilePicUrl } = user
-
-    if (!EMAIL_PATTERN.test(email)) {
-      throw new InvalidUserError("Invalid email format", {
-        cause: { email },
-      })
-    }
+    const { profilePicUrl } = user
 
     if (profilePicUrl) {
       try {

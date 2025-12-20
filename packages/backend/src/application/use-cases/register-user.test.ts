@@ -5,9 +5,10 @@ import type { PasswordHasher } from "../ports/password-hasher"
 import User from "~/domain/entities/user"
 import { RegisterUser } from "./register-user"
 import { Password } from "~/domain/value-objects/password"
+import { Email } from "~/domain/value-objects/email"
 
 const dto: RegisterUserInput = {
-  email: "example@example.com",
+  email: new Email("example@example.com"),
   username: "john_doe",
   password: new Password("SecureP@ssw0rd"),
 }
@@ -46,6 +47,7 @@ test("hashes the password before registering", async () => {
   expect(hasher.hash).toHaveBeenCalledWith(dto.password.value)
   expect(repo.register).toHaveBeenCalledWith({
     ...dto,
+    email: dto.email.value,
     passwordHash,
   })
 })

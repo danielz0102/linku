@@ -15,7 +15,7 @@ export const RegisterUserResponseMapper = {
     return {
       id: user.id,
       username: user.username,
-      email: user.email,
+      email: user.email.value,
       profilePicUrl: user.profilePicUrl,
       status: user.status,
     }

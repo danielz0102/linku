@@ -13,7 +13,7 @@ export class RegisterUser {
   ) {}
 
   async execute(user: RegisterUserInput): Promise<Result<User>> {
-    const userExists = await this.repo.exists(user.email, user.username)
+    const userExists = await this.repo.exists(user.email.value, user.username)
 
     if (userExists) {
       return Result.fail(new BusinessError("User already exists"))
@@ -22,6 +22,7 @@ export class RegisterUser {
     const hashedPassword = await this.hasher.hash(user.password.value)
     const registeredUser = await this.repo.register({
       ...user,
+      email: user.email.value,
       passwordHash: hashedPassword,
     })
 
