@@ -1,16 +1,16 @@
 import { createCustomError } from "../utils/create-custom-error.js"
 
 export class Password {
-  private constructor(private readonly value: string) {}
+  public readonly value: string
 
-  static create(rawPassword: string): Password {
-    const validation = Password.validate(rawPassword)
+  constructor(value: string) {
+    const validation = Password.validate(value)
 
     if (!validation.isValid) {
       throw new InvalidPasswordError(validation.errors.join("; "))
     }
 
-    return new Password(rawPassword)
+    this.value = value
   }
 
   static validate(password: string): {
@@ -43,10 +43,6 @@ export class Password {
       isValid: errors.length === 0,
       errors,
     }
-  }
-
-  getValue(): string {
-    return this.value
   }
 }
 

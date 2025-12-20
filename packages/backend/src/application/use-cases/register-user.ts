@@ -19,7 +19,7 @@ export class RegisterUser {
       return Result.fail(new BusinessError("User already exists"))
     }
 
-    const hashedPassword = await this.hasher.hash(user.password.getValue())
+    const hashedPassword = await this.hasher.hash(user.password.value)
     const registeredUser = await this.repo.register({
       ...user,
       passwordHash: hashedPassword,

@@ -12,7 +12,7 @@ export const RegisterUserRequestMapper = {
     return {
       email: request.email,
       username: request.username,
-      password: Password.create(request.password),
+      password: new Password(request.password),
     }
   },
 }
