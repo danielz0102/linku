@@ -11,7 +11,7 @@ const NODE_ENV = envSchema.parse(process.env.NODE_ENV)
 
 const configSchema = z.object({
   PORT: z.coerce.number().default(3000),
-  CLIENT_ORIGIN: z.url(),
+  CLIENT_ORIGIN: z.url().or(z.literal("*")),
   DATABASE_URL: z.url(),
   SALT: z.number().default(10),
   JWT_SECRET: z.string().nonempty(),
