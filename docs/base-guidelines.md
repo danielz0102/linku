@@ -22,3 +22,4 @@
 
 - Prefer `test` blocks over nested `describe` when tests are simple and don't require grouping
 - Use `it` for individual test cases within `describe` blocks
+- Write first the positive test cases, then the negative ones.
