@@ -1,11 +1,11 @@
-import type { UserRepository } from "~/domain/repositories/user-repository"
 import type { RegisterUserInput } from "../dtos/register-user-input"
-import type { PasswordHasher } from "../ports/password-hasher"
 
+import { mockHasher } from "~/__tests__/mocks/password-hasher"
+import { mockUserRepo } from "~/__tests__/mocks/user-repository"
 import User from "~/domain/entities/user"
-import { RegisterUser } from "./register-user"
-import { Password } from "~/domain/value-objects/password"
 import { Email } from "~/domain/value-objects/email"
+import { Password } from "~/domain/value-objects/password"
+import { RegisterUser } from "./register-user"
 
 const dto: RegisterUserInput = {
   email: new Email("example@example.com"),
@@ -20,17 +20,8 @@ const user = new User({
   passwordHash: "hashedpassword",
 })
 
-const repo = vi.mockObject<UserRepository>({
-  register: vi.fn(() => Promise.resolve(user)),
-  exists: vi.fn(() => Promise.resolve(false)),
-})
-
-const hasher = vi.mockObject<PasswordHasher>({
-  hash: vi.fn(),
-  compare: vi.fn(),
-})
-
-const useCase = new RegisterUser(repo, hasher)
+mockUserRepo.register.mockResolvedValue(user)
+const useCase = new RegisterUser(mockUserRepo, mockHasher)
 
 test("returns a User on success", async () => {
   const result = await useCase.execute(dto)
@@ -40,12 +31,12 @@ test("returns a User on success", async () => {
 
 test("hashes the password before registering", async () => {
   const passwordHash = "$super%#$%$hashed"
-  hasher.hash.mockResolvedValueOnce(passwordHash)
+  mockHasher.hash.mockResolvedValueOnce(passwordHash)
 
   await useCase.execute(dto)
 
-  expect(hasher.hash).toHaveBeenCalledWith(dto.password.value)
-  expect(repo.register).toHaveBeenCalledWith({
+  expect(mockHasher.hash).toHaveBeenCalledWith(dto.password.value)
+  expect(mockUserRepo.register).toHaveBeenCalledWith({
     ...dto,
     email: dto.email.value,
     passwordHash,
@@ -53,7 +44,7 @@ test("hashes the password before registering", async () => {
 })
 
 test("fails if user already exists", async () => {
-  repo.exists.mockResolvedValueOnce(true)
+  mockUserRepo.exists.mockResolvedValueOnce(true)
   const result = await useCase.execute(dto)
   expect(result.success).toBe(false)
 })
