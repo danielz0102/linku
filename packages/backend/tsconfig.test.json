@@ -4,7 +4,13 @@
     "types": ["vitest/globals"],
     "target": "es2022",
     "module": "es2022",
+
     "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
     "strict": true,
     "noUncheckedIndexedAccess": true
   },

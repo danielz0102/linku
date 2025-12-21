@@ -1,6 +1,6 @@
 import express from "express"
 import request from "supertest"
-import healthRouter from "~/presentation/app/routes/health.js"
+import healthRouter from "~/presentation/app/routes/health"
 
 const app = express()
 app.use(healthRouter)
