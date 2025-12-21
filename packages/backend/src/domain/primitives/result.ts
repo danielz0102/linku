@@ -1,11 +1,13 @@
 type SuccessResult<T> = {
   success: true
+  error?: never
   data: T
 }
 
 type FailureResult = {
   success: false
   error: Error
+  data?: never
 }
 
 export type Result<T> = SuccessResult<T> | FailureResult
