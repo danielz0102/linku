@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx --watch --tsconfig ./tsconfig.app.json src/index.ts | pino-pretty",
+    "dev": "tsx --watch --tsconfig ./tsconfig.app.json src/index.ts",
     "build": "tsc --project tsconfig.app.json --noEmitOnError && tsc-alias -p tsconfig.app.json",
     "start": "node dist/index.js",
     "db:push": "drizzle-kit push",

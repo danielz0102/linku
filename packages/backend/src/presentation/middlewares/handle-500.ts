@@ -8,6 +8,6 @@ export function handle500(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _next: NextFunction
 ) {
-  logger.error(`Internal Server Error: ${err}`)
+  logger.error(err)
   res.sendStatus(500)
 }
