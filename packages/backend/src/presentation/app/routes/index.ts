@@ -1,7 +1,7 @@
 import { Router } from "express"
 import { handle404 } from "~/presentation/middlewares/handle-404.js"
 import { handle500 } from "~/presentation/middlewares/handle-500.js"
-import apiRouter from "./api.js"
+import apiRouter from "./api/index.js"
 import healthRouter from "./health.js"
 
 const router = Router()
