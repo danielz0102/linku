@@ -6,8 +6,8 @@ import healthRouter from "./health.js"
 
 const router = Router()
 
-router.use(healthRouter)
 router.use("/api", apiRouter)
+router.use(healthRouter)
 router.use(handle404)
 router.use(handle500)
 

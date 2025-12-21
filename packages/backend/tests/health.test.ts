@@ -1,9 +1,12 @@
+import express from "express"
 import request from "supertest"
-import app from "~/presentation/app"
+import healthRouter from "~/presentation/app/routes/health.js"
+
+const app = express()
+app.use(healthRouter)
 
 describe("GET /health", () => {
-  it("should return 200 status", async () => {
-    const response = await request(app).get("/health")
-    expect(response.status).toBe(200)
+  it("sends 200 status", async () => {
+    await request(app).get("/health").expect(200)
   })
 })

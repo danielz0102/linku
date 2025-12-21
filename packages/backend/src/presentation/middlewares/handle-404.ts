@@ -7,5 +7,5 @@ export function handle404(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _next: NextFunction
 ) {
-  res.status(400).json({ error: "Not Found" })
+  res.sendStatus(404)
 }

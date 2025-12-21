@@ -9,5 +9,5 @@ export function handle500(
   _next: NextFunction
 ) {
   logger.error(`Internal Server Error: ${err}`)
-  res.status(500).json({ error: "Internal Server Error" })
+  res.sendStatus(500)
 }
