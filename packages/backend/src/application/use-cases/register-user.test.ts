@@ -2,7 +2,7 @@ import type { RegisterUserInput } from "../dtos/register-user-input"
 
 import { mockHasher } from "~/__tests__/mocks/password-hasher"
 import { mockUserRepo } from "~/__tests__/mocks/user-repository"
-import User from "~/domain/entities/user"
+import { UserMother } from "~/__tests__/utils/user-mother"
 import { Email } from "~/domain/value-objects/email"
 import { Password } from "~/domain/value-objects/password"
 import { RegisterUser } from "./register-user"
@@ -13,11 +13,9 @@ const dto: RegisterUserInput = {
   password: new Password("SecureP@ssw0rd"),
 }
 
-const user = new User({
-  id: "user-id",
+const user = UserMother.create({
   email: dto.email,
   username: dto.username,
-  passwordHash: "hashedpassword",
 })
 
 mockUserRepo.register.mockResolvedValue(user)

@@ -4,9 +4,8 @@ import express from "express"
 import request from "supertest"
 import { mockHasher } from "~/__tests__/mocks/password-hasher"
 import { mockUserRepo } from "~/__tests__/mocks/user-repository"
+import { UserMother } from "~/__tests__/utils/user-mother"
 import { RegisterUser } from "~/application/use-cases/register-user"
-import User from "~/domain/entities/user"
-import { Email } from "~/domain/value-objects/email"
 import { AuthController } from "~/presentation/auth/auth-controller"
 import { createAuthRouter } from "~/presentation/auth/auth-router"
 import { handle500 } from "~/presentation/middlewares/handle-500"
@@ -20,35 +19,33 @@ app.use(express.json())
 app.use(router)
 app.use(handle500)
 
-const user: RegisterUserRequest = {
+const dto: RegisterUserRequest = {
   username: "newuser",
   email: "newuser@example.com",
   password: "securePassword123!",
 }
 
-const userEntity = new User({
-  id: "user-id",
-  username: user.username,
-  email: new Email(user.email),
-  passwordHash: "hashedpassword",
+const user = UserMother.create({
+  username: dto.username,
+  email: dto.email,
 })
 
-mockUserRepo.register.mockResolvedValue(userEntity)
+mockUserRepo.register.mockResolvedValue(user)
 
 describe("POST /register", () => {
   it("sends 201 when user is created", async () => {
-    const response = await request(app).post("/register").send(user).expect(201)
+    const response = await request(app).post("/register").send(dto).expect(201)
     expect(response.body).toEqual({
-      id: userEntity.id,
-      username: userEntity.username,
-      email: userEntity.email.value,
-      status: userEntity.status,
+      id: user.id,
+      username: user.username,
+      email: user.email.value,
+      status: user.status,
     })
   })
 
   it("sends 400 when user already exists", async () => {
     mockUserRepo.exists.mockResolvedValueOnce(true)
-    const response = await request(app).post("/register").send(user).expect(400)
+    const response = await request(app).post("/register").send(dto).expect(400)
     expect(response.body).toEqual({ message: "User already exists" })
   })
 })

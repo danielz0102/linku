@@ -1,10 +1,10 @@
 import { createCustomError } from "../utils/create-custom-error.js"
-import type { Email } from "../value-objects/email.js"
+import { Email } from "../value-objects/email.js"
 
 type UserParams = {
   id: string
   username: string
-  email: Email
+  email: string | Email
   passwordHash: string
   profilePicUrl?: string
   status?: "online" | "offline"
@@ -20,10 +20,12 @@ export default class User {
 
   constructor(params: UserParams) {
     this.validate(params)
+    const email =
+      params.email instanceof Email ? params.email : new Email(params.email)
 
     this.id = params.id
     this.username = params.username
-    this.email = params.email
+    this.email = email
     this.passwordHash = params.passwordHash
     this.profilePicUrl = params.profilePicUrl
     this.status = params.status || "offline"
