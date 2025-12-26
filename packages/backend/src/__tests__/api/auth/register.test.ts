@@ -1,5 +1,6 @@
 import type { RegisterUserRequest } from "~/presentation/auth/dtos/register-user-request"
 
+import { faker } from "@faker-js/faker"
 import express from "express"
 import request from "supertest"
 import { mockHasher } from "~/__tests__/mocks/password-hasher"
@@ -20,8 +21,8 @@ app.use(router)
 app.use(handle500)
 
 const dto: RegisterUserRequest = {
-  username: "newuser",
-  email: "newuser@example.com",
+  username: faker.internet.username(),
+  email: faker.internet.email(),
   password: "securePassword123!",
 }
 

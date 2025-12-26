@@ -1,5 +1,6 @@
 import type { RegisterUserInput } from "../dtos/register-user-input"
 
+import { faker } from "@faker-js/faker"
 import { mockHasher } from "~/__tests__/mocks/password-hasher"
 import { mockUserRepo } from "~/__tests__/mocks/user-repository"
 import { UserMother } from "~/__tests__/utils/user-mother"
@@ -8,8 +9,8 @@ import { Password } from "~/domain/value-objects/password"
 import { RegisterUser } from "./register-user"
 
 const dto: RegisterUserInput = {
-  email: new Email("example@example.com"),
-  username: "john_doe",
+  email: new Email(faker.internet.email()),
+  username: faker.internet.username(),
   password: new Password("SecureP@ssw0rd"),
 }
 

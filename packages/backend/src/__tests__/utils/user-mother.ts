@@ -1,16 +1,17 @@
 import User from "~/domain/entities/user.js"
+import { faker } from "@faker-js/faker"
 
 type UserMotherParams = Partial<ConstructorParameters<typeof User>[0]>
 
 export const UserMother = {
   create({
-    id = "user-id",
-    username = "testuser",
-    email = "testuser@example.com",
-    passwordHash = "hashedpassword",
+    id = faker.string.uuid(),
+    username = faker.internet.username(),
+    email = faker.internet.email(),
+    passwordHash = faker.string.alphanumeric(16),
     profilePicUrl,
-    status = "online",
-  }: UserMotherParams): User {
+    status = faker.helpers.arrayElement(["online", "offline"]),
+  }: UserMotherParams = {}): User {
     return new User({
       id,
       username,
