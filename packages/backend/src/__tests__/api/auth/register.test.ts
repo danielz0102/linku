@@ -1,9 +1,11 @@
 import express from "express"
 import request from "supertest"
+
 import { mockHasher } from "~/__tests__/mocks/password-hasher"
 import { mockUserRepo } from "~/__tests__/mocks/user-repository"
 import { RegisterUserRequestMother as RequestMother } from "~/__tests__/utils/register-user-request-mother"
 import { UserMother } from "~/__tests__/utils/user-mother"
+
 import { RegisterUser } from "~/application/use-cases/register-user"
 import { AuthController } from "~/presentation/auth/auth-controller"
 import { createAuthRouter } from "~/presentation/auth/auth-router"
@@ -41,5 +43,20 @@ describe("POST /register", () => {
     mockUserRepo.exists.mockResolvedValueOnce(true)
     const response = await request(app).post("/register").send(req).expect(400)
     expect(response.body).toEqual({ message: "User already exists" })
+  })
+
+  it("sends 400 when email is invalid", async () => {
+    const req = RequestMother.create({ email: "invalid-email" })
+    await request(app).post("/register").send(req).expect(400)
+  })
+
+  it("sends 400 when username is empty", async () => {
+    const req = RequestMother.create({ username: "   " })
+    await request(app).post("/register").send(req).expect(400)
+  })
+
+  it("sends 400 when password is too weak", async () => {
+    const req = RequestMother.create({ password: "weak" })
+    await request(app).post("/register").send(req).expect(400)
   })
 })
