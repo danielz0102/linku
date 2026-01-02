@@ -9,4 +9,6 @@ function getAllowedOrigin(): CorsOptions["origin"] {
   if (NODE_ENV === "production") {
     return CLIENT_ORIGIN
   }
+
+  return "*"
 }
