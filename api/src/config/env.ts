@@ -9,6 +9,8 @@ const envSchema = z.object({
     .default("development"),
   PORT: z.coerce.number().default(3000),
   CLIENT_ORIGIN: z.url(),
+  GOOGLE_OAUTH_CLIENT_ID: z.string(),
 })
 
-export const { NODE_ENV, PORT, CLIENT_ORIGIN } = envSchema.parse(process.env)
+export const { NODE_ENV, PORT, CLIENT_ORIGIN, GOOGLE_OAUTH_CLIENT_ID } =
+  envSchema.parse(process.env)
