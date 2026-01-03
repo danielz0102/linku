@@ -28,5 +28,8 @@ export default defineConfig(
         ...globals.vitest,
       },
     },
+    rules: {
+      "@typescript-eslint/no-non-null-assertion": "off",
+    },
   }
 )
