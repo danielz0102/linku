@@ -7,3 +7,6 @@ export const usersTable = pgTable("users", {
   email: varchar({ length: 255 }).notNull().unique(),
   picture: varchar({ length: 255 }).notNull(),
 })
+
+export type User = typeof usersTable.$inferSelect
+export type NewUser = typeof usersTable.$inferInsert
