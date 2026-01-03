@@ -11,7 +11,14 @@ const envSchema = z.object({
   CLIENT_ORIGIN: z.url(),
   GOOGLE_OAUTH_CLIENT_ID: z.string(),
   DB_URL: z.url(),
+  JWT_SECRET: z.string(),
 })
 
-export const { NODE_ENV, PORT, CLIENT_ORIGIN, GOOGLE_OAUTH_CLIENT_ID, DB_URL } =
-  envSchema.parse(process.env)
+export const {
+  NODE_ENV,
+  PORT,
+  CLIENT_ORIGIN,
+  GOOGLE_OAUTH_CLIENT_ID,
+  DB_URL,
+  JWT_SECRET,
+} = envSchema.parse(process.env)

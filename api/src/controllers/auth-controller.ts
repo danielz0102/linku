@@ -14,9 +14,9 @@ export class AuthController {
       throw new Error("Invalid authentication request")
     }
 
-    const user = await authenticate({ idToken: req.token, repo: this.repo })
+    const token = await authenticate({ idToken: req.token, repo: this.repo })
 
-    res.json({ user })
+    res.json(token)
   }
 
   private isAuthReq(req: Request): req is AuthRequest {

@@ -1,3 +1,5 @@
+import jwt from "jsonwebtoken"
+import { JWT_SECRET } from "~/config/env.js"
 import type { UserRepository } from "~/repositories/user-repository.js"
 import { getUser } from "~/services/auth-google-service.js"
 
@@ -6,10 +8,10 @@ interface Params {
   repo: UserRepository
 }
 
-export async function authenticate({ idToken, repo }: Params) {
+export async function authenticate({ idToken, repo }: Params): Promise<string> {
   const payload = await getUser(idToken)
 
-  const user = (async () => {
+  const user = await (async () => {
     const existingUser = await repo.findByEmail(payload.email)
 
     if (existingUser) {
@@ -24,7 +26,5 @@ export async function authenticate({ idToken, repo }: Params) {
     })
   })()
 
-  // TODO: generate session token
-
-  return user
+  return jwt.sign(user, JWT_SECRET, { expiresIn: "7d" })
 }
