@@ -1,19 +1,12 @@
-import type { User } from "~/db/drizzle/schema.ts"
 import type { UserRepository } from "~/repositories/user-repository.ts"
 import type { AuthService } from "~/services/auth-services/auth-service.js"
 
-import { faker } from "@faker-js/faker"
 import jwt from "jsonwebtoken"
+import { createFakeUser } from "~/__tests__/lib/user-mother.ts"
 import { Result } from "~/lib/Result.ts"
 import { Authenticate } from "./authenticate.ts"
 
-const fakeUser: User = {
-  id: faker.string.uuid(),
-  email: faker.internet.email(),
-  firstName: faker.person.firstName(),
-  lastName: faker.person.lastName(),
-  picture: faker.image.avatar(),
-}
+const fakeUser = createFakeUser()
 
 const authSerivceMock = vi.mockObject<AuthService>({
   verifyToken: vi.fn(() => Promise.resolve(Result.ok(fakeUser))),

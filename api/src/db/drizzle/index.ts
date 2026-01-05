@@ -1,4 +1,4 @@
 import { drizzle } from "drizzle-orm/node-postgres"
-import { DB_URL } from "~/config/env.js"
+import { DB_URL, NODE_ENV, TEST_DB_URL } from "~/config/env.js"
 
-export default drizzle(DB_URL)
+export default drizzle(NODE_ENV === "test" ? TEST_DB_URL : DB_URL)
