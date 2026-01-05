@@ -5,7 +5,7 @@ import type { AuthService } from "~/services/auth-services/auth-service.js"
 import { faker } from "@faker-js/faker"
 import jwt from "jsonwebtoken"
 import { Result } from "~/lib/Result.ts"
-import { authenticate } from "./authenticate.ts"
+import { Authenticate } from "./authenticate.ts"
 
 const fakeUser: User = {
   id: faker.string.uuid(),
@@ -23,14 +23,11 @@ const repoMock = vi.mockObject<UserRepository>({
   findByEmail: vi.fn(() => Promise.resolve(fakeUser)),
 })
 
-const params = {
-  idToken: "valid-id-token",
-  repo: repoMock,
-  authService: authSerivceMock,
-}
+const idToken = "valid-id-token"
+const auth = new Authenticate(repoMock, authSerivceMock)
 
 test("returns a JWT token with user data on successful authentication", async () => {
-  const result = await authenticate(params)
+  const result = await auth.execute(idToken)
 
   expect(result.success).toBe(true)
 
@@ -43,7 +40,7 @@ test("returns an error when authentication fails", async () => {
     Result.fail(new Error("Invalid token"))
   )
 
-  const result = await authenticate(params)
+  const result = await auth.execute(idToken)
 
   expect(result.success).toBe(false)
   expect(result.error?.message).toBe("Token is not valid")
