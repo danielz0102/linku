@@ -33,7 +33,7 @@ test("returns access and refresh tokens on success", async () => {
   const rtDecoded = jwt.decode(refreshToken)
 
   expect(atDecoded).toMatchObject(fakeUser)
-  expect(rtDecoded).toMatchObject(fakeUser)
+  expect(rtDecoded).toMatchObject({ userId: fakeUser.id })
 })
 
 test("returns an error when authentication fails", async () => {

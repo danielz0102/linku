@@ -30,7 +30,9 @@ export class Authenticate {
     })()
 
     const accessToken = jwt.sign(user, JWT_SECRET, { expiresIn: "15m" })
-    const refreshToken = jwt.sign(user, JWT_SECRET, { expiresIn: "30d" })
+    const refreshToken = jwt.sign({ userId: user.id }, JWT_SECRET, {
+      expiresIn: "30d",
+    })
 
     return Result.ok({ accessToken, refreshToken })
   }
