@@ -1,12 +1,14 @@
 import express from "express"
 import indexRouter from "~/routers/index.js"
 import { corsMiddleware } from "./middlewares/cors.js"
+import cookieParser from "cookie-parser"
 
 const app = express()
 
 app.use(corsMiddleware)
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+app.use(cookieParser())
 
 app.use("/", indexRouter)
 

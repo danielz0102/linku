@@ -2,7 +2,6 @@ import type { NextFunction, Request, Response } from "express"
 
 import { eq } from "drizzle-orm"
 import express from "express"
-import jwt from "jsonwebtoken"
 import request from "supertest"
 import db from "~/db/drizzle/index.ts"
 import { usersTable } from "~/db/drizzle/schema.ts"
@@ -49,16 +48,23 @@ describe("POST /auth/google", () => {
     await db.delete(usersTable).where(eq(usersTable.email, fakeUser.email))
   })
 
-  it("sends 200 and a token on success", async () => {
+  it("sends 200 and user data on success", async () => {
     const response = await request(app)
       .post("/auth/google")
       .set("Authorization", "Bearer valid-id-token")
       .expect(200)
 
-    const { token } = response.body
-    const decoded = jwt.decode(token)
+    const { user } = response.body
 
-    expect(decoded).toMatchObject(fakeUser)
+    expect(user).toMatchObject(fakeUser)
+  })
+
+  it('sets "access_token" cookie on success', async () => {
+    await request(app)
+      .post("/auth/google")
+      .set("Authorization", "Bearer valid-id-token")
+      .expect(200)
+      .expect("set-cookie", /access_token=.*HttpOnly/)
   })
 
   it("registers the user in the database if they do not exist", async () => {
