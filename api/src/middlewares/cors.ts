@@ -1,14 +1,7 @@
-import cors, { type CorsOptions } from "cors"
-import { CLIENT_ORIGIN, NODE_ENV } from "~/config/env.js"
+import cors from "cors"
+import { CLIENT_ORIGIN } from "~/config/env.js"
 
 export const corsMiddleware = cors({
-  origin: getAllowedOrigin(),
+  origin: CLIENT_ORIGIN,
+  credentials: true,
 })
-
-function getAllowedOrigin(): CorsOptions["origin"] {
-  if (NODE_ENV === "production") {
-    return CLIENT_ORIGIN
-  }
-
-  return "*"
-}
