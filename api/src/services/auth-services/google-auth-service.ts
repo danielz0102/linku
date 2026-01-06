@@ -1,4 +1,4 @@
-import type { User } from "~/db/drizzle/schema.js"
+import type { NewUser } from "~/db/drizzle/schema.js"
 import type { AuthService } from "./auth-service.js"
 
 import { OAuth2Client, type TokenPayload } from "google-auth-library"
@@ -6,7 +6,6 @@ import { GOOGLE_OAUTH_CLIENT_ID } from "~/config/env.js"
 import { Result } from "~/lib/Result.js"
 
 interface UserPayload {
-  sub: string
   email: string
   given_name: string
   family_name: string
@@ -20,7 +19,7 @@ export class GoogleAuthService implements AuthService {
     this.client = new OAuth2Client({ client_id: GOOGLE_OAUTH_CLIENT_ID })
   }
 
-  async verifyToken(token: string): Promise<Result<User>> {
+  async verifyToken(token: string): Promise<Result<NewUser>> {
     let ticket
 
     try {
@@ -44,7 +43,7 @@ export class GoogleAuthService implements AuthService {
   }
 
   private validatePayload(payload: TokenPayload): UserPayload {
-    const { email, given_name, family_name, picture, sub } = payload
+    const { email, given_name, family_name, picture } = payload
 
     if (!email || !given_name || !family_name || !picture) {
       throw new Error("Required fields missing in token payload", {
@@ -52,12 +51,11 @@ export class GoogleAuthService implements AuthService {
       })
     }
 
-    return { sub, email, given_name, family_name, picture }
+    return { email, given_name, family_name, picture }
   }
 
-  private payloadToUser(payload: UserPayload): User {
+  private payloadToUser(payload: UserPayload): NewUser {
     return {
-      id: payload.sub,
       email: payload.email,
       firstName: payload.given_name,
       lastName: payload.family_name,
