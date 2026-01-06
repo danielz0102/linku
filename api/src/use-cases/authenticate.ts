@@ -10,7 +10,9 @@ export class Authenticate {
     private authService: AuthService
   ) {}
 
-  async execute(idToken: string): Promise<Result<string>> {
+  async execute(
+    idToken: string
+  ): Promise<Result<{ accessToken: string; refreshToken: string }>> {
     const payload = await this.authService.verifyToken(idToken)
 
     if (!payload.success) {
@@ -27,7 +29,9 @@ export class Authenticate {
       return this.repo.create(payload.data)
     })()
 
-    const token = jwt.sign(user, JWT_SECRET, { expiresIn: "7d" })
-    return Result.ok(token)
+    const accessToken = jwt.sign(user, JWT_SECRET, { expiresIn: "15m" })
+    const refreshToken = jwt.sign(user, JWT_SECRET, { expiresIn: "30d" })
+
+    return Result.ok({ accessToken, refreshToken })
   }
 }

@@ -1,5 +1,4 @@
 import type { Request, Response } from "express"
-import jwt from "jsonwebtoken"
 import { NODE_ENV } from "~/config/env.js"
 import { Authenticate } from "~/use-cases/authenticate.js"
 
@@ -8,7 +7,7 @@ interface AuthRequest extends Request {
 }
 
 export class AuthController {
-  private static COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 15 // 15 days
+  private static COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 30 // 30 days
 
   constructor(private useCase: Authenticate) {}
 
@@ -23,16 +22,16 @@ export class AuthController {
       return res.status(401).json({ message: result.error.message })
     }
 
-    const user = jwt.decode(result.data)
+    const { accessToken, refreshToken } = result.data
 
-    res.cookie("access_token", result.data, {
+    res.cookie("refresh_token", refreshToken, {
       httpOnly: true,
       secure: NODE_ENV === "production",
       sameSite: "lax",
       maxAge: AuthController.COOKIE_MAX_AGE,
     })
 
-    res.json({ user })
+    res.json({ accessToken })
   }
 
   private isAuthReq(req: Request): req is AuthRequest {

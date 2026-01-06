@@ -19,13 +19,21 @@ const repoMock = vi.mockObject<UserRepository>({
 const idToken = "valid-id-token"
 const auth = new Authenticate(repoMock, authSerivceMock)
 
-test("returns a JWT token with user data on successful authentication", async () => {
+test("returns access and refresh tokens on success", async () => {
   const result = await auth.execute(idToken)
 
   expect(result.success).toBe(true)
 
-  const decoded = jwt.decode(result.data!)
-  expect(decoded).toMatchObject(fakeUser)
+  if (!result.success) {
+    throw new Error("Expected authentication to succeed")
+  }
+
+  const { accessToken, refreshToken } = result.data
+  const atDecoded = jwt.decode(accessToken)
+  const rtDecoded = jwt.decode(refreshToken)
+
+  expect(atDecoded).toMatchObject(fakeUser)
+  expect(rtDecoded).toMatchObject(fakeUser)
 })
 
 test("returns an error when authentication fails", async () => {
