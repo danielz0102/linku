@@ -2,6 +2,7 @@ import type { Request, Response } from "express"
 import jwt from "jsonwebtoken"
 import { JWT_SECRET, NODE_ENV } from "~/config/env.js"
 import { UserRepository } from "~/repositories/user-repository.js"
+import type { RefreshTokenPayload } from "~/types.js"
 import { Authenticate } from "~/use-cases/authenticate.js"
 
 export class AuthController {
@@ -39,16 +40,7 @@ export class AuthController {
       return res.status(401).json({ message: "No refresh token provided" })
     }
 
-    const decoded = jwt.verify(refreshToken, JWT_SECRET)
-
-    if (typeof decoded === "string") {
-      throw new Error("Invalid refresh token payload", {
-        cause: {
-          payload: decoded,
-        },
-      })
-    }
-
+    const decoded = jwt.verify(refreshToken, JWT_SECRET) as RefreshTokenPayload
     const repo = new UserRepository()
     const user = await repo.findById(decoded.userId)
 
