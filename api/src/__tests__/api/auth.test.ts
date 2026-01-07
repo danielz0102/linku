@@ -1,9 +1,11 @@
 import type { NextFunction, Request, Response } from "express"
 
+import cookieParser from "cookie-parser"
 import { eq } from "drizzle-orm"
 import express from "express"
 import jwt from "jsonwebtoken"
 import request from "supertest"
+import { JWT_SECRET } from "~/config/env.ts"
 import db from "~/db/drizzle/index.ts"
 import { usersTable } from "~/db/drizzle/schema.ts"
 import { Result } from "~/lib/Result.ts"
@@ -31,6 +33,7 @@ vi.mock(
 
 const app = express()
 app.use(express.json())
+app.use(cookieParser())
 app.use("/auth", authRouter)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
@@ -102,5 +105,28 @@ describe("POST /auth/google", () => {
 
   it("sends 401 when no token is provided", async () => {
     await request(app).post("/auth/google").expect(401)
+  })
+})
+
+describe("GET /auth/me", () => {
+  const fakeUser = createFakeUser()
+  const token = jwt.sign({ userId: fakeUser.id }, JWT_SECRET, {
+    expiresIn: "15m",
+  })
+
+  it("sends an access token if there is a refresh token", async () => {
+    await db.insert(usersTable).values(fakeUser)
+
+    const response = await request(app)
+      .get("/auth/me")
+      .set("Cookie", `refresh_token=${token}`)
+      .expect(200)
+
+    const { accessToken } = response.body
+    const decoded = jwt.decode(accessToken) as { userId: string }
+
+    expect(decoded).toMatchObject(fakeUser)
+
+    await db.delete(usersTable).where(eq(usersTable.email, fakeUser.email))
   })
 })

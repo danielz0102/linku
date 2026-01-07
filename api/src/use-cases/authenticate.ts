@@ -21,12 +21,7 @@ export class Authenticate {
 
     const user = await (async () => {
       const existingUser = await this.repo.findByEmail(payload.data.email)
-
-      if (existingUser) {
-        return existingUser
-      }
-
-      return this.repo.create(payload.data)
+      return existingUser ?? this.repo.create(payload.data)
     })()
 
     const accessToken = jwt.sign(user, JWT_SECRET, { expiresIn: "15m" })
