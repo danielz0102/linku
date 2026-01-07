@@ -14,6 +14,7 @@ const authSerivceMock = vi.mockObject<AuthService>({
 const repoMock = vi.mockObject<UserRepository>({
   create: vi.fn(() => Promise.resolve(fakeUser)),
   findByEmail: vi.fn(() => Promise.resolve(fakeUser)),
+  findById: vi.fn(),
 })
 
 const idToken = "valid-id-token"

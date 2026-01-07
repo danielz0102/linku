@@ -9,6 +9,7 @@ const router = Router()
 const auth = new Authenticate(new UserRepository(), new GoogleAuthService())
 const controller = new AuthController(auth)
 
+router.get("/me", controller.getMe)
 router.post("/google", verifyToken, controller.auth)
 
 export default router

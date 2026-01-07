@@ -13,6 +13,16 @@ export class UserRepository {
     return user[0] || null
   }
 
+  async findById(id: string): Promise<User | null> {
+    const user = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.id, id))
+      .limit(1)
+
+    return user[0] || null
+  }
+
   async create(data: NewUser): Promise<User> {
     const [newUser] = await db.insert(usersTable).values(data).returning()
 

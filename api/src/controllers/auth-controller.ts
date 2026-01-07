@@ -1,10 +1,8 @@
 import type { Request, Response } from "express"
-import { NODE_ENV } from "~/config/env.js"
+import jwt from "jsonwebtoken"
+import { JWT_SECRET, NODE_ENV } from "~/config/env.js"
+import { UserRepository } from "~/repositories/user-repository.js"
 import { Authenticate } from "~/use-cases/authenticate.js"
-
-interface AuthRequest extends Request {
-  token: string
-}
 
 export class AuthController {
   private static COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 30 // 30 days
@@ -12,7 +10,7 @@ export class AuthController {
   constructor(private useCase: Authenticate) {}
 
   auth = async (req: Request, res: Response) => {
-    if (!this.isAuthReq(req)) {
+    if (!req.token) {
       throw new Error("Invalid authentication request")
     }
 
@@ -34,7 +32,36 @@ export class AuthController {
     res.json({ accessToken })
   }
 
-  private isAuthReq(req: Request): req is AuthRequest {
-    return (req as AuthRequest).token !== undefined
+  getMe = async (req: Request, res: Response) => {
+    const refreshToken = req.cookies.refresh_token as string | undefined
+
+    if (!refreshToken) {
+      return res.status(401).json({ message: "No refresh token provided" })
+    }
+
+    const decoded = jwt.verify(refreshToken, JWT_SECRET)
+
+    if (typeof decoded === "string") {
+      throw new Error("Invalid refresh token payload", {
+        cause: {
+          payload: decoded,
+        },
+      })
+    }
+
+    const repo = new UserRepository()
+    const user = await repo.findById(decoded.userId)
+
+    if (!user) {
+      throw new Error("User not found for the provided refresh token", {
+        cause: {
+          userId: decoded.userId,
+        },
+      })
+    }
+
+    const accessToken = jwt.sign(user, JWT_SECRET, { expiresIn: "15m" })
+
+    res.json({ accessToken })
   }
 }

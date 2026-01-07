@@ -1,17 +1,16 @@
 import { GoogleOAuthProvider } from "@react-oauth/google"
 import { jwtDecode } from "jwt-decode"
-import { useState, type PropsWithChildren } from "react"
+import { useEffect, useState, type PropsWithChildren } from "react"
 import { GOOGLE_OAUTH_CLIENT_ID } from "~/config/env"
 import AuthContext from "~/contexts/auth-context"
-import { auth } from "~/services/auth-service"
+import { auth, getAccessToken } from "~/services/auth-service"
 import type { User, UserPayload } from "~/types"
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<User | undefined>()
 
-  const login = async (tokenId: string) => {
-    const { data } = await auth(tokenId)
-    const decodedUser = jwtDecode<UserPayload>(data.accessToken)
+  const updateUser = (accessToken: string) => {
+    const decodedUser = jwtDecode<UserPayload>(accessToken)
 
     setUser({
       id: decodedUser.id,
@@ -21,6 +20,18 @@ export default function AuthProvider({ children }: PropsWithChildren) {
       picture: decodedUser.picture,
     })
   }
+
+  const login = async (tokenId: string) => {
+    const { data } = await auth(tokenId)
+    updateUser(data.accessToken)
+  }
+
+  useEffect(() => {
+    getAccessToken().then((token) => {
+      if (!token) return
+      updateUser(token)
+    })
+  }, [])
 
   return (
     <GoogleOAuthProvider clientId={GOOGLE_OAUTH_CLIENT_ID}>

@@ -7,3 +7,12 @@ export function auth(token: string) {
     },
   })
 }
+
+export async function getAccessToken() {
+  try {
+    const { data } = await apiClient.get<{ accessToken: string }>("/auth/me")
+    return data.accessToken
+  } catch {
+    return null
+  }
+}
