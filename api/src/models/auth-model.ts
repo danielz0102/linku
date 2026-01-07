@@ -4,13 +4,13 @@ import { Result } from "~/lib/Result.js"
 import type { UserRepository } from "~/repositories/user-repository.js"
 import type { AuthService } from "~/services/auth-services/auth-service.js"
 
-export class Authenticate {
+export class AuthModel {
   constructor(
     private repo: UserRepository,
     private authService: AuthService
   ) {}
 
-  async execute(
+  async auth(
     idToken: string
   ): Promise<Result<{ accessToken: string; refreshToken: string }>> {
     const payload = await this.authService.verifyToken(idToken)

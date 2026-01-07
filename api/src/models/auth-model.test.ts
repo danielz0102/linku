@@ -4,7 +4,7 @@ import type { AuthService } from "~/services/auth-services/auth-service.js"
 import jwt from "jsonwebtoken"
 import { createFakeUser } from "~/__tests__/lib/user-mother.ts"
 import { Result } from "~/lib/Result.ts"
-import { Authenticate } from "./authenticate.ts"
+import { AuthModel } from "./auth-model.ts"
 
 const fakeUser = createFakeUser()
 
@@ -18,10 +18,10 @@ const repoMock = vi.mockObject<UserRepository>({
 })
 
 const idToken = "valid-id-token"
-const auth = new Authenticate(repoMock, authSerivceMock)
+const auth = new AuthModel(repoMock, authSerivceMock)
 
 test("returns access and refresh tokens on success", async () => {
-  const result = await auth.execute(idToken)
+  const result = await auth.auth(idToken)
 
   expect(result.success).toBe(true)
 
@@ -42,7 +42,7 @@ test("returns an error when authentication fails", async () => {
     Result.fail(new Error("Invalid token"))
   )
 
-  const result = await auth.execute(idToken)
+  const result = await auth.auth(idToken)
 
   expect(result.success).toBe(false)
   expect(result.error?.message).toBe("Token is not valid")

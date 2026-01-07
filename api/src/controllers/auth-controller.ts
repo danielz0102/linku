@@ -1,21 +1,22 @@
 import type { Request, Response } from "express"
+import type { AuthModel } from "~/models/auth-model.js"
+import type { RefreshTokenPayload } from "~/types.js"
+
 import jwt from "jsonwebtoken"
 import { JWT_SECRET, NODE_ENV } from "~/config/env.js"
 import { UserRepository } from "~/repositories/user-repository.js"
-import type { RefreshTokenPayload } from "~/types.js"
-import { Authenticate } from "~/use-cases/authenticate.js"
 
 export class AuthController {
   private static COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 30 // 30 days
 
-  constructor(private useCase: Authenticate) {}
+  constructor(private model: AuthModel) {}
 
   auth = async (req: Request, res: Response) => {
     if (!req.token) {
       throw new Error("Invalid authentication request")
     }
 
-    const result = await this.useCase.execute(req.token)
+    const result = await this.model.auth(req.token)
 
     if (!result.success) {
       return res.status(401).json({ message: result.error.message })
