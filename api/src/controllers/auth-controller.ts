@@ -1,10 +1,6 @@
 import type { Request, Response } from "express"
+import { NODE_ENV } from "~/config/env.js"
 import type { AuthModel } from "~/models/auth-model.js"
-import type { RefreshTokenPayload } from "~/types.js"
-
-import jwt from "jsonwebtoken"
-import { JWT_SECRET, NODE_ENV } from "~/config/env.js"
-import { UserRepository } from "~/repositories/user-repository.js"
 
 export class AuthController {
   private static COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 30 // 30 days
@@ -41,19 +37,7 @@ export class AuthController {
       return res.status(401).json({ message: "No refresh token provided" })
     }
 
-    const decoded = jwt.verify(refreshToken, JWT_SECRET) as RefreshTokenPayload
-    const repo = new UserRepository()
-    const user = await repo.findById(decoded.userId)
-
-    if (!user) {
-      throw new Error("User not found for the provided refresh token", {
-        cause: {
-          userId: decoded.userId,
-        },
-      })
-    }
-
-    const accessToken = jwt.sign(user, JWT_SECRET, { expiresIn: "15m" })
+    const accessToken = await this.model.generateAccessToken(refreshToken)
 
     res.json({ accessToken })
   }
