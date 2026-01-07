@@ -1,5 +1,4 @@
 import type { NextFunction, Request, Response } from "express"
-import logger from "~/services/logger.js"
 
 export function handleUnexpectedError(
   err: Error,
@@ -8,6 +7,6 @@ export function handleUnexpectedError(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _n: NextFunction
 ) {
-  logger.error(err)
+  console.error(err)
   res.sendStatus(500)
 }
