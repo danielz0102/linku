@@ -3,8 +3,6 @@ import { NODE_ENV } from "~/config/env.js"
 import type { AuthModel } from "~/models/auth-model.js"
 
 export class AuthController {
-  private static COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 30 // 30 days
-
   constructor(private model: AuthModel) {}
 
   auth = async (req: Request, res: Response) => {
@@ -20,12 +18,7 @@ export class AuthController {
 
     const { accessToken, refreshToken } = result.data
 
-    res.cookie("refresh_token", refreshToken, {
-      httpOnly: true,
-      secure: NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: AuthController.COOKIE_MAX_AGE,
-    })
+    this.setRefreshTokenCookie(res, refreshToken)
 
     res.json({ accessToken })
   }
@@ -40,5 +33,14 @@ export class AuthController {
     const accessToken = await this.model.generateAccessToken(refreshToken)
 
     res.json({ accessToken })
+  }
+
+  private setRefreshTokenCookie(res: Response, refreshToken: string) {
+    res.cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      secure: NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+    })
   }
 }
