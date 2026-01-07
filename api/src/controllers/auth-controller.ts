@@ -35,6 +35,15 @@ export class AuthController {
     res.json({ accessToken })
   }
 
+  logout = async (req: Request, res: Response) => {
+    res.clearCookie("refresh_token", {
+      httpOnly: true,
+      secure: NODE_ENV === "production",
+      sameSite: "lax",
+    })
+    res.sendStatus(200)
+  }
+
   private setRefreshTokenCookie(res: Response, refreshToken: string) {
     res.cookie("refresh_token", refreshToken, {
       httpOnly: true,

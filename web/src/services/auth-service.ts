@@ -16,3 +16,7 @@ export async function getAccessToken() {
     return null
   }
 }
+
+export async function logout() {
+  await apiClient.get("/auth/logout")
+}

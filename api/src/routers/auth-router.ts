@@ -11,5 +11,6 @@ const controller = new AuthController(auth)
 
 router.get("/me", controller.getMe)
 router.post("/google", verifyToken, controller.auth)
+router.get("/logout", controller.logout)
 
 export default router
