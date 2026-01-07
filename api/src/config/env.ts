@@ -1,7 +1,6 @@
-import dotenv from "dotenv"
 import z from "zod"
 
-dotenv.config({ quiet: true })
+process.loadEnvFile()
 
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("production"),
