@@ -114,7 +114,7 @@ describe("GET /auth/me", () => {
     expiresIn: "15m",
   })
 
-  it("sends an access token if there is a refresh token", async () => {
+  it("sends an access token if a refresh token is provided", async () => {
     await db.insert(usersTable).values(fakeUser)
 
     const response = await request(app)
@@ -128,5 +128,9 @@ describe("GET /auth/me", () => {
     expect(decoded).toMatchObject(fakeUser)
 
     await db.delete(usersTable).where(eq(usersTable.email, fakeUser.email))
+  })
+
+  it("sends 401 if no refresh token is provided", async () => {
+    await request(app).get("/auth/me").expect(401)
   })
 })
