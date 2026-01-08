@@ -7,9 +7,9 @@ export default function Login() {
   const { login } = useAuth()
 
   return (
-    <main className="page bg-gray-100">
-      <h1 className="mb-2 text-3xl text-neutral-950">Linku</h1>
-      <p className="mb-4 text-neutral-700">Real-time messaging, simplified</p>
+    <main className="page bg-primary">
+      <h1 className="title mb-2">Linku</h1>
+      <p className="text-secondary mb-4">Real-time messaging, simplified</p>
       <GoogleLogin
         onSuccess={async (res) => {
           if (!res.credential) return

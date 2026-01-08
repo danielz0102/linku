@@ -6,12 +6,10 @@ import AuthContext from "~/contexts/auth-context"
 import { AuthService } from "~/services/auth-service"
 import type { User, UserPayload } from "~/types"
 
-const initialUser: User | undefined = await AuthService.getAccessToken().then(
-  (token) => {
-    if (!token) return
-    return userTokenToUser(token)
-  }
-)
+const initialUser = await AuthService.getAccessToken().then((token) => {
+  if (!token) return
+  return userTokenToUser(token)
+})
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<User | undefined>(initialUser)

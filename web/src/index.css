@@ -1,7 +1,33 @@
 @import "tailwindcss";
 
+@utility center {
+  @apply flex flex-col items-center justify-center;
+}
+
+@utility bg-primary {
+  @apply bg-gray-200;
+}
+
+@utility bg-light {
+  @apply bg-gray-50;
+}
+
+@utility text-primary {
+  @apply text-gray-950;
+}
+
+@utility text-secondary {
+  @apply text-gray-700;
+}
+
+/* COMPONENTS */
+
 @utility page {
-  @apply flex min-h-screen flex-col items-center justify-center;
+  @apply center min-h-dvh;
+}
+
+@utility title {
+  @apply text-primary text-3xl;
 }
 
 body {
