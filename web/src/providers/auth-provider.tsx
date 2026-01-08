@@ -1,6 +1,6 @@
 import { GoogleOAuthProvider } from "@react-oauth/google"
 import { jwtDecode } from "jwt-decode"
-import { useEffect, useState, type PropsWithChildren } from "react"
+import { useState, type PropsWithChildren } from "react"
 import { GOOGLE_OAUTH_CLIENT_ID } from "~/config/env"
 import AuthContext from "~/contexts/auth-context"
 import {
@@ -10,24 +10,17 @@ import {
 } from "~/services/auth-service"
 import type { User, UserPayload } from "~/types"
 
+const initialUser: User | undefined = await getAccessToken().then((token) => {
+  if (!token) return
+  return userTokenToUser(token)
+})
+
 export default function AuthProvider({ children }: PropsWithChildren) {
-  const [user, setUser] = useState<User | undefined>()
-
-  const updateUser = (accessToken: string) => {
-    const decodedUser = jwtDecode<UserPayload>(accessToken)
-
-    setUser({
-      id: decodedUser.id,
-      firstName: decodedUser.firstName,
-      lastName: decodedUser.lastName,
-      email: decodedUser.email,
-      picture: decodedUser.picture,
-    })
-  }
+  const [user, setUser] = useState<User | undefined>(initialUser)
 
   const login = async (tokenId: string) => {
     const { data } = await auth(tokenId)
-    updateUser(data.accessToken)
+    setUser(userTokenToUser(data.accessToken))
   }
 
   const logout = async () => {
@@ -35,16 +28,21 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     setUser(undefined)
   }
 
-  useEffect(() => {
-    getAccessToken().then((token) => {
-      if (!token) return
-      updateUser(token)
-    })
-  }, [])
-
   return (
     <GoogleOAuthProvider clientId={GOOGLE_OAUTH_CLIENT_ID}>
       <AuthContext value={{ user, login, logout }}>{children}</AuthContext>
     </GoogleOAuthProvider>
   )
+}
+
+function userTokenToUser(token: string): User {
+  const payload = jwtDecode<UserPayload>(token)
+
+  return {
+    id: payload.id,
+    firstName: payload.firstName,
+    lastName: payload.lastName,
+    email: payload.email,
+    picture: payload.picture,
+  }
 }
