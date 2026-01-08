@@ -3,28 +3,26 @@ import { jwtDecode } from "jwt-decode"
 import { useState, type PropsWithChildren } from "react"
 import { GOOGLE_OAUTH_CLIENT_ID } from "~/config/env"
 import AuthContext from "~/contexts/auth-context"
-import {
-  auth,
-  getAccessToken,
-  logout as logoutApi,
-} from "~/services/auth-service"
+import { AuthService } from "~/services/auth-service"
 import type { User, UserPayload } from "~/types"
 
-const initialUser: User | undefined = await getAccessToken().then((token) => {
-  if (!token) return
-  return userTokenToUser(token)
-})
+const initialUser: User | undefined = await AuthService.getAccessToken().then(
+  (token) => {
+    if (!token) return
+    return userTokenToUser(token)
+  }
+)
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<User | undefined>(initialUser)
 
   const login = async (tokenId: string) => {
-    const { data } = await auth(tokenId)
+    const { data } = await AuthService.auth(tokenId)
     setUser(userTokenToUser(data.accessToken))
   }
 
   const logout = async () => {
-    await logoutApi()
+    await AuthService.logout()
     setUser(undefined)
   }
 
