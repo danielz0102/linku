@@ -1,6 +1,11 @@
+// Supports weights 400-900
+import "@fontsource-variable/playfair-display"
+// Supports weights 100-900
+import "@fontsource-variable/archivo"
+import "./index.css"
+
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
-import "./index.css"
 import Router from "./router.tsx"
 
 const root = document.getElementById("root")
