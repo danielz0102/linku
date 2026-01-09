@@ -5,10 +5,10 @@ import Router from "./router"
 
 export default function App() {
   return (
-    <AuthProvider>
-      <ErrorBoundary fallback={<UnexpectedError />}>
+    <ErrorBoundary fallback={<UnexpectedError />}>
+      <AuthProvider>
         <Router />
-      </ErrorBoundary>
-    </AuthProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   )
 }
