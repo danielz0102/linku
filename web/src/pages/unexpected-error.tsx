@@ -1,7 +1,12 @@
+import { Link } from "react-router"
+
 export default function UnexpectedError() {
   return (
-    <div className="page bg-red-950">
-      <h1 className="text-3xl text-white">500 - Unexpected Error</h1>
-    </div>
+    <main className="page bg-primary gap-4">
+      <h1 className="title text-center">An unexpected error occurred</h1>
+      <Link to="/" className="text-secondary underline">
+        Go back home
+      </Link>
+    </main>
   )
 }
