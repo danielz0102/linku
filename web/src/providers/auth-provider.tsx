@@ -14,9 +14,9 @@ const initialUser = await AuthService.getAccessToken().then((token) => {
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<User | undefined>(initialUser)
 
-  const login = async (tokenId: string) => {
-    const { data } = await AuthService.auth(tokenId)
-    setUser(userTokenToUser(data.accessToken))
+  const login = async (code: string) => {
+    const token = await AuthService.auth(code)
+    setUser(userTokenToUser(token))
   }
 
   const logout = async () => {

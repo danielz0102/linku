@@ -1,12 +1,13 @@
 import apiClient from "./api-client"
 
 export const AuthService = {
-  auth(token: string) {
-    return apiClient.post<{ accessToken: string }>("/auth/google", undefined, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+  async auth(code: string) {
+    const { data } = await apiClient.post<{ accessToken: string }>(
+      "/auth/google",
+      { code }
+    )
+
+    return data.accessToken
   },
   async getAccessToken() {
     try {

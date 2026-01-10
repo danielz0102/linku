@@ -5,12 +5,19 @@ import type { AuthModel } from "~/models/auth-model.js"
 export class AuthController {
   constructor(private model: AuthModel) {}
 
-  auth = async (req: Request, res: Response) => {
-    if (!req.token) {
-      throw new Error("Invalid authentication request")
+  auth = async (
+    req: Request<unknown, unknown, { code?: string }>,
+    res: Response
+  ) => {
+    const { code } = req.body
+
+    if (!code) {
+      return res
+        .status(400)
+        .json({ message: "Authentication code is required" })
     }
 
-    const result = await this.model.auth(req.token)
+    const result = await this.model.auth(code)
 
     if (!result.success) {
       return res.status(401).json({ message: result.error.message })
