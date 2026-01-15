@@ -21,7 +21,7 @@ type Credentials =
       password: string
     }
 
-export class AuthModel {
+export class LoginWithCredentials {
   private readonly repo: UserRepository
   private readonly hasher: PasswordHasher
   private readonly tokenService: TokenService
@@ -32,7 +32,7 @@ export class AuthModel {
     this.tokenService = tokenService
   }
 
-  async loginWithCredentials({
+  async execute({
     username,
     email,
     password,
