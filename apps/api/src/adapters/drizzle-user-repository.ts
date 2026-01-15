@@ -1,5 +1,5 @@
-import db from "#db/index.js"
-import { usersTable, type UserRecord } from "#db/schemas.js"
+import db from "#db/drizzle/index.js"
+import { usersTable, type UserRecord } from "#db/drizzle/schemas.js"
 import type { Filters, UserRepository } from "#ports/user-repository.d.js"
 import { and, eq } from "drizzle-orm"
 

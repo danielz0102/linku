@@ -1,9 +1,9 @@
-import type { UserRecord } from "#db/schemas.js"
+import type { UserRecord } from "#db/drizzle/schemas.js"
 import { PasswordHasher } from "#ports/password-hasher.js"
 import { TokenService } from "#ports/token-service.js"
 import type { UserRepository } from "#ports/user-repository.d.js"
-import { LoginWithCredentials } from "./login-with-credentials.js"
 import { faker } from "@faker-js/faker"
+import { LoginWithCredentials } from "./login-with-credentials.js"
 
 const fakeUser: UserRecord = {
   id: faker.string.uuid(),
