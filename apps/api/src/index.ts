@@ -1,24 +1,13 @@
-import { ALLOWED_ORIGIN, PORT } from "#config/env.js"
-import { handleUnexpectedError } from "#middlewares/handle-error.js"
-import { handleNotFound } from "#middlewares/handle-not-found.js"
-import cors from "cors"
-import express from "express"
+import { createApp } from "#app.js"
+import { composeAuthRouter } from "#composition.js"
+import { PORT } from "#config/env.js"
+import { createApiRouter } from "#routers/api-router.js"
 
-const app = express()
-
-app.use(
-  cors({
-    origin: ALLOWED_ORIGIN,
-  })
-)
-app.use(express.json())
-
-app.get("/", (_, res) => {
-  res.send("Hello, World!")
+const apiRouter = createApiRouter({
+  authRouter: composeAuthRouter(),
 })
-app.use(handleNotFound)
-app.use(handleUnexpectedError)
+const app = createApp(apiRouter)
 
 app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`)
+  console.log(`Server is running on port ${PORT}`)
 })
