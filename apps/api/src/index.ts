@@ -9,5 +9,5 @@ const apiRouter = createApiRouter({
 const app = createApp(apiRouter)
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`)
+  console.log(`Server is running on http://localhost:${PORT}`)
 })
