@@ -1,51 +1,27 @@
-import type { UserRecord } from "#db/drizzle/schemas.js"
-import { PasswordHasher } from "#ports/password-hasher.js"
-import { TokenService } from "#ports/token-service.js"
-import type { UserRepository } from "#ports/user-repository.d.js"
-import { faker } from "@faker-js/faker"
+import { createFakeUserRecord } from "#__tests__/lib/create-fake-user-record.js"
+import { createHasherMock } from "#__tests__/lib/hasher-mock.js"
+import { createUserRepositoryMock } from "#__tests__/lib/user-repository-mock.js"
+import { createTokenServiceMock } from "../__tests__/lib/token-service-mock.js"
 import { LoginWithCredentials } from "./login-with-credentials.js"
 
-const fakeUser: UserRecord = {
-  id: faker.string.uuid(),
-  username: faker.internet.username(),
-  email: faker.internet.email(),
-  hashedPassword: faker.string.alphanumeric(10),
-  bio: faker.lorem.text(),
-  firstName: faker.person.firstName(),
-  lastName: faker.person.lastName(),
-  profilePicId: null,
-  signUpAt: faker.date.past(),
-  status: "offline",
-}
-
-const repo = {
-  findBy: vi.fn<UserRepository["findBy"]>(() => Promise.resolve(fakeUser)),
-} satisfies UserRepository
-
-const HasherMock = vi.fn(
-  class extends PasswordHasher {
-    override hash = vi.fn()
-    override compare = vi.fn(() => Promise.resolve(true))
-  }
-)
-const hasher = new HasherMock(1)
-
-const TokenServiceMock = vi.fn(
-  class extends TokenService {
-    override accessToken = vi.fn(() => Promise.resolve("valid.token.here"))
-  }
-)
-const tokenService = new TokenServiceMock("secret")
-
+const repo = createUserRepositoryMock()
+const hasher = createHasherMock()
+const tokenService = createTokenServiceMock()
 const useCase = new LoginWithCredentials({
   repo,
   hasher,
   tokenService,
 })
 
+beforeAll(() => {
+  repo.findBy.mockResolvedValue(createFakeUserRecord())
+  hasher.compare.mockResolvedValue(true)
+  tokenService.accessToken.mockReturnValue("valid.token.here")
+})
+
 test("returns a token when credentials are valid", async () => {
   const result = await useCase.execute({
-    username: fakeUser.username,
+    username: "john.doe",
     password: "plainPassword",
   })
 
@@ -69,7 +45,7 @@ test("returns an error when password is invalid", async () => {
   hasher.compare.mockResolvedValueOnce(false)
 
   const result = await useCase.execute({
-    username: fakeUser.username,
+    username: "john.doe",
     password: "wrongPassword",
   })
 
