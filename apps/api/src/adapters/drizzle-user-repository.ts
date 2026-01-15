@@ -1,10 +1,10 @@
 import db from "#db/index.js"
-import { usersTable, type User } from "#db/schemas.js"
+import { usersTable, type UserRecord } from "#db/schemas.js"
 import type { Filters, UserRepository } from "#ports/user-repository.d.js"
 import { and, eq } from "drizzle-orm"
 
 export class DrizzleUserRepository implements UserRepository {
-  async findBy(filters: Filters): Promise<User | undefined> {
+  async findBy(filters: Filters): Promise<UserRecord | undefined> {
     const keys = Object.keys(filters) as (keyof Filters)[]
     const conditions: ReturnType<typeof eq>[] = []
 

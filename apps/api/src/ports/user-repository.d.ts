@@ -1,8 +1,8 @@
-import { User } from "#db/schemas.js"
+import { UserRecord } from "#db/schemas.js"
 
-type UserQueryableFields = Pick<User, "id" | "username" | "email">
+type UserQueryableFields = Pick<UserRecord, "id" | "username" | "email">
 type Filters = Partial<UserQueryableFields>
 
 interface UserRepository {
-  findBy(filters: Filters): Promise<User | undefined>
+  findBy(filters: Filters): Promise<UserRecord | undefined>
 }

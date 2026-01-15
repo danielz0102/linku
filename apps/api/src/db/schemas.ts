@@ -25,7 +25,7 @@ export const usersTable = pgTable("users", {
   signUpAt: timestamp().defaultNow().notNull(),
 })
 
-export type User = typeof usersTable.$inferSelect
+export type UserRecord = typeof usersTable.$inferSelect
 
 export const friends = pgTable(
   "friends",
