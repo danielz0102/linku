@@ -13,6 +13,27 @@ type User = {
   signUpAt: Date
 }
 
+type LoginCredentials = {
+  username: string
+  password: string
+}
+
+type LoginPayload = {
+  user: PublicUser
+  accessToken: string
+  refreshToken: string
+}
+
+type RegisterCredentials = {
+  username: string
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  // TODO: handle picture upload
+  // profilePicUrl?: string
+}
+
 type PublicUser = {
   id: string
   username: string

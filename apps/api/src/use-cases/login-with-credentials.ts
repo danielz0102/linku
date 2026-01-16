@@ -1,18 +1,8 @@
+import { TOKEN_LIFES } from "#domain/constants/token-lifes.js"
 import { toPublicUser } from "#domain/entities/user-mapper.js"
 import { Result } from "#lib/result.js"
 import type { PasswordHasher } from "#ports/password-hasher.js"
 import type { TokenService } from "#ports/token-service.js"
-
-type Credentials = {
-  username: string
-  password: string
-}
-
-type LoginPayload = {
-  user: PublicUser
-  accessToken: string
-  refreshToken: string
-}
 
 type Dependencies = {
   repo: UserRepository
@@ -21,9 +11,6 @@ type Dependencies = {
 }
 
 export class LoginWithCredentials {
-  private static readonly ACCESS_TOKEN_EXPIRATION = 60 * 60 // 1 hour
-  private static readonly REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 30 // 30 days
-
   private readonly repo: UserRepository
   private readonly hasher: PasswordHasher
   private readonly tokenService: TokenService
@@ -37,7 +24,7 @@ export class LoginWithCredentials {
   async execute({
     username,
     password,
-  }: Credentials): Promise<Result<LoginPayload>> {
+  }: LoginCredentials): Promise<Result<LoginPayload>> {
     const user = await this.repo.findBy({
       username,
     })
@@ -66,14 +53,8 @@ export class LoginWithCredentials {
 
   private async signTokens(userId: string) {
     const [accessToken, refreshToken] = await Promise.all([
-      this.tokenService.signToken(
-        { userId },
-        LoginWithCredentials.ACCESS_TOKEN_EXPIRATION
-      ),
-      this.tokenService.signToken(
-        { userId },
-        LoginWithCredentials.REFRESH_TOKEN_EXPIRATION
-      ),
+      this.tokenService.signToken({ userId }, TOKEN_LIFES.ACCESS_TOKEN),
+      this.tokenService.signToken({ userId }, TOKEN_LIFES.REFRESH_TOKEN),
     ])
 
     return { accessToken, refreshToken }
