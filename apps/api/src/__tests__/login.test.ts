@@ -11,13 +11,11 @@ import jwt from "jsonwebtoken"
 import request from "supertest"
 import { createFakeUser } from "./lib/create-fake-user-record.js"
 
-const app = createApp(composeAuthRouter())
-
-const plainPassword = "plainPassword"
-const fakeUser = createFakeUser({
-  hashedPassword: await bcrypt.hash(plainPassword, SALT),
-})
+const actualPassword = "plainPassword123!"
+const hashedPassword = await bcrypt.hash(actualPassword, SALT)
+const fakeUser = createFakeUser({ hashedPassword })
 const publicUser = toPublicUser(fakeUser)
+const app = createApp(composeAuthRouter())
 
 beforeAll(async () => {
   await db.insert(usersTable).values(fakeUser)
@@ -28,10 +26,10 @@ afterAll(async () => {
 })
 
 describe("POST /login", () => {
-  it("sends an access token when username and password are valid", async () => {
+  it("sends public user data and access token when credentials are valid", async () => {
     const response = await request(app)
       .post("/api/login")
-      .send({ username: fakeUser.username, password: "plainPassword" })
+      .send({ username: fakeUser.username, password: actualPassword })
       .expect(200)
 
     expect(response.body).toMatchObject({
@@ -42,15 +40,22 @@ describe("POST /login", () => {
       accessToken: expect.any(String),
     })
     expect(response.body).not.toHaveProperty("hashedPassword")
+  })
+
+  it("assigns user id to access token", async () => {
+    const response = await request(app)
+      .post("/api/login")
+      .send({ username: fakeUser.username, password: actualPassword })
+      .expect(200)
 
     const decodedToken = jwt.verify(response.body.accessToken, JWT_SECRET)
     expect(decodedToken).toMatchObject({ userId: fakeUser.id })
   })
 
-  it("sets cookie with refresh token", async () => {
+  it("sets cookie with HTTP only flag and refresh token with user id", async () => {
     const response = await request(app)
       .post("/api/login")
-      .send({ username: fakeUser.username, password: "plainPassword" })
+      .send({ username: fakeUser.username, password: actualPassword })
       .expect(200)
 
     const cookies = response.headers["set-cookie"] as unknown as string[]
@@ -62,22 +67,29 @@ describe("POST /login", () => {
     expect(decodedToken).toMatchObject({ userId: fakeUser.id })
   })
 
-  it("succeeds with email too", async () => {
+  it("sends 401 when password is invalid", async () => {
     await request(app)
       .post("/api/login")
-      .send({ email: fakeUser.email, password: plainPassword })
-      .expect(200)
+      .send({ username: fakeUser.username, password: "wrongPassword123!!" })
+      .expect(401)
   })
 
-  it("does not ignore email if username is provided", async () => {
+  it("sends 400 when credentials are missing", async () => {
+    await request(app).post("/api/login").expect(400)
+  })
+
+  it("sends 400 when fields have invalid types", async () => {
     await request(app)
       .post("/api/login")
-      .send({
-        username: fakeUser.username,
-        email: "incorrectEmail@gmail.com",
-        password: plainPassword,
-      })
-      .expect(401)
+      .send({ username: 12345, password: true })
+      .expect(400)
+  })
+
+  it("sends 400 when fields are empty strings", async () => {
+    await request(app)
+      .post("/api/login")
+      .send({ username: "", password: "" })
+      .expect(400)
   })
 })
 

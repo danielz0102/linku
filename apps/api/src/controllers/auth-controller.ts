@@ -1,6 +1,7 @@
 import { COOKIE_HTTPS_ONLY } from "#config/env.js"
 import { RefreshTokenCookie } from "#domain/constants/cookies.js"
 import type { LoginWithCredentials } from "#use-cases/login-with-credentials.js"
+import { validateLoginCredentials } from "#validators/login-credentials-validator.js"
 import type { Request, Response } from "express"
 
 type UseCases = {
@@ -15,7 +16,13 @@ export class AuthController {
   }
 
   login = async (req: Request, res: Response) => {
-    const result = await this.loginWithCredentials.execute(req.body)
+    const validation = validateLoginCredentials(req.body)
+
+    if (validation.error) {
+      return res.status(400).json({ error: validation.error })
+    }
+
+    const result = await this.loginWithCredentials.execute(validation.data)
 
     if (!result.success) {
       return res.status(401).json({ error: result.error.message })

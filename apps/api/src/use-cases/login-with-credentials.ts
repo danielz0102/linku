@@ -3,17 +3,10 @@ import { Result } from "#lib/result.js"
 import type { PasswordHasher } from "#ports/password-hasher.js"
 import type { TokenService } from "#ports/token-service.js"
 
-type Credentials =
-  | {
-      username: string
-      email?: never
-      password: string
-    }
-  | {
-      email: string
-      username?: never
-      password: string
-    }
+type Credentials = {
+  username: string
+  password: string
+}
 
 type LoginPayload = {
   user: PublicUser
@@ -43,12 +36,10 @@ export class LoginWithCredentials {
 
   async execute({
     username,
-    email,
     password,
   }: Credentials): Promise<Result<LoginPayload>> {
     const user = await this.repo.findBy({
       username,
-      email,
     })
 
     if (!user || !user.hashedPassword) {
