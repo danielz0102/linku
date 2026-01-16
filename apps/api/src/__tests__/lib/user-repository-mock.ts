@@ -2,7 +2,8 @@ import type { UserRepository } from "#ports/user-repository.d.js"
 import { vi } from "vitest"
 
 export function createUserRepositoryMock() {
-  return {
-    findBy: vi.fn<UserRepository["findBy"]>(),
-  } satisfies UserRepository
+  return vi.mockObject<UserRepository>({
+    create: vi.fn(),
+    findBy: vi.fn(),
+  })
 }
