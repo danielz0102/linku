@@ -2,7 +2,6 @@ import { toPublicUser } from "#domain/entities/user-mapper.js"
 import { Result } from "#lib/result.js"
 import type { PasswordHasher } from "#ports/password-hasher.js"
 import type { TokenService } from "#ports/token-service.js"
-import type { UserRepository } from "#ports/user-repository.d.js"
 
 type Credentials =
   | {

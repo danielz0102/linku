@@ -3,8 +3,8 @@
     // Environment Settings
     "module": "nodenext",
     "target": "esnext",
-    "noEmitOnError": true,
     "moduleResolution": "nodenext",
+    "noEmitOnError": true,
 
     // Stricter Typechecking Options
     // "noUncheckedIndexedAccess": true,

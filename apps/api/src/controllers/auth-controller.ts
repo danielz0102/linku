@@ -1,3 +1,5 @@
+import { COOKIE_HTTPS_ONLY } from "#config/env.js"
+import { RefreshTokenCookie } from "#domain/constants/cookies.js"
 import type { LoginWithCredentials } from "#use-cases/login-with-credentials.js"
 import type { Request, Response } from "express"
 
@@ -19,8 +21,16 @@ export class AuthController {
       return res.status(401).json({ error: result.error.message })
     }
 
-    // TODO: Set HttpOnly cookie with token
-    res.json(result.data)
+    const { user, accessToken, refreshToken } = result.data
+
+    res.cookie(RefreshTokenCookie.name, refreshToken, {
+      httpOnly: true,
+      secure: COOKIE_HTTPS_ONLY,
+      sameSite: "lax",
+      maxAge: RefreshTokenCookie.age,
+    })
+
+    res.json({ user, accessToken })
   }
 
   register = async (req: Request, res: Response) => {
