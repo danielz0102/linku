@@ -1,5 +1,9 @@
 import db from "#db/drizzle/index.js"
-import { usersTable, type UserRecord } from "#db/drizzle/schemas.js"
+import {
+  usersTable,
+  type NewUserRecord,
+  type UserRecord,
+} from "#db/drizzle/schemas.js"
 import type { Filters, UserRepository } from "#ports/user-repository.d.js"
 import { and, eq } from "drizzle-orm"
 
@@ -25,5 +29,13 @@ export class DrizzleUserRepository implements UserRepository {
       .limit(1)
 
     return user
+  }
+
+  async create(user: NewUserRecord): Promise<UserRecord> {
+    return db
+      .insert(usersTable)
+      .values(user)
+      .returning()
+      .then((res) => res[0])
   }
 }

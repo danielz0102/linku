@@ -13,7 +13,13 @@ export class AuthController {
   }
 
   login = async (req: Request, res: Response) => {
-    res.send("Login endpoint")
+    const result = await this.loginWithCredentials.execute(req.body)
+
+    if (!result.success) {
+      return res.status(401).json({ error: result.error.message })
+    }
+
+    res.json(result.data)
   }
 
   register = async (req: Request, res: Response) => {

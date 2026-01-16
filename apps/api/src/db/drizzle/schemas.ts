@@ -26,6 +26,7 @@ export const usersTable = pgTable("users", {
 })
 
 export type UserRecord = typeof usersTable.$inferSelect
+export type NewUserRecord = typeof usersTable.$inferInsert
 
 export const friends = pgTable(
   "friends",

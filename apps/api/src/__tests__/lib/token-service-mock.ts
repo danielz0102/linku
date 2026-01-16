@@ -4,7 +4,8 @@ import { vi } from "vitest"
 export function createTokenServiceMock(secret = "secret") {
   const TokenServiceMock = vi.fn(
     class extends TokenService {
-      override accessToken = vi.fn()
+      override signToken = vi.fn()
+      override verifyToken = vi.fn()
     }
   )
 

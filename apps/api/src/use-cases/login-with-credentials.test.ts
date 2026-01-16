@@ -4,6 +4,8 @@ import { createUserRepositoryMock } from "#__tests__/lib/user-repository-mock.js
 import { createTokenServiceMock } from "../__tests__/lib/token-service-mock.js"
 import { LoginWithCredentials } from "./login-with-credentials.js"
 
+const FAKE_TOKEN = "valid.token.here"
+const user = createFakeUserRecord()
 const repo = createUserRepositoryMock()
 const hasher = createHasherMock()
 const tokenService = createTokenServiceMock()
@@ -14,19 +16,27 @@ const useCase = new LoginWithCredentials({
 })
 
 beforeAll(() => {
-  repo.findBy.mockResolvedValue(createFakeUserRecord())
+  repo.findBy.mockResolvedValue(user)
   hasher.compare.mockResolvedValue(true)
-  tokenService.accessToken.mockReturnValue("valid.token.here")
+  tokenService.signToken.mockReturnValue(FAKE_TOKEN)
 })
 
-test("returns a token when credentials are valid", async () => {
+test("returns the user found with a token", async () => {
   const result = await useCase.execute({
     username: "john.doe",
     password: "plainPassword",
   })
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { hashedPassword, ...publicUser } = user
+
   expect(result.success).toBe(true)
-  expect(result.data).toEqual({ accessToken: "valid.token.here" })
+  expect(result.data).toMatchObject({
+    user: publicUser,
+    accessToken: FAKE_TOKEN,
+    refreshToken: FAKE_TOKEN,
+  })
+  expect(result.data).not.toHaveProperty("hashedPassword")
 })
 
 test("returns an error when user is not found", async () => {

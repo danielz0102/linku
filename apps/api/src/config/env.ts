@@ -1,7 +1,7 @@
-import { loadEnvFile } from "node:process"
 import z from "zod"
 
-loadEnvFile()
+const envFile = process.env["VITEST"] ? ".env.test" : ".env"
+process.loadEnvFile(envFile)
 
 const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
