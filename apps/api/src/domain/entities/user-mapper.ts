@@ -8,6 +8,6 @@ export function toPublicUser(user: User): PublicUser {
     profilePicUrl: user.profilePicUrl ?? null,
     status: user.status,
     bio: user.bio ?? null,
-    signUpAt: user.signUpAt,
+    signUpAt: user.signUpAt.toISOString(),
   }
 }

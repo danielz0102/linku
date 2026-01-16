@@ -1,3 +1,5 @@
+type Status = "online" | "offline"
+
 type User = {
   id: string
   username: string
@@ -11,7 +13,14 @@ type User = {
   signUpAt: Date
 }
 
-type Status = "online" | "offline"
-
-type PrivateUserFields = Pick<User, "hashedPassword">
-type PublicUser = UndefinedToNull<Omit<User, keyof PrivateUserFields>>
+type PublicUser = {
+  id: string
+  username: string
+  email: string
+  firstName: string
+  lastName: string
+  profilePicUrl: string | null
+  status: Status
+  bio: string | null
+  signUpAt: string
+}

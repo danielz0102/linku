@@ -14,7 +14,6 @@ import { createFakeUser } from "./lib/create-fake-user-record.js"
 const actualPassword = "plainPassword123!"
 const hashedPassword = await bcrypt.hash(actualPassword, SALT)
 const fakeUser = createFakeUser({ hashedPassword })
-const publicUser = toPublicUser(fakeUser)
 const app = createApp(composeAuthRouter())
 
 beforeAll(async () => {
@@ -33,10 +32,7 @@ describe("POST /login", () => {
       .expect(200)
 
     expect(response.body).toMatchObject({
-      user: {
-        ...publicUser,
-        signUpAt: publicUser.signUpAt.toISOString(),
-      },
+      user: toPublicUser(fakeUser),
       accessToken: expect.any(String),
     })
     expect(response.body).not.toHaveProperty("hashedPassword")
