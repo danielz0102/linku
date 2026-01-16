@@ -1,4 +1,4 @@
-import type { UserRecord } from "#db/drizzle/schemas.js"
+import { toPublicUser } from "#domain/entities/user-mapper.js"
 import { Result } from "#lib/result.js"
 import type { PasswordHasher } from "#ports/password-hasher.js"
 import type { TokenService } from "#ports/token-service.js"
@@ -16,8 +16,6 @@ type Credentials =
       password: string
     }
 
-type PrivateUserFields = Pick<UserRecord, "hashedPassword">
-type PublicUser = Omit<UserRecord, keyof PrivateUserFields>
 type LoginPayload = {
   user: PublicUser
   accessToken: string
@@ -31,12 +29,12 @@ type Dependencies = {
 }
 
 export class LoginWithCredentials {
+  private static readonly ACCESS_TOKEN_EXPIRATION = 60 * 60 // 1 hour
+  private static readonly REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 30 // 30 days
+
   private readonly repo: UserRepository
   private readonly hasher: PasswordHasher
   private readonly tokenService: TokenService
-
-  private static readonly ACCESS_TOKEN_EXPIRATION = 60 * 60 // 1 hour
-  private static readonly REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 30 // 30 days
 
   constructor({ repo, hasher, tokenService }: Dependencies) {
     this.repo = repo
@@ -70,17 +68,7 @@ export class LoginWithCredentials {
     const { accessToken, refreshToken } = await this.signTokens(user.id)
 
     return Result.ok({
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        profilePicId: user.profilePicId,
-        bio: user.bio,
-        signUpAt: user.signUpAt,
-        status: user.status,
-      },
+      user: toPublicUser(user),
       accessToken,
       refreshToken,
     })

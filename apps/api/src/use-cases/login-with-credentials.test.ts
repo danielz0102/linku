@@ -1,11 +1,12 @@
-import { createFakeUserRecord } from "#__tests__/lib/create-fake-user-record.js"
+import { createFakeUser } from "#__tests__/lib/create-fake-user-record.js"
 import { createHasherMock } from "#__tests__/lib/hasher-mock.js"
 import { createUserRepositoryMock } from "#__tests__/lib/user-repository-mock.js"
+import { toPublicUser } from "#domain/entities/user-mapper.js"
 import { createTokenServiceMock } from "../__tests__/lib/token-service-mock.js"
 import { LoginWithCredentials } from "./login-with-credentials.js"
 
 const FAKE_TOKEN = "valid.token.here"
-const user = createFakeUserRecord()
+const user = createFakeUser()
 const repo = createUserRepositoryMock()
 const hasher = createHasherMock()
 const tokenService = createTokenServiceMock()
@@ -21,14 +22,13 @@ beforeAll(() => {
   tokenService.signToken.mockReturnValue(FAKE_TOKEN)
 })
 
-test("returns the user found with a token", async () => {
+test("returns the user found with tokens", async () => {
   const result = await useCase.execute({
     username: "john.doe",
     password: "plainPassword",
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { hashedPassword, ...publicUser } = user
+  const publicUser = toPublicUser(user)
 
   expect(result.success).toBe(true)
   expect(result.data).toMatchObject({

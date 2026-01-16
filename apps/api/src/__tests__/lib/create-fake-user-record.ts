@@ -1,14 +1,11 @@
-import type { UserRecord } from "#db/drizzle/schemas.js"
 import { faker } from "@faker-js/faker"
 
-export const createFakeUserRecord = (
-  overrides: Partial<UserRecord> = {}
-): UserRecord => ({
-  ...createDefaultRecord(),
+export const createFakeUser = (overrides: Partial<User> = {}): User => ({
+  ...createDefaultUser(),
   ...overrides,
 })
 
-const createDefaultRecord = (): UserRecord => ({
+const createDefaultUser = (): User => ({
   id: faker.string.uuid(),
   username: faker.internet.username(),
   email: faker.internet.email(),
@@ -16,13 +13,7 @@ const createDefaultRecord = (): UserRecord => ({
   bio: faker.lorem.text(),
   firstName: faker.person.firstName(),
   lastName: faker.person.lastName(),
-  profilePicId:
-    faker.helpers.maybe(() => faker.string.uuid(), {
-      probability: 0.5,
-    }) || null,
+  profilePicUrl: faker.helpers.maybe(() => faker.image.avatar()),
   signUpAt: faker.date.recent(),
-  status: faker.helpers.arrayElement<UserRecord["status"]>([
-    "online",
-    "offline",
-  ]),
+  status: faker.helpers.arrayElement<User["status"]>(["online", "offline"]),
 })

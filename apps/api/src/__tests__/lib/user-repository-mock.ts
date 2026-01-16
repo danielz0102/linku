@@ -1,4 +1,3 @@
-import type { UserRepository } from "#ports/user-repository.d.js"
 import { vi } from "vitest"
 
 export function createUserRepositoryMock() {

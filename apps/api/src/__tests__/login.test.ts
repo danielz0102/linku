@@ -3,17 +3,17 @@ import { composeAuthRouter } from "#composition.js"
 import { JWT_SECRET, SALT } from "#config/env.js"
 import db from "#db/drizzle/index.js"
 import { usersTable } from "#db/drizzle/schemas.js"
+import { toPublicUser } from "#domain/entities/user-mapper.js"
 import bcrypt from "bcryptjs"
 import { eq } from "drizzle-orm"
-import request from "supertest"
-import { createFakeUserRecord } from "./lib/create-fake-user-record.js"
 import jwt from "jsonwebtoken"
+import request from "supertest"
+import { createFakeUser } from "./lib/create-fake-user-record.js"
 
 const app = createApp(composeAuthRouter())
 
 const plainPassword = "plainPassword"
-const fakeUser = createFakeUserRecord({
-  profilePicId: null,
+const fakeUser = createFakeUser({
   hashedPassword: await bcrypt.hash(plainPassword, SALT),
 })
 
@@ -26,18 +26,17 @@ afterAll(async () => {
 })
 
 describe("POST /login", () => {
-  it("sends an access token when credentials are valid", async () => {
+  it("sends an access token when username and password are valid", async () => {
     const response = await request(app)
       .post("/api/login")
       .send({ username: fakeUser.username, password: "plainPassword" })
       .expect(200)
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { hashedPassword, ...publicUser } = fakeUser
+    const publicUser = toPublicUser(fakeUser)
 
     expect(response.body).toMatchObject({
       user: {
-        ...publicUser,
+        ...toPublicUser(fakeUser),
         signUpAt: publicUser.signUpAt.toISOString(),
       },
       accessToken: expect.any(String),

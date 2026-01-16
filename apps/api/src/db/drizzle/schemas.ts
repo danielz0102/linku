@@ -17,7 +17,7 @@ export const usersTable = pgTable("users", {
   hashedPassword: varchar({ length: 255 }),
   firstName: varchar({ length: 50 }).notNull(),
   lastName: varchar({ length: 50 }).notNull(),
-  profilePicId: uuid().references(() => attachmentsTable.id),
+  profilePicUrl: text(),
   status: varchar({ length: 50, enum: ["online", "offline"] })
     .default("online")
     .notNull(),
@@ -26,7 +26,6 @@ export const usersTable = pgTable("users", {
 })
 
 export type UserRecord = typeof usersTable.$inferSelect
-export type NewUserRecord = typeof usersTable.$inferInsert
 
 export const friends = pgTable(
   "friends",

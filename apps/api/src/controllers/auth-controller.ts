@@ -19,6 +19,7 @@ export class AuthController {
       return res.status(401).json({ error: result.error.message })
     }
 
+    // TODO: Set HttpOnly cookie with token
     res.json(result.data)
   }
 
