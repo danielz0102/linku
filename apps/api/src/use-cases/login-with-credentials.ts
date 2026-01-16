@@ -67,19 +67,7 @@ export class LoginWithCredentials {
       return Result.fail(new Error("Invalid credentials"))
     }
 
-    const accessToken = await this.tokenService.signToken(
-      {
-        userId: user.id,
-      },
-      LoginWithCredentials.ACCESS_TOKEN_EXPIRATION
-    )
-
-    const refreshToken = await this.tokenService.signToken(
-      {
-        userId: user.id,
-      },
-      LoginWithCredentials.REFRESH_TOKEN_EXPIRATION
-    )
+    const { accessToken, refreshToken } = await this.signTokens(user.id)
 
     return Result.ok({
       user: {
@@ -96,5 +84,20 @@ export class LoginWithCredentials {
       accessToken,
       refreshToken,
     })
+  }
+
+  private async signTokens(userId: string) {
+    const [accessToken, refreshToken] = await Promise.all([
+      this.tokenService.signToken(
+        { userId },
+        LoginWithCredentials.ACCESS_TOKEN_EXPIRATION
+      ),
+      this.tokenService.signToken(
+        { userId },
+        LoginWithCredentials.REFRESH_TOKEN_EXPIRATION
+      ),
+    ])
+
+    return { accessToken, refreshToken }
   }
 }
