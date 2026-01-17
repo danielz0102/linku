@@ -1,3 +1,7 @@
+import {
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_PATTERNS,
+} from "#domain/constants/password-patterns.js"
 import z from "zod"
 
 const schema = z.object({
@@ -5,11 +9,20 @@ const schema = z.object({
   email: z.email(),
   password: z
     .string()
-    .min(8)
-    .regex(/[A-Z]/, "must contain at least one uppercase letter")
-    .regex(/[a-z]/, "must contain at least one lowercase letter")
-    .regex(/[0-9]/, "must contain at least one number")
-    .regex(/[^A-Za-z0-9]/, "must contain at least one special character"),
+    .min(PASSWORD_MIN_LENGTH)
+    .regex(
+      PASSWORD_PATTERNS.UPPERCASE,
+      "must contain at least one uppercase letter"
+    )
+    .regex(
+      PASSWORD_PATTERNS.LOWERCASE,
+      "must contain at least one lowercase letter"
+    )
+    .regex(PASSWORD_PATTERNS.DIGIT, "must contain at least one number")
+    .regex(
+      PASSWORD_PATTERNS.SPECIAL_CHAR,
+      "must contain at least one special character"
+    ),
   firstName: z.string().nonempty(),
   lastName: z.string().nonempty(),
 })
