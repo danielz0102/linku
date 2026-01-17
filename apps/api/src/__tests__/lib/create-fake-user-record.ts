@@ -1,3 +1,4 @@
+import type { User } from "#domain/entities/user.d.js"
 import { faker } from "@faker-js/faker"
 
 export const createFakeUser = (overrides: Partial<User> = {}): User => ({

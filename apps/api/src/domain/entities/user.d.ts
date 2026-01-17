@@ -1,6 +1,6 @@
 type Status = "online" | "offline"
 
-type User = {
+export type User = {
   id: string
   username: string
   email: string
@@ -13,18 +13,18 @@ type User = {
   signUpAt: Date
 }
 
-type LoginCredentials = {
+export type LoginCredentials = {
   username: string
   password: string
 }
 
-type LoginPayload = {
+export type LoginPayload = {
   user: PublicUser
   accessToken: string
   refreshToken: string
 }
 
-type RegisterCredentials = {
+export type RegisterCredentials = {
   username: string
   email: string
   password: string
@@ -34,7 +34,7 @@ type RegisterCredentials = {
   // profilePicUrl?: string
 }
 
-type PublicUser = {
+export type PublicUser = {
   id: string
   username: string
   email: string

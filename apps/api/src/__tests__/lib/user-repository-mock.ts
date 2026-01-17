@@ -1,8 +1,7 @@
-import { vi } from "vitest"
+import type { UserRepository } from "#ports/user-repository.d.js"
+import { vi, type Mocked } from "vitest"
 
-export function createUserRepositoryMock() {
-  return vi.mockObject<UserRepository>({
-    create: vi.fn(),
-    findBy: vi.fn(),
-  })
-}
+export const createUserRepositoryMock = (): Mocked<UserRepository> => ({
+  findBy: vi.fn(),
+  create: vi.fn(),
+})

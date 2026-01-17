@@ -19,7 +19,7 @@ const useCase = new LoginWithCredentials({
 beforeAll(() => {
   repo.findBy.mockResolvedValue(user)
   hasher.compare.mockResolvedValue(true)
-  tokenService.signToken.mockReturnValue(FAKE_TOKEN)
+  tokenService.signToken.mockResolvedValue(FAKE_TOKEN)
 })
 
 test("returns the user found with tokens", async () => {

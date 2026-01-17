@@ -1,8 +1,11 @@
+import type { LoginCredentials, LoginPayload } from "#domain/entities/user.d.js"
+import type { PasswordHasher } from "#ports/password-hasher.js"
+import type { TokenService } from "#ports/token-service.js"
+import type { UserRepository } from "#ports/user-repository.d.js"
+
 import { TOKEN_LIFES } from "#domain/constants/token-lifes.js"
 import { toPublicUser } from "#domain/entities/user-mapper.js"
 import { Result } from "#lib/result.js"
-import type { PasswordHasher } from "#ports/password-hasher.js"
-import type { TokenService } from "#ports/token-service.js"
 
 type Dependencies = {
   repo: UserRepository

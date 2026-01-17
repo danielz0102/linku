@@ -4,8 +4,8 @@ import { vi } from "vitest"
 export function createHasherMock(salt = 1) {
   const HasherMock = vi.fn(
     class extends PasswordHasher {
-      override hash = vi.fn()
-      override compare = vi.fn(() => Promise.resolve(true))
+      override hash = vi.fn<PasswordHasher["hash"]>()
+      override compare = vi.fn<PasswordHasher["compare"]>()
     }
   )
 
