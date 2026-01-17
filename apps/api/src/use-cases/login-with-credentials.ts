@@ -3,7 +3,6 @@ import type { PasswordHasher } from "#ports/password-hasher.js"
 import type { TokenService } from "#ports/token-service.js"
 import type { UserRepository } from "#ports/user-repository.d.js"
 
-import { TOKEN_LIFES } from "#domain/constants/token-lifes.js"
 import { toPublicUser } from "#domain/entities/user-mapper.js"
 import { Result } from "#lib/result.js"
 
@@ -45,21 +44,13 @@ export class LoginWithCredentials {
       return Result.fail(new Error("Invalid credentials"))
     }
 
-    const { accessToken, refreshToken } = await this.signTokens(user.id)
+    const { accessToken, refreshToken } =
+      await this.tokenService.signAuthTokens(user.id)
 
     return Result.ok({
       user: toPublicUser(user),
       accessToken,
       refreshToken,
     })
-  }
-
-  private async signTokens(userId: string) {
-    const [accessToken, refreshToken] = await Promise.all([
-      this.tokenService.signToken({ userId }, TOKEN_LIFES.ACCESS_TOKEN),
-      this.tokenService.signToken({ userId }, TOKEN_LIFES.REFRESH_TOKEN),
-    ])
-
-    return { accessToken, refreshToken }
   }
 }

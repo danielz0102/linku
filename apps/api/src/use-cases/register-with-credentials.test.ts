@@ -21,7 +21,10 @@ const useCase = new RegisterWithCredentials({
 beforeAll(() => {
   repo.findBy.mockResolvedValue(undefined)
   repo.create.mockResolvedValue(user)
-  tokenService.signToken.mockResolvedValue(FAKE_TOKEN)
+  tokenService.signAuthTokens.mockResolvedValue({
+    accessToken: FAKE_TOKEN,
+    refreshToken: FAKE_TOKEN,
+  })
 })
 
 test("returns public user with tokens on success", async () => {

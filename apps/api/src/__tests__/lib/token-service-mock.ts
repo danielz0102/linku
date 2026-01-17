@@ -6,9 +6,9 @@ export function createTokenServiceMock(secret = "secret") {
     class extends TokenService {
       override signToken = vi.fn<TokenService["signToken"]>()
       override verifyToken = vi.fn<TokenService["verifyToken"]>()
+      override signAuthTokens = vi.fn<TokenService["signAuthTokens"]>()
     }
   )
 
-  const tokenService = new TokenServiceMock(secret)
-  return tokenService
+  return new TokenServiceMock(secret)
 }
