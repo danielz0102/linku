@@ -13,7 +13,6 @@ app.use(apiRouter)
 
 const fakeCredentials = createFakeRegisterCredentials({
   profilePicUrl: undefined,
-  password: "StrongP@ssw0rd!",
 })
 
 beforeEach(async () => {
