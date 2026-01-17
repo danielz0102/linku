@@ -1,10 +1,11 @@
-import { COOKIE_HTTPS_ONLY } from "#config/env.js"
-import { RefreshTokenCookie } from "#domain/constants/cookies.js"
 import type { LoginWithCredentials } from "#use-cases/login-with-credentials.js"
 import type { RegisterWithCredentials } from "#use-cases/register-with-credentials.js"
+import type { Request, Response } from "express"
+
+import { COOKIE_HTTPS_ONLY } from "#config/env.js"
+import { RefreshTokenCookie } from "#domain/constants/cookies.js"
 import { validateLoginCredentials } from "#validators/login-credentials-validator.js"
 import { validateRegisterCredentials } from "#validators/register-credentials-validator.js"
-import type { Request, Response } from "express"
 
 type UseCases = {
   loginWithCredentials: LoginWithCredentials

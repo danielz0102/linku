@@ -2,6 +2,7 @@ import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_PATTERNS,
 } from "#domain/constants/password-patterns.js"
+import { validateSchema } from "#lib/validate-schema.js"
 import z from "zod"
 
 const schema = z.object({
@@ -28,11 +29,5 @@ const schema = z.object({
 })
 
 export function validateRegisterCredentials(data: unknown) {
-  const result = schema.safeParse(data)
-
-  if (!result.success) {
-    return { data: null, error: z.treeifyError(result.error) }
-  }
-
-  return { data: result.data, error: null }
+  return validateSchema(data, schema)
 }

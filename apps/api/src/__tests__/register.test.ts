@@ -30,4 +30,7 @@ describe("POST /register", () => {
       accessToken: expect.any(String),
     })
   })
+
+  it.todo("handles profile picture upload")
+  it.todo("validates input data")
 })
