@@ -30,8 +30,11 @@ export type RegisterCredentials = {
   password: string
   firstName: string
   lastName: string
-  // TODO: handle picture upload
-  // profilePicUrl?: string
+  profilePicture?: {
+    buffer: Buffer
+    mimetype: string
+    originalname: string
+  }
 }
 
 export type PublicUser = {
