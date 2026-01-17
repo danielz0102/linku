@@ -1,3 +1,5 @@
+import type { UploadableFile } from "#ports/file-service.js"
+
 type Status = "online" | "offline"
 
 export type User = {
@@ -30,11 +32,7 @@ export type RegisterCredentials = {
   password: string
   firstName: string
   lastName: string
-  profilePicture?: {
-    buffer: Buffer
-    mimetype: string
-    originalname: string
-  }
+  profilePicture?: UploadableFile
 }
 
 export type PublicUser = {
