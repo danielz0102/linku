@@ -1,12 +1,6 @@
-import { FileService } from "#ports/file-service.js"
-import { vi } from "vitest"
+import type { FileService } from "#ports/file-service.d.js"
+import { vi, type Mocked } from "vitest"
 
-export function createFileServiceMock() {
-  const FileServiceMock = vi.fn(
-    class extends FileService {
-      override uploadFile = vi.fn<FileService["uploadFile"]>()
-    }
-  )
-
-  return new FileServiceMock()
-}
+export const createFileServiceMock = (): Mocked<FileService> => ({
+  uploadFile: vi.fn(),
+})

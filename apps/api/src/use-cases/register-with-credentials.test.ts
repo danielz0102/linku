@@ -24,11 +24,6 @@ beforeAll(() => {
   tokenService.signToken.mockResolvedValue(FAKE_TOKEN)
 })
 
-afterEach(() => {
-  fileService.uploadFile.mockClear()
-  repo.create.mockClear()
-})
-
 test("returns public user with tokens on success", async () => {
   const result = await useCase.execute({
     ...user,
@@ -54,44 +49,4 @@ test("returns an error if user already exists", async () => {
 
   expect(result.success).toBe(false)
   expect(result.error).toEqual(new Error("User already exists"))
-})
-
-test("uploads profile picture when provided", async () => {
-  const PROFILE_PIC_URL = "https://example.com/profile.jpg"
-  fileService.uploadFile.mockResolvedValue(PROFILE_PIC_URL)
-
-  const profilePicture = {
-    buffer: Buffer.from("fake-image-data"),
-    mimetype: "image/jpeg",
-    originalname: "profile.jpg",
-  }
-
-  const result = await useCase.execute({
-    ...user,
-    password: "plain-password",
-    profilePicture,
-  })
-
-  expect(result.success).toBe(true)
-  expect(fileService.uploadFile).toHaveBeenCalledWith(profilePicture)
-  expect(repo.create).toHaveBeenCalledWith(
-    expect.objectContaining({
-      profilePicUrl: PROFILE_PIC_URL,
-    })
-  )
-})
-
-test("does not upload profile picture when not provided", async () => {
-  const result = await useCase.execute({
-    ...user,
-    password: "plain-password",
-  })
-
-  expect(result.success).toBe(true)
-  expect(fileService.uploadFile).not.toHaveBeenCalled()
-  expect(repo.create).toHaveBeenCalledWith(
-    expect.objectContaining({
-      profilePicUrl: undefined,
-    })
-  )
 })

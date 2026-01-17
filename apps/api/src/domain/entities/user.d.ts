@@ -1,5 +1,3 @@
-import type { UploadableFile } from "#ports/file-service.js"
-
 type Status = "online" | "offline"
 
 export type User = {
@@ -24,6 +22,12 @@ export type LoginPayload = {
   user: PublicUser
   accessToken: string
   refreshToken: string
+}
+
+export type UploadableFile = {
+  buffer: Buffer
+  mimetype: string
+  originalname: string
 }
 
 export type RegisterCredentials = {
