@@ -17,6 +17,4 @@ They can also choose to sign up with Google. In that case, email, full name, and
 
 ## Log in
 
-They can log in using either their username or email address along with their password. 
-
-Google login is also supported. The user must be identified by their Google sub field.
+Users can log in using their username and password. Google login is also supported. The user must be identified by their Google sub field.
