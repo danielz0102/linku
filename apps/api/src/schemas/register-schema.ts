@@ -2,10 +2,9 @@ import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_PATTERNS,
 } from "#domain/constants/password-patterns.js"
-import { validateSchema } from "#lib/validate-schema.js"
 import z from "zod"
 
-const schema = z.object({
+export const registerSchema = z.object({
   username: z.string().nonempty(),
   email: z.email(),
   password: z
@@ -27,7 +26,3 @@ const schema = z.object({
   firstName: z.string().nonempty(),
   lastName: z.string().nonempty(),
 })
-
-export function validateRegisterCredentials(data: unknown) {
-  return validateSchema(data, schema)
-}

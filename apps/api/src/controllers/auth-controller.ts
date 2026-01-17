@@ -4,8 +4,6 @@ import type { Request, Response } from "express"
 
 import { COOKIE_HTTPS_ONLY } from "#config/env.js"
 import { RefreshTokenCookie } from "#domain/constants/cookies.js"
-import { validateLoginCredentials } from "#validators/login-credentials-validator.js"
-import { validateRegisterCredentials } from "#validators/register-credentials-validator.js"
 
 type UseCases = {
   loginWithCredentials: LoginWithCredentials
@@ -22,13 +20,7 @@ export class AuthController {
   }
 
   login = async (req: Request, res: Response) => {
-    const validation = validateLoginCredentials(req.body)
-
-    if (validation.error) {
-      return res.status(400).json({ error: validation.error })
-    }
-
-    const result = await this.loginWithCredentials.execute(validation.data)
+    const result = await this.loginWithCredentials.execute(req.body)
 
     if (!result.success) {
       return res.status(401).json({ error: result.error.message })
@@ -41,14 +33,8 @@ export class AuthController {
   }
 
   register = async (req: Request, res: Response) => {
-    const validation = validateRegisterCredentials(req.body)
-
-    if (validation.error) {
-      return res.status(400).json({ error: validation.error })
-    }
-
     const result = await this.registerWithCredentials.execute({
-      ...validation.data,
+      ...req.body,
       profilePicUrl: req.file?.path,
     })
 
