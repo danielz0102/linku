@@ -36,7 +36,7 @@ export class RegisterWithCredentials {
     firstName,
     lastName,
     password,
-    profilePicture,
+    profilePicUrl: profilePictureUrl,
   }: RegisterCredentials): Promise<Result<LoginPayload>> {
     const existingUser = await this.repo.findBy({ username, email })
 
@@ -46,9 +46,10 @@ export class RegisterWithCredentials {
 
     const hashedPassword = await this.hasher.hash(password)
 
-    let profilePicUrl: string | undefined
-    if (profilePicture) {
-      profilePicUrl = await this.fileService.uploadFile(profilePicture)
+    let uploadedPictureUrl: string | undefined
+    if (profilePictureUrl) {
+      uploadedPictureUrl =
+        await this.fileService.uploadProfilePic(profilePictureUrl)
     }
 
     const newUser = await this.repo.create({
@@ -57,7 +58,7 @@ export class RegisterWithCredentials {
       firstName,
       lastName,
       hashedPassword,
-      profilePicUrl,
+      profilePicUrl: uploadedPictureUrl,
     })
     const { accessToken, refreshToken } =
       await this.tokenService.signAuthTokens(newUser.id)

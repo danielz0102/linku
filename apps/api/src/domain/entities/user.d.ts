@@ -24,19 +24,13 @@ export type LoginPayload = {
   refreshToken: string
 }
 
-export type UploadableFile = {
-  buffer: Buffer
-  mimetype: string
-  originalname: string
-}
-
 export type RegisterCredentials = {
   username: string
   email: string
   password: string
   firstName: string
   lastName: string
-  profilePicture?: UploadableFile
+  profilePicUrl?: string
 }
 
 export type PublicUser = {
