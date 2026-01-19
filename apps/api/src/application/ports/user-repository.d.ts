@@ -16,4 +16,5 @@ type NewUser = {
 export interface UserRepository {
   findBy(filters: Filters): Promise<User | undefined>
   create(user: NewUser): Promise<User>
+  deleteBy(filters: Filters): Promise<void>
 }

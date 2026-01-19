@@ -1,8 +1,6 @@
 import { createFakeRegisterCredentials } from "#__tests__/lib/create-fake-register-credentials.js"
+import { userRepository } from "#infraestructure/dependencies.js"
 import { composeAuthRouter } from "#presentation/composition.js"
-import db from "#infraestructure/db/drizzle/index.js"
-import { usersTable } from "#infraestructure/db/drizzle/schemas.js"
-import { eq } from "drizzle-orm"
 import express from "express"
 import request from "supertest"
 
@@ -16,7 +14,7 @@ const fakeCredentials = createFakeRegisterCredentials({
 })
 
 beforeEach(async () => {
-  await db.delete(usersTable).where(eq(usersTable.email, fakeCredentials.email))
+  await userRepository.deleteBy({ email: fakeCredentials.email })
 })
 
 describe("POST /register", () => {

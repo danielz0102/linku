@@ -1,27 +1,26 @@
-import { createApp } from "#presentation/app.js"
-import { composeAuthRouter } from "#presentation/composition.js"
-import { JWT_SECRET, SALT } from "#infraestructure/config/env.js"
-import db from "#infraestructure/db/drizzle/index.js"
-import { usersTable } from "#infraestructure/db/drizzle/schemas.js"
 import { RefreshTokenCookie } from "#domain/constants/cookies.js"
 import { toPublicUser } from "#domain/entities/user-mapper.js"
-import bcrypt from "bcryptjs"
-import { eq } from "drizzle-orm"
-import jwt from "jsonwebtoken"
+import {
+  passwordHasher as hasher,
+  tokenService,
+  userRepository as userRepo,
+} from "#infraestructure/dependencies.js"
+import { createApp } from "#presentation/app.js"
+import { composeAuthRouter } from "#presentation/composition.js"
 import request from "supertest"
 import { createFakeUser } from "./lib/create-fake-user-record.js"
 
 const actualPassword = "plainPassword123!"
-const hashedPassword = await bcrypt.hash(actualPassword, SALT)
+const hashedPassword = await hasher.hash(actualPassword)
 const fakeUser = createFakeUser({ hashedPassword })
 const app = createApp(composeAuthRouter())
 
 beforeAll(async () => {
-  await db.insert(usersTable).values(fakeUser)
+  await userRepo.create(fakeUser)
 })
 
 afterAll(async () => {
-  await db.delete(usersTable).where(eq(usersTable.id, fakeUser.id))
+  await userRepo.deleteBy({ id: fakeUser.id })
 })
 
 describe("POST /login", () => {
@@ -44,7 +43,9 @@ describe("POST /login", () => {
       .send({ username: fakeUser.username, password: actualPassword })
       .expect(200)
 
-    const decodedToken = jwt.verify(response.body.accessToken, JWT_SECRET)
+    const decodedToken = await tokenService.verifyToken(
+      response.body.accessToken
+    )
     expect(decodedToken).toMatchObject({ userId: fakeUser.id })
   })
 
@@ -57,7 +58,7 @@ describe("POST /login", () => {
     const cookies = response.headers["set-cookie"] as unknown as string[]
     const refreshTokenCookie = findRefreshTokenCookie(cookies)
     const refreshToken = refreshTokenCookie.split(";")[0].split("=")[1]
-    const decodedToken = jwt.verify(refreshToken, JWT_SECRET)
+    const decodedToken = await tokenService.verifyToken(refreshToken)
 
     expect(refreshTokenCookie).toMatch(/HttpOnly/)
     expect(decodedToken).toMatchObject({ userId: fakeUser.id })

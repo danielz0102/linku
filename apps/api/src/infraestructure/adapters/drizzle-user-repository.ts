@@ -13,19 +13,7 @@ import { and, eq } from "drizzle-orm"
 
 export class DrizzleUserRepository implements UserRepository {
   async findBy(filters: Filters): Promise<User | undefined> {
-    const keys = Object.keys(filters) as (keyof Filters)[]
-    const conditions: ReturnType<typeof eq>[] = []
-
-    if (keys.length === 0) {
-      throw new Error("At least one filter must be provided")
-    }
-
-    keys.forEach((k) => {
-      if (filters[k]) {
-        conditions.push(eq(usersTable[k], filters[k]))
-      }
-    })
-
+    const conditions = this.buildConditions(filters)
     const [user] = await db
       .select()
       .from(usersTable)
@@ -41,6 +29,28 @@ export class DrizzleUserRepository implements UserRepository {
       .values(user)
       .returning()
       .then((res) => this.toDomain(res[0]))
+  }
+
+  async deleteBy(filters: Filters): Promise<void> {
+    const conditions = this.buildConditions(filters)
+    await db.delete(usersTable).where(and(...conditions))
+  }
+
+  private buildConditions(filters: Filters) {
+    const keys = Object.keys(filters) as (keyof Filters)[]
+    const conditions: ReturnType<typeof eq>[] = []
+
+    if (keys.length === 0) {
+      throw new Error("At least one filter must be provided")
+    }
+
+    keys.forEach((k) => {
+      if (filters[k]) {
+        conditions.push(eq(usersTable[k], filters[k]))
+      }
+    })
+
+    return conditions
   }
 
   private toDomain(record: UserRecord): User {
