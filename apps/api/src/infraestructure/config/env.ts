@@ -1,7 +1,8 @@
 import z from "zod"
+import dotenv from "dotenv"
 
 const envFile = process.env["VITEST"] ? ".env.test" : ".env"
-process.loadEnvFile(envFile)
+dotenv.config({ path: envFile, override: true, quiet: true })
 
 const envSchema = z.object({
   PORT: z.coerce.number().default(3000),

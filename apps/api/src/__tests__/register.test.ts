@@ -13,7 +13,7 @@ const fakeCredentials = createFakeRegisterCredentials({
   profilePicUrl: undefined,
 })
 
-beforeEach(async () => {
+afterEach(async () => {
   await userRepository.deleteBy({ email: fakeCredentials.email })
 })
 
