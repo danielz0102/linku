@@ -39,7 +39,7 @@ export class AuthController {
     })
 
     if (!result.success) {
-      return res.status(400).json({ error: result.error.message })
+      return res.status(409).json({ error: result.error.message })
     }
 
     const { user, accessToken, refreshToken } = result.data
