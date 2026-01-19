@@ -1,11 +1,14 @@
-import db from "#db/drizzle/index.js"
-import { usersTable, type UserRecord } from "#db/drizzle/schemas.js"
+import db from "#infraestructure/db/drizzle/index.js"
+import {
+  usersTable,
+  type UserRecord,
+} from "#infraestructure/db/drizzle/schemas.js"
 import type { User } from "#domain/entities/user.d.js"
 import type {
   Filters,
   NewUser,
   UserRepository,
-} from "#ports/user-repository.d.js"
+} from "#application/ports/user-repository.d.js"
 import { and, eq } from "drizzle-orm"
 
 export class DrizzleUserRepository implements UserRepository {

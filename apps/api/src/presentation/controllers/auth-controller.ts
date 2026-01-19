@@ -1,8 +1,8 @@
-import type { LoginWithCredentials } from "#use-cases/login-with-credentials.js"
-import type { RegisterWithCredentials } from "#use-cases/register-with-credentials.js"
+import type { LoginWithCredentials } from "#application/use-cases/login-with-credentials.js"
+import type { RegisterWithCredentials } from "#application/use-cases/register-with-credentials.js"
 import type { Request, Response } from "express"
 
-import { COOKIE_HTTPS_ONLY } from "#config/env.js"
+import { COOKIE_HTTPS_ONLY } from "#infraestructure/config/env.js"
 import { RefreshTokenCookie } from "#domain/constants/cookies.js"
 
 type UseCases = {

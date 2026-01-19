@@ -1,4 +1,4 @@
-import type { UserRepository } from "#ports/user-repository.d.js"
+import type { UserRepository } from "#application/ports/user-repository.d.js"
 import { vi, type Mocked } from "vitest"
 
 export const createUserRepositoryMock = (): Mocked<UserRepository> => ({

@@ -1,7 +1,7 @@
-import { createApp } from "#app.js"
-import { composeAuthRouter } from "#composition.js"
-import { PORT } from "#config/env.js"
-import { createApiRouter } from "#routers/api-router.js"
+import { PORT } from "#infraestructure/config/env.js"
+import { createApp } from "#presentation/app.js"
+import { composeAuthRouter } from "#presentation/composition.js"
+import { createApiRouter } from "#presentation/routers/api-router.js"
 
 const apiRouter = createApiRouter({
   authRouter: composeAuthRouter(),

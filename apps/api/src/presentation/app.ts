@@ -1,6 +1,6 @@
-import { checkOrigin } from "#middlewares/check-origin.js"
-import { handleUnexpectedError } from "#middlewares/handle-error.js"
-import { handleNotFound } from "#middlewares/handle-not-found.js"
+import { checkOrigin } from "#presentation/middlewares/check-origin.js"
+import { handleUnexpectedError } from "#presentation/middlewares/handle-error.js"
+import { handleNotFound } from "#presentation/middlewares/handle-not-found.js"
 import cookieParser from "cookie-parser"
 import express, { type Router } from "express"
 

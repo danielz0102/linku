@@ -1,4 +1,4 @@
-import { TokenService } from "#ports/token-service.js"
+import { TokenService } from "#application/ports/token-service.js"
 import { vi } from "vitest"
 
 class TokenServiceMock extends TokenService {

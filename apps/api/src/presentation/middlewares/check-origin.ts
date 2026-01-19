@@ -1,4 +1,4 @@
-import { ALLOWED_ORIGIN } from "#config/env.js"
+import { ALLOWED_ORIGIN } from "#infraestructure/config/env.js"
 import cors from "cors"
 
 export const checkOrigin = cors({

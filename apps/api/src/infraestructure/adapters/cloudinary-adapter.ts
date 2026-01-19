@@ -1,5 +1,5 @@
-import type { FileService } from "#ports/file-service.d.js"
-import cloudinary from "#config/cloudinary.js"
+import type { FileService } from "#application/ports/file-service.d.js"
+import cloudinary from "#infraestructure/config/cloudinary.js"
 
 export class CloudinaryAdapter implements FileService {
   async uploadProfilePic(url: string): Promise<string> {

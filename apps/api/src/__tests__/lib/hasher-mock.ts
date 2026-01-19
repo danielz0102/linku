@@ -1,4 +1,4 @@
-import { PasswordHasher } from "#ports/password-hasher.js"
+import { PasswordHasher } from "#application/ports/password-hasher.js"
 import { vi } from "vitest"
 
 class HasherMock extends PasswordHasher {

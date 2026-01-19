@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import { TokenService } from "#ports/token-service.js"
+import { TokenService } from "#application/ports/token-service.js"
 
 export class JwtService extends TokenService {
   override signToken(payload: object, expiresIn: number): Promise<string> {
