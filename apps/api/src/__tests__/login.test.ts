@@ -3,7 +3,7 @@ import {
   hasher as hasher,
   tokenSvc,
   userRepo as userRepo,
-} from "#infraestructure/dependencies.js"
+} from "#infrastructure/dependencies.js"
 import { createApp } from "#presentation/app.js"
 import { composeAuthRouter } from "#presentation/composition.js"
 import request from "supertest"

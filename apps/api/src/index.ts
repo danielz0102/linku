@@ -1,4 +1,4 @@
-import { PORT } from "#infraestructure/config/env.js"
+import { PORT } from "#infrastructure/config/env.js"
 import { createApp } from "#presentation/app.js"
 import { composeAuthRouter } from "#presentation/composition.js"
 import { createApiRouter } from "#presentation/routers/api-router.js"

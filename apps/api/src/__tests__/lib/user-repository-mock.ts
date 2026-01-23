@@ -4,4 +4,5 @@ import { vi, type Mocked } from "vitest"
 export const createUserRepositoryMock = (): Mocked<UserRepository> => ({
   findBy: vi.fn(),
   create: vi.fn(),
+  deleteBy: vi.fn(),
 })

@@ -1,5 +1,5 @@
 import { createFakeRegisterCredentials } from "#__tests__/lib/create-fake-register-credentials.js"
-import { userRepo } from "#infraestructure/dependencies.js"
+import { userRepo } from "#infrastructure/dependencies.js"
 import { composeAuthRouter } from "#presentation/composition.js"
 import express from "express"
 import request from "supertest"

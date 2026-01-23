@@ -1,8 +1,8 @@
-import db from "#infraestructure/db/drizzle/index.js"
+import db from "#infrastructure/db/drizzle/index.js"
 import {
   usersTable,
   type UserRecord,
-} from "#infraestructure/db/drizzle/schemas.js"
+} from "#infrastructure/db/drizzle/schemas.js"
 import type { User } from "#domain/entities/user.d.js"
 import type {
   Filters,

@@ -1,6 +1,6 @@
 import { LoginWithCredentials } from "#application/use-cases/login-with-credentials.js"
 import { RegisterWithCredentials } from "#application/use-cases/register-with-credentials.js"
-import * as deps from "#infraestructure/dependencies.js"
+import * as deps from "#infrastructure/dependencies.js"
 import { AuthController } from "#presentation/controllers/auth-controller.js"
 import { createAuthRouter } from "#presentation/routers/auth-router.js"
 
