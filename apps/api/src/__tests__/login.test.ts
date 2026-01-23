@@ -1,8 +1,8 @@
 import { toPublicUser } from "#domain/entities/user-mapper.js"
 import {
-  passwordHasher as hasher,
-  tokenService,
-  userRepository as userRepo,
+  hasher as hasher,
+  tokenSvc,
+  userRepo as userRepo,
 } from "#infraestructure/dependencies.js"
 import { createApp } from "#presentation/app.js"
 import { composeAuthRouter } from "#presentation/composition.js"
@@ -42,9 +42,7 @@ describe("POST /login", () => {
       .send({ username: fakeUser.username, password: actualPassword })
       .expect(200)
 
-    const decodedToken = await tokenService.verifyToken(
-      response.body.accessToken
-    )
+    const decodedToken = await tokenSvc.verifyToken(response.body.accessToken)
     expect(decodedToken).toMatchObject({ userId: fakeUser.id })
   })
 

@@ -6,15 +6,15 @@ import { createAuthRouter } from "#presentation/routers/auth-router.js"
 
 export function composeAuthRouter() {
   const loginUseCase = new LoginWithCredentials({
-    repo: deps.userRepository,
-    hasher: deps.passwordHasher,
-    tokenService: deps.tokenService,
+    repo: deps.userRepo,
+    hasher: deps.hasher,
+    tokenService: deps.tokenSvc,
   })
   const registerUseCase = new RegisterWithCredentials({
-    repo: deps.userRepository,
-    hasher: deps.passwordHasher,
-    tokenService: deps.tokenService,
-    fileService: deps.fileService,
+    repo: deps.userRepo,
+    hasher: deps.hasher,
+    tokenService: deps.tokenSvc,
+    fileService: deps.fileSvc,
   })
 
   const authController = new AuthController({

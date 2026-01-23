@@ -1,5 +1,5 @@
 import { createFakeRegisterCredentials } from "#__tests__/lib/create-fake-register-credentials.js"
-import { userRepository } from "#infraestructure/dependencies.js"
+import { userRepo } from "#infraestructure/dependencies.js"
 import { composeAuthRouter } from "#presentation/composition.js"
 import express from "express"
 import request from "supertest"
@@ -14,7 +14,7 @@ const fakeCredentials = createFakeRegisterCredentials({
 })
 
 afterEach(async () => {
-  await userRepository.deleteBy({ email: fakeCredentials.email })
+  await userRepo.deleteBy({ email: fakeCredentials.email })
 })
 
 describe("POST /register", () => {
