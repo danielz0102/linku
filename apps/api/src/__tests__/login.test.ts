@@ -1,14 +1,14 @@
 import { toPublicUser } from "#domain/entities/user-mapper.js"
 import { hasher, tokenSvc, userRepo } from "#infrastructure/dependencies.js"
-import { composeAuthRouter } from "#presentation/composition.js"
 import request from "supertest"
 import { createFakeUser } from "./lib/create-fake-user-record.js"
 import { createTestApp } from "./lib/create-test-app.js"
+import { createTestAuthRouter } from "./lib/create-test-auth-router.js"
 
 const actualPassword = "plainPassword123!"
 const hashedPassword = await hasher.hash(actualPassword)
 const fakeUser = createFakeUser({ hashedPassword })
-const app = createTestApp(composeAuthRouter())
+const app = createTestApp(createTestAuthRouter())
 
 beforeAll(async () => {
   await userRepo.create(fakeUser)

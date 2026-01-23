@@ -1,16 +1,18 @@
 import { createFakeRegisterCredentials } from "#__tests__/lib/create-fake-register-credentials.js"
-import { userRepo } from "#infrastructure/dependencies.js"
-import { composeAuthRouter } from "#presentation/composition.js"
+import { createFileServiceMock } from "#__tests__/lib/file-service-mock.js"
+import { createTestAuthRouter } from "#__tests__/lib/create-test-auth-router.js"
+import * as deps from "#infrastructure/dependencies.js"
 import request from "supertest"
 import { createTestApp } from "./lib/create-test-app.js"
+import { toPublicUser } from "#domain/entities/user-mapper.js"
 
-const app = createTestApp(composeAuthRouter())
-const fakeCredentials = createFakeRegisterCredentials({
-  profilePicUrl: undefined,
-})
+const fileServiceMock = createFileServiceMock()
+const authRouter = createTestAuthRouter({ fileService: fileServiceMock })
+const app = createTestApp(authRouter)
+const fakeCredentials = createFakeRegisterCredentials()
 
 afterEach(async () => {
-  await userRepo.deleteBy({ email: fakeCredentials.email })
+  await deps.userRepo.deleteBy({ email: fakeCredentials.email })
 })
 
 describe("POST /register", () => {
@@ -20,7 +22,14 @@ describe("POST /register", () => {
       .send(fakeCredentials)
       .expect(201)
 
+    const user = await deps.userRepo.findBy({ email: fakeCredentials.email })
+
+    if (!user) {
+      throw new Error("User was not created in the repository")
+    }
+
     expect(response.body).toMatchObject({
+      user: toPublicUser(user),
       accessToken: expect.any(String),
     })
   })
