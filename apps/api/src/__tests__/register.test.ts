@@ -34,6 +34,23 @@ describe("POST /register", () => {
     })
   })
 
-  it.todo("handles profile picture upload")
-  it.todo("validates input data")
+  it("sends 409 when the user already exists", async () => {
+    await deps.userRepo.create(fakeCredentials)
+    await request(app).post("/register").send(fakeCredentials).expect(409)
+  })
+
+  it("sends 400 when the input data is invalid", async () => {
+    await request(app).post("/register").send({}).expect(400)
+    await request(app)
+      .post("/register")
+      .send({ ...fakeCredentials, email: "invalid-email" })
+      .expect(400)
+  })
+
+  it("sends 400 when password is weak", async () => {
+    await request(app)
+      .post("/register")
+      .send({ ...fakeCredentials, password: "123" })
+      .expect(400)
+  })
 })
