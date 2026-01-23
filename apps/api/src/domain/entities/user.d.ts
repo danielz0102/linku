@@ -21,7 +21,6 @@ export type LoginCredentials = {
 export type LoginPayload = {
   user: PublicUser
   accessToken: string
-  refreshToken: string
 }
 
 export type RegisterCredentials = {

@@ -60,13 +60,11 @@ export class RegisterWithCredentials {
       hashedPassword,
       profilePicUrl: uploadedPictureUrl,
     })
-    const { accessToken, refreshToken } =
-      await this.tokenService.signAuthTokens(newUser.id)
+    const { accessToken } = await this.tokenService.signAcessToken(newUser.id)
 
     return Result.ok({
       user: toPublicUser(newUser),
       accessToken,
-      refreshToken,
     })
   }
 }

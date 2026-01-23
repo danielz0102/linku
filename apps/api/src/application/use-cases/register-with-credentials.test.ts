@@ -23,9 +23,8 @@ const useCase = new RegisterWithCredentials({
 beforeAll(() => {
   repo.findBy.mockResolvedValue(undefined)
   repo.create.mockResolvedValue(fakeUser)
-  tokenService.signAuthTokens.mockResolvedValue({
+  tokenService.signAcessToken.mockResolvedValue({
     accessToken: FAKE_TOKEN,
-    refreshToken: FAKE_TOKEN,
   })
 })
 
@@ -36,7 +35,6 @@ test("returns public user with tokens on success", async () => {
   expect(result.data).toMatchObject({
     user: toPublicUser(fakeUser),
     accessToken: FAKE_TOKEN,
-    refreshToken: FAKE_TOKEN,
   })
   expect(result.data).not.toHaveProperty("hashedPassword")
 })

@@ -44,13 +44,11 @@ export class LoginWithCredentials {
       return Result.fail(new Error("Invalid credentials"))
     }
 
-    const { accessToken, refreshToken } =
-      await this.tokenService.signAuthTokens(user.id)
+    const { accessToken } = await this.tokenService.signAcessToken(user.id)
 
     return Result.ok({
       user: toPublicUser(user),
       accessToken,
-      refreshToken,
     })
   }
 }

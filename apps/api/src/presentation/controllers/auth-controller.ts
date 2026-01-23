@@ -2,9 +2,6 @@ import type { LoginWithCredentials } from "#application/use-cases/login-with-cre
 import type { RegisterWithCredentials } from "#application/use-cases/register-with-credentials.js"
 import type { Request, Response } from "express"
 
-import { COOKIE_HTTPS_ONLY } from "#infraestructure/config/env.js"
-import { RefreshTokenCookie } from "#domain/constants/cookies.js"
-
 type UseCases = {
   loginWithCredentials: LoginWithCredentials
   registerWithCredentials: RegisterWithCredentials
@@ -26,8 +23,7 @@ export class AuthController {
       return res.status(401).json({ error: result.error.message })
     }
 
-    const { user, accessToken, refreshToken } = result.data
-    this.setRefreshTokenCookie(res, refreshToken)
+    const { user, accessToken } = result.data
 
     res.json({ user, accessToken })
   }
@@ -42,18 +38,8 @@ export class AuthController {
       return res.status(409).json({ error: result.error.message })
     }
 
-    const { user, accessToken, refreshToken } = result.data
-    this.setRefreshTokenCookie(res, refreshToken)
+    const { user, accessToken } = result.data
 
     res.status(201).json({ user, accessToken })
-  }
-
-  private setRefreshTokenCookie(res: Response, token: string) {
-    res.cookie(RefreshTokenCookie.name, token, {
-      httpOnly: true,
-      secure: COOKIE_HTTPS_ONLY,
-      sameSite: "lax",
-      maxAge: RefreshTokenCookie.age,
-    })
   }
 }

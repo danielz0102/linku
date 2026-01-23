@@ -1,4 +1,3 @@
-import { RefreshTokenCookie } from "#domain/constants/cookies.js"
 import { toPublicUser } from "#domain/entities/user-mapper.js"
 import {
   passwordHasher as hasher,
@@ -49,21 +48,6 @@ describe("POST /login", () => {
     expect(decodedToken).toMatchObject({ userId: fakeUser.id })
   })
 
-  it("sets cookie with HTTP only flag and refresh token with user id", async () => {
-    const response = await request(app)
-      .post("/api/login")
-      .send({ username: fakeUser.username, password: actualPassword })
-      .expect(200)
-
-    const cookies = response.headers["set-cookie"] as unknown as string[]
-    const refreshTokenCookie = findRefreshTokenCookie(cookies)
-    const refreshToken = refreshTokenCookie.split(";")[0].split("=")[1]
-    const decodedToken = await tokenService.verifyToken(refreshToken)
-
-    expect(refreshTokenCookie).toMatch(/HttpOnly/)
-    expect(decodedToken).toMatchObject({ userId: fakeUser.id })
-  })
-
   it("sends 401 when password is invalid", async () => {
     await request(app)
       .post("/api/login")
@@ -89,15 +73,3 @@ describe("POST /login", () => {
       .expect(400)
   })
 })
-
-function findRefreshTokenCookie(cookies: string[]) {
-  const cookie = cookies.find((c) =>
-    c.startsWith(`${RefreshTokenCookie.name}=`)
-  )
-
-  if (!cookie) {
-    throw new Error("Refresh token cookie not found")
-  }
-
-  return cookie
-}

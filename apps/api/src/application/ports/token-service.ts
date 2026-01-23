@@ -1,4 +1,4 @@
-import { TOKEN_LIFES } from "#domain/constants/token-lifes.js"
+import { ACCESS_TOKEN_LIFE } from "#domain/constants/token-lifes.js"
 
 export abstract class TokenService {
   constructor(protected readonly secretKey: string) {}
@@ -6,11 +6,8 @@ export abstract class TokenService {
   abstract signToken(payload: object, seconds: number): Promise<string>
   abstract verifyToken(token: string): Promise<object>
 
-  async signAuthTokens(userId: string) {
-    const [accessToken, refreshToken] = await Promise.all([
-      this.signToken({ userId }, TOKEN_LIFES.ACCESS_TOKEN),
-      this.signToken({ userId }, TOKEN_LIFES.REFRESH_TOKEN),
-    ])
-    return { accessToken, refreshToken }
+  async signAcessToken(userId: string) {
+    const accessToken = await this.signToken({ userId }, ACCESS_TOKEN_LIFE)
+    return { accessToken }
   }
 }
