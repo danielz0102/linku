@@ -1,11 +1,11 @@
-import type {
-  LoginPayload,
-  RegisterCredentials,
-} from "#domain/entities/user.d.js"
 import type { FileService } from "#application/ports/file-service.d.js"
 import type { PasswordHasher } from "#application/ports/password-hasher.js"
 import type { TokenService } from "#application/ports/token-service.js"
 import type { UserRepository } from "#application/ports/user-repository.d.js"
+import type {
+  LoginPayload,
+  RegisterCredentials,
+} from "#domain/entities/user.d.js"
 
 import { toPublicUser } from "#domain/entities/user-mapper.js"
 import { Result } from "#lib/result.js"

@@ -1,14 +1,10 @@
 import { createFakeRegisterCredentials } from "#__tests__/lib/create-fake-register-credentials.js"
 import { userRepo } from "#infrastructure/dependencies.js"
 import { composeAuthRouter } from "#presentation/composition.js"
-import express from "express"
 import request from "supertest"
+import { createTestApp } from "./lib/create-test-app.js"
 
-const apiRouter = composeAuthRouter()
-const app = express()
-app.use(express.json())
-app.use(apiRouter)
-
+const app = createTestApp(composeAuthRouter())
 const fakeCredentials = createFakeRegisterCredentials({
   profilePicUrl: undefined,
 })
