@@ -7,10 +7,11 @@
 - Don't use assertions like `as HTMLInputElement` unless absolutely necessary
 - Prefer `Boolean(value)` over `!!value` for clarity
 - Prefer `Number(value)` over `+value` for clarity
+- Use `kebab-case` for file and folder names
 
 ## Import Conventions
 
-- Use the `~/` path alias for cross-directory imports (e.g., `import cn from "~/utils/cn"`)
+- Use the corresponding path alias for cross-directory imports (e.g., `import cn from "#utils/cn"`)
 - Relative imports (e.g., `./index`) are acceptable for same-directory imports
 - Avoid deep relative paths like `../../..`
 
