@@ -53,4 +53,21 @@ describe("POST /register", () => {
       .send({ ...fakeCredentials, password: "123" })
       .expect(400)
   })
+
+  it("sends 400 when image type is not allowed", async () => {
+    const response = await request(app)
+      .post("/register")
+      .field("username", fakeCredentials.username)
+      .field("email", fakeCredentials.email)
+      .field("password", fakeCredentials.password)
+      .attach("picture", Buffer.from("fake-content"), {
+        filename: "test.svg",
+        contentType: "image/svg+xml",
+      })
+      .expect(400)
+
+    expect(response.body).toMatchObject({
+      error: expect.stringContaining("image type"),
+    })
+  })
 })
