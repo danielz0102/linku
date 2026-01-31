@@ -3,12 +3,17 @@ import { useRef } from "react"
 import { useImage } from "~/hooks/use-image"
 
 type ImagePickerProps = {
-  onImageSelect?: (file: File | null) => void
+  onChange?: (file: File | null) => void
+  onError?: () => void
 }
 
-export function ImagePicker({ onImageSelect }: ImagePickerProps) {
+export function ImagePicker({ onChange, onError }: ImagePickerProps) {
   const { preview, updatePreview } = useImage()
   const inputRef = useRef<HTMLInputElement>(null)
+
+  const validateImage = (file: File) => {
+    return file.type.startsWith("image/")
+  }
 
   return (
     <div className="flex flex-col items-center">
@@ -42,8 +47,14 @@ export function ImagePicker({ onImageSelect }: ImagePickerProps) {
           accept="image/*"
           onChange={(e) => {
             const file = e.target.files?.[0] || null
+
+            if (file && !validateImage(file)) {
+              onError?.()
+              return
+            }
+
             updatePreview(file)
-            onImageSelect?.(file)
+            onChange?.(file)
           }}
           className="hidden"
           name="image"

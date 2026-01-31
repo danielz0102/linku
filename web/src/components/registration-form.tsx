@@ -1,5 +1,6 @@
 import { AtSign, Lock, Mail, User } from "lucide-react"
-import { useRef } from "react"
+import { useRef, useState } from "react"
+import { Alert } from "./alert"
 import { FormField } from "./form-field"
 import { ImagePicker } from "./image-picker"
 import { PasswordField } from "./password-field"
@@ -15,6 +16,7 @@ type FormDataRef = {
 }
 
 export function RegistrationForm() {
+  const [imageError, setImageError] = useState(false)
   const dataRef = useRef<FormDataRef>({
     firstName: "",
     lastName: "",
@@ -34,10 +36,14 @@ export function RegistrationForm() {
         e.target.checkValidity()
       }}
     >
+      {imageError && <Alert>Picture selected is not a valid image</Alert>}
+
       <ImagePicker
-        onImageSelect={(file) => {
+        onChange={(file) => {
           dataRef.current.picture = file
+          setImageError(false)
         }}
+        onError={() => setImageError(true)}
       />
 
       <FormField
