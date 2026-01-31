@@ -15,7 +15,7 @@ type FormDataRef = {
 }
 
 export function RegistrationForm() {
-  const formDataRef = useRef<FormDataRef>({
+  const dataRef = useRef<FormDataRef>({
     firstName: "",
     lastName: "",
     username: "",
@@ -36,7 +36,7 @@ export function RegistrationForm() {
     >
       <ImagePicker
         onImageSelect={(file) => {
-          formDataRef.current.picture = file
+          dataRef.current.picture = file
         }}
       />
 
@@ -48,7 +48,7 @@ export function RegistrationForm() {
           placeholder: "Enter your first name",
           required: true,
           onChange: (e) => {
-            formDataRef.current.firstName = e.target.value
+            dataRef.current.firstName = e.target.value
           },
         }}
       />
@@ -61,7 +61,7 @@ export function RegistrationForm() {
           placeholder: "Enter your last name",
           required: true,
           onChange: (e) => {
-            formDataRef.current.lastName = e.target.value
+            dataRef.current.lastName = e.target.value
           },
         }}
       />
@@ -74,7 +74,7 @@ export function RegistrationForm() {
           placeholder: "username",
           required: true,
           onChange: (e) => {
-            formDataRef.current.username = e.target.value
+            dataRef.current.username = e.target.value
           },
         }}
       />
@@ -87,22 +87,27 @@ export function RegistrationForm() {
           placeholder: "you@example.com",
           required: true,
           onChange: (e) => {
-            formDataRef.current.email = e.target.value
+            dataRef.current.email = e.target.value
           },
         }}
       />
 
-      <PasswordField onChange={(v) => (formDataRef.current.password = v)} />
+      <PasswordField onChange={(v) => (dataRef.current.password = v)} />
 
       <FormField
         label="Confirm Password"
         Icon={Lock}
+        validate={(v) => {
+          if (v !== dataRef.current.password) {
+            return "Passwords don't match"
+          }
+        }}
         attrs={{
           type: "password",
           placeholder: "••••••••",
           required: true,
           onChange: (e) => {
-            formDataRef.current.confirmPassword = e.target.value
+            dataRef.current.confirmPassword = e.target.value
           },
         }}
       />
