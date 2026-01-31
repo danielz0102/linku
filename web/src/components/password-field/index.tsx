@@ -1,5 +1,6 @@
 import { Eye, EyeOff, Lock } from "lucide-react"
-import { useId, useState } from "react"
+import { useState } from "react"
+import { FormField } from "../form-field"
 
 type PasswordFieldProps = {
   onChange: (value: string) => void
@@ -10,8 +11,6 @@ const ERROR_MESSAGE =
 
 export function PasswordField({ onChange }: PasswordFieldProps) {
   const [isVisible, setIsVisible] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const id = useId()
   const Icon = isVisible ? EyeOff : Eye
 
   const passwordIsValid = (password: string) => {
@@ -19,49 +18,31 @@ export function PasswordField({ onChange }: PasswordFieldProps) {
   }
 
   return (
-    <div className="space-y-2">
-      <label htmlFor={id} className="input-label">
-        Password
-      </label>
-      <div className="relative">
-        <Lock className="input-icon" />
-        <input
-          id={id}
-          type={isVisible ? "text" : "password"}
-          placeholder="••••••••"
-          className="input-field pr-12 pl-11"
-          required
-          onChange={(e) => {
-            onChange(e.target.value)
-          }}
-          onBlur={(e) => {
-            const v = passwordIsValid(e.target.value)
-            e.target.setCustomValidity(v ? "" : ERROR_MESSAGE)
-
-            if (e.target.checkValidity()) {
-              setError(null)
-            }
-          }}
-          onInvalid={(e) => {
-            setError(e.currentTarget.validationMessage)
-          }}
+    <FormField
+      label="Password"
+      Icon={Lock}
+      validate={(v) => {
+        if (!passwordIsValid(v)) {
+          return ERROR_MESSAGE
+        }
+      }}
+      attrs={{
+        type: isVisible ? "text" : "password",
+        placeholder: "••••••••",
+        required: true,
+        onChange: (e) => onChange(e.target.value),
+      }}
+    >
+      <button
+        type="button"
+        className="absolute top-1/2 right-3 -translate-y-1/2 text-neutral-500 hover:text-neutral-400"
+        onClick={() => setIsVisible((prev) => !prev)}
+      >
+        <Icon
+          className="size-5"
+          aria-label={isVisible ? "Hide password" : "Show password"}
         />
-        <button
-          type="button"
-          className="absolute top-1/2 right-3 -translate-y-1/2 text-neutral-500 hover:text-neutral-400"
-          onClick={() => setIsVisible((prev) => !prev)}
-        >
-          <Icon
-            className="size-5"
-            aria-label={isVisible ? "Hide password" : "Show password"}
-          />
-        </button>
-      </div>
-      {error && (
-        <p className="text-sm text-red-700" role="status">
-          {error}
-        </p>
-      )}
-    </div>
+      </button>
+    </FormField>
   )
 }

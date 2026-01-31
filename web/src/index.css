@@ -3,15 +3,3 @@
 body {
   @apply bg-slate-900 text-neutral-50;
 }
-
-@utility input-field {
-  @apply w-full rounded-lg border border-neutral-700 bg-neutral-800/50 py-3 text-neutral-100 placeholder-neutral-500 user-invalid:border-red-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none;
-}
-
-@utility input-icon {
-  @apply absolute top-1/2 left-3 size-5 -translate-y-1/2 text-neutral-500;
-}
-
-@utility input-label {
-  @apply block text-sm;
-}

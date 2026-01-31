@@ -1,5 +1,6 @@
 import { AtSign, Lock, Mail, User } from "lucide-react"
 import { useRef } from "react"
+import { FormField } from "./form-field"
 import { ImagePicker } from "./image-picker"
 import { PasswordField } from "./password-field"
 
@@ -39,102 +40,72 @@ export function RegistrationForm() {
         }}
       />
 
-      <div className="space-y-2">
-        <label htmlFor="firstName" className="input-label">
-          First Name
-        </label>
-        <div className="relative">
-          <User className="input-icon" />
-          <input
-            id="firstName"
-            type="text"
-            placeholder="Enter your first name"
-            className="input-field pr-4 pl-11"
-            required
-            onChange={(e) => {
-              formDataRef.current.firstName = e.target.value
-            }}
-          />
-        </div>
-      </div>
+      <FormField
+        label="First Name"
+        Icon={User}
+        attrs={{
+          type: "text",
+          placeholder: "Enter your first name",
+          required: true,
+          onChange: (e) => {
+            formDataRef.current.firstName = e.target.value
+          },
+        }}
+      />
 
-      <div className="space-y-2">
-        <label htmlFor="lastName" className="input-label">
-          Last Name
-        </label>
-        <div className="relative">
-          <User className="input-icon" />
-          <input
-            id="lastName"
-            type="text"
-            placeholder="Enter your last name"
-            className="input-field pr-4 pl-11"
-            required
-            onChange={(e) => {
-              formDataRef.current.lastName = e.target.value
-            }}
-          />
-        </div>
-      </div>
+      <FormField
+        label="Last Name"
+        Icon={User}
+        attrs={{
+          type: "text",
+          placeholder: "Enter your last name",
+          required: true,
+          onChange: (e) => {
+            formDataRef.current.lastName = e.target.value
+          },
+        }}
+      />
 
-      <div className="space-y-2">
-        <label htmlFor="username" className="input-label">
-          Username
-        </label>
-        <div className="relative">
-          <AtSign className="input-icon" />
-          <input
-            id="username"
-            type="text"
-            placeholder="username"
-            className="input-field pr-4 pl-11"
-            required
-            onChange={(e) => {
-              formDataRef.current.username = e.target.value
-            }}
-          />
-        </div>
-      </div>
+      <FormField
+        label="Username"
+        Icon={AtSign}
+        attrs={{
+          type: "text",
+          placeholder: "username",
+          required: true,
+          onChange: (e) => {
+            formDataRef.current.username = e.target.value
+          },
+        }}
+      />
 
-      <div className="space-y-2">
-        <label htmlFor="email" className="input-label">
-          Email Address
-        </label>
-        <div className="relative">
-          <Mail className="input-icon" />
-          <input
-            id="email"
-            type="email"
-            placeholder="you@example.com"
-            className="input-field pr-4 pl-11"
-            required
-            onChange={(e) => {
-              formDataRef.current.email = e.target.value
-            }}
-          />
-        </div>
-      </div>
+      <FormField
+        label="Email Address"
+        Icon={Mail}
+        attrs={{
+          type: "email",
+          placeholder: "you@example.com",
+          required: true,
+          onChange: (e) => {
+            formDataRef.current.email = e.target.value
+          },
+        }}
+      />
 
       <PasswordField onChange={(v) => (formDataRef.current.password = v)} />
 
-      <div className="space-y-2">
-        <label htmlFor="confirmPassword" className="input-label">
-          Confirm Password
-        </label>
-        <div className="relative">
-          <Lock className="input-icon" />
-          <input
-            id="confirmPassword"
-            type="password"
-            placeholder="••••••••"
-            className="input-field pr-4 pl-11"
-            required
-            onChange={(e) => {
-              formDataRef.current.confirmPassword = e.target.value
-            }}
-          />
-        </div>
-      </div>
+      <FormField
+        label="Confirm Password"
+        Icon={Lock}
+        attrs={{
+          type: "password",
+          placeholder: "••••••••",
+          required: true,
+          onChange: (e) => {
+            formDataRef.current.confirmPassword = e.target.value
+          },
+        }}
+      />
 
       <button
         type="submit"
