@@ -1,6 +1,7 @@
-import { AtSign, Eye, Lock, Mail, User } from "lucide-react"
-import { ImagePicker } from "./image-picker"
+import { AtSign, Lock, Mail, User } from "lucide-react"
 import { useRef } from "react"
+import { ImagePicker } from "./image-picker"
+import { PasswordField } from "./password-field"
 
 type FormDataRef = {
   firstName: string
@@ -24,7 +25,14 @@ export function RegistrationForm() {
   })
 
   return (
-    <form className="space-y-6">
+    <form
+      className="space-y-6"
+      noValidate
+      onSubmit={(e) => {
+        e.preventDefault()
+        e.target.checkValidity()
+      }}
+    >
       <ImagePicker
         onImageSelect={(file) => {
           formDataRef.current.picture = file
@@ -107,30 +115,7 @@ export function RegistrationForm() {
         </div>
       </div>
 
-      <div className="space-y-2">
-        <label htmlFor="password" className="input-label">
-          Password
-        </label>
-        <div className="relative">
-          <Lock className="input-icon" />
-          <input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            className="input-field pr-12 pl-11"
-            required
-            onChange={(e) => {
-              formDataRef.current.password = e.target.value
-            }}
-          />
-          <button
-            type="button"
-            className="absolute top-1/2 right-3 -translate-y-1/2 text-neutral-500 hover:text-neutral-400"
-          >
-            <Eye className="size-5" aria-label="Toggle password visibility" />
-          </button>
-        </div>
-      </div>
+      <PasswordField onChange={(v) => (formDataRef.current.password = v)} />
 
       <div className="space-y-2">
         <label htmlFor="confirmPassword" className="input-label">
