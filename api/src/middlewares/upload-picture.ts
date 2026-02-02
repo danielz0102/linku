@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from "express"
+import type { RequestHandler } from "express"
 import multer from "multer"
 
 const allowedMimeTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"]
@@ -13,11 +13,7 @@ const upload = multer({
   },
 }).single("picture")
 
-export function uploadPicture(
-  req: Request,
-  res: Response,
-  _next: NextFunction
-) {
+export const uploadPicture: RequestHandler = (req, res, _next) => {
   upload(req, res, () => {
     res.status(400).json({
       error: "Invalid image file",
