@@ -9,15 +9,20 @@ const upload = multer({
     if (!allowedMimeTypes.includes(file.mimetype)) {
       return cb(null, false)
     }
+
     cb(null, true)
   },
 }).single("picture")
 
-export const uploadPicture: RequestHandler = (req, res, _next) => {
-  upload(req, res, () => {
-    res.status(400).json({
-      error: "Invalid image file",
-      allowedMimeTypes: allowedMimeTypes,
-    })
+export const uploadPicture: RequestHandler = (req, res, next) => {
+  upload(req, res, (err) => {
+    if (!req.file) {
+      return res.status(400).json({
+        error: "Invalid image file",
+        allowedMimeTypes: allowedMimeTypes,
+      })
+    }
+
+    next(err)
   })
 }
