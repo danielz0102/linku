@@ -16,14 +16,19 @@
   "packageManager": "pnpm@10.27.0",
   "dependencies": {
     "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.45.1",
     "express": "^5.2.1",
     "multer": "^2.0.2",
+    "pg": "^8.18.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.10.9",
+    "@types/pg": "^8.16.0",
+    "drizzle-kit": "^0.31.8",
     "eslint": "^9.39.2",
     "prettier": "^3.8.1",
     "tsx": "^4.21.0",
