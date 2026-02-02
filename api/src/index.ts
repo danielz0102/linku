@@ -1,3 +1,5 @@
+import { notFound } from "#middlewares/not-found.js"
+import { unexpectedError } from "#middlewares/unexpected-error.js"
 import { authRouter } from "#routers/auth-router.js"
 import cors from "cors"
 import express from "express"
@@ -10,6 +12,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors({ origin: ALLOWED_ORIGIN, credentials: true }))
 
 app.use(authRouter)
+
+app.use(notFound)
+app.use(unexpectedError)
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`)
