@@ -15,10 +15,14 @@
   "license": "ISC",
   "packageManager": "pnpm@10.27.0",
   "dependencies": {
+    "cors": "^2.8.6",
     "express": "^5.2.1",
+    "multer": "^2.0.2",
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/multer": "^2.0.0",
     "@types/node": "^24.10.9",
     "eslint": "^9.39.2",
     "prettier": "^3.8.1",

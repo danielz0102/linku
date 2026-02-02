@@ -1,11 +1,15 @@
+import { authRouter } from "#routers/auth-router.js"
+import cors from "cors"
 import express from "express"
-import { PORT } from "./config/env.js"
+import { ALLOWED_ORIGIN, PORT } from "./config/env.js"
 
 const app = express()
 
-app.get("/", (_, res) => {
-  res.send("Hello, World!")
-})
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(cors({ origin: ALLOWED_ORIGIN, credentials: true }))
+
+app.use(authRouter)
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`)
