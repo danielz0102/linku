@@ -2,4 +2,5 @@
 
 body {
   @apply bg-slate-900 text-neutral-50;
+  font-family: "Inter Variable", sans-serif;
 }
