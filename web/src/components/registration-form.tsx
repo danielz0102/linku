@@ -1,5 +1,8 @@
+import axios from "axios"
 import { AtSign, Lock, Mail, User } from "lucide-react"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { useRegister } from "~/hooks/useRegister"
+import type { ValidationErrorData } from "~/types"
 import { Alert } from "./alert"
 import { FormField } from "./form-field"
 import { ImagePicker } from "./image-picker"
@@ -16,16 +19,42 @@ type FormDataRef = {
 }
 
 export function RegistrationForm() {
-  const [imageError, setImageError] = useState(false)
+  const { mutate, isPending, isError, error } = useRegister()
+  const [imageError, setImageError] = useState<string | null>(null)
+  const confirmPasswordRef = useRef<HTMLInputElement>(null)
   const dataRef = useRef<FormDataRef>({
-    firstName: "",
-    lastName: "",
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
+    firstName: "",
+    lastName: "",
     picture: null,
   })
+
+  useEffect(() => {
+    if (isError) {
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    }
+  }, [isError])
+
+  const mapError = (error: Error): string => {
+    if (!axios.isAxiosError(error)) {
+      return "An unexpected error occurred. Please try again."
+    }
+
+    if (error.response?.status === 409) {
+      return "Username or email already exists. Please choose another."
+    }
+
+    if (error.response?.status === 400) {
+      const data = error.response.data as ValidationErrorData
+      const messages = Object.values(data.errors).flat()
+      return messages[0]
+    }
+
+    return "An unexpected error occurred. Please try again."
+  }
 
   return (
     <form
@@ -33,17 +62,36 @@ export function RegistrationForm() {
       noValidate
       onSubmit={(e) => {
         e.preventDefault()
-        e.target.checkValidity()
+
+        if (confirmPasswordRef.current) {
+          confirmPasswordRef.current.setCustomValidity(
+            dataRef.current.confirmPassword !== dataRef.current.password
+              ? "Passwords don't match"
+              : ""
+          )
+        }
+
+        if (e.target.checkValidity()) {
+          mutate({
+            username: dataRef.current.username,
+            email: dataRef.current.email,
+            password: dataRef.current.password,
+            firstName: dataRef.current.firstName,
+            lastName: dataRef.current.lastName,
+            picture: dataRef.current.picture,
+          })
+        }
       }}
     >
-      {imageError && <Alert>Picture selected is not a valid image</Alert>}
+      {imageError && <Alert>{imageError}</Alert>}
+      {isError && <Alert>{mapError(error)}</Alert>}
 
       <ImagePicker
         onChange={(file) => {
           dataRef.current.picture = file
-          setImageError(false)
+          setImageError(null)
         }}
-        onError={() => setImageError(true)}
+        onError={() => setImageError("Picture selected is not a valid image")}
       />
 
       <FormField
@@ -101,6 +149,7 @@ export function RegistrationForm() {
       <PasswordField onChange={(v) => (dataRef.current.password = v)} />
 
       <FormField
+        ref={confirmPasswordRef}
         label="Confirm Password"
         Icon={Lock}
         validate={(v) => {
@@ -120,9 +169,10 @@ export function RegistrationForm() {
 
       <button
         type="submit"
+        disabled={isPending}
         className="w-full cursor-pointer rounded-full bg-blue-600 py-3 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-950 focus:outline-none"
       >
-        Create Account
+        {isPending ? "Loading..." : "Create Account"}
       </button>
     </form>
   )

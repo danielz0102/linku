@@ -1,11 +1,12 @@
-function App() {
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { Router } from "./router"
+
+const queryClient = new QueryClient()
+
+export default function App() {
   return (
-    <>
-      <div className="bg-red-300 p-4">
-        <h1>Hello World</h1>
-      </div>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <Router />
+    </QueryClientProvider>
   )
 }
-
-export default App

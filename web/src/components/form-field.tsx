@@ -10,6 +10,7 @@ type FormFieldProps = {
     "type" | "placeholder" | "required" | "onChange"
   >
   children?: ReactNode
+  ref?: React.Ref<HTMLInputElement>
 }
 
 export function FormField({
@@ -18,6 +19,7 @@ export function FormField({
   validate,
   attrs,
   children,
+  ref,
 }: FormFieldProps) {
   const id = useId()
   const [error, setError] = useState<string | null>(null)
@@ -31,12 +33,13 @@ export function FormField({
       <div className="relative">
         <Icon className="absolute top-1/2 left-3 size-5 -translate-y-1/2 text-neutral-500" />
         <input
+          ref={ref}
           id={id}
           data-has-children={children ? "true" : undefined}
           className="w-full rounded-lg border border-neutral-700 bg-neutral-800/50 py-3 pr-4 pl-11 text-neutral-100 placeholder-neutral-500 user-invalid:border-red-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none data-has-children:pr-12"
           onBlur={(e) => {
-            const errorMsg = validate?.(e.target.value) || ""
-            e.target.setCustomValidity(errorMsg)
+            const errorMsg = validate?.(e.target.value)
+            e.target.setCustomValidity(errorMsg || "")
 
             if (e.target.checkValidity()) {
               setError(null)

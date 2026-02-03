@@ -1,21 +1,21 @@
-import type { registrationSchema } from "#schemas/registration-schema.js"
-import type { RequestHandler } from "express"
-import type z from "zod"
-
 import { SALT } from "#config/env.js"
 import { UserRepository } from "#repositories/user-repository.js"
 import { uploadImage } from "#services/upload-image.js"
 import bcrypt from "bcryptjs"
+import type { RequestHandler } from "express"
 
-type RegistrationBody = z.infer<typeof registrationSchema>["body"]
+type Body = {
+  username: string
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+}
 
-export const register: RequestHandler<
-  unknown,
-  unknown,
-  RegistrationBody
-> = async (req, res) => {
+type RegistrationHandler = RequestHandler<unknown, unknown, Body>
+
+export const register: RegistrationHandler = async (req, res) => {
   const { username, email, password, firstName, lastName } = req.body
-
   const exists = await UserRepository.exists({ email, username })
 
   if (exists) {
@@ -40,5 +40,12 @@ export const register: RequestHandler<
     profilePicUrl: picUrl,
   })
 
-  res.send(user)
+  res.send({
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    pictureUrl: user.profilePicUrl,
+  })
 }
