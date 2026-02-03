@@ -1,6 +1,6 @@
 import axios from "axios"
 import { AtSign, Lock, Mail, User } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { useRegister } from "~/hooks/useRegister"
 import type { ValidationErrorData } from "~/types"
 import { Alert } from "./alert"
@@ -20,7 +20,6 @@ type FormDataRef = {
 
 export function RegistrationForm() {
   const { mutate, isPending, isError, error } = useRegister()
-  const [imageError, setImageError] = useState<string | null>(null)
   const confirmPasswordRef = useRef<HTMLInputElement>(null)
   const dataRef = useRef<FormDataRef>({
     username: "",
@@ -83,15 +82,12 @@ export function RegistrationForm() {
         }
       }}
     >
-      {imageError && <Alert>{imageError}</Alert>}
       {isError && <Alert>{mapError(error)}</Alert>}
 
       <ImagePicker
         onChange={(file) => {
           dataRef.current.picture = file
-          setImageError(null)
         }}
-        onError={() => setImageError("Picture selected is not a valid image")}
       />
 
       <FormField

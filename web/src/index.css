@@ -4,3 +4,7 @@ body {
   @apply bg-slate-900 text-neutral-50;
   font-family: "Inter Variable", sans-serif;
 }
+
+@utility fade {
+  @apply opacity-0 transition-opacity transition-discrete duration-300 data-show:opacity-100 starting:opacity-0;
+}

@@ -4,16 +4,11 @@ import { useImage } from "~/hooks/use-image"
 
 type ImagePickerProps = {
   onChange?: (file: File | null) => void
-  onError?: () => void
 }
 
-export function ImagePicker({ onChange, onError }: ImagePickerProps) {
-  const { preview, updatePreview } = useImage()
+export function ImagePicker({ onChange }: ImagePickerProps) {
+  const { preview, invalid, updateImage } = useImage()
   const inputRef = useRef<HTMLInputElement>(null)
-
-  const validateImage = (file: File) => {
-    return file.type.startsWith("image/")
-  }
 
   return (
     <div className="flex flex-col items-center">
@@ -24,7 +19,10 @@ export function ImagePicker({ onChange, onError }: ImagePickerProps) {
         }}
         className="group relative cursor-pointer focus:outline-none"
       >
-        <div className="flex size-32 items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-neutral-600 bg-neutral-800 transition-colors group-hover:border-neutral-500 group-focus:border-blue-500">
+        <div
+          data-invalid={invalid ? true : undefined}
+          className="flex size-32 items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-neutral-600 bg-neutral-800 transition-colors group-hover:border-neutral-500 group-focus:border-blue-500 data-invalid:border-red-500"
+        >
           {preview ? (
             <img
               src={preview}
@@ -38,23 +36,38 @@ export function ImagePicker({ onChange, onError }: ImagePickerProps) {
             />
           )}
         </div>
-        <div className="absolute right-0 bottom-0 flex size-10 items-center justify-center rounded-full border-4 border-blue-950 bg-blue-600">
+
+        <div
+          data-show={invalid ? undefined : true}
+          className="fade absolute right-0 bottom-0 flex size-10 items-center justify-center rounded-full border-4 border-blue-950 bg-blue-600"
+        >
           <Pencil className="size-4 text-white" />
         </div>
+
+        <div
+          data-show={invalid ? true : undefined}
+          className="fade absolute inset-0 flex items-center justify-center rounded-full bg-black/70"
+        >
+          <p
+            aria-hidden={invalid ? undefined : true}
+            role="status"
+            className="text-sm font-medium text-white"
+          >
+            That's not an image!
+          </p>
+        </div>
+
         <input
           ref={inputRef}
           type="file"
           accept="image/*"
           onChange={(e) => {
             const file = e.target.files?.[0] || null
+            updateImage(file)
 
-            if (file && !validateImage(file)) {
-              onError?.()
-              return
+            if (!invalid) {
+              onChange?.(file)
             }
-
-            updatePreview(file)
-            onChange?.(file)
           }}
           className="hidden"
           name="image"
