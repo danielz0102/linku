@@ -1,5 +1,5 @@
 import type { ComponentType, InputHTMLAttributes, JSX, ReactNode } from "react"
-import { useId, useState } from "react"
+import { useEffect, useId, useRef, useState } from "react"
 
 type FormFieldProps = {
   label: string
@@ -10,7 +10,6 @@ type FormFieldProps = {
     "type" | "placeholder" | "required" | "onChange"
   >
   children?: ReactNode
-  ref?: React.Ref<HTMLInputElement>
 }
 
 export function FormField({
@@ -19,10 +18,31 @@ export function FormField({
   validate,
   attrs,
   children,
-  ref,
 }: FormFieldProps) {
   const id = useId()
   const [error, setError] = useState<string | null>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    const input = inputRef.current
+
+    if (!input || !validate) return
+
+    const form = input.form
+
+    if (!form) return
+
+    const handleFormSubmit = () => {
+      const errorMsg = validate(input.value)
+      input.setCustomValidity(errorMsg || "")
+    }
+
+    form.addEventListener("submit", handleFormSubmit)
+
+    return () => {
+      form.removeEventListener("submit", handleFormSubmit)
+    }
+  }, [validate])
 
   return (
     <div className="space-y-2">
@@ -33,7 +53,7 @@ export function FormField({
       <div className="relative">
         <Icon className="absolute top-1/2 left-3 size-5 -translate-y-1/2 text-neutral-500" />
         <input
-          ref={ref}
+          ref={inputRef}
           id={id}
           data-has-children={children ? "true" : undefined}
           className="w-full rounded-lg border border-neutral-700 bg-neutral-800/50 py-3 pr-4 pl-11 text-neutral-100 placeholder-neutral-500 user-invalid:border-red-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none data-has-children:pr-12"

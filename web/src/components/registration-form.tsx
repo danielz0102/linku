@@ -20,7 +20,6 @@ type FormDataRef = {
 
 export function RegistrationForm() {
   const { mutate, isPending, isError, error } = useRegister()
-  const confirmPasswordRef = useRef<HTMLInputElement>(null)
   const dataRef = useRef<FormDataRef>({
     username: "",
     email: "",
@@ -62,25 +61,10 @@ export function RegistrationForm() {
       onSubmit={(e) => {
         e.preventDefault()
 
-        if (!confirmPasswordRef.current) {
-          throw new Error("Confirm password input not found")
-        }
+        const { username, email, password, firstName, lastName, picture } =
+          dataRef.current
 
-        const {
-          username,
-          email,
-          password,
-          confirmPassword,
-          firstName,
-          lastName,
-          picture,
-        } = dataRef.current
-
-        const errorMsg =
-          confirmPassword !== password ? "Passwords don't match" : ""
-        confirmPasswordRef.current.setCustomValidity(errorMsg)
-
-        if (e.target.checkValidity()) {
+        if (e.currentTarget.checkValidity()) {
           mutate({
             username,
             email,
@@ -155,7 +139,6 @@ export function RegistrationForm() {
       <PasswordField onChange={(v) => (dataRef.current.password = v)} />
 
       <FormField
-        ref={confirmPasswordRef}
         label="Confirm Password"
         Icon={Lock}
         validate={(v) => {
