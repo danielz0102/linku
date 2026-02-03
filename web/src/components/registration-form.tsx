@@ -62,22 +62,32 @@ export function RegistrationForm() {
       onSubmit={(e) => {
         e.preventDefault()
 
-        if (confirmPasswordRef.current) {
-          confirmPasswordRef.current.setCustomValidity(
-            dataRef.current.confirmPassword !== dataRef.current.password
-              ? "Passwords don't match"
-              : ""
-          )
+        if (!confirmPasswordRef.current) {
+          throw new Error("Confirm password input not found")
         }
+
+        const {
+          username,
+          email,
+          password,
+          confirmPassword,
+          firstName,
+          lastName,
+          picture,
+        } = dataRef.current
+
+        const errorMsg =
+          confirmPassword !== password ? "Passwords don't match" : ""
+        confirmPasswordRef.current.setCustomValidity(errorMsg)
 
         if (e.target.checkValidity()) {
           mutate({
-            username: dataRef.current.username,
-            email: dataRef.current.email,
-            password: dataRef.current.password,
-            firstName: dataRef.current.firstName,
-            lastName: dataRef.current.lastName,
-            picture: dataRef.current.picture,
+            username,
+            email,
+            password,
+            firstName,
+            lastName,
+            picture,
           })
         }
       }}
