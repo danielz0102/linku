@@ -1,6 +1,7 @@
 import axios from "axios"
 import { AtSign, Lock, Mail, User } from "lucide-react"
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
+import { useScroll } from "~/hooks/use-scroll"
 import { useRegister } from "~/hooks/useRegister"
 import type { ValidationErrorData } from "~/types"
 import { Alert } from "./alert"
@@ -20,6 +21,8 @@ type FormDataRef = {
 
 export function RegistrationForm() {
   const { mutate, isPending, isError, error } = useRegister()
+  useScroll({ on: isError, top: 0 })
+
   const dataRef = useRef<FormDataRef>({
     username: "",
     email: "",
@@ -29,12 +32,6 @@ export function RegistrationForm() {
     lastName: "",
     picture: null,
   })
-
-  useEffect(() => {
-    if (isError) {
-      window.scrollTo({ top: 0, behavior: "smooth" })
-    }
-  }, [isError])
 
   const mapError = (error: Error): string => {
     if (!axios.isAxiosError(error)) {
