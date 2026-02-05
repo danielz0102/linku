@@ -26,12 +26,7 @@ export function useImage() {
     }
 
     setInvalid(false)
-
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      setPreview(reader.result as string)
-    }
-    reader.readAsDataURL(file)
+    setPreview(URL.createObjectURL(file))
   }
 
   return { preview, invalid, updateImage }

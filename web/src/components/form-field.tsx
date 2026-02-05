@@ -1,83 +1,104 @@
-import type { ComponentType, InputHTMLAttributes, JSX, ReactNode } from "react"
-import { useEffect, useId, useRef, useState } from "react"
+import { Eye, EyeOff } from "lucide-react"
+import type {
+  ComponentProps,
+  ComponentType,
+  JSX,
+  PropsWithChildren,
+} from "react"
+import { createContext, use, useId, useState } from "react"
 
-type FormFieldProps = {
+type FormFieldProps = PropsWithChildren & {
   label: string
   Icon: ComponentType<JSX.IntrinsicElements["svg"]>
-  validate?: (value: string) => string | undefined
-  attrs: Pick<
-    InputHTMLAttributes<HTMLInputElement>,
-    "type" | "placeholder" | "required" | "onChange"
-  >
-  children?: ReactNode
+  error?: string
 }
 
-export function FormField({
-  label,
-  Icon,
-  validate,
-  attrs,
-  children,
-}: FormFieldProps) {
-  const id = useId()
-  const [error, setError] = useState<string | null>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
+type InputProps = Omit<
+  ComponentProps<"input">,
+  "id" | "className" | "aria-invalid"
+>
 
-  useEffect(() => {
-    const input = inputRef.current
+type PasswordInputProps = Omit<InputProps, "type">
 
-    if (!input || !validate) return
+export const FormField = {
+  Provider({ label, Icon, error, children }: FormFieldProps) {
+    const id = useId()
 
-    const form = input.form
+    return (
+      <div className="space-y-2">
+        <label htmlFor={id} className="block text-sm">
+          {label}
+        </label>
 
-    if (!form) return
+        <div className="relative">
+          <Icon className="absolute top-1/2 left-3 size-5 -translate-y-1/2 text-neutral-500" />
 
-    const handleFormSubmit = () => {
-      const errorMsg = validate(input.value)
-      input.setCustomValidity(errorMsg || "")
-    }
+          <FormFieldContext value={{ id, invalid: Boolean(error) }}>
+            {children}
+          </FormFieldContext>
+        </div>
 
-    form.addEventListener("submit", handleFormSubmit)
-
-    return () => {
-      form.removeEventListener("submit", handleFormSubmit)
-    }
-  }, [validate])
-
-  return (
-    <div className="space-y-2">
-      <label htmlFor={id} className="block text-sm">
-        {label}
-      </label>
-
-      <div className="relative">
-        <Icon className="absolute top-1/2 left-3 size-5 -translate-y-1/2 text-neutral-500" />
-        <input
-          ref={inputRef}
-          id={id}
-          data-has-children={children ? "true" : undefined}
-          className="w-full rounded-lg border border-neutral-700 bg-neutral-800/50 py-3 pr-4 pl-11 text-neutral-100 placeholder-neutral-500 user-invalid:border-red-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none data-has-children:pr-12"
-          onBlur={(e) => {
-            const errorMsg = validate?.(e.target.value)
-            e.target.setCustomValidity(errorMsg || "")
-
-            if (e.target.checkValidity()) {
-              setError(null)
-            }
-          }}
-          onInvalid={(e) => {
-            setError(e.currentTarget.validationMessage)
-          }}
-          {...attrs}
-        />
-        {children}
+        {error && (
+          <p role="status" className="text-sm text-red-600">
+            {error}
+          </p>
+        )}
       </div>
+    )
+  },
+  Input(props: InputProps) {
+    const { id, invalid } = useContext()
 
-      {error && (
-        <p className="text-sm text-red-700" role="status">
-          {error}
-        </p>
-      )}
-    </div>
-  )
+    return (
+      <input
+        id={id}
+        aria-invalid={invalid}
+        className="w-full rounded-lg border border-neutral-700 bg-neutral-800/50 py-3 pr-4 pl-11 text-neutral-100 placeholder-neutral-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none aria-invalid:border-red-700 aria-invalid:ring-0 data-has-sibling:pr-12"
+        {...props}
+      />
+    )
+  },
+  PasswordInput(props: PasswordInputProps) {
+    const [isVisible, setIsVisible] = useState(false)
+    const Icon = isVisible ? EyeOff : Eye
+
+    return (
+      <>
+        <FormField.Input
+          data-has-sibling
+          type={isVisible ? "text" : "password"}
+          {...props}
+        />
+        <button
+          type="button"
+          className="absolute top-1/2 right-3 -translate-y-1/2 text-neutral-500 hover:text-neutral-400"
+          onClick={() => setIsVisible((prev) => !prev)}
+        >
+          <Icon
+            className="size-5"
+            aria-label={isVisible ? "Hide password" : "Show password"}
+          />
+        </button>
+      </>
+    )
+  },
+}
+
+type ContextValue = {
+  id: string
+  invalid: boolean
+}
+
+const FormFieldContext = createContext<ContextValue | null>(null)
+
+function useContext() {
+  const context = use(FormFieldContext)
+
+  if (!context) {
+    throw new Error(
+      "FormField components must be used within FormField.Provider"
+    )
+  }
+
+  return context
 }

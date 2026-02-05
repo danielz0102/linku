@@ -1,37 +1,39 @@
 import axios from "axios"
 import { AtSign, Lock, Mail, User } from "lucide-react"
-import { useRef } from "react"
+import { useForm, useWatch } from "react-hook-form"
 import { useScroll } from "~/hooks/use-scroll"
 import { useRegister } from "~/hooks/useRegister"
 import type { ValidationErrorData } from "~/types"
 import { Alert } from "./alert"
 import { FormField } from "./form-field"
 import { ImagePicker } from "./image-picker"
-import { PasswordField } from "./password-field"
 
-type FormDataRef = {
+type Inputs = {
   firstName: string
   lastName: string
   username: string
   email: string
   password: string
   confirmPassword: string
-  picture: File | null
+  file: File | null
 }
 
 export function RegistrationForm() {
-  const { mutate, isPending, isError, error } = useRegister()
-  useScroll({ on: isError, top: 0 })
+  const {
+    control,
+    formState: { errors },
+    register,
+    handleSubmit,
+    setValue,
+  } = useForm<Inputs>({ defaultValues: { file: null } })
 
-  const dataRef = useRef<FormDataRef>({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    firstName: "",
-    lastName: "",
-    picture: null,
-  })
+  const password = useWatch({ control, name: "password" })
+
+  register("file")
+
+  const { isPending, isError, error } = useRegister()
+
+  useScroll({ on: isError, top: 0 })
 
   const mapError = (error: Error): string => {
     if (!axios.isAxiosError(error)) {
@@ -55,103 +57,101 @@ export function RegistrationForm() {
     <form
       className="space-y-6"
       noValidate
-      onSubmit={(e) => {
-        e.preventDefault()
-
-        const { username, email, password, firstName, lastName, picture } =
-          dataRef.current
-
-        if (e.currentTarget.checkValidity()) {
-          mutate({
-            username,
-            email,
-            password,
-            firstName,
-            lastName,
-            picture,
-          })
-        }
-      }}
+      onSubmit={handleSubmit((data) => {
+        console.log({ data })
+      })}
     >
       {isError && <Alert>{mapError(error)}</Alert>}
 
-      <ImagePicker
-        onChange={(file) => {
-          dataRef.current.picture = file
-        }}
-      />
+      <ImagePicker onChange={(file) => setValue("file", file)} />
 
-      <FormField
+      <FormField.Provider
         label="First Name"
         Icon={User}
-        attrs={{
-          type: "text",
-          placeholder: "Enter your first name",
-          required: true,
-          onChange: (e) => {
-            dataRef.current.firstName = e.target.value
-          },
-        }}
-      />
+        error={errors.firstName?.message}
+      >
+        <FormField.Input
+          {...register("firstName", { required: "First name is required" })}
+          placeholder="John"
+        />
+      </FormField.Provider>
 
-      <FormField
+      <FormField.Provider
         label="Last Name"
         Icon={User}
-        attrs={{
-          type: "text",
-          placeholder: "Enter your last name",
-          required: true,
-          onChange: (e) => {
-            dataRef.current.lastName = e.target.value
-          },
-        }}
-      />
+        error={errors.lastName?.message}
+      >
+        <FormField.Input
+          {...register("lastName", { required: "Last name is required" })}
+          placeholder="Doe"
+        />
+      </FormField.Provider>
 
-      <FormField
+      <FormField.Provider
         label="Username"
         Icon={AtSign}
-        attrs={{
-          type: "text",
-          placeholder: "username",
-          required: true,
-          onChange: (e) => {
-            dataRef.current.username = e.target.value
-          },
-        }}
-      />
+        error={errors.username?.message}
+      >
+        <FormField.Input
+          {...register("username", { required: "Username is required" })}
+          placeholder="johndoe"
+        />
+      </FormField.Provider>
 
-      <FormField
+      <FormField.Provider
         label="Email Address"
         Icon={Mail}
-        attrs={{
-          type: "email",
-          placeholder: "you@example.com",
-          required: true,
-          onChange: (e) => {
-            dataRef.current.email = e.target.value
-          },
-        }}
-      />
+        error={errors.email?.message}
+      >
+        <FormField.Input
+          {...register("email", {
+            required: "Email address is required",
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: "That's not an email!",
+            },
+          })}
+          type="email"
+          placeholder="john_doe@example.com"
+        />
+      </FormField.Provider>
 
-      <PasswordField onChange={(v) => (dataRef.current.password = v)} />
+      <FormField.Provider
+        label="Password"
+        Icon={Lock}
+        error={errors.password?.message}
+      >
+        <FormField.PasswordInput
+          placeholder="••••••••"
+          {...register("password", {
+            required: "Password is required",
+            pattern: {
+              value: /^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/,
+              message:
+                "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",
+            },
+          })}
+        />
+      </FormField.Provider>
 
-      <FormField
+      <FormField.Provider
         label="Confirm Password"
         Icon={Lock}
-        validate={(v) => {
-          if (v !== dataRef.current.password) {
-            return "Passwords don't match"
-          }
-        }}
-        attrs={{
-          type: "password",
-          placeholder: "••••••••",
-          required: true,
-          onChange: (e) => {
-            dataRef.current.confirmPassword = e.target.value
-          },
-        }}
-      />
+        error={errors.confirmPassword?.message}
+      >
+        <FormField.Input
+          type="password"
+          placeholder="••••••••"
+          {...register("confirmPassword", {
+            required: "Please confirm your password",
+            validate: (value) => {
+              if (value !== password) {
+                return "Passwords do not match"
+              }
+            },
+          })}
+        />
+      </FormField.Provider>
 
       <button
         type="submit"
