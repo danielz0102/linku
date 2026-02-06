@@ -5,11 +5,6 @@ import { Router } from "express"
 
 const router = Router()
 
-router.post(
-  "/register",
-  uploadPicture,
-  validateRegistration,
-  registerController
-)
+router.post("/", uploadPicture, validateRegistration, registerController)
 
 export { router as userRouter }

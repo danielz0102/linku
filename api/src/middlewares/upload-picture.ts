@@ -1,5 +1,6 @@
 import { createCustomError } from "#lib/create-custom-error.js"
-import type { RequestHandler } from "express"
+import type { ValidationErrorBody } from "#types.d.js"
+import type { NextFunction, Request, Response } from "express"
 import multer from "multer"
 
 const allowedMimeTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"]
@@ -7,26 +8,48 @@ const ImageMimeTypeError = createCustomError("ImageMimeTypeError")
 
 const upload = multer({
   storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
   fileFilter(_, file, cb) {
     if (!allowedMimeTypes.includes(file.mimetype)) {
-      return cb(
-        new ImageMimeTypeError("Invalid image file", {
-          cause: { mimetype: file.mimetype, allowedMimeTypes },
-        })
-      )
+      return cb(new ImageMimeTypeError("Invalid image file"))
     }
 
     cb(null, true)
   },
 }).single("picture")
 
-export const uploadPicture: RequestHandler = (req, res, next) => {
+export function uploadPicture(
+  req: Request,
+  res: Response<ValidationErrorBody>,
+  next: NextFunction
+) {
   upload(req, res, (err) => {
     if (err instanceof ImageMimeTypeError) {
       return res.status(400).json({
-        error: err.message,
-        details: err.cause,
+        message: "Validation failed",
+        errors: [
+          {
+            field: "picture",
+            details: `Picture file is invalid. Allowed files are: JPEG, PNG, JPG, WEBP`,
+          },
+        ],
       })
+    }
+
+    if (err instanceof multer.MulterError) {
+      if (err.code === "LIMIT_FILE_SIZE") {
+        return res.status(400).json({
+          message: "Validation failed",
+          errors: [
+            {
+              field: "picture",
+              details: "Picture file cannot be larger than 5MB",
+            },
+          ],
+        })
+      }
     }
 
     next(err)
