@@ -12,14 +12,14 @@ type Body = {
   lastName: string
 }
 
-type RegistrationHandler = RequestHandler<unknown, unknown, Body>
+type Handler = RequestHandler<unknown, unknown, Body>
 
-export const register: RegistrationHandler = async (req, res) => {
+export const registerController: Handler = async (req, res) => {
   const { username, email, password, firstName, lastName } = req.body
   const exists = await UserRepository.exists({ email, username })
 
   if (exists) {
-    return res.status(409).json({ error: "Username or email already exists" })
+    return res.status(409).json({ message: "Username or email already exists" })
   }
 
   const [picUrl, hashedPassword] = await Promise.all([
