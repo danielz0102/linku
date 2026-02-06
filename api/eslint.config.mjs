@@ -1,21 +1,24 @@
 import { defineConfig, globalIgnores } from "eslint/config"
 import tseslint from "typescript-eslint"
 
-export default defineConfig(globalIgnores(["dist/**", "node_modules/**"]), {
-  files: ["src/**/*.ts"],
-  extends: [tseslint.configs.strict],
-  languageOptions: {
-    parserOptions: {
-      projectService: true,
-      tsconfigRootDir: import.meta.dirname,
+export default defineConfig([
+  globalIgnores(["dist/**", "node_modules/**"]),
+  {
+    files: ["src/**/*.ts", "__tests__/**/*.ts"],
+    extends: [tseslint.configs.strict],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+        },
+      ],
     },
   },
-  rules: {
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      {
-        argsIgnorePattern: "^_",
-      },
-    ],
-  },
-})
+])
