@@ -7,8 +7,11 @@ export type User = {
   pictureUrl: string | null
 }
 
-export type ValidationErrorData = {
-  errors: {
-    [key: string]: string[]
-  }
+export type NewUser = {
+  firstName: string
+  lastName: string
+  username: string
+  email: string
+  password: string
+  picture: File | null
 }

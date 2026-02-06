@@ -1,14 +1,5 @@
-import type { User } from "~/types"
+import type { NewUser, User } from "~/types"
 import apiClient from "./api-client"
-
-type NewUser = {
-  firstName: string
-  lastName: string
-  username: string
-  email: string
-  password: string
-  picture: File | null
-}
 
 export async function register({
   username,

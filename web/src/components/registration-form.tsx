@@ -1,9 +1,11 @@
+import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { AtSign, Lock, Mail, User } from "lucide-react"
 import { useForm, useWatch } from "react-hook-form"
 import { useScroll } from "~/hooks/use-scroll"
-import { useRegister } from "~/hooks/useRegister"
-import type { ValidationErrorData } from "~/types"
+import { isImageMimeTypeErrorData } from "~/schemas/image-mimetype-error-data"
+import { isRegistrationErrorData } from "~/schemas/registration-error-data"
+import { register as registerService } from "~/services/register"
 import { Alert } from "./alert"
 import { FormField } from "./form-field"
 import { ImagePicker } from "./image-picker"
@@ -15,7 +17,7 @@ type Inputs = {
   email: string
   password: string
   confirmPassword: string
-  file: File | null
+  picture: File | null
 }
 
 export function RegistrationForm() {
@@ -25,45 +27,99 @@ export function RegistrationForm() {
     register,
     handleSubmit,
     setValue,
-  } = useForm<Inputs>({ defaultValues: { file: null } })
+    setError,
+  } = useForm<Inputs>({ defaultValues: { picture: null } })
 
   const password = useWatch({ control, name: "password" })
 
-  register("file")
+  register("picture")
 
-  const { isPending, isError, error } = useRegister()
+  const { mutate, isPending, isError } = useMutation({
+    mutationFn: registerService,
+    onError: (error) => {
+      if (!axios.isAxiosError(error)) {
+        return setError("root", {
+          message: "An unexpected error occurred. Please try again.",
+        })
+      }
+
+      if (error.response?.status === 409) {
+        return setError("root", { message: "Username or email already exists" })
+      }
+
+      if (error.response?.status === 400) {
+        const { data } = error.response
+
+        if (isImageMimeTypeErrorData(data)) {
+          setError("picture", { message: data.error })
+          return
+        }
+
+        if (isRegistrationErrorData(data)) {
+          const { fieldErrors, formErrors } = data.errors
+
+          formErrors.forEach((formError) =>
+            setError("root", { message: formError })
+          )
+
+          if (fieldErrors.firstName) {
+            setError("firstName", { message: fieldErrors.firstName[0] })
+          }
+
+          if (fieldErrors.lastName) {
+            setError("lastName", { message: fieldErrors.lastName[0] })
+          }
+
+          if (fieldErrors.username) {
+            setError("username", { message: fieldErrors.username[0] })
+          }
+
+          if (fieldErrors.email) {
+            setError("email", { message: fieldErrors.email[0] })
+          }
+
+          if (fieldErrors.password) {
+            setError("password", { message: fieldErrors.password[0] })
+          }
+
+          return
+        }
+
+        setError("root", {
+          message: "An unexpected error occurred. Please try again.",
+        })
+
+        return
+      }
+
+      setError("root", {
+        message: "An unexpected error occurred. Please try again.",
+      })
+    },
+  })
 
   useScroll({ on: isError, top: 0 })
-
-  const mapError = (error: Error): string => {
-    if (!axios.isAxiosError(error)) {
-      return "An unexpected error occurred. Please try again."
-    }
-
-    if (error.response?.status === 409) {
-      return "Username or email already exists. Please choose another."
-    }
-
-    if (error.response?.status === 400) {
-      const data = error.response.data as ValidationErrorData
-      const messages = Object.values(data.errors).flat()
-      return messages[0]
-    }
-
-    return "An unexpected error occurred. Please try again."
-  }
 
   return (
     <form
       className="space-y-6"
       noValidate
       onSubmit={handleSubmit((data) => {
-        console.log({ data })
+        const { username, email, password, firstName, lastName, picture } = data
+        mutate({
+          username,
+          email,
+          password,
+          firstName,
+          lastName,
+          picture,
+        })
       })}
     >
-      {isError && <Alert>{mapError(error)}</Alert>}
+      {errors.root && <Alert>{errors.root.message}</Alert>}
+      {errors.picture && <Alert>{errors.picture.message}</Alert>}
 
-      <ImagePicker onChange={(file) => setValue("file", file)} />
+      <ImagePicker onChange={(file) => setValue("picture", file)} />
 
       <FormField.Provider
         label="First Name"

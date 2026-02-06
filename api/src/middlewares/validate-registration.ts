@@ -15,13 +15,11 @@ const registrationSchema = z.object({
   lastName: z.string().trim().nonempty("Last name is required"),
 })
 
-export const registrationValidator: RequestHandler = (req, res, next) => {
+export const validateRegistration: RequestHandler = (req, res, next) => {
   const result = registrationSchema.safeParse(req.body)
 
   if (!result.success) {
-    return res
-      .status(400)
-      .json({ errors: z.flattenError(result.error).fieldErrors })
+    return res.status(400).json({ errors: z.flattenError(result.error) })
   }
 
   next()

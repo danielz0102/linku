@@ -1,10 +1,10 @@
 import { register } from "#controllers/register.js"
 import { uploadPicture } from "#middlewares/upload-picture.js"
-import { registrationValidator } from "#validators/registration-validator.js"
+import { validateRegistration } from "#middlewares/validate-registration.js"
 import { Router } from "express"
 
 const router = Router()
 
-router.post("/register", uploadPicture, registrationValidator, register)
+router.post("/register", uploadPicture, validateRegistration, register)
 
 export { router as authRouter }
