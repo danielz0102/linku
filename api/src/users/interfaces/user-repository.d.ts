@@ -16,7 +16,7 @@ type NewUser = {
 }
 
 type Filters = AtLeastOne<{
-  id: number
+  id: string
   email: string
   username: string
 }>
