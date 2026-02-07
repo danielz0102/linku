@@ -32,5 +32,5 @@
     "skipLibCheck": true
   },
   "include": ["src"],
-  "exclude": ["**/*.test.ts"]
+  "exclude": ["src/__tests__"]
 }
