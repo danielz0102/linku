@@ -12,6 +12,15 @@ test("calls the next middleware", async () => {
   await register().expect(200)
 })
 
+test("sends 400 if body is empty", async () => {
+  const { body } = await request(app).post("/").expect(400)
+
+  expect(body).toEqual({
+    message: "Registration data is missing",
+    errors: [],
+  })
+})
+
 test("sends 400 if some fields are missing", async () => {
   const { body } = await register({
     username: "",

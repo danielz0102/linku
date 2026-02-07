@@ -10,10 +10,7 @@ export const validateRegistration: RequestHandler<unknown, ErrorBody> = (
   const result = registrationSchema.safeParse(req.body)
 
   if (!result.success) {
-    return res.status(400).json({
-      message: "Validation failed",
-      errors: mapZodError(result.error),
-    })
+    return res.status(400).json(mapZodError(result.error))
   }
 
   next()
@@ -35,15 +32,23 @@ const registrationSchema = z.object({
 
 function mapZodError(
   error: z.ZodError<z.infer<typeof registrationSchema>>
-): ErrorBody["errors"] {
+): ErrorBody {
   const flattened = z.treeifyError(error).properties
 
   if (!flattened) {
-    return []
+    return {
+      message: "Registration data is missing",
+      errors: [],
+    }
   }
 
-  return Object.entries(flattened).map(([field, details]) => ({
+  const errors = Object.entries(flattened).map(([field, details]) => ({
     field,
     details: details.errors[0],
   }))
+
+  return {
+    message: "Invalid registration data",
+    errors,
+  }
 }
