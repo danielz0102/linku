@@ -1,4 +1,4 @@
-import { validateRegistration } from "#users/register/validate-registration.js"
+import { validateRegistration } from "#users/features/register/validate-registration.js"
 import request from "supertest"
 import express from "express"
 

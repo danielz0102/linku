@@ -1,6 +1,6 @@
 import { RegistrationServiceMock } from "#__tests__/mocks/registration-service-mock.js"
 import { UserMother } from "#__tests__/mothers/user-mother.js"
-import { RegistrationHandler } from "#users/register/registration-handler.js"
+import { RegistrationHandler } from "#users/features/register/registration-handler.js"
 import express from "express"
 import request from "supertest"
 

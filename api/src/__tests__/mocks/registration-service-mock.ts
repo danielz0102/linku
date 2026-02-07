@@ -1,5 +1,5 @@
 import type { UserRepository } from "#users/interfaces/user-repository.d.js"
-import { RegistrationService } from "#users/register/registration-service.js"
+import { RegistrationService } from "#users/features/register/registration-service.js"
 
 export class RegistrationServiceMock extends RegistrationService {
   constructor() {

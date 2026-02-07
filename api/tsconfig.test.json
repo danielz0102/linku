@@ -21,5 +21,5 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": ["src/__tests__"]
+  "include": ["src/**/*.test.ts", "src/__tests__"]
 }

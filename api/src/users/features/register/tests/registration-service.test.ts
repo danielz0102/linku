@@ -1,6 +1,6 @@
 import { UserRepositoryMock } from "#__tests__/mocks/user-repository-mock.js"
 import { UserMother } from "#__tests__/mothers/user-mother.js"
-import { RegistrationService } from "#users/register/registration-service.js"
+import { RegistrationService } from "#users/features/register/registration-service.js"
 
 const repo = new UserRepositoryMock()
 const service = new RegistrationService({
