@@ -1,11 +1,11 @@
-import { RegisterServiceMock } from "#__tests__/mocks/register-service-mock.js"
+import { RegistrationServiceMock } from "#__tests__/mocks/registration-service-mock.js"
 import { UserMother } from "#__tests__/mothers/user-mother.js"
-import { RegisterHandler } from "#users/register/register-handler.js"
+import { RegistrationHandler } from "#users/register/registration-handler.js"
 import express from "express"
 import request from "supertest"
 
-const service = new RegisterServiceMock()
-const handler = new RegisterHandler(service)
+const service = new RegistrationServiceMock()
+const handler = new RegistrationHandler(service)
 
 const app = express()
 app.use(express.json())

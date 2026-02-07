@@ -2,7 +2,7 @@ import { Result } from "#lib/result.js"
 import type { UserRepository } from "#users/interfaces/user-repository.d.js"
 import type { PublicUser } from "#users/types.d.js"
 
-export class RegisterService {
+export class RegistrationService {
   private readonly userRepo: UserRepository
   private readonly hashPassword: (password: string) => Promise<string>
 

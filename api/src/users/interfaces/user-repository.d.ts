@@ -1,5 +1,10 @@
 import { User } from "#users/types.d.js"
 
+export interface UserRepository {
+  create: (newUser: NewUser) => Promise<User>
+  search: (filters: Filters) => Promise<User | undefined>
+}
+
 type NewUser = {
   username: string
   email: string
@@ -10,18 +15,13 @@ type NewUser = {
   bio?: string
 }
 
-type AtLeastOne<T> = Partial<T> &
-  {
-    [K in keyof T]-?: Required<Pick<T, K>>
-  }[keyof T]
-
 type Filters = AtLeastOne<{
   id: number
   email: string
   username: string
 }>
 
-export interface UserRepository {
-  create: (newUser: NewUser) => Promise<User>
-  search: (filters: Filters) => Promise<User | undefined>
-}
+type AtLeastOne<T> = Partial<T> &
+  {
+    [K in keyof T]-?: Required<Pick<T, K>>
+  }[keyof T]

@@ -1,14 +1,14 @@
 import { UserRepositoryMock } from "#__tests__/mocks/user-repository-mock.js"
 import { UserMother } from "#__tests__/mothers/user-mother.js"
-import { RegisterService } from "#users/register/register-service.js"
+import { RegistrationService } from "#users/register/registration-service.js"
 
 const repo = new UserRepositoryMock()
-const service = new RegisterService({
+const service = new RegistrationService({
   userRepo: repo,
   hashPassword: vi.fn(),
 })
 
-type Input = Parameters<RegisterService["register"]>[0]
+type Input = Parameters<RegistrationService["register"]>[0]
 
 const input: Input = {
   username: "testuser",

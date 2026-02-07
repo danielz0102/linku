@@ -1,13 +1,13 @@
 import type { Request, Response } from "express"
-import type { RegisterService } from "./register-service.js"
+import type { RegistrationService } from "./registration-service.js"
 import type { PublicUser } from "#users/types.d.js"
 import type { ErrorBody } from "#types.d.js"
 
-export class RegisterHandler {
-  constructor(private readonly service: RegisterService) {}
+export class RegistrationHandler {
+  constructor(private readonly service: RegistrationService) {}
 
   handle = async (
-    req: Request<unknown, unknown, RegisterBody>,
+    req: Request<unknown, unknown, RegistrationBody>,
     res: Response<PublicUser | ErrorBody>
   ) => {
     const { data, error } = await this.service.register(req.body)
@@ -30,7 +30,7 @@ export class RegisterHandler {
   }
 }
 
-type RegisterBody = {
+type RegistrationBody = {
   username: string
   email: string
   password: string
