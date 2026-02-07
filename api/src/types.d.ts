@@ -1,9 +1,7 @@
-export type ValidationErrorBody = {
-  message: "Validation failed"
-  errors: ErrorField[]
-}
-
-type ErrorField = {
-  field: string
-  details: string
+export type ErrorBody = {
+  message: string
+  errors: {
+    field: string
+    details: string
+  }[]
 }

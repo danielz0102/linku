@@ -1,5 +1,5 @@
 import { createCustomError } from "#lib/create-custom-error.js"
-import type { ValidationErrorBody } from "#types.d.js"
+import type { ErrorBody } from "#types.d.js"
 import type { NextFunction, Request, Response } from "express"
 import multer from "multer"
 
@@ -22,7 +22,7 @@ const upload = multer({
 
 export function uploadPicture(
   req: Request,
-  res: Response<ValidationErrorBody>,
+  res: Response<ErrorBody>,
   next: NextFunction
 ) {
   upload(req, res, (err) => {

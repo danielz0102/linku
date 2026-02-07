@@ -1,14 +1,10 @@
+import { UserRepositoryMock } from "#__tests__/mocks/user-repository-mock.js"
 import { UserMother } from "#__tests__/mothers/user-mother.js"
-import type { UserRepository } from "#users/interfaces/user-repository.d.js"
 import { RegisterService } from "#users/register/register-service.js"
 
-const userRepoMock = vi.mockObject<UserRepository>({
-  create: vi.fn(),
-  search: vi.fn(),
-})
-
+const repo = new UserRepositoryMock()
 const service = new RegisterService({
-  userRepo: userRepoMock,
+  userRepo: repo,
   hashPassword: vi.fn(),
 })
 
@@ -24,7 +20,7 @@ const input: Input = {
 
 test("returns a public user", async () => {
   const user = UserMother.create()
-  userRepoMock.create.mockResolvedValue(user)
+  repo.create.mockResolvedValue(user)
 
   const { ok, data } = await service.register(input)
 
@@ -41,7 +37,7 @@ test("returns a public user", async () => {
 })
 
 test("fails if username already exists", async () => {
-  userRepoMock.search.mockImplementation(async (filters) => {
+  repo.search.mockImplementation(async (filters) => {
     if (filters.username) return UserMother.create()
   })
 
@@ -52,7 +48,7 @@ test("fails if username already exists", async () => {
 })
 
 test("fails if email already exists", async () => {
-  userRepoMock.search.mockImplementation(async (filters) => {
+  repo.search.mockImplementation(async (filters) => {
     if (filters.email) return UserMother.create()
   })
 
