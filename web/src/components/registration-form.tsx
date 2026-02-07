@@ -3,12 +3,10 @@ import axios from "axios"
 import { AtSign, Lock, Mail, User } from "lucide-react"
 import { useForm, useWatch } from "react-hook-form"
 import { useScroll } from "~/hooks/use-scroll"
-import { isImageMimeTypeErrorData } from "~/schemas/image-mimetype-error-data"
 import { isRegistrationErrorData } from "~/schemas/registration-error-data"
 import { register as registerService } from "~/services/register"
 import { Alert } from "./alert"
 import { FormField } from "./form-field"
-import { ImagePicker } from "./image-picker"
 
 type Inputs = {
   firstName: string
@@ -17,7 +15,6 @@ type Inputs = {
   email: string
   password: string
   confirmPassword: string
-  picture: File | null
 }
 
 export function RegistrationForm() {
@@ -26,13 +23,10 @@ export function RegistrationForm() {
     formState: { errors },
     register,
     handleSubmit,
-    setValue,
     setError,
-  } = useForm<Inputs>({ defaultValues: { picture: null } })
+  } = useForm<Inputs>()
 
   const password = useWatch({ control, name: "password" })
-
-  register("picture")
 
   const { mutate, isPending, isError } = useMutation({
     mutationFn: registerService,
@@ -49,11 +43,6 @@ export function RegistrationForm() {
 
       if (error.response?.status === 400) {
         const { data } = error.response
-
-        if (isImageMimeTypeErrorData(data)) {
-          setError("picture", { message: data.error })
-          return
-        }
 
         if (isRegistrationErrorData(data)) {
           const { fieldErrors, formErrors } = data.errors
@@ -105,21 +94,17 @@ export function RegistrationForm() {
       className="space-y-6"
       noValidate
       onSubmit={handleSubmit((data) => {
-        const { username, email, password, firstName, lastName, picture } = data
+        const { username, email, password, firstName, lastName } = data
         mutate({
           username,
           email,
           password,
           firstName,
           lastName,
-          picture,
         })
       })}
     >
       {errors.root && <Alert>{errors.root.message}</Alert>}
-      {errors.picture && <Alert>{errors.picture.message}</Alert>}
-
-      <ImagePicker onChange={(file) => setValue("picture", file)} />
 
       <FormField.Provider
         label="First Name"
