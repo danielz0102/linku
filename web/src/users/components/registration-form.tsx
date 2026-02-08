@@ -1,12 +1,9 @@
-import { useMutation } from "@tanstack/react-query"
-import axios from "axios"
 import { AtSign, Lock, Mail, User } from "lucide-react"
 import { useForm, useWatch } from "react-hook-form"
-import { isApiErrorData, type ApiErrorData } from "~/api/api-error-data"
 import { Alert } from "~/components/alert"
 import { FormField } from "~/components/form-field"
 import { useScroll } from "~/hooks/use-scroll"
-import { register as registerService } from "~/users/services/register"
+import { useRegisterMutation } from "../hooks/use-register-mutation"
 
 type Inputs = {
   firstName: string
@@ -24,63 +21,38 @@ export function RegistrationForm() {
     register,
     handleSubmit,
     setError,
+    getValues,
   } = useForm<Inputs>()
 
   const password = useWatch({ control, name: "password" })
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: registerService,
-    onError: (error) => {
-      if (!axios.isAxiosError(error)) {
+  const { mutate, isPending } = useRegisterMutation({
+    handleExternalError: (error) => {
+      setError("root", { message: error })
+    },
+    handleApiError: (data) => {
+      const { errors } = data
+
+      if (!errors.some(({ field }) => isInput(field))) {
         return setError("root", {
           message: "An unexpected error occurred. Please try again later.",
         })
       }
 
-      if (!error.response) {
-        return setError("root", {
-          message:
-            "A network error occurred. Please check your connection and try again.",
-        })
-      }
-
-      const { status, data } = error.response
-
-      if (!isApiErrorData(data)) {
-        return setError("root", {
-          message: "An unexpected error occurred. Please try again later.",
-        })
-      }
-
-      if ([404, 409].includes(status)) {
-        return handleApiError(data)
-      }
-
-      setError("root", {
-        message: "An unexpected error occurred. Please try again later.",
+      errors.forEach(({ field, details }) => {
+        if (isInput(field)) {
+          setError(field, { message: details }, { shouldFocus: true })
+        }
       })
+
+      function isInput(field: string): field is keyof Inputs {
+        const inputs = Object.keys(getValues())
+        return inputs.includes(field)
+      }
     },
   })
 
   useScroll({ on: Boolean(errors.root), top: 0 })
-
-  function handleApiError(error: ApiErrorData) {
-    error.errors.forEach((err) => {
-      if (isInput(err.field)) {
-        setError(err.field, { message: err.details }, { shouldFocus: true })
-      }
-    })
-
-    function isInput(field: string): field is keyof Inputs {
-      return [
-        "firstName",
-        "lastName",
-        "username",
-        "email",
-        "password",
-      ].includes(field)
-    }
-  }
 
   return (
     <form
