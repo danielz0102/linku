@@ -2,64 +2,23 @@ import { AtSign, Lock, Mail, User } from "lucide-react"
 import { Alert } from "~/components/alert"
 import { FormField } from "~/components/form-field"
 import { useScroll } from "~/hooks/use-scroll"
-import { useRegisterMutation } from "../hooks/use-register-mutation"
-import {
-  useRegistrationForm,
-  type Inputs,
-} from "../hooks/use-registration-form"
+import { useRegistrationForm } from "../hooks/use-registration-form"
 
 export function RegistrationForm() {
   const {
-    formState: { errors },
-    register,
-    handleSubmit,
-    setError,
-    getValues,
+    form: {
+      formState: { errors },
+      register,
+      getValues,
+    },
+    submit,
+    isLoading,
   } = useRegistrationForm()
-
-  const { mutate, isPending } = useRegisterMutation({
-    handleExternalError: (error) => {
-      setError("root", { message: error })
-    },
-    handleApiError: (data) => {
-      const { errors } = data
-
-      if (!errors.some(({ field }) => isInput(field))) {
-        return setError("root", {
-          message: "An unexpected error occurred. Please try again later.",
-        })
-      }
-
-      errors.forEach(({ field, details }) => {
-        if (isInput(field)) {
-          setError(field, { message: details }, { shouldFocus: true })
-        }
-      })
-
-      function isInput(field: string): field is keyof Inputs {
-        const inputs = Object.keys(getValues())
-        return inputs.includes(field)
-      }
-    },
-  })
 
   useScroll({ on: Boolean(errors.root), top: 0 })
 
   return (
-    <form
-      className="space-y-6"
-      noValidate
-      onSubmit={handleSubmit((data) => {
-        const { username, email, password, firstName, lastName } = data
-        mutate({
-          username,
-          email,
-          password,
-          firstName,
-          lastName,
-        })
-      })}
-    >
+    <form className="space-y-6" noValidate onSubmit={submit}>
       {errors.root && <Alert>{errors.root.message}</Alert>}
 
       <FormField.Provider
@@ -152,10 +111,10 @@ export function RegistrationForm() {
 
       <button
         type="submit"
-        disabled={isPending}
+        disabled={isLoading}
         className="w-full cursor-pointer rounded-full bg-blue-600 py-3 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-950 focus:outline-none"
       >
-        {isPending ? "Loading..." : "Create Account"}
+        {isLoading ? "Loading..." : "Create Account"}
       </button>
     </form>
   )
