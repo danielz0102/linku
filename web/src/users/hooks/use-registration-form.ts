@@ -2,9 +2,13 @@ import { useForm } from "react-hook-form"
 import { useRegisterMutation } from "./use-register-mutation"
 
 export function useRegistrationForm() {
-  const form = useForm<Inputs>()
-
-  const { setError, getValues, handleSubmit } = form
+  const {
+    register,
+    setError,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>()
 
   const { mutate, isPending } = useRegisterMutation({
     handleExternalError: (error) => {
@@ -43,7 +47,38 @@ export function useRegistrationForm() {
     })
   })
 
-  return { form, submit, isLoading: isPending }
+  const fields = {
+    username: register("username", { required: "Username is required" }),
+    email: register("email", {
+      required: "Email address is required",
+      pattern: {
+        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        message: "That's not an email!",
+      },
+    }),
+    lastName: register("lastName", { required: "Last name is required" }),
+    firstName: register("firstName", {
+      required: "First name is required",
+    }),
+    password: register("password", {
+      required: "Password is required",
+      pattern: {
+        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/,
+        message:
+          "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",
+      },
+    }),
+    confirmPassword: register("confirmPassword", {
+      required: "Please confirm your password",
+      validate: (value) => {
+        if (value !== getValues("password")) {
+          return "Passwords do not match"
+        }
+      },
+    }),
+  }
+
+  return { submit, isLoading: isPending, fields, errors }
 }
 
 type Inputs = {

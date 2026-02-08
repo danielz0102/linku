@@ -5,16 +5,7 @@ import { useScroll } from "~/hooks/use-scroll"
 import { useRegistrationForm } from "../hooks/use-registration-form"
 
 export function RegistrationForm() {
-  const {
-    form: {
-      formState: { errors },
-      register,
-      getValues,
-    },
-    submit,
-    isLoading,
-  } = useRegistrationForm()
-
+  const { fields, errors, submit, isLoading } = useRegistrationForm()
   useScroll({ on: Boolean(errors.root), top: 0 })
 
   return (
@@ -26,10 +17,7 @@ export function RegistrationForm() {
         Icon={User}
         error={errors.firstName?.message}
       >
-        <FormField.Input
-          {...register("firstName", { required: "First name is required" })}
-          placeholder="John"
-        />
+        <FormField.Input {...fields.firstName} placeholder="John" />
       </FormField.Provider>
 
       <FormField.Provider
@@ -37,10 +25,7 @@ export function RegistrationForm() {
         Icon={User}
         error={errors.lastName?.message}
       >
-        <FormField.Input
-          {...register("lastName", { required: "Last name is required" })}
-          placeholder="Doe"
-        />
+        <FormField.Input {...fields.lastName} placeholder="Doe" />
       </FormField.Provider>
 
       <FormField.Provider
@@ -48,10 +33,7 @@ export function RegistrationForm() {
         Icon={AtSign}
         error={errors.username?.message}
       >
-        <FormField.Input
-          {...register("username", { required: "Username is required" })}
-          placeholder="johndoe"
-        />
+        <FormField.Input {...fields.username} placeholder="johndoe" />
       </FormField.Provider>
 
       <FormField.Provider
@@ -60,13 +42,7 @@ export function RegistrationForm() {
         error={errors.email?.message}
       >
         <FormField.Input
-          {...register("email", {
-            required: "Email address is required",
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: "That's not an email!",
-            },
-          })}
+          {...fields.email}
           type="email"
           placeholder="john_doe@example.com"
         />
@@ -77,17 +53,7 @@ export function RegistrationForm() {
         Icon={Lock}
         error={errors.password?.message}
       >
-        <FormField.PasswordInput
-          placeholder="••••••••"
-          {...register("password", {
-            required: "Password is required",
-            pattern: {
-              value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/,
-              message:
-                "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",
-            },
-          })}
-        />
+        <FormField.PasswordInput placeholder="••••••••" {...fields.password} />
       </FormField.Provider>
 
       <FormField.Provider
@@ -98,14 +64,7 @@ export function RegistrationForm() {
         <FormField.Input
           type="password"
           placeholder="••••••••"
-          {...register("confirmPassword", {
-            required: "Please confirm your password",
-            validate: (value) => {
-              if (value !== getValues("password")) {
-                return "Passwords do not match"
-              }
-            },
-          })}
+          {...fields.confirmPassword}
         />
       </FormField.Provider>
 
