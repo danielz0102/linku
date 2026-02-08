@@ -1,5 +1,5 @@
 import type { NewUser, User } from "~/types"
-import apiClient from "./api-client"
+import apiClient from "../../services/api-client"
 
 export async function register(newUser: NewUser): Promise<User> {
   const { data } = await apiClient.post<User>("/users", newUser)

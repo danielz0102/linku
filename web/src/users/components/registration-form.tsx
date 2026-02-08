@@ -2,11 +2,11 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { AtSign, Lock, Mail, User } from "lucide-react"
 import { useForm, useWatch } from "react-hook-form"
+import { Alert } from "~/components/alert"
+import { FormField } from "~/components/form-field"
 import { useScroll } from "~/hooks/use-scroll"
 import { isApiErrorData, type ApiErrorData } from "~/schemas/api-error-data"
-import { register as registerService } from "~/services/register"
-import { Alert } from "./alert"
-import { FormField } from "./form-field"
+import { register as registerService } from "~/users/services/register"
 
 type Inputs = {
   firstName: string

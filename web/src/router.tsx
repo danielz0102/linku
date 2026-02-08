@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router"
 import Home from "./pages/home"
-import Register from "./pages/register"
+import Register from "./users/register"
 
 export function Router() {
   return (
