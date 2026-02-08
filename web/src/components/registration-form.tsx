@@ -3,7 +3,7 @@ import axios from "axios"
 import { AtSign, Lock, Mail, User } from "lucide-react"
 import { useForm, useWatch } from "react-hook-form"
 import { useScroll } from "~/hooks/use-scroll"
-import { isRegistrationErrorData } from "~/schemas/registration-error-data"
+import { isApiErrorData, type ApiErrorData } from "~/schemas/api-error-data"
 import { register as registerService } from "~/services/register"
 import { Alert } from "./alert"
 import { FormField } from "./form-field"
@@ -28,66 +28,59 @@ export function RegistrationForm() {
 
   const password = useWatch({ control, name: "password" })
 
-  const { mutate, isPending, isError } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: registerService,
     onError: (error) => {
       if (!axios.isAxiosError(error)) {
         return setError("root", {
-          message: "An unexpected error occurred. Please try again.",
+          message: "An unexpected error occurred. Please try again later.",
         })
       }
 
-      if (error.response?.status === 409) {
-        return setError("root", { message: "Username or email already exists" })
+      if (!error.response) {
+        return setError("root", {
+          message:
+            "A network error occurred. Please check your connection and try again.",
+        })
       }
 
-      if (error.response?.status === 400) {
-        const { data } = error.response
+      const { status, data } = error.response
 
-        if (isRegistrationErrorData(data)) {
-          const { fieldErrors, formErrors } = data.errors
-
-          formErrors.forEach((formError) =>
-            setError("root", { message: formError })
-          )
-
-          if (fieldErrors.firstName) {
-            setError("firstName", { message: fieldErrors.firstName[0] })
-          }
-
-          if (fieldErrors.lastName) {
-            setError("lastName", { message: fieldErrors.lastName[0] })
-          }
-
-          if (fieldErrors.username) {
-            setError("username", { message: fieldErrors.username[0] })
-          }
-
-          if (fieldErrors.email) {
-            setError("email", { message: fieldErrors.email[0] })
-          }
-
-          if (fieldErrors.password) {
-            setError("password", { message: fieldErrors.password[0] })
-          }
-
-          return
-        }
-
-        setError("root", {
-          message: "An unexpected error occurred. Please try again.",
+      if (!isApiErrorData(data)) {
+        return setError("root", {
+          message: "An unexpected error occurred. Please try again later.",
         })
+      }
 
-        return
+      if ([404, 409].includes(status)) {
+        return handleApiError(data)
       }
 
       setError("root", {
-        message: "An unexpected error occurred. Please try again.",
+        message: "An unexpected error occurred. Please try again later.",
       })
     },
   })
 
-  useScroll({ on: isError, top: 0 })
+  useScroll({ on: Boolean(errors.root), top: 0 })
+
+  function handleApiError(error: ApiErrorData) {
+    error.errors.forEach((err) => {
+      if (isInput(err.field)) {
+        setError(err.field, { message: err.details }, { shouldFocus: true })
+      }
+    })
+
+    function isInput(field: string): field is keyof Inputs {
+      return [
+        "firstName",
+        "lastName",
+        "username",
+        "email",
+        "password",
+      ].includes(field)
+    }
+  }
 
   return (
     <form
