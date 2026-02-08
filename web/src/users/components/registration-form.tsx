@@ -160,7 +160,7 @@ export function RegistrationForm() {
           {...register("password", {
             required: "Password is required",
             pattern: {
-              value: /^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/,
+              value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/,
               message:
                 "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",
             },
