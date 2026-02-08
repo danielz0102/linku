@@ -1,30 +1,21 @@
 import { AtSign, Lock, Mail, User } from "lucide-react"
-import { useForm, useWatch } from "react-hook-form"
 import { Alert } from "~/components/alert"
 import { FormField } from "~/components/form-field"
 import { useScroll } from "~/hooks/use-scroll"
 import { useRegisterMutation } from "../hooks/use-register-mutation"
-
-type Inputs = {
-  firstName: string
-  lastName: string
-  username: string
-  email: string
-  password: string
-  confirmPassword: string
-}
+import {
+  useRegistrationForm,
+  type Inputs,
+} from "../hooks/use-registration-form"
 
 export function RegistrationForm() {
   const {
-    control,
     formState: { errors },
     register,
     handleSubmit,
     setError,
     getValues,
-  } = useForm<Inputs>()
-
-  const password = useWatch({ control, name: "password" })
+  } = useRegistrationForm()
 
   const { mutate, isPending } = useRegisterMutation({
     handleExternalError: (error) => {
@@ -151,7 +142,7 @@ export function RegistrationForm() {
           {...register("confirmPassword", {
             required: "Please confirm your password",
             validate: (value) => {
-              if (value !== password) {
+              if (value !== getValues("password")) {
                 return "Passwords do not match"
               }
             },
