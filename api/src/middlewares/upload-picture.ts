@@ -22,32 +22,28 @@ const upload = multer({
 
 export function uploadPicture(
   req: Request,
-  res: Response<ErrorBody>,
+  res: Response<ErrorBody<"picture">>,
   next: NextFunction
 ) {
   upload(req, res, (err) => {
     if (err instanceof ImageMimeTypeError) {
       return res.status(400).json({
+        code: "VALIDATION_ERROR",
         message: "Validation failed",
-        errors: [
-          {
-            field: "picture",
-            details: `Picture file is invalid. Allowed files are: JPEG, PNG, JPG, WEBP`,
-          },
-        ],
+        errors: {
+          picture: `Picture file is invalid. Allowed files are: JPEG, PNG, JPG, WEBP`,
+        },
       })
     }
 
     if (err instanceof multer.MulterError) {
       if (err.code === "LIMIT_FILE_SIZE") {
         return res.status(400).json({
+          code: "VALIDATION_ERROR",
           message: "Validation failed",
-          errors: [
-            {
-              field: "picture",
-              details: "Picture file cannot be larger than 5MB",
-            },
-          ],
+          errors: {
+            picture: "Picture file cannot be larger than 5MB",
+          },
         })
       }
     }

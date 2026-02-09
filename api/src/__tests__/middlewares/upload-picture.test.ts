@@ -1,4 +1,5 @@
 import { uploadPicture } from "#middlewares/upload-picture.js"
+import type { ErrorBody } from "#types.d.js"
 import express from "express"
 import request from "supertest"
 
@@ -35,16 +36,11 @@ describe("uploadPicture middleware", () => {
         contentType: "text/plain",
       })
       .expect(400)
-      .expect({
-        message: "Validation failed",
-        errors: [
-          {
-            field: "picture",
-            details:
-              "Picture file is invalid. Allowed files are: JPEG, PNG, JPG, WEBP",
-          },
-        ],
-      })
+      .expect(
+        ErrorBody(
+          "Picture file is invalid. Allowed files are: JPEG, PNG, JPG, WEBP"
+        )
+      )
   })
 
   it("sends 400 when picture size exceeds 5MB", async () => {
@@ -57,14 +53,16 @@ describe("uploadPicture middleware", () => {
         contentType: "image/png",
       })
       .expect(400)
-      .expect({
-        message: "Validation failed",
-        errors: [
-          {
-            field: "picture",
-            details: "Picture file cannot be larger than 5MB",
-          },
-        ],
-      })
+      .expect(ErrorBody("Picture file cannot be larger than 5MB"))
   })
 })
+
+function ErrorBody(error: string): ErrorBody<"picture"> {
+  return {
+    code: "VALIDATION_ERROR",
+    message: "Validation failed",
+    errors: {
+      picture: error,
+    },
+  }
+}

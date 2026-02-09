@@ -1,6 +1,15 @@
-import type { ErrorRequestHandler } from "express"
+import type { ErrorBody } from "#types.d.js"
+import type { Request, Response, NextFunction } from "express"
 
-export const unexpectedError: ErrorRequestHandler = (err, _req, res, _next) => {
+export const unexpectedError = (
+  err: unknown,
+  _req: Request,
+  res: Response<ErrorBody>,
+  _next: NextFunction
+) => {
   console.error(err)
-  res.sendStatus(500)
+  res.status(500).json({
+    code: "UNEXPECTED_ERROR",
+    message: "An unexpected error occurred. Please try again later.",
+  })
 }

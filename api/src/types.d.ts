@@ -1,7 +1,13 @@
-export type ErrorBody = {
+export type ErrorBody<T = unknown> = {
+  code: ErrorCode
   message: string
-  errors: {
-    field: string
-    details: string
-  }[]
+  errors?: {
+    [key in T]?: string
+  }
 }
+
+export type ErrorCode =
+  | "VALIDATION_ERROR"
+  | "NETWORK_ERROR"
+  | "UNEXPECTED_ERROR"
+  | "NOT_FOUND"

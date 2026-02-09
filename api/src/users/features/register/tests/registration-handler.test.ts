@@ -3,13 +3,14 @@ import { UserMother } from "#__tests__/mothers/user-mother.js"
 import { RegistrationHandler } from "#users/features/register/registration-handler.js"
 import express from "express"
 import request from "supertest"
+import type { RegistrationBody, RegistrationErrorBody } from "../types.js"
 
 const service = new RegistrationServiceMock()
 const handler = new RegistrationHandler(service)
 
 const app = express()
 app.use(express.json())
-app.post("/register", handler.handle)
+app.post("/", handler.handle)
 
 const body = {
   username: "testuser",
@@ -26,7 +27,7 @@ test("sends 200 with user data", async () => {
     data: user,
   })
 
-  await request(app).post("/register").send(body).expect(200).expect(user)
+  await request(app).post("/").send(body).expect(200).expect(user)
 })
 
 test("sends 409 if username exists", async () => {
@@ -35,12 +36,9 @@ test("sends 409 if username exists", async () => {
     error: { usernameExists: true },
   })
 
-  const res = await request(app).post("/register").send(body).expect(409)
+  const res = await request(app).post("/").send(body).expect(409)
 
-  expect(res.body).toEqual({
-    message: expect.any(String),
-    errors: [{ field: "username", details: "Username already exists" }],
-  })
+  expect(res.body).toEqual(FieldError("username", "Username already exists"))
 })
 
 test("sends 409 if email exists", async () => {
@@ -49,10 +47,20 @@ test("sends 409 if email exists", async () => {
     error: { emailExists: true },
   })
 
-  const res = await request(app).post("/register").send(body).expect(409)
+  const res = await request(app).post("/").send(body).expect(409)
 
-  expect(res.body).toEqual({
-    message: expect.any(String),
-    errors: [{ field: "email", details: "Email already exists" }],
-  })
+  expect(res.body).toEqual(FieldError("email", "Email already exists"))
 })
+
+function FieldError(
+  key: keyof RegistrationBody,
+  value: string | RegExp
+): RegistrationErrorBody {
+  return {
+    code: "VALIDATION_ERROR",
+    message: expect.any(String),
+    errors: {
+      [key]: expect.stringMatching(value),
+    },
+  }
+}

@@ -1,16 +1,28 @@
-import type { ErrorBody } from "#types.d.js"
 import type { RequestHandler } from "express"
 import z from "zod"
+import type { RegistrationErrorBody } from "./types.js"
 
-export const validateRegistration: RequestHandler<unknown, ErrorBody> = (
-  req,
-  res,
-  next
-) => {
+export const validateRegistration: RequestHandler<
+  unknown,
+  RegistrationErrorBody
+> = (req, res, next) => {
   const result = registrationSchema.safeParse(req.body)
 
   if (!result.success) {
-    return res.status(400).json(mapZodError(result.error))
+    const errors = mapZodError(result.error)
+
+    if (!errors) {
+      return res.status(400).json({
+        code: "VALIDATION_ERROR",
+        message: "Registration data is missing",
+      })
+    }
+
+    return res.status(400).json({
+      code: "VALIDATION_ERROR",
+      message: "Invalid registration data",
+      errors: errors,
+    })
   }
 
   next()
@@ -32,23 +44,20 @@ const registrationSchema = z.object({
 
 function mapZodError(
   error: z.ZodError<z.infer<typeof registrationSchema>>
-): ErrorBody {
+): RegistrationErrorBody["errors"] {
   const flattened = z.treeifyError(error).properties
 
   if (!flattened) {
-    return {
-      message: "Registration data is missing",
-      errors: [],
-    }
+    return
   }
 
-  const errors = Object.entries(flattened).map(([field, details]) => ({
-    field,
-    details: details.errors[0],
-  }))
+  const result = Object.entries(flattened).reduce(
+    (acc, [k, v]) => ({
+      ...acc,
+      [k]: v.errors[0],
+    }),
+    {}
+  )
 
-  return {
-    message: "Invalid registration data",
-    errors,
-  }
+  return result
 }
