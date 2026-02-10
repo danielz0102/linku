@@ -1,6 +1,7 @@
 packages:
   - web
   - api
+  - api-contract
 
 onlyBuiltDependencies:
   - '@swc/core'

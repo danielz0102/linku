@@ -1,13 +1,1 @@
-export type ErrorBody<T = unknown> = {
-  code: ErrorCode
-  message: string
-  errors?: {
-    [key in T]?: string
-  }
-}
-
-export type ErrorCode =
-  | "VALIDATION_ERROR"
-  | "NETWORK_ERROR"
-  | "UNEXPECTED_ERROR"
-  | "NOT_FOUND"
+export type { ErrorBody, ErrorCode } from "api-contract"
