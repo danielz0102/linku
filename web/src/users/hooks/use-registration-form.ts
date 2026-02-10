@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form"
+import { errorMatcher } from "~/api/error-matcher"
 import { useRegisterMutation } from "./use-register-mutation"
 
 export function useRegistrationForm() {
@@ -11,30 +12,46 @@ export function useRegistrationForm() {
   } = useForm<Inputs>()
 
   const { mutate, isPending } = useRegisterMutation({
-    handleExternalError: (error) => {
-      setError("root", { message: error })
-    },
-    handleApiError: (data) => {
-      const { errors } = data
-
-      if (!errors.some(({ field }) => isInput(field))) {
+    handleApiError: (error) => {
+      if (!error.response) {
         return setError("root", {
-          message: "An unexpected error occurred. Please try again later.",
+          message: errorMatcher("NETWORK_ERROR"),
         })
       }
 
-      errors.forEach(({ field, details }) => {
-        if (isInput(field)) {
-          setError(field, { message: details }, { shouldFocus: true })
-        }
+      const { data } = error.response
+      const { code, errors } = data
+
+      if (code !== "VALIDATION_ERROR") {
+        return setRootError(code)
+      }
+
+      if (!errors) {
+        return setRootError("UNEXPECTED_ERROR")
+      }
+
+      const formErrors = Object.entries(errors).filter(areFormErrors)
+
+      if (formErrors.length === 0) {
+        return setRootError("UNEXPECTED_ERROR")
+      }
+
+      formErrors.forEach(([field, message]) => {
+        setError(field, { message }, { shouldFocus: true })
       })
 
-      function isInput(field: string): field is keyof Inputs {
-        const inputs = Object.keys(getValues())
-        return inputs.includes(field)
+      function areFormErrors(
+        entry: [string, string]
+      ): entry is [keyof Inputs, string] {
+        const [field] = entry
+        return field in getValues()
       }
     },
   })
+
+  function setRootError(code: Parameters<typeof errorMatcher>[0]) {
+    setError("root", { message: errorMatcher(code) })
+  }
 
   const submit = handleSubmit((data) => {
     const { username, email, password, firstName, lastName } = data
