@@ -1,12 +1,10 @@
 import { AtSign, Lock, Mail, User } from "lucide-react"
 import { Alert } from "~/components/alert"
 import { FormField } from "~/components/form-field"
-import { useScroll } from "~/hooks/use-scroll"
 import { useRegistrationForm } from "../hooks/use-registration-form"
 
 export function RegistrationForm() {
   const { fields, errors, submit, isLoading } = useRegistrationForm()
-  useScroll({ on: Boolean(errors.root), top: 0 })
 
   return (
     <form className="space-y-6" noValidate onSubmit={submit}>
