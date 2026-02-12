@@ -20,7 +20,7 @@ try {
   await redisClient.connect()
 } catch (error) {
   console.error(
-    "Failed to connect to Redis. Check REDIS_URL and ensure Redis is running.",
+    "Failed to connect to Redis. Verify REDIS_URL is set correctly and Redis is accessible.",
     error
   )
   process.exit(1)

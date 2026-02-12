@@ -16,7 +16,9 @@ export class RegistrationHandler {
     const result = await this.service.register(req.body)
 
     if (result.ok) {
-      req.session.userId = result.data.id
+      const userId = result.data.id
+
+      req.session.userId = userId
 
       try {
         await new Promise<void>((resolve, reject) => {
@@ -30,7 +32,10 @@ export class RegistrationHandler {
           })
         })
       } catch (error) {
-        console.error("Failed to save session after registration.", error)
+        console.error(
+          `Failed to save session after registration for user ${userId}.`,
+          error
+        )
         return res.sendStatus(500)
       }
 
