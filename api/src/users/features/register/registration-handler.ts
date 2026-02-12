@@ -18,6 +18,21 @@ export class RegistrationHandler {
     if (result.ok) {
       req.session.userId = result.data.id
 
+      try {
+        await new Promise<void>((resolve, reject) => {
+          req.session.save((error?: Error) => {
+            if (error) {
+              reject(error)
+              return
+            }
+
+            resolve()
+          })
+        })
+      } catch {
+        return res.sendStatus(500)
+      }
+
       return res.status(200).json(result.data)
     }
 

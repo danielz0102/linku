@@ -19,7 +19,10 @@ app.use(cors({ origin: ALLOWED_ORIGIN, credentials: true }))
 try {
   await redisClient.connect()
 } catch (error) {
-  console.error("Redis connection error", error)
+  console.error(
+    "Failed to connect to Redis. Check REDIS_URL and ensure Redis is running.",
+    error
+  )
   process.exit(1)
 }
 
