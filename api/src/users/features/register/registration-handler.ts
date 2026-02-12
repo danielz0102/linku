@@ -35,6 +35,10 @@ export class RegistrationHandler {
       })
     }
 
+    if (data) {
+      req.session.userId = data.id
+    }
+
     res.status(200).json(data)
   }
 }
