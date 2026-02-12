@@ -2,7 +2,9 @@
   "compilerOptions": {
     // File Layout
     "rootDir": "./src",
-    "outDir": "./dist",
+
+    // Emit
+    "noEmit": true,
     "noEmitOnError": true,
 
     // Environment Settings
@@ -16,10 +18,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noPropertyAccessFromIndexSignature": true,
-
-    // Emit Options
-    "declaration": true,
-    "declarationMap": true,
 
     // Recommended Options
     "strict": true,
