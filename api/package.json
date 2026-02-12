@@ -17,6 +17,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.27.0",
   "dependencies": {
+    "api-contract": "workspace:*",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.9.0",
     "cors": "^2.8.6",

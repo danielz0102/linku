@@ -1,10 +1,7 @@
-export type { PublicUser } from "api-contract"
-
-export type User = {
+export type PublicUser = {
   id: string
   username: string
   email: string
-  hashedPassword: string
   firstName: string
   lastName: string
   profilePicUrl: string | null
