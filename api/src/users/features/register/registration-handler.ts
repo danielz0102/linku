@@ -13,28 +13,51 @@ export class RegistrationHandler {
     req: Request<unknown, unknown, RegistrationBody>,
     res: Response<PublicUser | RegistrationErrorBody>
   ) => {
-    const { ok, error, data } = await this.service.register(req.body)
+    const result = await this.service.register(req.body)
 
-    if (!ok) {
-      if (error.usernameExists) {
-        return res.status(409).json({
-          code: "VALIDATION_ERROR",
-          message: "User already exists",
-          errors: {
-            username: "Username already exists",
-          },
+    if (result.ok) {
+      const userId = result.data.id
+
+      req.session.userId = userId
+
+      try {
+        await new Promise<void>((resolve, reject) => {
+          req.session.save((error?: Error) => {
+            if (error) {
+              reject(error)
+              return
+            }
+
+            resolve()
+          })
         })
+      } catch (error) {
+        console.error(
+          `Failed to save session after registration for user ${userId}.`,
+          error
+        )
+        return res.sendStatus(500)
       }
 
+      return res.status(200).json(result.data)
+    }
+
+    if (result.error.usernameExists) {
       return res.status(409).json({
         code: "VALIDATION_ERROR",
         message: "User already exists",
         errors: {
-          email: "Email already exists",
+          username: "Username already exists",
         },
       })
     }
 
-    res.status(200).json(data)
+    return res.status(409).json({
+      code: "VALIDATION_ERROR",
+      message: "User already exists",
+      errors: {
+        email: "Email already exists",
+      },
+    })
   }
 }
