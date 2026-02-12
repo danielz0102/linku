@@ -13,19 +13,19 @@ export class RegistrationHandler {
     req: Request<unknown, unknown, RegistrationBody>,
     res: Response<PublicUser | RegistrationErrorBody>
   ) => {
-    const { data, error } = await this.service.register(req.body)
+    const { ok, error, data } = await this.service.register(req.body)
 
-    if (error?.usernameExists) {
-      return res.status(409).json({
-        code: "VALIDATION_ERROR",
-        message: "User already exists",
-        errors: {
-          username: "Username already exists",
-        },
-      })
-    }
+    if (!ok) {
+      if (error.usernameExists) {
+        return res.status(409).json({
+          code: "VALIDATION_ERROR",
+          message: "User already exists",
+          errors: {
+            username: "Username already exists",
+          },
+        })
+      }
 
-    if (error?.emailExists) {
       return res.status(409).json({
         code: "VALIDATION_ERROR",
         message: "User already exists",
