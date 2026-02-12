@@ -13,9 +13,15 @@ export class RegistrationHandler {
     req: Request<unknown, unknown, RegistrationBody>,
     res: Response<PublicUser | RegistrationErrorBody>
   ) => {
-    const { data, error } = await this.service.register(req.body)
+    const result = await this.service.register(req.body)
 
-    if (error?.usernameExists) {
+    if (result.ok) {
+      req.session.userId = result.data.id
+
+      return res.status(200).json(result.data)
+    }
+
+    if (result.error.usernameExists) {
       return res.status(409).json({
         code: "VALIDATION_ERROR",
         message: "User already exists",
@@ -25,7 +31,7 @@ export class RegistrationHandler {
       })
     }
 
-    if (error?.emailExists) {
+    if (result.error.emailExists) {
       return res.status(409).json({
         code: "VALIDATION_ERROR",
         message: "User already exists",
@@ -35,10 +41,6 @@ export class RegistrationHandler {
       })
     }
 
-    if (data) {
-      req.session.userId = data.id
-    }
-
-    res.status(200).json(data)
+    return res.sendStatus(500)
   }
 }
