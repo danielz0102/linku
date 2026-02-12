@@ -12,11 +12,18 @@ const app = express()
 
 app.set("trust proxy", 1)
 
-const redisStore = new RedisStore({ client: redisClient })
-
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({ origin: ALLOWED_ORIGIN, credentials: true }))
+
+try {
+  await redisClient.connect()
+} catch (error) {
+  console.error("Redis connection error", error)
+  process.exit(1)
+}
+
+const redisStore = new RedisStore({ client: redisClient })
 app.use(
   session({
     store: redisStore,

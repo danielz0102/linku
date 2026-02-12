@@ -7,8 +7,4 @@ redisClient.on("error", (error) => {
   console.error("Redis Client Error", error)
 })
 
-redisClient.connect().catch((error) => {
-  console.error("Redis connection error", error)
-})
-
 export default redisClient
