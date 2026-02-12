@@ -31,16 +31,12 @@ export class RegistrationHandler {
       })
     }
 
-    if (result.error.emailExists) {
-      return res.status(409).json({
-        code: "VALIDATION_ERROR",
-        message: "User already exists",
-        errors: {
-          email: "Email already exists",
-        },
-      })
-    }
-
-    return res.sendStatus(500)
+    return res.status(409).json({
+      code: "VALIDATION_ERROR",
+      message: "User already exists",
+      errors: {
+        email: "Email already exists",
+      },
+    })
   }
 }
