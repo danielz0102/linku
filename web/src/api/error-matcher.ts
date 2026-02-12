@@ -1,4 +1,4 @@
-import type { ErrorCode } from "./types"
+import type { ErrorCode } from "api-contract"
 
 const ERROR_MESSAGES: Record<ErrorCode, string> = {
   VALIDATION_ERROR:

@@ -1,5 +1,3 @@
-export type { PublicUser } from "api-contract"
-
 export type User = {
   id: string
   username: string

@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express"
 import z from "zod"
-import type { RegistrationErrorBody } from "./types.js"
+import type { RegistrationErrorBody } from "api-contract"
 
 export const validateRegistration: RequestHandler<
   unknown,

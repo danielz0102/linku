@@ -1,7 +1,7 @@
 import { validateRegistration } from "#users/features/register/validate-registration.js"
 import express from "express"
 import request from "supertest"
-import type { RegistrationBody, RegistrationErrorBody } from "../types.js"
+import type { RegistrationBody, RegistrationErrorBody } from "api-contract"
 
 const app = express()
 app.use(express.json())

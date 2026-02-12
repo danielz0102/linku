@@ -3,7 +3,7 @@ import { UserMother } from "#__tests__/mothers/user-mother.js"
 import { RegistrationHandler } from "#users/features/register/registration-handler.js"
 import express from "express"
 import request from "supertest"
-import type { RegistrationBody, RegistrationErrorBody } from "../types.js"
+import type { RegistrationBody, RegistrationErrorBody } from "api-contract"
 
 const service = new RegistrationServiceMock()
 const handler = new RegistrationHandler(service)

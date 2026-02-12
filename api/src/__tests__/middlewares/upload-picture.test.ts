@@ -1,5 +1,5 @@
 import { uploadPicture } from "#middlewares/upload-picture.js"
-import type { ErrorBody } from "#types.d.js"
+import type { ErrorBody } from "api-contract"
 import express from "express"
 import request from "supertest"
 

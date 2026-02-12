@@ -1,7 +1,10 @@
-import type { PublicUser } from "#users/types.d.js"
+import type {
+  PublicUser,
+  RegistrationBody,
+  RegistrationErrorBody,
+} from "api-contract"
 import type { Request, Response } from "express"
 import type { RegistrationService } from "./registration-service.js"
-import type { RegistrationBody, RegistrationErrorBody } from "./types.js"
 
 export class RegistrationHandler {
   constructor(private readonly service: RegistrationService) {}

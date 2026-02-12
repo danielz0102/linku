@@ -1,6 +1,6 @@
 import { Result } from "#lib/result.js"
 import type { UserRepository } from "#users/interfaces/user-repository.d.js"
-import type { PublicUser } from "#users/types.d.js"
+import type { PublicUser } from "api-contract"
 
 export class RegistrationService {
   private readonly userRepo: UserRepository

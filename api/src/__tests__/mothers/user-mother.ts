@@ -1,4 +1,5 @@
-import type { PublicUser, User } from "#users/types.d.js"
+import type { PublicUser } from "api-contract"
+import type { User } from "#users/types.d.js"
 import { faker } from "@faker-js/faker"
 
 export const UserMother = {

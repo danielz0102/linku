@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 import type { AxiosError } from "axios"
-import type { ErrorBody } from "~/api/types"
+import type { ErrorBody } from "api-contract"
 import { register } from "../services/register"
 
 type RegistrationFields =
