@@ -29,7 +29,8 @@ export class RegistrationHandler {
             resolve()
           })
         })
-      } catch {
+      } catch (error) {
+        console.error("Failed to save session after registration.", error)
         return res.sendStatus(500)
       }
 
