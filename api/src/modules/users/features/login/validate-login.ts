@@ -1,12 +1,12 @@
-import type { LoginBody, LoginErrorBody } from "api-contract"
+import type { LoginErrorBody } from "api-contract"
 import type { RequestHandler } from "express"
 import z from "zod"
 
-export const validateLogin: RequestHandler<
-  unknown,
-  LoginErrorBody,
-  LoginBody
-> = (req, res, next) => {
+export const validateLogin: RequestHandler<unknown, LoginErrorBody> = (
+  req,
+  res,
+  next
+) => {
   const result = loginSchema.safeParse(req.body)
 
   if (!result.success) {
