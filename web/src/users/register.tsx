@@ -1,3 +1,4 @@
+import { Link } from "react-router"
 import { RegistrationForm } from "~/users/components/registration-form"
 
 export default function Register() {
@@ -13,12 +14,12 @@ export default function Register() {
 
         <p className="text-center text-sm text-neutral-400">
           Already have an account?{" "}
-          <a
-            href="/login"
+          <Link
+            to="/login"
             className="font-medium text-blue-500 hover:text-blue-400"
           >
             Log In
-          </a>
+          </Link>
         </p>
       </div>
     </main>

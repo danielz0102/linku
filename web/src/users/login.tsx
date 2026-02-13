@@ -1,3 +1,4 @@
+import { Link } from "react-router"
 import { LoginForm } from "~/users/components/login-form"
 
 export default function Login() {
@@ -13,12 +14,12 @@ export default function Login() {
 
         <p className="text-center text-sm text-neutral-400">
           New to Linku?{" "}
-          <a
-            href="/register"
+          <Link
+            to="/register"
             className="font-medium text-blue-500 hover:text-blue-400"
           >
             Create an account
-          </a>
+          </Link>
         </p>
       </div>
     </main>
