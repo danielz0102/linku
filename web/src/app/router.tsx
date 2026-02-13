@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router"
+import Login from "../users/login"
+import Register from "../users/register"
 import Home from "./pages/home"
-import Login from "./users/login"
-import Register from "./users/register"
 
 export function Router() {
   return (

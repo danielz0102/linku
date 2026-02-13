@@ -1,4 +1,4 @@
-import { apiClient } from "~/api"
+import { apiClient } from "~/shared/api"
 import type {
   PublicUser as User,
   RegistrationBody as NewUser,

@@ -1,6 +1,6 @@
 import { AtSign, Lock, Mail, User } from "lucide-react"
-import { Alert } from "~/components/alert"
-import { FormField } from "~/components/form-field"
+import { Alert } from "~/shared/components/alert"
+import { FormField } from "~/shared/components/form-field"
 import { useRegistrationForm } from "../hooks/use-registration-form"
 
 export function RegistrationForm() {

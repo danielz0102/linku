@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form"
-import { errorMatcher } from "~/api/error-matcher"
+import { errorMatcher } from "~/shared/api/error-matcher"
 import { useRegisterMutation } from "./use-register-mutation"
 
 export function useRegistrationForm() {

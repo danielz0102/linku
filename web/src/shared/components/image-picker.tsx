@@ -1,6 +1,6 @@
 import { Camera, Pencil } from "lucide-react"
 import { useRef } from "react"
-import { useImage } from "~/hooks/use-image"
+import { useImage } from "~/shared/hooks/use-image"
 
 type ImagePickerProps = {
   onChange?: (file: File | null) => void
