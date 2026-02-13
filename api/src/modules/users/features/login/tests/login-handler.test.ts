@@ -6,10 +6,9 @@ import request from "supertest"
 import { loginHandler } from "../login-handler.js"
 
 const service = new LoginServiceMock()
-const handler = loginHandler(service)
 
 const app = new AppBuilder().withSession().build()
-app.get("/", handler)
+app.get("/", loginHandler(service))
 
 const body: LoginBody = {
   username: "testuser",

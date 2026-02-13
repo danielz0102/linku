@@ -6,12 +6,11 @@ import request from "supertest"
 import { registrationHandler } from "../registration-handler.js"
 
 const service = new RegistrationServiceMock()
-const handler = registrationHandler(service)
 
 const app = new AppBuilder().withSession().build()
-app.post("/", handler)
+app.post("/", registrationHandler(service))
 
-const body = {
+const body: RegistrationBody = {
   username: "testuser",
   email: "john@example.com",
   password: "password123",
