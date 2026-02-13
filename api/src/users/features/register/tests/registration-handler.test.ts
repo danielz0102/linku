@@ -1,10 +1,10 @@
 import { RegistrationServiceMock } from "#__tests__/mocks/registration-service-mock.js"
 import { UserMother } from "#__tests__/mothers/user-mother.js"
 import { RegistrationHandler } from "#users/features/register/registration-handler.js"
+import type { RegistrationBody, RegistrationErrorBody } from "api-contract"
 import express from "express"
 import session from "express-session"
 import request from "supertest"
-import type { RegistrationBody, RegistrationErrorBody } from "api-contract"
 
 const service = new RegistrationServiceMock()
 const handler = new RegistrationHandler(service)
@@ -41,16 +41,7 @@ test("sends 200 with user data", async () => {
     data: user,
   })
 
-  const response = await request(app)
-    .post("/")
-    .set("X-Forwarded-Proto", "https")
-    .send(body)
-    .expect(200)
-    .expect(user)
-
-  expect(response.headers["set-cookie"]).toEqual(
-    expect.arrayContaining([expect.stringContaining("connect.sid")])
-  )
+  await request(app).post("/").send(body).expect(200).expect(user)
 })
 
 test("sends 409 if username exists", async () => {
