@@ -1,6 +1,7 @@
 import { AtSign, Lock, Mail, User } from "lucide-react"
 import { Alert } from "~/shared/components/alert"
 import { FormField } from "~/shared/components/form-field"
+import { LoadingSpinner } from "~/shared/components/loading-spinner"
 import { useRegistrationForm } from "../hooks/use-registration-form"
 
 export function RegistrationForm() {
@@ -69,9 +70,17 @@ export function RegistrationForm() {
       <button
         type="submit"
         disabled={isLoading}
+        aria-busy={isLoading}
         className="w-full cursor-pointer rounded-full bg-blue-600 py-3 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-950 focus:outline-none"
       >
-        {isLoading ? "Loading..." : "Create Account"}
+        {isLoading ? (
+          <span className="flex items-center justify-center gap-2">
+            <LoadingSpinner size="sm" />
+            <span>Create Account</span>
+          </span>
+        ) : (
+          "Create Account"
+        )}
       </button>
     </form>
   )

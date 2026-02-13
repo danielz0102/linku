@@ -12,3 +12,4 @@ Check the requirements of the project [here](../docs/linku.md).
 ## General Guidelines
 
 - Use kebab-case for file names.
+- Use `pnpm test` in the project you are to run tests.

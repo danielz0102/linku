@@ -1,6 +1,7 @@
 import { AtSign, Lock } from "lucide-react"
 import { Alert } from "~/shared/components/alert"
 import { FormField } from "~/shared/components/form-field"
+import { LoadingSpinner } from "~/shared/components/loading-spinner"
 import { useLoginForm } from "../hooks/use-login-form"
 
 export function LoginForm() {
@@ -29,9 +30,17 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={isLoading}
+        aria-busy={isLoading}
         className="w-full cursor-pointer rounded-full bg-blue-600 py-3 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-950 focus:outline-none"
       >
-        {isLoading ? "Loading..." : "Log In"}
+        {isLoading ? (
+          <span className="flex items-center justify-center gap-2">
+            <LoadingSpinner size="sm" />
+            <span>Log In</span>
+          </span>
+        ) : (
+          "Log In"
+        )}
       </button>
     </form>
   )
