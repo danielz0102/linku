@@ -1,29 +1,14 @@
+import { AppBuilder } from "#__tests__/builders/app-builder.js"
 import { RegistrationServiceMock } from "#__tests__/mocks/registration-service-mock.js"
 import { UserMother } from "#__tests__/mothers/user-mother.js"
 import { RegistrationHandler } from "#users/features/register/registration-handler.js"
 import type { RegistrationBody, RegistrationErrorBody } from "api-contract"
-import express from "express"
-import session from "express-session"
 import request from "supertest"
 
 const service = new RegistrationServiceMock()
 const handler = new RegistrationHandler(service)
 
-const app = express()
-app.use(express.json())
-app.set("trust proxy", 1)
-app.use(
-  session({
-    secret: "test-session-secret",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: true,
-      httpOnly: true,
-      sameSite: "none",
-    },
-  })
-)
+const app = new AppBuilder().withSession().build()
 app.post("/", handler.handle)
 
 const body = {

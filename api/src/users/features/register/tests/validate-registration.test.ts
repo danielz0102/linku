@@ -1,10 +1,9 @@
+import { AppBuilder } from "#__tests__/builders/app-builder.js"
 import { validateRegistration } from "#users/features/register/validate-registration.js"
-import express from "express"
-import request from "supertest"
 import type { RegistrationBody, RegistrationErrorBody } from "api-contract"
+import request from "supertest"
 
-const app = express()
-app.use(express.json())
+const app = new AppBuilder().build()
 app.post("/", validateRegistration, (_, res) => {
   res.sendStatus(200)
 })
