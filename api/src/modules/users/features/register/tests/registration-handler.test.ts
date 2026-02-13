@@ -3,13 +3,13 @@ import { RegistrationServiceMock } from "#__test-utils__/mocks/registration-serv
 import { UserMother } from "#__test-utils__/mothers/user-mother.js"
 import type { RegistrationBody, RegistrationErrorBody } from "api-contract"
 import request from "supertest"
-import { RegistrationHandler } from "../registration-handler.js"
+import { registrationHandler } from "../registration-handler.js"
 
 const service = new RegistrationServiceMock()
-const handler = new RegistrationHandler(service)
+const handler = registrationHandler(service)
 
 const app = new AppBuilder().withSession().build()
-app.post("/", handler.handle)
+app.post("/", handler)
 
 const body = {
   username: "testuser",

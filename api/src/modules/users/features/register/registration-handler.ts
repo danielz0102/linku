@@ -6,43 +6,20 @@ import type {
 import type { Request, Response } from "express"
 import type { RegistrationService } from "./registration-service.js"
 
-export class RegistrationHandler {
-  constructor(private readonly service: RegistrationService) {}
-
-  handle = async (
+export const registrationHandler = (service: RegistrationService) => {
+  return async (
     req: Request<unknown, unknown, RegistrationBody>,
     res: Response<PublicUser | RegistrationErrorBody>
   ) => {
-    const result = await this.service.register(req.body)
+    const { ok, data, error } = await service.register(req.body)
 
-    if (result.ok) {
-      const userId = result.data.id
-
+    if (ok) {
+      const userId = data.id
       req.session.userId = userId
-
-      try {
-        await new Promise<void>((resolve, reject) => {
-          req.session.save((error?: Error) => {
-            if (error) {
-              reject(error)
-              return
-            }
-
-            resolve()
-          })
-        })
-      } catch (error) {
-        console.error(
-          `Failed to save session after registration for user ${userId}.`,
-          error
-        )
-        return res.sendStatus(500)
-      }
-
-      return res.status(200).json(result.data)
+      return res.status(200).json(data)
     }
 
-    if (result.error.usernameExists) {
+    if (error.usernameExists) {
       return res.status(409).json({
         code: "VALIDATION_ERROR",
         message: "User already exists",
