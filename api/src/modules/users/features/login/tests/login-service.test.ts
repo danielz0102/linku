@@ -10,9 +10,7 @@ const service = new LoginService({
   hasher,
 })
 
-type Input = Parameters<LoginService["login"]>[0]
-
-const input: Input = {
+const input = {
   username: "testuser",
   password: "password123",
 }
@@ -42,7 +40,7 @@ test("fails if user does not exist", async () => {
   const { ok, error } = await service.login(input)
 
   expect(ok).toBe(false)
-  expect(error).toBe("invalidCredentials")
+  expect(error).toBe("INVALID_CREDENTIALS")
 })
 
 test("fails if password is invalid", async () => {
@@ -52,5 +50,5 @@ test("fails if password is invalid", async () => {
   const { ok, error } = await service.login(input)
 
   expect(ok).toBe(false)
-  expect(error).toBe("invalidCredentials")
+  expect(error).toBe("INVALID_CREDENTIALS")
 })

@@ -16,7 +16,7 @@ export class LoginService {
     const user = await this.userRepo.search({ username: input.username })
 
     if (!user) {
-      return Result.fail("invalidCredentials")
+      return Result.fail("INVALID_CREDENTIALS")
     }
 
     const isValidPassword = await this.hasher.compare(
@@ -25,7 +25,7 @@ export class LoginService {
     )
 
     if (!isValidPassword) {
-      return Result.fail("invalidCredentials")
+      return Result.fail("INVALID_CREDENTIALS")
     }
 
     return Result.ok({
@@ -45,4 +45,4 @@ type Dependencies = {
   hasher: PasswordHasher
 }
 
-type LoginError = "invalidCredentials"
+type LoginError = "INVALID_CREDENTIALS"

@@ -19,8 +19,8 @@ export const registrationHandler = (service: RegistrationService) => {
         message: "User already exists",
         errors: {
           username:
-            error === "usernameExists" ? "Username already exists" : undefined,
-          email: error === "emailExists" ? "Email already exists" : undefined,
+            error === "USERNAME_EXISTS" ? "Username already exists" : undefined,
+          email: error === "EMAIL_EXISTS" ? "Email already exists" : undefined,
         },
       })
     }

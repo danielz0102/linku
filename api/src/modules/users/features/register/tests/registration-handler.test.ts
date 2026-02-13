@@ -32,7 +32,7 @@ test("sends 200 with user data", async () => {
 test("sends 409 if username exists", async () => {
   service.register.mockResolvedValueOnce({
     ok: false,
-    error: "usernameExists",
+    error: "USERNAME_EXISTS",
   })
 
   const res = await request(app).post("/").send(body).expect(409)
@@ -43,7 +43,7 @@ test("sends 409 if username exists", async () => {
 test("sends 409 if email exists", async () => {
   service.register.mockResolvedValueOnce({
     ok: false,
-    error: "emailExists",
+    error: "EMAIL_EXISTS",
   })
 
   const res = await request(app).post("/").send(body).expect(409)

@@ -29,10 +29,13 @@ test("sends 200 with user data", async () => {
 test("sends 401 if credentials are invalid", async () => {
   service.login.mockResolvedValueOnce({
     ok: false,
-    error: "invalidCredentials",
+    error: "INVALID_CREDENTIALS",
   })
 
-  const { body: responseBody } = await request(app).get("/").send(body).expect(401)
+  const { body: responseBody } = await request(app)
+    .get("/")
+    .send(body)
+    .expect(401)
 
   expect(responseBody).toEqual({
     code: "VALIDATION_ERROR",
