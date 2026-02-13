@@ -21,11 +21,11 @@ export class RegistrationService {
     ])
 
     if (usernameExists) {
-      return Result.fail({ usernameExists: true })
+      return Result.fail("usernameExists")
     }
 
     if (emailExists) {
-      return Result.fail({ emailExists: true })
+      return Result.fail("emailExists")
     }
 
     const hash = await this.hasher.hash(password)
@@ -62,12 +62,4 @@ type Input = {
   lastName: string
 }
 
-type RegisterError =
-  | {
-      usernameExists: true
-      emailExists?: never
-    }
-  | {
-      usernameExists?: never
-      emailExists: true
-    }
+type RegisterError = "usernameExists" | "emailExists"

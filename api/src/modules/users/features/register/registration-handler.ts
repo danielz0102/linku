@@ -13,28 +13,19 @@ export const registrationHandler = (service: RegistrationService) => {
   ) => {
     const { ok, data, error } = await service.register(req.body)
 
-    if (ok) {
-      const userId = data.id
-      req.session.userId = userId
-      return res.status(200).json(data)
-    }
-
-    if (error.usernameExists) {
+    if (!ok) {
       return res.status(409).json({
         code: "VALIDATION_ERROR",
         message: "User already exists",
         errors: {
-          username: "Username already exists",
+          username:
+            error === "usernameExists" ? "Username already exists" : undefined,
+          email: error === "emailExists" ? "Email already exists" : undefined,
         },
       })
     }
 
-    return res.status(409).json({
-      code: "VALIDATION_ERROR",
-      message: "User already exists",
-      errors: {
-        email: "Email already exists",
-      },
-    })
+    req.session.userId = data.id
+    return res.status(200).json(data)
   }
 }

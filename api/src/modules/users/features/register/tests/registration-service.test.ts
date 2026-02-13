@@ -45,7 +45,7 @@ test("fails if username already exists", async () => {
   const { ok, error } = await service.register(input)
 
   expect(ok).toBe(false)
-  expect(error?.usernameExists).toBe(true)
+  expect(error).toBe("usernameExists")
 })
 
 test("fails if email already exists", async () => {
@@ -56,5 +56,5 @@ test("fails if email already exists", async () => {
   const { ok, error } = await service.register(input)
 
   expect(ok).toBe(false)
-  expect(error?.emailExists).toBe(true)
+  expect(error).toBe("emailExists")
 })
