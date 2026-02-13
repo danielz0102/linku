@@ -1,7 +1,7 @@
 import type { ErrorBody } from "./error.js"
 
 export type LoginBody = {
-  email: string
+  username: string
   password: string
 }
 

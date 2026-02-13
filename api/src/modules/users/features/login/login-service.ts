@@ -13,7 +13,7 @@ export class LoginService {
   }
 
   async login(input: LoginBody): Promise<Result<PublicUser, LoginError>> {
-    const user = await this.userRepo.search({ email: input.email })
+    const user = await this.userRepo.search({ username: input.username })
 
     if (!user) {
       return Result.fail("invalidCredentials")

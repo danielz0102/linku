@@ -12,7 +12,7 @@ const app = new AppBuilder().withSession().build()
 app.get("/", handler)
 
 const body: LoginBody = {
-  email: "john@example.com",
+  username: "testuser",
   password: "password123",
 }
 
@@ -36,6 +36,6 @@ test("sends 401 if credentials are invalid", async () => {
 
   expect(responseBody).toEqual({
     code: "VALIDATION_ERROR",
-    message: "Invalid email or password",
+    message: "Invalid username or password",
   } satisfies LoginErrorBody)
 })

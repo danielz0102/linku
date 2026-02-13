@@ -23,7 +23,7 @@ export const validateLogin: RequestHandler<
 }
 
 const loginSchema = z.object({
-  email: z.email("Invalid email address"),
+  username: z.string().trim().nonempty("Username is empty"),
   password: z.string().min(1, "Password is empty"),
 })
 

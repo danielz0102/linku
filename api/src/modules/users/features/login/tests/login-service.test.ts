@@ -13,7 +13,7 @@ const service = new LoginService({
 type Input = Parameters<LoginService["login"]>[0]
 
 const input: Input = {
-  email: "user@test.com",
+  username: "testuser",
   password: "password123",
 }
 

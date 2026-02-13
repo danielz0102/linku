@@ -21,14 +21,14 @@ test("sends 400 if body is empty", async () => {
   } satisfies LoginErrorBody)
 })
 
-test("sends 400 if email is invalid", async () => {
-  const { body } = await login({ email: "invalid-email" }).expect(400)
+test("sends 400 if username is empty", async () => {
+  const { body } = await login({ username: "" }).expect(400)
 
   expect(body).toEqual({
     code: "VALIDATION_ERROR",
     message: "Invalid login data",
     errors: {
-      email: "Invalid email address",
+      username: "Username is empty",
     },
   } satisfies LoginErrorBody)
 })
@@ -47,7 +47,7 @@ test("sends 400 if password is empty", async () => {
 
 function login(overrides = {}) {
   return request(app).get("/").send({
-    email: "user@test.com",
+    username: "testuser",
     password: "password123",
     ...overrides,
   })

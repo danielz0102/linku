@@ -12,7 +12,7 @@ export const loginHandler = (service: LoginService) => {
     if (!ok) {
       return res.status(401).json({
         code: "VALIDATION_ERROR",
-        message: "Invalid email or password",
+        message: "Invalid username or password",
       })
     }
 
