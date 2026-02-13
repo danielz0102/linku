@@ -1,16 +1,20 @@
+import { Suspense, lazy } from "react"
 import { BrowserRouter, Route, Routes } from "react-router"
-import Login from "../users/login"
-import Register from "../users/register"
-import Home from "./pages/home"
+
+const Home = lazy(() => import("./pages/home"))
+const Login = lazy(() => import("~/users/login"))
+const Register = lazy(() => import("~/users/register"))
 
 export function Router() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
+      <Suspense fallback={<div className="text-center">Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   )
 }
