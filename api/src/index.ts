@@ -5,7 +5,12 @@ import { RedisStore } from "connect-redis"
 import cors from "cors"
 import express from "express"
 import session from "express-session"
-import { ALLOWED_ORIGIN, PORT, SESSION_SECRET } from "./config/env.js"
+import {
+  ALLOWED_ORIGIN,
+  PORT,
+  SESSION_SECRET,
+  SESSION_MAX_AGE,
+} from "./config/env.js"
 import redisClient from "#db/redis/index.js"
 
 const app = express()
@@ -26,7 +31,11 @@ try {
   process.exit(1)
 }
 
-const redisStore = new RedisStore({ client: redisClient })
+const redisStore = new RedisStore({
+  client: redisClient,
+  ttl: SESSION_MAX_AGE / 1000,
+})
+
 app.use(
   session({
     store: redisStore,
@@ -37,6 +46,7 @@ app.use(
       secure: true,
       httpOnly: true,
       sameSite: "none",
+      maxAge: SESSION_MAX_AGE,
     },
   })
 )
