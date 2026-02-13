@@ -1,14 +1,15 @@
+import type { PasswordHasher } from "#modules/users/interfaces/password-hasher.js"
 import type { UserRepository } from "#modules/users/interfaces/user-repository.d.js"
 import { Result } from "#shared/lib/result.js"
 import type { PublicUser } from "api-contract"
 
 export class RegistrationService {
   private readonly userRepo: UserRepository
-  private readonly hashPassword: (password: string) => Promise<string>
+  private readonly hasher: PasswordHasher
 
-  constructor({ userRepo, hashPassword }: Dependencies) {
+  constructor({ userRepo, hasher }: Dependencies) {
     this.userRepo = userRepo
-    this.hashPassword = hashPassword
+    this.hasher = hasher
   }
 
   async register(input: Input): Promise<Result<PublicUser, RegisterError>> {
@@ -27,7 +28,7 @@ export class RegistrationService {
       return Result.fail({ emailExists: true })
     }
 
-    const hash = await this.hashPassword(password)
+    const hash = await this.hasher.hash(password)
     const user = await this.userRepo.create({
       username,
       email,
@@ -50,7 +51,7 @@ export class RegistrationService {
 
 type Dependencies = {
   userRepo: UserRepository
-  hashPassword: (password: string) => Promise<string>
+  hasher: PasswordHasher
 }
 
 type Input = {

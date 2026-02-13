@@ -1,3 +1,4 @@
+import { PasswordHasherMock } from "#__test-utils__/mocks/password-hasher-mock.js"
 import { UserRepositoryMock } from "#__test-utils__/mocks/user-repository-mock.js"
 import { UserMother } from "#__test-utils__/mothers/user-mother.js"
 import { RegistrationService } from "../registration-service.js"
@@ -5,7 +6,7 @@ import { RegistrationService } from "../registration-service.js"
 const repo = new UserRepositoryMock()
 const service = new RegistrationService({
   userRepo: repo,
-  hashPassword: vi.fn(),
+  hasher: new PasswordHasherMock(),
 })
 
 type Input = Parameters<RegistrationService["register"]>[0]
