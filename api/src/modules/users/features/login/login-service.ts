@@ -1,7 +1,7 @@
 import type { PasswordHasher } from "#modules/users/interfaces/password-hasher.js"
 import type { UserRepository } from "#modules/users/interfaces/user-repository.d.js"
 import { Result } from "#shared/lib/result.js"
-import type { LoginQuery, PublicUser } from "api-contract"
+import type { LoginBody, PublicUser } from "api-contract"
 
 export class LoginService {
   private readonly userRepo: UserRepository
@@ -12,7 +12,7 @@ export class LoginService {
     this.hasher = hasher
   }
 
-  async login(input: LoginQuery): Promise<Result<PublicUser, LoginError>> {
+  async login(input: LoginBody): Promise<Result<PublicUser, LoginError>> {
     const user = await this.userRepo.search({ email: input.email })
 
     if (!user) {

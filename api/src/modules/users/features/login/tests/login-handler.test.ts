@@ -1,7 +1,7 @@
 import { AppBuilder } from "#__test-utils__/builders/app-builder.js"
 import { LoginServiceMock } from "#__test-utils__/mocks/login-service-mock.js"
 import { UserMother } from "#__test-utils__/mothers/user-mother.js"
-import type { LoginErrorBody, LoginQuery } from "api-contract"
+import type { LoginBody, LoginErrorBody } from "api-contract"
 import request from "supertest"
 import { loginHandler } from "../login-handler.js"
 
@@ -11,7 +11,7 @@ const handler = loginHandler(service)
 const app = new AppBuilder().withSession().build()
 app.get("/", handler)
 
-const query: LoginQuery = {
+const body: LoginBody = {
   email: "john@example.com",
   password: "password123",
 }
@@ -23,7 +23,7 @@ test("sends 200 with user data", async () => {
     data: user,
   })
 
-  await request(app).get("/").query(query).expect(200).expect(user)
+  await request(app).get("/").send(body).expect(200).expect(user)
 })
 
 test("sends 401 if credentials are invalid", async () => {
@@ -32,9 +32,9 @@ test("sends 401 if credentials are invalid", async () => {
     error: "invalidCredentials",
   })
 
-  const { body } = await request(app).get("/").query(query).expect(401)
+  const { body: responseBody } = await request(app).get("/").send(body).expect(401)
 
-  expect(body).toEqual({
+  expect(responseBody).toEqual({
     code: "VALIDATION_ERROR",
     message: "Invalid email or password",
   } satisfies LoginErrorBody)

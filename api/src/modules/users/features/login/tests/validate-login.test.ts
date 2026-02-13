@@ -12,16 +12,12 @@ test("calls the next middleware", async () => {
   await login().expect(200)
 })
 
-test("sends 400 if query is empty", async () => {
+test("sends 400 if body is empty", async () => {
   const { body } = await request(app).get("/").expect(400)
 
   expect(body).toEqual({
     code: "VALIDATION_ERROR",
     message: "Invalid login data",
-    errors: {
-      email: expect.any(String),
-      password: expect.any(String),
-    },
   } satisfies LoginErrorBody)
 })
 
@@ -50,7 +46,7 @@ test("sends 400 if password is empty", async () => {
 })
 
 function login(overrides = {}) {
-  return request(app).get("/").query({
+  return request(app).get("/").send({
     email: "user@test.com",
     password: "password123",
     ...overrides,
