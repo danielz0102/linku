@@ -1,16 +1,11 @@
 import { redisStore } from "#db/redis/session-store.js"
+import { corsMiddleware } from "#middlewares/cors-middleware.js"
 import { notFound } from "#middlewares/not-found.js"
 import { unexpectedError } from "#middlewares/unexpected-error.js"
 import { usersRouter } from "#users/index.js"
-import cors from "cors"
 import express from "express"
 import session from "express-session"
-import {
-  ALLOWED_ORIGIN,
-  PORT,
-  SESSION_MAX_AGE,
-  SESSION_SECRET,
-} from "./config/env.js"
+import { PORT, SESSION_MAX_AGE, SESSION_SECRET } from "./config/env.js"
 
 const app = express()
 
@@ -18,7 +13,7 @@ app.set("trust proxy", 1)
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cors({ origin: ALLOWED_ORIGIN, credentials: true }))
+app.use(corsMiddleware)
 
 app.use(
   session({
