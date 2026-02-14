@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form"
+import type { AxiosError } from "axios"
+import type { RegistrationErrorBody } from "api-contract"
 import { errorMatcher } from "~/shared/api/error-matcher"
-import { useRegisterMutation } from "./use-register-mutation"
+import { register as registerUser } from "../services/register"
 
 export function useRegistrationForm() {
   const {
@@ -8,60 +10,63 @@ export function useRegistrationForm() {
     setError,
     getValues,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<Inputs>()
-
-  const { mutate, isPending } = useRegisterMutation({
-    handleApiError: (error) => {
-      if (!error.response) {
-        return setError("root", {
-          message: errorMatcher("NETWORK_ERROR"),
-        })
-      }
-
-      const { data } = error.response
-      const { code, errors } = data
-
-      if (code !== "VALIDATION_ERROR") {
-        return setRootError(code)
-      }
-
-      if (!errors) {
-        return setRootError("UNEXPECTED_ERROR")
-      }
-
-      const formErrors = Object.entries(errors).filter(areFormErrors)
-
-      if (formErrors.length === 0) {
-        return setRootError("UNEXPECTED_ERROR")
-      }
-
-      formErrors.forEach(([field, message]) => {
-        setError(field, { message }, { shouldFocus: true })
-      })
-
-      function areFormErrors(
-        entry: [string, string]
-      ): entry is [keyof Inputs, string] {
-        const [field] = entry
-        return field in getValues()
-      }
-    },
-  })
 
   function setRootError(code: Parameters<typeof errorMatcher>[0]) {
     setError("root", { message: errorMatcher(code) })
   }
 
-  const submit = handleSubmit((data) => {
-    const { username, email, password, firstName, lastName } = data
-    mutate({
-      username,
-      email,
-      password,
-      firstName,
-      lastName,
+  function handleApiError(error: AxiosError<RegistrationErrorBody>) {
+    if (!error.response) {
+      return setError("root", {
+        message: errorMatcher("NETWORK_ERROR"),
+      })
+    }
+
+    const { data } = error.response
+    const { code, errors } = data
+
+    if (code !== "VALIDATION_ERROR") {
+      return setRootError(code)
+    }
+
+    if (!errors) {
+      return setRootError("UNEXPECTED_ERROR")
+    }
+
+    const formErrors = Object.entries(errors).filter(areFormErrors)
+
+    if (formErrors.length === 0) {
+      return setRootError("UNEXPECTED_ERROR")
+    }
+
+    formErrors.forEach(([field, message]) => {
+      setError(field, { message }, { shouldFocus: true })
     })
+
+    function areFormErrors(
+      entry: [string, string]
+    ): entry is [keyof Inputs, string] {
+      const [field] = entry
+      return field in getValues()
+    }
+  }
+
+  const submit = handleSubmit(async (data) => {
+    const { username, email, password, firstName, lastName } = data
+
+    try {
+      await registerUser({
+        username,
+        email,
+        password,
+        firstName,
+        lastName,
+      })
+    } catch (error) {
+      handleApiError(error as AxiosError<RegistrationErrorBody>)
+    }
   })
 
   const fields = {
@@ -95,7 +100,7 @@ export function useRegistrationForm() {
     }),
   }
 
-  return { submit, isLoading: isPending, fields, errors }
+  return { submit, isLoading: isSubmitting, fields, errors }
 }
 
 type Inputs = {
