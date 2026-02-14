@@ -3,8 +3,11 @@ import type { AxiosError } from "axios"
 import type { RegistrationErrorBody } from "api-contract"
 import { errorMatcher } from "~/shared/api/error-matcher"
 import { register as registerUser } from "../services/register"
+import { useNavigate } from "react-router"
 
 export function useRegistrationForm() {
+  const navigate = useNavigate()
+
   const {
     register,
     setError,
@@ -24,6 +27,8 @@ export function useRegistrationForm() {
         firstName,
         lastName,
       })
+
+      navigate("/")
     } catch (error) {
       handleApiError(error as AxiosError<RegistrationErrorBody>)
     }

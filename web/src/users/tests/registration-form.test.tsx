@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { renderWithQueryClient } from "~/__tests__/utils/render-with-client"
+import { Renderer } from "~/__tests__/utils/renderer"
 import { RegistrationForm } from "~/users/components/registration-form"
 import { register } from "../services/register"
 
@@ -8,10 +8,11 @@ vi.mock(import("~/users/services/register"), () => ({
   register: vi.fn(),
 }))
 
+const renderer = new Renderer().withRouter().withQueryProvider()
 const service = vi.mocked(register)
 
 test("has all form fields", () => {
-  renderWithQueryClient(<RegistrationForm />)
+  renderer.render(<RegistrationForm />)
 
   expect(screen.getByLabelText(/first name/i)).toBeVisible()
   expect(screen.getByLabelText(/last name/i)).toBeVisible()
@@ -24,7 +25,7 @@ test("has all form fields", () => {
 
 test("fails on missing fields", async () => {
   const user = userEvent.setup()
-  renderWithQueryClient(<RegistrationForm />)
+  renderer.render(<RegistrationForm />)
 
   const button = screen.getByRole("button", { name: /create account/i })
   await user.click(button)
@@ -39,7 +40,7 @@ test("fails on missing fields", async () => {
 
 test("fails on invalid email", async () => {
   const user = userEvent.setup()
-  renderWithQueryClient(<RegistrationForm />)
+  renderer.render(<RegistrationForm />)
 
   const emailInput = screen.getByLabelText(/email address/i)
   const button = screen.getByRole("button", { name: /create account/i })
@@ -52,7 +53,7 @@ test("fails on invalid email", async () => {
 
 test("fails on password mismatch", async () => {
   const user = userEvent.setup()
-  renderWithQueryClient(<RegistrationForm />)
+  renderer.render(<RegistrationForm />)
 
   const passwordInput = screen.getByLabelText(/^password$/i)
   const confirmPasswordInput = screen.getByLabelText(/confirm password/i)
@@ -89,7 +90,8 @@ describe("Password validation", () => {
 
 async function testPassword(password: string) {
   const user = userEvent.setup()
-  renderWithQueryClient(<RegistrationForm />)
+  const renderer = new Renderer().withRouter().withQueryProvider()
+  renderer.render(<RegistrationForm />)
 
   const passwordInput = screen.getByLabelText(/^password$/i)
   const button = screen.getByRole("button", { name: /create account/i })
