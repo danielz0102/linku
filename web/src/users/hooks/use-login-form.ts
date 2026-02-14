@@ -1,8 +1,6 @@
 import { useForm } from "react-hook-form"
-import type { AxiosError } from "axios"
-import type { LoginErrorBody } from "api-contract"
-import { errorMatcher } from "~/shared/api/error-matcher"
 import { useNavigate } from "react-router"
+import type { ApiError } from "~/shared/api/api-error"
 import { login } from "../services/login"
 
 export function useLoginForm() {
@@ -20,33 +18,19 @@ export function useLoginForm() {
       await login(data)
       navigate("/")
     } catch (error) {
-      handleApiError(error as AxiosError<LoginErrorBody>)
+      handleApiError(error as ApiError)
     }
   })
 
-  function handleApiError(error: AxiosError<LoginErrorBody>) {
-    if (!error.response) {
+  function handleApiError(error: ApiError) {
+    if (error.code === "UNAUTHORIZED") {
       return setError("root", {
-        message: errorMatcher("NETWORK_ERROR"),
+        message: "Invalid username or password",
       })
     }
 
-    const { status, data } = error.response
-
-    if (status === 401) {
-      return setError("root", { message: "Credentials are invalid" })
-    }
-
-    if (status === 429) {
-      return setError("root", {
-        message: "Too many login attempts. Please try again later.",
-      })
-    }
-
-    const { code } = data
-
-    return setError("root", {
-      message: errorMatcher(code),
+    setError("root", {
+      message: error.genericMessage,
     })
   }
 

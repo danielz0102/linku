@@ -1,9 +1,7 @@
 import { useForm } from "react-hook-form"
-import type { AxiosError } from "axios"
-import type { RegistrationErrorBody } from "api-contract"
-import { errorMatcher } from "~/shared/api/error-matcher"
-import { register as registerUser } from "../services/register"
 import { useNavigate } from "react-router"
+import type { ApiError } from "~/shared/api/api-error"
+import { register as registerUser } from "../services/register"
 
 export function useRegistrationForm() {
   const navigate = useNavigate()
@@ -15,64 +13,6 @@ export function useRegistrationForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<Inputs>()
-
-  const submit = handleSubmit(async (data) => {
-    const { username, email, password, firstName, lastName } = data
-
-    try {
-      await registerUser({
-        username,
-        email,
-        password,
-        firstName,
-        lastName,
-      })
-
-      navigate("/")
-    } catch (error) {
-      handleApiError(error as AxiosError<RegistrationErrorBody>)
-    }
-  })
-
-  function handleApiError(error: AxiosError<RegistrationErrorBody>) {
-    if (!error.response) {
-      return setError("root", {
-        message: errorMatcher("NETWORK_ERROR"),
-      })
-    }
-
-    const { data } = error.response
-    const { code, errors } = data
-
-    if (code !== "VALIDATION_ERROR") {
-      return setRootError(code)
-    }
-
-    if (!errors) {
-      return setRootError("UNEXPECTED_ERROR")
-    }
-
-    const formErrors = Object.entries(errors).filter(areFormErrors)
-
-    if (formErrors.length === 0) {
-      return setRootError("UNEXPECTED_ERROR")
-    }
-
-    formErrors.forEach(([field, message]) => {
-      setError(field, { message }, { shouldFocus: true })
-    })
-
-    function areFormErrors(
-      entry: [string, string]
-    ): entry is [keyof Inputs, string] {
-      const [field] = entry
-      return field in getValues()
-    }
-  }
-
-  function setRootError(code: Parameters<typeof errorMatcher>[0]) {
-    setError("root", { message: errorMatcher(code) })
-  }
 
   const fields = {
     username: register("username", { required: "Username is required" }),
@@ -103,6 +43,42 @@ export function useRegistrationForm() {
         }
       },
     }),
+  }
+
+  const submit = handleSubmit(async (data) => {
+    const { username, email, password, firstName, lastName } = data
+
+    try {
+      await registerUser({
+        username,
+        email,
+        password,
+        firstName,
+        lastName,
+      })
+
+      navigate("/")
+    } catch (error) {
+      handleApiError(error as ApiError)
+    }
+  })
+
+  function handleApiError(error: ApiError) {
+    if (error.code !== "VALIDATION_ERROR") {
+      return setError("root", {
+        message: error.genericMessage,
+      })
+    }
+
+    const fieldKeys = Object.keys(getValues()) as (keyof Inputs)[]
+
+    fieldKeys.forEach((k) => {
+      const message = error.getValidationError(k)
+
+      if (message) {
+        setError(k, { message }, { shouldFocus: true })
+      }
+    })
   }
 
   return { submit, isLoading: isSubmitting, fields, errors }
