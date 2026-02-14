@@ -8,7 +8,7 @@ import { loginHandler } from "../login-handler.js"
 const service = new LoginServiceMock()
 
 const app = new AppBuilder().withSession().build()
-app.get("/", loginHandler(service))
+app.post("/", loginHandler(service))
 
 const body: LoginBody = {
   username: "testuser",
@@ -22,7 +22,7 @@ test("sends 200 with user data", async () => {
     data: user,
   })
 
-  await request(app).get("/").send(body).expect(200).expect(user)
+  await request(app).post("/").send(body).expect(200).expect(user)
 })
 
 test("sends 401 if credentials are invalid", async () => {
@@ -32,7 +32,7 @@ test("sends 401 if credentials are invalid", async () => {
   })
 
   const { body: responseBody } = await request(app)
-    .get("/")
+    .post("/")
     .send(body)
     .expect(401)
 

@@ -4,7 +4,7 @@ import { registrationMiddleware } from "./features/register/index.js"
 
 const router = Router()
 
-router.get("/", loginMiddleware)
+router.post("/login", loginMiddleware)
 router.post("/", registrationMiddleware)
 
 export { router as usersRouter }
