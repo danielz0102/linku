@@ -18,11 +18,13 @@
     "@tanstack/react-query": "^5.90.20",
     "api-contract": "workspace:*",
     "axios": "^1.13.4",
+    "clsx": "^2.1.1",
     "lucide-react": "^0.563.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.71.1",
     "react-router": "^7.13.0",
+    "tailwind-merge": "^3.4.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
