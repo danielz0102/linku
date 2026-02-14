@@ -37,7 +37,7 @@ test("sends 401 if credentials are invalid", async () => {
     .expect(401)
 
   expect(responseBody).toEqual({
-    code: "VALIDATION_ERROR",
+    code: "UNAUTHORIZED",
     message: "Invalid username or password",
   } satisfies LoginErrorBody)
 })

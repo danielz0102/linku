@@ -11,3 +11,6 @@ export type ErrorCode =
   | "NETWORK_ERROR"
   | "UNEXPECTED_ERROR"
   | "NOT_FOUND"
+  | "UNAUTHORIZED"
+  | "FORBIDDEN"
+  | "TOO_MANY_REQUESTS"

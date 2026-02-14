@@ -13,9 +13,21 @@ export function useRegistrationForm() {
     formState: { errors, isSubmitting },
   } = useForm<Inputs>()
 
-  function setRootError(code: Parameters<typeof errorMatcher>[0]) {
-    setError("root", { message: errorMatcher(code) })
-  }
+  const submit = handleSubmit(async (data) => {
+    const { username, email, password, firstName, lastName } = data
+
+    try {
+      await registerUser({
+        username,
+        email,
+        password,
+        firstName,
+        lastName,
+      })
+    } catch (error) {
+      handleApiError(error as AxiosError<RegistrationErrorBody>)
+    }
+  })
 
   function handleApiError(error: AxiosError<RegistrationErrorBody>) {
     if (!error.response) {
@@ -53,21 +65,9 @@ export function useRegistrationForm() {
     }
   }
 
-  const submit = handleSubmit(async (data) => {
-    const { username, email, password, firstName, lastName } = data
-
-    try {
-      await registerUser({
-        username,
-        email,
-        password,
-        firstName,
-        lastName,
-      })
-    } catch (error) {
-      handleApiError(error as AxiosError<RegistrationErrorBody>)
-    }
-  })
+  function setRootError(code: Parameters<typeof errorMatcher>[0]) {
+    setError("root", { message: errorMatcher(code) })
+  }
 
   const fields = {
     username: register("username", { required: "Username is required" }),

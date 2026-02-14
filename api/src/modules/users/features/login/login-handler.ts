@@ -11,7 +11,7 @@ export const loginHandler = (service: LoginService) => {
 
     if (!ok) {
       return res.status(401).json({
-        code: "VALIDATION_ERROR",
+        code: "UNAUTHORIZED",
         message: "Invalid username or password",
       })
     }
