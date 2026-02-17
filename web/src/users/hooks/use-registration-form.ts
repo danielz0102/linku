@@ -1,10 +1,11 @@
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router"
 import type { ApiError } from "~/shared/api/api-error"
-import { register as registerUser } from "../services/register"
+import { useAuth } from "../context/auth-context"
 
 export function useRegistrationForm() {
   const navigate = useNavigate()
+  const { register: registerUser } = useAuth()
 
   const {
     register,

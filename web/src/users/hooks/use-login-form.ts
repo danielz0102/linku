@@ -1,10 +1,11 @@
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router"
 import type { ApiError } from "~/shared/api/api-error"
-import { login } from "../services/login"
+import { useAuth } from "../context/auth-context"
 
 export function useLoginForm() {
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   const {
     register,
