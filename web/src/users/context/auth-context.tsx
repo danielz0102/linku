@@ -1,14 +1,14 @@
 import type {
   LoginBody,
-  PublicUser as User,
   RegistrationBody as NewUser,
+  PublicUser as User,
 } from "api-contract"
 import { createContext, use } from "react"
 
 type AuthContextValue = {
   user: User | null
-  login(credentials: LoginBody): Promise<User>
-  register(newUser: NewUser): Promise<User>
+  login(credentials: LoginBody): Promise<void>
+  register(newUser: NewUser): Promise<void>
   logout(): Promise<void>
 }
 
