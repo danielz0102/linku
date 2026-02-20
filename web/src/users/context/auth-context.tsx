@@ -5,6 +5,13 @@ import type {
 } from "api-contract"
 import { createContext, use } from "react"
 
+type AuthContextValue = {
+  user: User | null
+  login(credentials: LoginBody): Promise<User>
+  register(newUser: NewUser): Promise<User>
+  logout(): Promise<void>
+}
+
 export const AuthContext = createContext<AuthContextValue>({
   user: null,
   login: () => missingAuthProvider(),
@@ -16,13 +23,6 @@ export function useAuth() {
   return use(AuthContext)
 }
 
-type AuthContextValue = {
-  user: User | null
-  login(credentials: LoginBody): Promise<User>
-  register(newUser: NewUser): Promise<User>
-  logout(): Promise<void>
-}
-
-async function missingAuthProvider() {
+function missingAuthProvider<T>(): Promise<T> {
   throw new Error("AuthProvider is required")
 }
