@@ -10,13 +10,13 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
   const user = use(currentUser)
 
   const login = async (credentials: LoginBody) => {
-    const nextUser = AuthService.login(credentials)
-    setUser(nextUser)
+    const nextUser = await AuthService.login(credentials)
+    setUser(Promise.resolve(nextUser))
   }
 
   const register = async (newUser: NewUser) => {
-    const nextUser = AuthService.register(newUser)
-    setUser(nextUser)
+    const nextUser = await AuthService.register(newUser)
+    setUser(Promise.resolve(nextUser))
   }
 
   const logout = async () => {
