@@ -2,7 +2,8 @@ packages:
   - web
   - api
   - api-contract
+  - e2e
 
 onlyBuiltDependencies:
-  - '@swc/core'
+  - "@swc/core"
   - esbuild

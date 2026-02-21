@@ -1,6 +1,6 @@
 import { BcryptHasher } from "#modules/users/implementations/bcrypt-hasher.js"
 import { DrizzleUserRepository } from "#modules/users/implementations/drizzle-user-repository.js"
-import { SALT } from "#shared/config/env.js"
+import { RATE_LIMIT_ENABLED, SALT } from "#shared/config/env.js"
 import { loginHandler } from "./login-handler.js"
 import { loginRateLimit } from "./login-rate-limit.js"
 import { LoginService } from "./login-service.js"
@@ -13,6 +13,6 @@ const service = new LoginService({
 
 export const loginMiddleware = [
   validateLogin,
-  loginRateLimit,
+  ...(RATE_LIMIT_ENABLED ? [loginRateLimit] : []),
   loginHandler(service),
 ]
