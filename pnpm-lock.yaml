@@ -10,7 +10,7 @@ importers:
 
   api:
     dependencies:
-      api-contract:
+      '@linku/api-contract':
         specifier: workspace:*
         version: link:../api-contract
       bcryptjs:
@@ -113,15 +113,15 @@ importers:
       '@faker-js/faker':
         specifier: ^10.3.0
         version: 10.3.0
+      '@linku/api-contract':
+        specifier: workspace:*
+        version: link:../api-contract
       '@playwright/test':
         specifier: ^1.58.2
         version: 1.58.2
       '@types/node':
         specifier: ^25.3.0
         version: 25.3.0
-      api-contract:
-        specifier: workspace:*
-        version: link:../api-contract
       typescript:
         specifier: ~5.9.3
         version: 5.9.3
@@ -131,12 +131,12 @@ importers:
       '@fontsource-variable/inter':
         specifier: ^5.2.8
         version: 5.2.8
+      '@linku/api-contract':
+        specifier: workspace:*
+        version: link:../api-contract
       '@tanstack/react-query':
         specifier: ^5.90.20
         version: 5.90.20(react@19.2.4)
-      api-contract:
-        specifier: workspace:*
-        version: link:../api-contract
       axios:
         specifier: ^1.13.4
         version: 1.13.4

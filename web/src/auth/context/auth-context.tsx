@@ -2,7 +2,7 @@ import type {
   LoginBody,
   RegistrationBody as NewUser,
   PublicUser as User,
-} from "api-contract"
+} from "@linku/api-contract"
 import { createContext, use } from "react"
 
 type AuthContextValue = {

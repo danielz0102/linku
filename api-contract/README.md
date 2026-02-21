@@ -4,7 +4,7 @@ This package contains shared TypeScript types for the API contract between the `
 
 ## Purpose
 
-The `api-contract` package centralizes API type definitions to:
+The `@linku/api-contract` package centralizes API type definitions to:
 - Prevent type duplication between frontend and backend
 - Ensure type consistency across the application
 - Provide a single source of truth for API contracts
@@ -27,7 +27,7 @@ The `api-contract` package centralizes API type definitions to:
 Import types from the package in both `api` and `web`:
 
 ```typescript
-import type { ErrorBody, PublicUser, RegistrationBody } from "api-contract"
+import type { ErrorBody, PublicUser, RegistrationBody } from "@linku/api-contract"
 ```
 
 ## Development

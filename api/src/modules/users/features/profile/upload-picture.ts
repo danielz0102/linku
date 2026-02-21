@@ -1,5 +1,5 @@
 import { createCustomError } from "#shared/lib/create-custom-error.js"
-import type { ErrorBody } from "api-contract"
+import type { ErrorBody } from "@linku/api-contract"
 import type { NextFunction, Request, Response } from "express"
 import multer from "multer"
 

@@ -2,7 +2,7 @@ import type {
   PublicUser,
   RegistrationBody,
   RegistrationErrorBody,
-} from "api-contract"
+} from "@linku/api-contract"
 import type { Request, Response } from "express"
 import type { RegistrationService } from "./registration-service.js"
 

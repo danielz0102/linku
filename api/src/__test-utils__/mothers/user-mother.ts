@@ -1,6 +1,6 @@
 import type { User } from "#modules/users/domain/user.js"
 import { faker } from "@faker-js/faker"
-import type { PublicUser } from "api-contract"
+import type { PublicUser } from "@linku/api-contract"
 
 export const UserMother = {
   create(overrides: Partial<User> = {}): User {

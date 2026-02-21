@@ -1,4 +1,4 @@
-import type { LoginBody, RegistrationBody as NewUser } from "api-contract"
+import type { LoginBody, RegistrationBody as NewUser } from "@linku/api-contract"
 import { use, useState } from "react"
 import { AuthService } from "~/auth/services/auth-service"
 import { AuthContext } from "./auth-context"

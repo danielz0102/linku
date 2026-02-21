@@ -1,7 +1,7 @@
 import { AppBuilder } from "#__test-utils__/builders/app-builder.js"
 import { LoginServiceMock } from "#__test-utils__/mocks/login-service-mock.js"
 import { UserMother } from "#__test-utils__/mothers/user-mother.js"
-import type { LoginBody, LoginErrorBody } from "api-contract"
+import type { LoginBody, LoginErrorBody } from "@linku/api-contract"
 import request from "supertest"
 import { loginHandler } from "../login-handler.js"
 

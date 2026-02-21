@@ -1,5 +1,5 @@
 import type { UserRepository } from "#modules/users/interfaces/user-repository.d.js"
-import type { ErrorBody, PublicUser } from "api-contract"
+import type { ErrorBody, PublicUser } from "@linku/api-contract"
 import type { Request, Response } from "express"
 
 export const meHandler = (repository: UserRepository) => {

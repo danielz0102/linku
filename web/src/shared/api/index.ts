@@ -1,7 +1,7 @@
 import axios, { type AxiosError } from "axios"
 import { API_URL } from "~/shared/config/env"
 import { ApiError } from "./api-error"
-import type { ErrorBody } from "api-contract"
+import type { ErrorBody } from "@linku/api-contract"
 import z from "zod"
 
 export const apiClient = axios.create({

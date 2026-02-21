@@ -1,4 +1,4 @@
-import type { ErrorBody } from "api-contract"
+import type { ErrorBody } from "@linku/api-contract"
 import { rateLimit } from "express-rate-limit"
 
 export const loginRateLimit = rateLimit({

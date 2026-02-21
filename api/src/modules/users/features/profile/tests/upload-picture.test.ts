@@ -1,4 +1,4 @@
-import type { ErrorBody } from "api-contract"
+import type { ErrorBody } from "@linku/api-contract"
 import express from "express"
 import request from "supertest"
 import { uploadPicture } from "../upload-picture.js"

@@ -1,4 +1,4 @@
-import type { ErrorBody } from "api-contract"
+import type { ErrorBody } from "@linku/api-contract"
 import type { Request, Response, NextFunction } from "express"
 
 export const unexpectedError = (

@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express"
 import z from "zod"
-import type { RegistrationErrorBody } from "api-contract"
+import type { RegistrationErrorBody } from "@linku/api-contract"
 
 export const validateRegistration: RequestHandler<
   unknown,

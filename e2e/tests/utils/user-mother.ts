@@ -1,4 +1,4 @@
-import type { RegistrationBody } from "api-contract";
+import type { RegistrationBody } from "@linku/api-contract";
 import { faker } from "@faker-js/faker";
 
 export const UserMother = {

@@ -1,4 +1,4 @@
-import type { LoginBody, LoginErrorBody, PublicUser } from "api-contract"
+import type { LoginBody, LoginErrorBody, PublicUser } from "@linku/api-contract"
 import type { Request, Response } from "express"
 import type { LoginService } from "./login-service.js"
 

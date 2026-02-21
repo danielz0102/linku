@@ -1,5 +1,5 @@
 import { SESSION_COOKIE_NAME } from "#shared/constants/session.js"
-import type { ErrorBody } from "api-contract"
+import type { ErrorBody } from "@linku/api-contract"
 import type { Request, Response } from "express"
 
 export const logoutHandler = (req: Request, res: Response<ErrorBody>) => {

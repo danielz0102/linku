@@ -1,4 +1,4 @@
-import type { ErrorCode, ErrorBody } from "api-contract"
+import type { ErrorCode, ErrorBody } from "@linku/api-contract"
 
 export class ApiError {
   readonly code: ErrorCode

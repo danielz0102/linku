@@ -1,7 +1,7 @@
 import { AppBuilder } from "#__test-utils__/builders/app-builder.js"
 import { RegistrationServiceMock } from "#__test-utils__/mocks/registration-service-mock.js"
 import { UserMother } from "#__test-utils__/mothers/user-mother.js"
-import type { RegistrationBody, RegistrationErrorBody } from "api-contract"
+import type { RegistrationBody, RegistrationErrorBody } from "@linku/api-contract"
 import request from "supertest"
 import { registrationHandler } from "../registration-handler.js"
 

@@ -9,7 +9,7 @@ Linku is a messaging app. The codebase is a monorepo with the following packages
 
 - `api`: The backend API for the project.
 - `web`: The frontend web application for the project.
-- `api-contract`: The shared types between the backend and frontend.
+- `@linku/api-contract`: The shared types between the backend and frontend.
 
 Check the requirements of the project [here](../docs/linku.md).
 

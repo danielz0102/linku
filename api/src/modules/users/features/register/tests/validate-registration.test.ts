@@ -1,5 +1,5 @@
 import { AppBuilder } from "#__test-utils__/builders/app-builder.js"
-import type { RegistrationBody, RegistrationErrorBody } from "api-contract"
+import type { RegistrationBody, RegistrationErrorBody } from "@linku/api-contract"
 import request from "supertest"
 import { validateRegistration } from "../validate-registration.js"
 

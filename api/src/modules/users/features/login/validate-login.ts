@@ -1,4 +1,4 @@
-import type { LoginErrorBody } from "api-contract"
+import type { LoginErrorBody } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 import z from "zod"
 
