@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useAuth } from "~/users/context/auth-context"
+import { useAuth } from "~/auth/context/auth-context"
 
 export default function Home() {
   const { logout } = useAuth()

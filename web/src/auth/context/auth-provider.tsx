@@ -1,6 +1,6 @@
 import type { LoginBody, RegistrationBody as NewUser } from "api-contract"
 import { use, useState } from "react"
-import { AuthService } from "~/users/services/auth-service"
+import { AuthService } from "~/auth/services/auth-service"
 import { AuthContext } from "./auth-context"
 
 const initialUser = AuthService.getMe()

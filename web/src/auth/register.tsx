@@ -1,24 +1,24 @@
 import { Link } from "react-router"
-import { LoginForm } from "~/users/components/login-form"
+import { RegistrationForm } from "~/auth/components/registration-form"
 
-export default function Login() {
+export default function Register() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center">
-          <h1 className="mb-2 text-4xl font-bold">Welcome back</h1>
-          <p className="text-neutral-400">Pick up the conversation.</p>
+          <h1 className="mb-2 text-4xl font-bold">Join Linku</h1>
+          <p className="text-neutral-400">Connect with friends instantly.</p>
         </div>
 
-        <LoginForm />
+        <RegistrationForm />
 
         <p className="text-center text-sm text-neutral-400">
-          New to Linku?{" "}
+          Already have an account?{" "}
           <Link
-            to="/register"
+            to="/login"
             className="font-medium text-blue-500 hover:text-blue-400"
           >
-            Create an account
+            Log In
           </Link>
         </p>
       </div>
