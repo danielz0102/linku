@@ -1,6 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { render, type RenderResult } from "@testing-library/react"
+import type React from "react"
 import { MemoryRouter } from "react-router"
+
+type Wrapper = React.ComponentType<React.PropsWithChildren>
 
 export class Renderer {
   private Wrapper: Wrapper | null = null
@@ -49,9 +52,3 @@ export class Renderer {
     )
   }
 }
-
-type Wrapper = ({
-  children,
-}: {
-  children: React.ReactNode
-}) => React.ReactElement
