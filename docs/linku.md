@@ -6,9 +6,9 @@ Linku is a real-time messaging web application that allows users to connect, cha
 
 ### User Authentication
 
-- [ ] Users can register a new account
-- [ ] Users can log in to their account
-- [ ] Users can log out
+- [x] Users can register a new account
+- [x] Users can log in to their account
+- [x] Users can log out
 
 ### User Profiles
 
