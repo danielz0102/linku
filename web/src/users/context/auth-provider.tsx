@@ -3,23 +3,25 @@ import { use, useState } from "react"
 import { AuthService } from "~/users/services/auth-service"
 import { AuthContext } from "./auth-context"
 
+const initialUser = AuthService.getMe()
+
 export function AuthProvider({ children }: React.PropsWithChildren) {
-  const [currentUser, setCurrentUser] = useState(() => AuthService.getMe())
+  const [currentUser, setUser] = useState(initialUser)
   const user = use(currentUser)
 
-  async function login(credentials: LoginBody): Promise<void> {
+  const login = async (credentials: LoginBody) => {
     const nextUser = AuthService.login(credentials)
-    setCurrentUser(nextUser)
+    setUser(nextUser)
   }
 
-  async function register(newUser: NewUser): Promise<void> {
+  const register = async (newUser: NewUser) => {
     const nextUser = AuthService.register(newUser)
-    setCurrentUser(nextUser)
+    setUser(nextUser)
   }
 
-  async function logout(): Promise<void> {
+  const logout = async () => {
     await AuthService.logout()
-    setCurrentUser(Promise.resolve(null))
+    setUser(Promise.resolve(null))
   }
 
   return (
