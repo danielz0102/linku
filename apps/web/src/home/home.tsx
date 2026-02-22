@@ -1,9 +1,7 @@
-import { Layout } from "~/shared/layout/index"
-
 export default function Home() {
   return (
-    <Layout>
+    <main>
       <h1>Hello World</h1>
-    </Layout>
+    </main>
   )
 }
