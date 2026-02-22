@@ -1,8 +1,8 @@
+import type { ErrorBody } from "@linku/api-contract"
 import axios, { type AxiosError } from "axios"
+import { z } from "zod/mini"
 import { API_URL } from "~/shared/config/env"
 import { ApiError } from "./api-error"
-import type { ErrorBody } from "@linku/api-contract"
-import z from "zod"
 
 export const apiClient = axios.create({
   baseURL: API_URL,
@@ -35,5 +35,5 @@ function isErrorBody(data: unknown): data is ErrorBody {
 const errorBodySchema = z.object({
   code: z.string(),
   message: z.string(),
-  errors: z.record(z.string(), z.string()).optional(),
+  errors: z.optional(z.record(z.string(), z.string())),
 })

@@ -1,4 +1,4 @@
-import z from "zod"
+import { z } from "zod/mini"
 
 const envSchema = z.object({
   VITE_API_URL: z.url(),
