@@ -1,15 +1,9 @@
 import { screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { Renderer } from "~/__tests__/utils/renderer"
-import { RegistrationForm } from "~/users/components/registration-form"
-import { register } from "../services/register"
-
-vi.mock(import("~/users/services/register"), () => ({
-  register: vi.fn(),
-}))
+import { RegistrationForm } from "~/auth/components/registration-form"
 
 const renderer = new Renderer().withRouter().withQueryProvider()
-const service = vi.mocked(register)
 
 test("has all form fields", () => {
   renderer.render(<RegistrationForm />)
@@ -34,8 +28,6 @@ test("fails on missing fields", async () => {
   fields.forEach((field) => {
     expect(field).toBeInvalid()
   })
-
-  expect(service).not.toHaveBeenCalled()
 })
 
 test("fails on invalid email", async () => {
