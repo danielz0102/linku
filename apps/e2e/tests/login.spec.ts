@@ -33,4 +33,5 @@ test("fails with incorrect password", async ({ page, registeredUser }) => {
   await loginButton.click();
 
   await expect(page).toHaveURL("/login");
+  await expect(page.getByText(/invalid/i)).toBeVisible();
 });

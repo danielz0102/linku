@@ -3,6 +3,11 @@ import { useNavigate } from "react-router"
 import type { ApiError } from "~/shared/api/api-error"
 import { useAuth } from "../context/auth-context"
 
+type Inputs = {
+  username: string
+  password: string
+}
+
 export function useLoginForm() {
   const navigate = useNavigate()
   const { login } = useAuth()
@@ -14,31 +19,26 @@ export function useLoginForm() {
     formState: { errors, isSubmitting },
   } = useForm<Inputs>()
 
+  const fields = {
+    username: register("username", { required: "Username is required" }),
+    password: register("password", { required: "Password is required" }),
+  }
+
   const submit = handleSubmit(async (data) => {
     try {
       await login(data)
       navigate("/")
     } catch (error) {
-      handleApiError(error as ApiError)
-    }
-  })
+      const { code, genericMessage } = error as ApiError
 
-  function handleApiError(error: ApiError) {
-    if (error.code === "UNAUTHORIZED") {
-      return setError("root", {
-        message: "Invalid username or password",
+      setError("root", {
+        message:
+          code === "UNAUTHORIZED"
+            ? "Invalid username or password"
+            : genericMessage,
       })
     }
-
-    setError("root", {
-      message: error.genericMessage,
-    })
-  }
-
-  const fields = {
-    username: register("username", { required: "Username is required" }),
-    password: register("password", { required: "Password is required" }),
-  }
+  })
 
   return {
     submit,
@@ -46,9 +46,4 @@ export function useLoginForm() {
     fields,
     errors,
   }
-}
-
-type Inputs = {
-  username: string
-  password: string
 }

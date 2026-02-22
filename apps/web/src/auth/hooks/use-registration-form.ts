@@ -3,6 +3,15 @@ import { useNavigate } from "react-router"
 import type { ApiError } from "~/shared/api/api-error"
 import { useAuth } from "../context/auth-context"
 
+type Inputs = {
+  firstName: string
+  lastName: string
+  username: string
+  email: string
+  password: string
+  confirmPassword: string
+}
+
 export function useRegistrationForm() {
   const navigate = useNavigate()
   const { register: registerUser } = useAuth()
@@ -60,36 +69,25 @@ export function useRegistrationForm() {
 
       navigate("/")
     } catch (error) {
-      handleApiError(error as ApiError)
+      const apiError = error as ApiError
+
+      if (apiError.code !== "VALIDATION_ERROR") {
+        return setError("root", {
+          message: apiError.genericMessage,
+        })
+      }
+
+      const fieldKeys = Object.keys(getValues()) as (keyof Inputs)[]
+
+      fieldKeys.forEach((k) => {
+        const message = apiError.getValidationError(k)
+
+        if (message) {
+          setError(k, { message }, { shouldFocus: true })
+        }
+      })
     }
   })
 
-  function handleApiError(error: ApiError) {
-    if (error.code !== "VALIDATION_ERROR") {
-      return setError("root", {
-        message: error.genericMessage,
-      })
-    }
-
-    const fieldKeys = Object.keys(getValues()) as (keyof Inputs)[]
-
-    fieldKeys.forEach((k) => {
-      const message = error.getValidationError(k)
-
-      if (message) {
-        setError(k, { message }, { shouldFocus: true })
-      }
-    })
-  }
-
   return { submit, isLoading: isSubmitting, fields, errors }
-}
-
-type Inputs = {
-  firstName: string
-  lastName: string
-  username: string
-  email: string
-  password: string
-  confirmPassword: string
 }
