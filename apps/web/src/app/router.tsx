@@ -2,7 +2,7 @@ import { lazy } from "react"
 import { BrowserRouter, Route, Routes } from "react-router"
 import { ProtectedRoute } from "~/auth/components/protected-route"
 
-const Home = lazy(() => import("./pages/home"))
+const Home = lazy(() => import("~/home/index"))
 const Login = lazy(() => import("~/auth/login"))
 const Register = lazy(() => import("~/auth/register"))
 
