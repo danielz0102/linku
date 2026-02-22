@@ -1,4 +1,4 @@
-import { expect, test } from "./fixtures/auth-fixtures.js";
+import { expect, test } from "./fixtures/auth-fixtures.ts";
 
 test("redirects user to home page on login", async ({
   page,

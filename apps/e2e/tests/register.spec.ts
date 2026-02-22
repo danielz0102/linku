@@ -1,5 +1,5 @@
-import { test, expect } from "./fixtures/auth-fixtures.js";
-import { UserMother } from "./utils/user-mother.js";
+import { test, expect } from "./fixtures/auth-fixtures.ts";
+import { UserMother } from "./utils/user-mother.ts";
 
 test("redirects user to home page on registration", async ({ page }) => {
   const { email, username, password, firstName, lastName } =
