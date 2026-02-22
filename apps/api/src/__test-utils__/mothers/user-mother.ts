@@ -1,4 +1,4 @@
-import type { User } from "#modules/users/domain/user.js"
+import type { User } from "#users/domain/user.js"
 import { faker } from "@faker-js/faker"
 import type { PublicUser } from "@linku/api-contract"
 

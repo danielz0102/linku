@@ -1,5 +1,5 @@
-import { BcryptHasher } from "#modules/users/implementations/bcrypt-hasher.js"
-import { DrizzleUserRepository } from "#modules/users/implementations/drizzle-user-repository.js"
+import { BcryptHasher } from "#users/implementations/bcrypt-hasher.js"
+import { DrizzleUserRepository } from "#users/implementations/drizzle-user-repository.js"
 import { SALT } from "#shared/config/env.js"
 import { registrationHandler } from "./registration-handler.js"
 import { RegistrationService } from "./registration-service.js"

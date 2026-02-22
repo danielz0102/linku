@@ -1,4 +1,4 @@
-import { PasswordHasher } from "#modules/users/interfaces/password-hasher.js"
+import { PasswordHasher } from "#users/interfaces/password-hasher.js"
 
 export class PasswordHasherMock extends PasswordHasher {
   constructor() {

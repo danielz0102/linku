@@ -1,4 +1,4 @@
-import { User } from "#modules/users/domain/user.js"
+import { User } from "#users/domain/user.js"
 
 export interface UserRepository {
   create: (newUser: NewUser) => Promise<User>

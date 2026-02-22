@@ -1,4 +1,4 @@
-import type { UserRepository } from "#modules/users/interfaces/user-repository.d.js"
+import type { UserRepository } from "#users/interfaces/user-repository.d.js"
 import type { ErrorBody, PublicUser } from "@linku/api-contract"
 import type { Request, Response } from "express"
 

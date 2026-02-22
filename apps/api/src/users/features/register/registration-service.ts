@@ -1,5 +1,5 @@
-import type { PasswordHasher } from "#modules/users/interfaces/password-hasher.js"
-import type { UserRepository } from "#modules/users/interfaces/user-repository.d.js"
+import type { PasswordHasher } from "#users/interfaces/password-hasher.js"
+import type { UserRepository } from "#users/interfaces/user-repository.d.js"
 import { Result } from "#shared/lib/result.js"
 import type { PublicUser } from "@linku/api-contract"
 

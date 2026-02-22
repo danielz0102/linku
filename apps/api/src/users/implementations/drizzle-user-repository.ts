@@ -1,9 +1,9 @@
-import type { User } from "#modules/users/domain/user.js"
+import type { User } from "#users/domain/user.js"
 import type {
   Filters,
   NewUser,
   UserRepository,
-} from "#modules/users/interfaces/user-repository.d.js"
+} from "#users/interfaces/user-repository.d.js"
 
 import db from "#shared/db/drizzle/index.js"
 import { usersTable } from "#shared/db/drizzle/schemas.js"
