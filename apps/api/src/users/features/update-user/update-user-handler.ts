@@ -3,14 +3,15 @@ import type {
   UpdateUserBody,
   UpdateUserErrorBody,
 } from "@linku/api-contract"
-import type { Request, Response } from "express"
+import type { RequestHandler } from "express"
 import type { UpdateUserService } from "./update-user-service.js"
 
-export const updateUserHandler = (service: UpdateUserService) => {
-  return async (
-    req: Request<unknown, unknown, UpdateUserBody>,
-    res: Response<PublicUser | UpdateUserErrorBody>
-  ) => {
+type UpdateUserHandler = (
+  service: UpdateUserService
+) => RequestHandler<never, PublicUser | UpdateUserErrorBody, UpdateUserBody>
+
+export const updateUserHandler: UpdateUserHandler =
+  (service) => async (req, res) => {
     const userId = req.session.userId
 
     if (!userId) {
@@ -33,4 +34,3 @@ export const updateUserHandler = (service: UpdateUserService) => {
 
     return res.status(200).json(data)
   }
-}

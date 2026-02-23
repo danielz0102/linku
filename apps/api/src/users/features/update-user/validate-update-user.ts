@@ -2,10 +2,11 @@ import type { RequestHandler } from "express"
 import z from "zod"
 import type { UpdateUserErrorBody } from "@linku/api-contract"
 
-export const validateUpdateUser: RequestHandler<
-  unknown,
-  UpdateUserErrorBody
-> = (req, res, next) => {
+export const validateUpdateUser: RequestHandler<never, UpdateUserErrorBody> = (
+  req,
+  res,
+  next
+) => {
   const result = updateUserSchema.safeParse(req.body)
 
   if (!result.success) {
