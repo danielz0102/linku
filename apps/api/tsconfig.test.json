@@ -19,7 +19,11 @@
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true
-  },
-  "include": ["**/*.test.ts", "**/__test-utils__"]
+    "skipLibCheck": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "#*.js": ["./src/*.ts"]
+    }
+  }
 }

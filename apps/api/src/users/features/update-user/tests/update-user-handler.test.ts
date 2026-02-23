@@ -8,10 +8,14 @@ import { updateUserHandler } from "../update-user-handler.js"
 const service = new UpdateUserServiceMock()
 
 const app = new AppBuilder().withSession().build()
-app.patch("/", (req, _res, next) => {
-  req.session.userId = "test-user-id"
-  next()
-}, updateUserHandler(service))
+app.patch(
+  "/",
+  (req, _res, next) => {
+    req.session.userId = "test-user-id"
+    next()
+  },
+  updateUserHandler(service)
+)
 
 const body: UpdateUserBody = {
   username: "newusername",
