@@ -19,13 +19,12 @@ export const meHandler = (repository: UserRepository) => {
     const user = await repository.search({ id: userId })
 
     if (!user) {
-      return res.status(401).json({
-        code: "UNAUTHORIZED",
-        message: "You must be logged in to access this resource",
+      throw new Error("User with session not found in database", {
+        cause: { userId },
       })
     }
 
-    return res.status(200).json({
+    return res.json({
       id: user.id,
       username: user.username,
       email: user.email,
