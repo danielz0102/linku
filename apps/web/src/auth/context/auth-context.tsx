@@ -12,17 +12,24 @@ type AuthContextValue = {
   logout(): Promise<void>
 }
 
-export const AuthContext = createContext<AuthContextValue>({
-  user: null,
-  login: () => missingAuthProvider(),
-  register: () => missingAuthProvider(),
-  logout: () => missingAuthProvider(),
-})
+export const AuthContext = createContext<AuthContextValue | null>(null)
 
 export function useAuth() {
-  return use(AuthContext)
+  const value = use(AuthContext)
+
+  if (!value) {
+    throw new Error("useAuth must be used within an AuthProvider")
+  }
+
+  return value
 }
 
-function missingAuthProvider<T>(): Promise<T> {
-  throw new Error("AuthProvider is required")
+export function useUser() {
+  const { user } = useAuth()
+
+  if (!user) {
+    throw new Error("User is not authenticated")
+  }
+
+  return user
 }
