@@ -23,7 +23,8 @@
 
     "baseUrl": ".",
     "paths": {
-      "#*.js": ["./src/*.ts"]
-    }
+      "~/*": ["./src/*"]
+    },
+    "allowImportingTsExtensions": true
   }
 }

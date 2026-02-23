@@ -1,9 +1,9 @@
-import { AppBuilder } from "#__test-utils__/builders/app-builder.js"
-import { UpdateUserServiceMock } from "#__test-utils__/mocks/update-user-service-mock.js"
-import { UserMother } from "#__test-utils__/mothers/user-mother.js"
+import { AppBuilder } from "~/__test-utils__/builders/app-builder.ts"
+import { UpdateUserServiceMock } from "~/__test-utils__/mocks/update-user-service-mock.ts"
+import { UserMother } from "~/__test-utils__/mothers/user-mother.ts"
 import type { UpdateUserBody, UpdateUserErrorBody } from "@linku/api-contract"
 import request from "supertest"
-import { updateUserHandler } from "../update-user-handler.js"
+import { updateUserHandler } from "~/users/features/update-user/update-user-handler.ts"
 
 const service = new UpdateUserServiceMock()
 

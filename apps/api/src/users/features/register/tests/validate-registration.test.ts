@@ -1,7 +1,10 @@
-import { AppBuilder } from "#__test-utils__/builders/app-builder.js"
-import type { RegistrationBody, RegistrationErrorBody } from "@linku/api-contract"
+import { AppBuilder } from "~/__test-utils__/builders/app-builder.ts"
+import type {
+  RegistrationBody,
+  RegistrationErrorBody,
+} from "@linku/api-contract"
 import request from "supertest"
-import { validateRegistration } from "../validate-registration.js"
+import { validateRegistration } from "~/users/features/register/validate-registration.ts"
 
 const app = new AppBuilder().build()
 app.post("/", validateRegistration, (_, res) => {

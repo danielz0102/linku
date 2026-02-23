@@ -1,7 +1,7 @@
 import type { ErrorBody } from "@linku/api-contract"
 import express from "express"
 import request from "supertest"
-import { uploadPicture } from "../upload-picture.js"
+import { uploadPicture } from "~/users/features/profile/upload-picture.ts"
 
 const app = express()
 app.use("/", uploadPicture, (req, res) => {

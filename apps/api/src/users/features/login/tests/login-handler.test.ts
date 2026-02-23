@@ -1,9 +1,9 @@
-import { AppBuilder } from "#__test-utils__/builders/app-builder.js"
-import { LoginServiceMock } from "#__test-utils__/mocks/login-service-mock.js"
-import { UserMother } from "#__test-utils__/mothers/user-mother.js"
+import { AppBuilder } from "~/__test-utils__/builders/app-builder.ts"
+import { LoginServiceMock } from "~/__test-utils__/mocks/login-service-mock.ts"
+import { UserMother } from "~/__test-utils__/mothers/user-mother.ts"
 import type { LoginBody, LoginErrorBody } from "@linku/api-contract"
 import request from "supertest"
-import { loginHandler } from "../login-handler.js"
+import { loginHandler } from "~/users/features/login/login-handler.ts"
 
 const service = new LoginServiceMock()
 

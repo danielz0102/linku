@@ -1,6 +1,6 @@
-import { RegistrationService } from "#users/features/register/registration-service.js"
-import type { PasswordHasher } from "#users/interfaces/password-hasher.js"
-import type { UserRepository } from "#users/interfaces/user-repository.d.js"
+import { RegistrationService } from "~/users/features/register/registration-service.ts"
+import type { PasswordHasher } from "~/users/interfaces/password-hasher.ts"
+import type { UserRepository } from "~/users/interfaces/user-repository.d.ts"
 
 export class RegistrationServiceMock extends RegistrationService {
   constructor() {

@@ -1,7 +1,7 @@
-import { PasswordHasherMock } from "#__test-utils__/mocks/password-hasher-mock.js"
-import { UserRepositoryMock } from "#__test-utils__/mocks/user-repository-mock.js"
-import { UserMother } from "#__test-utils__/mothers/user-mother.js"
-import { RegistrationService } from "../registration-service.js"
+import { PasswordHasherMock } from "~/__test-utils__/mocks/password-hasher-mock.ts"
+import { UserRepositoryMock } from "~/__test-utils__/mocks/user-repository-mock.ts"
+import { UserMother } from "~/__test-utils__/mothers/user-mother.ts"
+import { RegistrationService } from "~/users/features/register/registration-service.ts"
 
 const repo = new UserRepositoryMock()
 const service = new RegistrationService({

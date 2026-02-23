@@ -1,6 +1,6 @@
-import { UserRepositoryMock } from "#__test-utils__/mocks/user-repository-mock.js"
-import { UserMother } from "#__test-utils__/mothers/user-mother.js"
-import { UpdateUserService } from "../update-user-service.js"
+import { UserRepositoryMock } from "~/__test-utils__/mocks/user-repository-mock.ts"
+import { UserMother } from "~/__test-utils__/mothers/user-mother.ts"
+import { UpdateUserService } from "~/users/features/update-user/update-user-service.ts"
 
 const repo = new UserRepositoryMock()
 const service = new UpdateUserService({ userRepo: repo })
