@@ -11,7 +11,11 @@ export const updateUserHandler = (service: UpdateUserService) => {
     req: Request<unknown, unknown, UpdateUserBody>,
     res: Response<PublicUser | UpdateUserErrorBody>
   ) => {
-    const userId = req.session.userId!
+    const userId = req.session.userId
+
+    if (!userId) {
+      throw new Error("User ID not found in session")
+    }
 
     const { ok, data, error } = await service.update(userId, req.body)
 
