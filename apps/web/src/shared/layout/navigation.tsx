@@ -1,13 +1,23 @@
 import { House, LogOut, User } from "lucide-react"
 import { Link, useLocation } from "react-router"
 import { useAuth } from "~/auth/context/auth-context"
+import { cn } from "../utils/cn"
 
-export function Navigation() {
+type NavigationProps = {
+  className?: string
+}
+
+export function Navigation({ className }: NavigationProps) {
   const { logout } = useAuth()
   const { pathname } = useLocation()
 
   return (
-    <nav className="border-t border-slate-800 p-4 md:border-t-0 md:border-r">
+    <nav
+      className={cn(
+        "border-t border-slate-950 bg-slate-800 p-4 md:border-t-0 md:border-r",
+        className
+      )}
+    >
       <ul className="flex items-center justify-center gap-6 md:flex-col md:gap-4">
         <NavItem isActive={pathname === "/"}>
           <Link to="/" className="md:flex md:items-center md:gap-2">
@@ -44,7 +54,7 @@ type NavItemProps = React.PropsWithChildren<{
 function NavItem({ children, isActive = false }: NavItemProps) {
   return (
     <li
-      className="p-2 text-sm data-active:rounded-lg data-active:bg-slate-700 md:w-50"
+      className="p-2 text-sm data-active:rounded-lg data-active:bg-slate-700 md:w-full"
       data-active={isActive ? "true" : undefined}
     >
       {children}
