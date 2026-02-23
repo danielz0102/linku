@@ -3,6 +3,7 @@ import { User } from "#users/domain/user.js"
 export interface UserRepository {
   create: (newUser: NewUser) => Promise<User>
   search: (filters: Filters) => Promise<User | undefined>
+  update: (id: string, data: UpdateData) => Promise<User>
 }
 
 type NewUser = {
@@ -12,6 +13,14 @@ type NewUser = {
   firstName: string
   lastName: string
   profilePicUrl?: string
+  bio?: string
+}
+
+export type UpdateData = {
+  username?: string
+  email?: string
+  firstName?: string
+  lastName?: string
   bio?: string
 }
 

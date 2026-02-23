@@ -2,6 +2,7 @@ import type { User } from "#users/domain/user.js"
 import type {
   Filters,
   NewUser,
+  UpdateData,
   UserRepository,
 } from "#users/interfaces/user-repository.d.js"
 
@@ -41,5 +42,14 @@ export class DrizzleUserRepository implements UserRepository {
       .where(conditions.length === 1 ? conditions[0] : and(...conditions))
       .limit(1)
       .then((rows) => rows[0])
+  }
+
+  async update(id: string, data: UpdateData): Promise<User> {
+    return db
+      .update(usersTable)
+      .set(data)
+      .where(eq(usersTable.id, id))
+      .returning()
+      .then(([row]) => row)
   }
 }
