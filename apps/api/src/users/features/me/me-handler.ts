@@ -1,37 +1,33 @@
 import type { UserRepository } from "#users/interfaces/user-repository.d.js"
 import type { ErrorBody, PublicUser } from "@linku/api-contract"
-import type { Request, Response } from "express"
+import type { RequestHandler } from "express"
 
-export const meHandler = (repository: UserRepository) => {
-  return async (
-    req: Request,
-    res: Response<PublicUser | ErrorBody>
-  ): Promise<Response<PublicUser | ErrorBody>> => {
-    const userId = req.session.userId
+type MeHandler = (
+  repository: UserRepository
+) => RequestHandler<never, PublicUser | ErrorBody>
 
-    if (!userId) {
-      return res.status(401).json({
-        code: "UNAUTHORIZED",
-        message: "You must be logged in to access this resource",
-      })
-    }
+export const meHandler: MeHandler = (repository) => async (req, res) => {
+  const { userId } = req.session
 
-    const user = await repository.search({ id: userId })
+  if (!userId) {
+    throw new Error("User ID not found in session")
+  }
 
-    if (!user) {
-      throw new Error("User with session not found in database", {
-        cause: { userId },
-      })
-    }
+  const userFound = await repository.search({ id: userId })
 
-    return res.json({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      bio: user.bio,
-      profilePicUrl: user.profilePicUrl,
+  if (!userFound) {
+    throw new Error("User with session not found in database", {
+      cause: { id: userId },
     })
   }
+
+  return res.json({
+    id: userFound.id,
+    username: userFound.username,
+    email: userFound.email,
+    firstName: userFound.firstName,
+    lastName: userFound.lastName,
+    bio: userFound.bio,
+    profilePicUrl: userFound.profilePicUrl,
+  })
 }
