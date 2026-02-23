@@ -2,6 +2,20 @@ import type { UserRepository } from "#users/interfaces/user-repository.d.js"
 import { Result } from "#shared/lib/result.js"
 import type { PublicUser } from "@linku/api-contract"
 
+type Dependencies = {
+  userRepo: UserRepository
+}
+
+type Input = {
+  username?: string
+  email?: string
+  firstName?: string
+  lastName?: string
+  bio?: string
+}
+
+type UpdateUserError = "USERNAME_EXISTS" | "EMAIL_EXISTS"
+
 export class UpdateUserService {
   private readonly userRepo: UserRepository
 
@@ -15,6 +29,7 @@ export class UpdateUserService {
   ): Promise<Result<PublicUser, UpdateUserError>> {
     if (data.username) {
       const existing = await this.userRepo.search({ username: data.username })
+
       if (existing && existing.id !== id) {
         return Result.fail("USERNAME_EXISTS")
       }
@@ -22,6 +37,7 @@ export class UpdateUserService {
 
     if (data.email) {
       const existing = await this.userRepo.search({ email: data.email })
+
       if (existing && existing.id !== id) {
         return Result.fail("EMAIL_EXISTS")
       }
@@ -40,17 +56,3 @@ export class UpdateUserService {
     })
   }
 }
-
-type Dependencies = {
-  userRepo: UserRepository
-}
-
-type Input = {
-  username?: string
-  email?: string
-  firstName?: string
-  lastName?: string
-  bio?: string
-}
-
-type UpdateUserError = "USERNAME_EXISTS" | "EMAIL_EXISTS"
