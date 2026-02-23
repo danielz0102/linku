@@ -1,7 +1,14 @@
+import { Result } from "#shared/lib/result.js"
 import type { PasswordHasher } from "#users/interfaces/password-hasher.js"
 import type { UserRepository } from "#users/interfaces/user-repository.d.js"
-import { Result } from "#shared/lib/result.js"
 import type { LoginBody, PublicUser } from "@linku/api-contract"
+
+type Dependencies = {
+  userRepo: UserRepository
+  hasher: PasswordHasher
+}
+
+type LoginError = "INVALID_CREDENTIALS"
 
 export class LoginService {
   private readonly userRepo: UserRepository
@@ -39,10 +46,3 @@ export class LoginService {
     })
   }
 }
-
-type Dependencies = {
-  userRepo: UserRepository
-  hasher: PasswordHasher
-}
-
-type LoginError = "INVALID_CREDENTIALS"

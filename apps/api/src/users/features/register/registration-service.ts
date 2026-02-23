@@ -3,6 +3,21 @@ import type { UserRepository } from "#users/interfaces/user-repository.d.js"
 import { Result } from "#shared/lib/result.js"
 import type { PublicUser } from "@linku/api-contract"
 
+type Dependencies = {
+  userRepo: UserRepository
+  hasher: PasswordHasher
+}
+
+type Input = {
+  username: string
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+}
+
+type RegisterError = "USERNAME_EXISTS" | "EMAIL_EXISTS"
+
 export class RegistrationService {
   private readonly userRepo: UserRepository
   private readonly hasher: PasswordHasher
@@ -48,18 +63,3 @@ export class RegistrationService {
     })
   }
 }
-
-type Dependencies = {
-  userRepo: UserRepository
-  hasher: PasswordHasher
-}
-
-type Input = {
-  username: string
-  email: string
-  password: string
-  firstName: string
-  lastName: string
-}
-
-type RegisterError = "USERNAME_EXISTS" | "EMAIL_EXISTS"

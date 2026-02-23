@@ -3,14 +3,15 @@ import type {
   RegistrationBody,
   RegistrationErrorBody,
 } from "@linku/api-contract"
-import type { Request, Response } from "express"
+import type { RequestHandler } from "express"
 import type { RegistrationService } from "./registration-service.js"
 
-export const registrationHandler = (service: RegistrationService) => {
-  return async (
-    req: Request<unknown, unknown, RegistrationBody>,
-    res: Response<PublicUser | RegistrationErrorBody>
-  ) => {
+type RegistrationHandler = (
+  service: RegistrationService
+) => RequestHandler<never, PublicUser | RegistrationErrorBody, RegistrationBody>
+
+export const registrationHandler: RegistrationHandler =
+  (service) => async (req, res) => {
     const { ok, data, error } = await service.register(req.body)
 
     if (!ok) {
@@ -28,4 +29,3 @@ export const registrationHandler = (service: RegistrationService) => {
     req.session.userId = data.id
     return res.status(200).json(data)
   }
-}

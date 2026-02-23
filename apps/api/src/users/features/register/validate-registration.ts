@@ -3,7 +3,7 @@ import z from "zod"
 import type { RegistrationErrorBody } from "@linku/api-contract"
 
 export const validateRegistration: RequestHandler<
-  unknown,
+  never,
   RegistrationErrorBody
 > = (req, res, next) => {
   const result = registrationSchema.safeParse(req.body)

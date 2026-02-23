@@ -1,22 +1,21 @@
 import type { LoginBody, LoginErrorBody, PublicUser } from "@linku/api-contract"
-import type { Request, Response } from "express"
+import type { RequestHandler } from "express"
 import type { LoginService } from "./login-service.js"
 
-export const loginHandler = (service: LoginService) => {
-  return async (
-    req: Request<unknown, unknown, LoginBody>,
-    res: Response<PublicUser | LoginErrorBody>
-  ) => {
-    const { ok, data } = await service.login(req.body)
+type LoginHandler = (
+  service: LoginService
+) => RequestHandler<never, PublicUser | LoginErrorBody, LoginBody>
 
-    if (!ok) {
-      return res.status(401).json({
-        code: "UNAUTHORIZED",
-        message: "Invalid username or password",
-      })
-    }
+export const loginHandler: LoginHandler = (service) => async (req, res) => {
+  const { ok, data } = await service.login(req.body)
 
-    req.session.userId = data.id
-    return res.status(200).json(data)
+  if (!ok) {
+    return res.status(401).json({
+      code: "UNAUTHORIZED",
+      message: "Invalid username or password",
+    })
   }
+
+  req.session.userId = data.id
+  return res.status(200).json(data)
 }

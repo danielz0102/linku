@@ -2,7 +2,7 @@ import type { LoginErrorBody } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 import z from "zod"
 
-export const validateLogin: RequestHandler<unknown, LoginErrorBody> = (
+export const validateLogin: RequestHandler<never, LoginErrorBody> = (
   req,
   res,
   next
