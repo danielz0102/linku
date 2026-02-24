@@ -1,14 +1,10 @@
-import type {
-  PublicUser,
-  UpdateUserBody,
-  UpdateUserErrorBody,
-} from "@linku/api-contract"
+import type { ErrorBody, PublicUser, UpdateUserBody } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 import type { UpdateUserService } from "./update-user-service.js"
 
 type UpdateUserHandler = (
   service: UpdateUserService
-) => RequestHandler<never, PublicUser | UpdateUserErrorBody, UpdateUserBody>
+) => RequestHandler<never, PublicUser | ErrorBody, UpdateUserBody>
 
 export const updateUserHandler: UpdateUserHandler =
   (service) => async (req, res) => {
@@ -21,14 +17,26 @@ export const updateUserHandler: UpdateUserHandler =
     const { ok, data, error } = await service.update(userId, req.body)
 
     if (!ok) {
+      let errors = {}
+
+      if (error === "USERNAME_EXISTS") {
+        errors = {
+          ...errors,
+          username: "Username already exists",
+        }
+      }
+
+      if (error === "EMAIL_EXISTS") {
+        errors = {
+          ...errors,
+          email: "Email already exists",
+        }
+      }
+
       return res.status(409).json({
         code: "VALIDATION_ERROR",
         message: "User already exists",
-        errors: {
-          username:
-            error === "USERNAME_EXISTS" ? "Username already exists" : undefined,
-          email: error === "EMAIL_EXISTS" ? "Email already exists" : undefined,
-        },
+        errors,
       })
     }
 

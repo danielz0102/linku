@@ -2,7 +2,7 @@ export type ErrorBody<T extends string = string> = {
   code: ErrorCode
   message: string
   errors?: {
-    [key in T]?: string
+    [key in T]: string
   }
 }
 

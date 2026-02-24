@@ -1,9 +1,10 @@
+import { SALT } from "#shared/config/env.js"
+import { validator } from "#shared/middlewares/validator.js"
 import { BcryptHasher } from "#users/implementations/bcrypt-hasher.js"
 import { DrizzleUserRepository } from "#users/implementations/drizzle-user-repository.js"
-import { SALT } from "#shared/config/env.js"
 import { registrationHandler } from "./registration-handler.js"
 import { RegistrationService } from "./registration-service.js"
-import { validateRegistration } from "./validate-registration.js"
+import { registrationSchema } from "./registration-schema.js"
 
 const service = new RegistrationService({
   userRepo: new DrizzleUserRepository(),
@@ -11,6 +12,6 @@ const service = new RegistrationService({
 })
 
 export const registrationMiddleware = [
-  validateRegistration,
+  validator(registrationSchema),
   registrationHandler(service),
 ]
