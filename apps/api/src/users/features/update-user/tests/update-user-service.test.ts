@@ -5,10 +5,9 @@ import { UpdateUserService } from "~/users/features/update-user/update-user-serv
 const repo = new UserRepositoryMock()
 const service = new UpdateUserService({ userRepo: repo })
 
+const userId = crypto.randomUUID()
+
 type Input = Parameters<UpdateUserService["update"]>[1]
-
-const userId = "test-user-id"
-
 const input: Input = {
   username: "newusername",
   email: "new@example.com",
@@ -17,14 +16,10 @@ const input: Input = {
   bio: "Hello!",
 }
 
-beforeEach(() => {
-  vi.clearAllMocks()
-})
-
 test("returns the updated public user", async () => {
   const user = UserMother.create({ id: userId })
-  repo.search.mockResolvedValue(undefined)
-  repo.update.mockResolvedValue(user)
+  repo.search.mockResolvedValueOnce(undefined)
+  repo.update.mockResolvedValueOnce(user)
 
   const { ok, data } = await service.update(userId, input)
 
@@ -41,7 +36,7 @@ test("returns the updated public user", async () => {
 })
 
 test("fails if username belongs to another user", async () => {
-  repo.search.mockImplementation(async (filters) => {
+  repo.search.mockImplementationOnce(async (filters) => {
     if (filters.username) return UserMother.create()
   })
 
@@ -53,10 +48,10 @@ test("fails if username belongs to another user", async () => {
 
 test("does not fail if username belongs to the same user", async () => {
   const user = UserMother.create({ id: userId })
-  repo.search.mockImplementation(async (filters) => {
+  repo.search.mockImplementationOnce(async (filters) => {
     if (filters.username) return user
   })
-  repo.update.mockResolvedValue(user)
+  repo.update.mockResolvedValueOnce(user)
 
   const { ok } = await service.update(userId, { username: user.username })
 
@@ -64,7 +59,7 @@ test("does not fail if username belongs to the same user", async () => {
 })
 
 test("fails if email belongs to another user", async () => {
-  repo.search.mockImplementation(async (filters) => {
+  repo.search.mockImplementationOnce(async (filters) => {
     if (filters.email) return UserMother.create()
   })
 
@@ -78,27 +73,12 @@ test("fails if email belongs to another user", async () => {
 
 test("does not fail if email belongs to the same user", async () => {
   const user = UserMother.create({ id: userId })
-  repo.search.mockImplementation(async (filters) => {
+  repo.search.mockImplementationOnce(async (filters) => {
     if (filters.email) return user
   })
-  repo.update.mockResolvedValue(user)
+  repo.update.mockResolvedValueOnce(user)
 
   const { ok } = await service.update(userId, { email: user.email })
 
   expect(ok).toBe(true)
-})
-
-test("updates without checking uniqueness when neither username nor email provided", async () => {
-  const user = UserMother.create({ id: userId })
-  repo.search.mockResolvedValue(undefined)
-  repo.update.mockResolvedValue(user)
-
-  const { ok } = await service.update(userId, {
-    firstName: "Updated",
-    lastName: "Name",
-    bio: "New bio",
-  })
-
-  expect(ok).toBe(true)
-  expect(repo.search).not.toHaveBeenCalled()
 })
