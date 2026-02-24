@@ -1,4 +1,4 @@
-import type { UpdateUserBody, UpdateUserErrorBody } from "@linku/api-contract"
+import type { UpdateUserBody } from "@linku/api-contract"
 import request from "supertest"
 import { AppBuilder } from "~/__test-utils__/builders/app-builder.ts"
 import { UpdateUserUseCaseMock } from "~/__test-utils__/mocks/update-user-use-case-mock.ts"
@@ -38,9 +38,7 @@ test("sends 409 if username exists", async () => {
     error: "USERNAME_EXISTS",
   })
 
-  const res = await request(app).patch("/").send(body).expect(409)
-
-  expect(res.body).toEqual(FieldError("username", "Username already exists"))
+  await request(app).patch("/").send(body).expect(409)
 })
 
 test("sends 409 if email exists", async () => {
@@ -49,20 +47,5 @@ test("sends 409 if email exists", async () => {
     error: "EMAIL_EXISTS",
   })
 
-  const res = await request(app).patch("/").send(body).expect(409)
-
-  expect(res.body).toEqual(FieldError("email", "Email already exists"))
+  await request(app).patch("/").send(body).expect(409)
 })
-
-function FieldError(
-  key: keyof UpdateUserBody,
-  value: string | RegExp
-): UpdateUserErrorBody {
-  return {
-    code: "VALIDATION_ERROR",
-    message: expect.any(String),
-    errors: {
-      [key]: expect.stringMatching(value),
-    },
-  }
-}

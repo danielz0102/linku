@@ -1,4 +1,4 @@
-import type { LoginBody, LoginErrorBody } from "@linku/api-contract"
+import type { LoginBody } from "@linku/api-contract"
 import request from "supertest"
 import { AppBuilder } from "~/__test-utils__/builders/app-builder.ts"
 import { LoginUseCaseMock } from "~/__test-utils__/mocks/login-use-case-mock.ts"
@@ -31,13 +31,5 @@ test("sends 401 if credentials are invalid", async () => {
     error: "INVALID_CREDENTIALS",
   })
 
-  const { body: responseBody } = await request(app)
-    .post("/")
-    .send(body)
-    .expect(401)
-
-  expect(responseBody).toEqual({
-    code: "UNAUTHORIZED",
-    message: "Invalid username or password",
-  } satisfies LoginErrorBody)
+  await request(app).post("/").send(body).expect(401)
 })

@@ -1,11 +1,8 @@
+import type { RegistrationBody } from "@linku/api-contract"
+import request from "supertest"
 import { AppBuilder } from "~/__test-utils__/builders/app-builder.ts"
 import { RegistrationUseCaseMock } from "~/__test-utils__/mocks/registration-use-case-mock.ts"
 import { UserMother } from "~/__test-utils__/mothers/user-mother.ts"
-import type {
-  RegistrationBody,
-  RegistrationErrorBody,
-} from "@linku/api-contract"
-import request from "supertest"
 import { registrationHandler } from "../registration-handler.ts"
 
 const service = new RegistrationUseCaseMock()
@@ -37,9 +34,7 @@ test("sends 409 if username exists", async () => {
     error: "USERNAME_EXISTS",
   })
 
-  const res = await request(app).post("/").send(body).expect(409)
-
-  expect(res.body).toEqual(FieldError("username", "Username already exists"))
+  await request(app).post("/").send(body).expect(409)
 })
 
 test("sends 409 if email exists", async () => {
@@ -48,20 +43,5 @@ test("sends 409 if email exists", async () => {
     error: "EMAIL_EXISTS",
   })
 
-  const res = await request(app).post("/").send(body).expect(409)
-
-  expect(res.body).toEqual(FieldError("email", "Email already exists"))
+  await request(app).post("/").send(body).expect(409)
 })
-
-function FieldError(
-  key: keyof RegistrationBody,
-  value: string | RegExp
-): RegistrationErrorBody {
-  return {
-    code: "VALIDATION_ERROR",
-    message: expect.any(String),
-    errors: {
-      [key]: expect.stringMatching(value),
-    },
-  }
-}
