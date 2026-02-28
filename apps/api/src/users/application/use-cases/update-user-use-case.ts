@@ -1,5 +1,5 @@
 import { Result } from "#shared/lib/result.js"
-import type { PublicUser } from "@linku/api-contract"
+import type { PublicUser } from "#users/domain/user.js"
 import type { UserRepository } from "../ports/user-repository.d.js"
 
 type Dependencies = {

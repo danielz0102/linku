@@ -8,3 +8,5 @@ export type User = {
   profilePicUrl: string | null
   bio: string | null
 }
+
+export type PublicUser = Omit<User, "hashedPassword">

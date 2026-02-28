@@ -1,5 +1,5 @@
 import { Result } from "#shared/lib/result.js"
-import type { LoginBody, PublicUser } from "@linku/api-contract"
+import type { PublicUser } from "#users/domain/user.js"
 import type { PasswordHasher } from "../ports/password-hasher.js"
 import type { UserRepository } from "../ports/user-repository.d.js"
 
@@ -19,7 +19,10 @@ export class LoginUseCase {
     this.hasher = hasher
   }
 
-  async login(input: LoginBody): Promise<Result<PublicUser, LoginError>> {
+  async login(input: {
+    username: string
+    password: string
+  }): Promise<Result<PublicUser, LoginError>> {
     const user = await this.userRepo.search({ username: input.username })
 
     if (!user) {
