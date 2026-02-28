@@ -16,9 +16,7 @@ export const UserMother = {
       ...overrides,
     }
   },
-  createPublicUser(
-    overrides: Partial<LinkuAPI.PublicUser> = {}
-  ): LinkuAPI.PublicUser {
+  createPublicUser(overrides: Partial<LinkuAPI.User> = {}): LinkuAPI.User {
     return {
       id: faker.string.uuid(),
       username: faker.internet.username(),

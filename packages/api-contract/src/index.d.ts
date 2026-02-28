@@ -1,14 +1,14 @@
 export namespace LinkuAPI {
   type ErrorCode = import("./error.d.ts").ErrorCode
   type ErrorBody = import("./error.d.ts").ErrorBody
-  type PublicUser = import("./user.d.ts").PublicUser
+  type User = import("./user.d.ts").User
 
   interface Login {
     RequestBody: {
       username: string
       password: string
     }
-    ResponseBody: PublicUser | ErrorBody
+    ResponseBody: User | ErrorBody
   }
 
   interface RegisterUser {
@@ -19,12 +19,12 @@ export namespace LinkuAPI {
       firstName: string
       lastName: string
     }
-    ResponseBody: PublicUser | ErrorBody
+    ResponseBody: User | ErrorBody
   }
 
   interface GetMe {
     RequestBody: never
-    ResponseBody: PublicUser | ErrorBody
+    ResponseBody: User | ErrorBody
   }
 
   interface UpdateUser {
@@ -35,7 +35,7 @@ export namespace LinkuAPI {
       lastName?: string
       bio?: string
     }
-    ResponseBody: PublicUser | ErrorBody
+    ResponseBody: User | ErrorBody
   }
 
   interface Logout {

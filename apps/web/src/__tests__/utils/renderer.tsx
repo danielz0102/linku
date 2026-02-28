@@ -39,7 +39,7 @@ export class Renderer {
     return this
   }
 
-  withAuthProvider(user: LinkuAPI.PublicUser | null = null): Renderer {
+  withAuthProvider(user: LinkuAPI.User | null = null): Renderer {
     this.setNewWrapper(({ children }) => (
       <AuthContext
         value={{
