@@ -1,28 +1,30 @@
-import type {
-  LoginBody,
-  RegistrationBody as NewUser,
-  PublicUser as User,
-} from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
 import { apiClient } from "~/shared/api"
 
 export const AuthService = {
-  async login(credentials: LoginBody): Promise<User> {
+  async login(
+    credentials: LinkuAPI.Login["RequestBody"]
+  ): Promise<LinkuAPI.PublicUser> {
     return apiClient
-      .post<User>("/users/login", credentials)
+      .post<LinkuAPI.PublicUser>("/users/login", credentials)
       .then(({ data }) => data)
   },
 
-  async register(newUser: NewUser): Promise<User> {
-    return apiClient.post<User>("/users", newUser).then(({ data }) => data)
+  async register(
+    newUser: LinkuAPI.RegisterUser["RequestBody"]
+  ): Promise<LinkuAPI.PublicUser> {
+    return apiClient
+      .post<LinkuAPI.PublicUser>("/users", newUser)
+      .then(({ data }) => data)
   },
 
   async logout(): Promise<void> {
     await apiClient.post("/users/logout")
   },
 
-  async getMe(): Promise<User | null> {
+  async getMe(): Promise<LinkuAPI.PublicUser | null> {
     return apiClient
-      .get<User>("/users/me")
+      .get<LinkuAPI.PublicUser>("/users/me")
       .then(({ data }) => data)
       .catch(() => null)
   },

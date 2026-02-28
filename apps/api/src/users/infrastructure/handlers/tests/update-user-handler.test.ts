@@ -1,4 +1,4 @@
-import type { UpdateUserBody } from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
 import request from "supertest"
 import { AppBuilder } from "~/__test-utils__/builders/app-builder.ts"
 import { UpdateUserUseCaseMock } from "~/__test-utils__/mocks/update-user-use-case-mock.ts"
@@ -17,7 +17,7 @@ app.patch(
   updateUserHandler(service)
 )
 
-const body: UpdateUserBody = {
+const body: LinkuAPI.UpdateUser["RequestBody"] = {
   username: "newusername",
   email: "new@example.com",
   firstName: "New",

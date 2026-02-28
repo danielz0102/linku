@@ -1,9 +1,9 @@
 import { test as base, expect } from "@playwright/test";
-import type { RegistrationBody } from "@linku/api-contract";
+import type { LinkuAPI } from "@linku/api-contract";
 import { UserMother } from "../utils/user-mother.js";
 
 type Fixtures = {
-  registeredUser: RegistrationBody;
+  registeredUser: LinkuAPI.RegisterUser["RequestBody"];
 };
 
 export const test = base.extend<Fixtures>({

@@ -1,8 +1,10 @@
-import type { ErrorBody } from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 import z from "zod"
 
-type Validator = (schema: z.ZodObject) => RequestHandler<never, ErrorBody>
+type Validator = (
+  schema: z.ZodObject
+) => RequestHandler<never, LinkuAPI.ErrorBody>
 
 export const validator: Validator = (schema) => (req, res, next) => {
   const result = schema.safeParse(req.body)

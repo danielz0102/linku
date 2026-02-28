@@ -1,10 +1,14 @@
-import type { ErrorBody, LoginBody, PublicUser } from "@linku/api-contract"
+import type { LoginUseCase } from "#users/application/use-cases/login-use-case.js"
+import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
-import type { LoginUseCase } from "../../application/use-cases/login-use-case.js"
 
 type LoginHandler = (
   service: LoginUseCase
-) => RequestHandler<never, PublicUser | ErrorBody, LoginBody>
+) => RequestHandler<
+  never,
+  LinkuAPI.Login["ResponseBody"],
+  LinkuAPI.Login["RequestBody"]
+>
 
 export const loginHandler: LoginHandler = (service) => async (req, res) => {
   const { ok, data } = await service.login(req.body)

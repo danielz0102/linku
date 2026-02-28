@@ -1,4 +1,4 @@
-import type { ErrorBody } from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
 import express from "express"
 import request from "supertest"
 import { uploadPicture } from "~/users/infrastructure/middlewares/upload-picture.ts"
@@ -36,7 +36,7 @@ it("sends 400 when picture MIME type is not allowed", async () => {
     })
     .expect(400)
     .expect(
-      ErrorBody(
+      buildErrorBody(
         "Picture file is invalid. Allowed files are: JPEG, PNG, JPG, WEBP"
       )
     )
@@ -52,10 +52,10 @@ it("sends 400 when picture size exceeds 5MB", async () => {
       contentType: "image/png",
     })
     .expect(400)
-    .expect(ErrorBody("Picture file cannot be larger than 5MB"))
+    .expect(buildErrorBody("Picture file cannot be larger than 5MB"))
 })
 
-function ErrorBody(error: string): ErrorBody<"picture"> {
+function buildErrorBody(error: string): LinkuAPI.ErrorBody {
   return {
     code: "VALIDATION_ERROR",
     message: "Validation failed",

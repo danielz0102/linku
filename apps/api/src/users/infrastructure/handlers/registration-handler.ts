@@ -1,14 +1,14 @@
-import type {
-  ErrorBody,
-  PublicUser,
-  RegistrationBody,
-} from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 import type { RegistrationUseCase } from "../../application/use-cases/registration-use-case.js"
 
 type RegistrationHandler = (
   service: RegistrationUseCase
-) => RequestHandler<never, PublicUser | ErrorBody, RegistrationBody>
+) => RequestHandler<
+  never,
+  LinkuAPI.RegisterUser["ResponseBody"],
+  LinkuAPI.RegisterUser["RequestBody"]
+>
 
 export const registrationHandler: RegistrationHandler =
   (service) => async (req, res) => {

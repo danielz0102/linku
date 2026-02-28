@@ -1,4 +1,4 @@
-import type { ErrorBody } from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
 import axios, { type AxiosError } from "axios"
 import { z } from "zod/mini"
 import { API_URL } from "~/shared/config/env"
@@ -28,7 +28,7 @@ apiClient.interceptors.response.use(
   }
 )
 
-function isErrorBody(data: unknown): data is ErrorBody {
+function isErrorBody(data: unknown): data is LinkuAPI.ErrorBody {
   return errorBodySchema.safeParse(data).success
 }
 

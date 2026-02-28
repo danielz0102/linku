@@ -1,14 +1,10 @@
-import type {
-  LoginBody,
-  RegistrationBody as NewUser,
-  PublicUser as User,
-} from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
 import { createContext, use } from "react"
 
 type AuthContextValue = {
-  user: User | null
-  login(credentials: LoginBody): Promise<void>
-  register(newUser: NewUser): Promise<void>
+  user: LinkuAPI.PublicUser | null
+  login(credentials: LinkuAPI.Login["RequestBody"]): Promise<void>
+  register(newUser: LinkuAPI.RegisterUser["RequestBody"]): Promise<void>
   logout(): Promise<void>
 }
 

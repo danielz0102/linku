@@ -1,8 +1,10 @@
-import type { RegistrationBody } from "@linku/api-contract";
+import type { LinkuAPI } from "@linku/api-contract";
 import { faker } from "@faker-js/faker";
 
 export const UserMother = {
-  createRegistration(overrides?: Partial<RegistrationBody>): RegistrationBody {
+  createRegistration(
+    overrides?: Partial<LinkuAPI.RegisterUser["RequestBody"]>,
+  ): LinkuAPI.RegisterUser["RequestBody"] {
     return {
       email: faker.internet.email(),
       username: faker.internet.username(),

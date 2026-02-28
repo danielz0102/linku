@@ -11,23 +11,25 @@ The `@linku/api-contract` package centralizes API type definitions to:
 
 ## Types
 
-### Error Types
-- `ErrorBody<T>` - Standard error response format
-- `ErrorCode` - Error code enum
-
-### User Types
-- `PublicUser` - User data exposed by the API
-
-### Registration Types
-- `RegistrationBody` - User registration request body
-- `RegistrationErrorBody` - Typed error response for registration
+### LinkuAPI Namespace
+- `LinkuAPI.ErrorBody` - Standard error response format
+- `LinkuAPI.ErrorCode` - Error code enum
+- `LinkuAPI.PublicUser` - User data exposed by the API
+- `LinkuAPI.Login` - Login endpoint request/response types
+- `LinkuAPI.RegisterUser` - Registration endpoint request/response types
+- `LinkuAPI.GetMe` - Current user endpoint request/response types
+- `LinkuAPI.UpdateUser` - Update user endpoint request/response types
+- `LinkuAPI.Logout` - Logout endpoint request/response types
 
 ## Usage
 
 Import types from the package in both `api` and `web`:
 
 ```typescript
-import type { ErrorBody, PublicUser, RegistrationBody } from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
+
+type User = LinkuAPI.PublicUser
+type LoginPayload = LinkuAPI.Login["RequestBody"]
 ```
 
 ## Development

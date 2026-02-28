@@ -1,4 +1,4 @@
-import type { LoginBody } from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
 import request from "supertest"
 import { AppBuilder } from "~/__test-utils__/builders/app-builder.ts"
 import { LoginUseCaseMock } from "~/__test-utils__/mocks/login-use-case-mock.ts"
@@ -10,7 +10,7 @@ const service = new LoginUseCaseMock()
 const app = new AppBuilder().withSession().build()
 app.post("/", loginHandler(service))
 
-const body: LoginBody = {
+const body: LinkuAPI.Login["RequestBody"] = {
   username: "testuser",
   password: "password123",
 }

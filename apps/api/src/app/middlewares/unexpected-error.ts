@@ -1,10 +1,10 @@
-import type { ErrorBody } from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
 import type { Request, Response, NextFunction } from "express"
 
 export const unexpectedError = (
   err: unknown,
   _req: Request,
-  res: Response<ErrorBody>,
+  res: Response<LinkuAPI.ErrorBody>,
   _next: NextFunction
 ) => {
   console.error(err)

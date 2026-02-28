@@ -1,10 +1,10 @@
 import type { UserRepository } from "#users/application/ports/user-repository.d.js"
-import type { PublicUser } from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 
 type GetMeHandler = (
   repository: UserRepository
-) => RequestHandler<never, PublicUser>
+) => RequestHandler<never, LinkuAPI.GetMe["ResponseBody"]>
 
 export const getMeHandler: GetMeHandler = (repository) => async (req, res) => {
   const { userId } = req.session

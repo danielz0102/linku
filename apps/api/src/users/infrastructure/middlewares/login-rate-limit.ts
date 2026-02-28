@@ -1,7 +1,7 @@
-import type { ErrorBody } from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
 import { rateLimit } from "express-rate-limit"
 
-const body: ErrorBody = {
+const body: LinkuAPI.ErrorBody = {
   code: "TOO_MANY_REQUESTS",
   message: "Too many login attempts. Please try again later.",
 }

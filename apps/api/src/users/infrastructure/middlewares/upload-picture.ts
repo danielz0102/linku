@@ -1,5 +1,5 @@
 import { createCustomError } from "#shared/lib/create-custom-error.js"
-import type { ErrorBody } from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
 import type { NextFunction, Request, Response } from "express"
 import multer from "multer"
 
@@ -22,7 +22,7 @@ const upload = multer({
 
 export function uploadPicture(
   req: Request,
-  res: Response<ErrorBody>,
+  res: Response<LinkuAPI.ErrorBody>,
   next: NextFunction
 ) {
   upload(req, res, (err) => {

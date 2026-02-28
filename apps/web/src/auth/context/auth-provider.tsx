@@ -1,4 +1,4 @@
-import type { LoginBody, RegistrationBody as NewUser } from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
 import { use, useState } from "react"
 import { AuthService } from "~/auth/services/auth-service"
 import { AuthContext } from "./auth-context"
@@ -9,12 +9,12 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
   const [currentUser, setUser] = useState(initialUser)
   const user = use(currentUser)
 
-  const login = async (credentials: LoginBody) => {
+  const login = async (credentials: LinkuAPI.Login["RequestBody"]) => {
     const nextUser = await AuthService.login(credentials)
     setUser(Promise.resolve(nextUser))
   }
 
-  const register = async (newUser: NewUser) => {
+  const register = async (newUser: LinkuAPI.RegisterUser["RequestBody"]) => {
     const nextUser = await AuthService.register(newUser)
     setUser(Promise.resolve(nextUser))
   }

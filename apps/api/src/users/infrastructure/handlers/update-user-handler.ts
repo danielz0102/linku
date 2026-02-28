@@ -1,10 +1,14 @@
-import type { ErrorBody, PublicUser, UpdateUserBody } from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 import type { UpdateUserUseCase } from "../../application/use-cases/update-user-use-case.js"
 
 type UpdateUserHandler = (
   service: UpdateUserUseCase
-) => RequestHandler<never, PublicUser | ErrorBody, UpdateUserBody>
+) => RequestHandler<
+  never,
+  LinkuAPI.UpdateUser["ResponseBody"],
+  LinkuAPI.UpdateUser["RequestBody"]
+>
 
 export const updateUserHandler: UpdateUserHandler =
   (service) => async (req, res) => {

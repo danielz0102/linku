@@ -1,8 +1,13 @@
-import type { ErrorCode, ErrorBody } from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
+
+type ApiErrorParams = {
+  code: LinkuAPI.ErrorCode
+  errors?: LinkuAPI.ErrorBody["errors"]
+}
 
 export class ApiError {
-  readonly code: ErrorCode
-  private validationErrors?: ErrorBody["errors"]
+  readonly code: LinkuAPI.ErrorCode
+  private validationErrors?: LinkuAPI.ErrorBody["errors"]
 
   constructor({ code, errors }: ApiErrorParams) {
     this.code = code
@@ -18,12 +23,7 @@ export class ApiError {
   }
 }
 
-type ApiErrorParams = {
-  code: ErrorCode
-  errors?: ErrorBody["errors"]
-}
-
-const ERROR_MESSAGES: Record<ErrorCode, string> = {
+const ERROR_MESSAGES: Record<LinkuAPI.ErrorCode, string> = {
   VALIDATION_ERROR:
     "There was a validation error. Please check the provided data and try again.",
   NETWORK_ERROR:

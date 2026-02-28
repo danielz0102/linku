@@ -1,4 +1,4 @@
-import type { RegistrationBody } from "@linku/api-contract"
+import type { LinkuAPI } from "@linku/api-contract"
 import request from "supertest"
 import { AppBuilder } from "~/__test-utils__/builders/app-builder.ts"
 import { RegistrationUseCaseMock } from "~/__test-utils__/mocks/registration-use-case-mock.ts"
@@ -10,7 +10,7 @@ const service = new RegistrationUseCaseMock()
 const app = new AppBuilder().withSession().build()
 app.post("/", registrationHandler(service))
 
-const body: RegistrationBody = {
+const body: LinkuAPI.RegisterUser["RequestBody"] = {
   username: "testuser",
   email: "john@example.com",
   password: "password123",
