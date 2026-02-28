@@ -22,7 +22,7 @@ const upload = multer({
 
 export function uploadPicture(
   req: Request,
-  res: Response<ErrorBody<"picture">>,
+  res: Response<ErrorBody>,
   next: NextFunction
 ) {
   upload(req, res, (err) => {

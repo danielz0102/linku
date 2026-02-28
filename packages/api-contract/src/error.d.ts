@@ -1,8 +1,8 @@
-export type ErrorBody<T extends string = string> = {
+export type ErrorBody = {
   code: ErrorCode
   message: string
   errors?: {
-    [key in T]: string
+    [key in string]: string
   }
 }
 
