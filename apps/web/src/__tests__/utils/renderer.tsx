@@ -2,6 +2,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { render, type RenderResult } from "@testing-library/react"
 import type React from "react"
 import { MemoryRouter } from "react-router"
+import type {
+  LoginBody,
+  PublicUser,
+  RegistrationBody as NewUser,
+} from "@linku/api-contract"
+import { AuthContext } from "~/auth/context/auth-context"
 
 type Wrapper = React.ComponentType<React.PropsWithChildren>
 
@@ -33,6 +39,22 @@ export class Renderer {
 
     this.setNewWrapper(({ children }) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    ))
+    return this
+  }
+
+  withAuthProvider(user: PublicUser | null = null): Renderer {
+    this.setNewWrapper(({ children }) => (
+      <AuthContext
+        value={{
+          user,
+          async login(_credentials: LoginBody) {},
+          async register(_newUser: NewUser) {},
+          async logout() {},
+        }}
+      >
+        {children}
+      </AuthContext>
     ))
     return this
   }

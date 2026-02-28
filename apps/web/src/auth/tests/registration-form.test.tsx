@@ -3,12 +3,15 @@ import userEvent from "@testing-library/user-event"
 import { Renderer } from "~/__tests__/utils/renderer"
 import { RegistrationForm } from "~/auth/components/registration-form"
 
-const renderer = new Renderer().withRouter().withQueryProvider()
+const renderer = new Renderer()
+  .withRouter()
+  .withQueryProvider()
+  .withAuthProvider()
 
-test("has all form fields", () => {
+test("has all form fields", async () => {
   renderer.render(<RegistrationForm />)
 
-  expect(screen.getByLabelText(/first name/i)).toBeVisible()
+  expect(await screen.findByLabelText(/first name/i)).toBeVisible()
   expect(screen.getByLabelText(/last name/i)).toBeVisible()
   expect(screen.getByLabelText(/username/i)).toBeVisible()
   expect(screen.getByLabelText(/email address/i)).toBeVisible()
@@ -82,7 +85,10 @@ describe("Password validation", () => {
 
 async function testPassword(password: string) {
   const user = userEvent.setup()
-  const renderer = new Renderer().withRouter().withQueryProvider()
+  const renderer = new Renderer()
+    .withRouter()
+    .withQueryProvider()
+    .withAuthProvider()
   renderer.render(<RegistrationForm />)
 
   const passwordInput = screen.getByLabelText(/^password$/i)

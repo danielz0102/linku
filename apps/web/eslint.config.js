@@ -27,5 +27,10 @@ export default defineConfig([
         tsconfigRootDir: import.meta.dirname,
       },
     },
+    rules: {
+      "no-unused-vars": {
+        argsIgnorePattern: "^_",
+      },
+    },
   },
 ])
