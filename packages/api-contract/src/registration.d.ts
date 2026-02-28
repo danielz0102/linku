@@ -7,5 +7,3 @@ export type RegistrationBody = {
   firstName: string
   lastName: string
 }
-
-export type RegistrationErrorBody = ErrorBody<keyof RegistrationBody>

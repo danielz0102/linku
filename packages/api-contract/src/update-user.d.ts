@@ -7,5 +7,3 @@ export type UpdateUserBody = {
   lastName?: string
   bio?: string
 }
-
-export type UpdateUserErrorBody = ErrorBody<keyof UpdateUserBody>
