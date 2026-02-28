@@ -15,26 +15,10 @@ export const registrationHandler: RegistrationHandler =
     const { ok, data, error } = await service.register(req.body)
 
     if (!ok) {
-      let errors = {}
-
-      if (error === "USERNAME_EXISTS") {
-        errors = {
-          ...errors,
-          username: "Username already exists",
-        }
-      }
-
-      if (error === "EMAIL_EXISTS") {
-        errors = {
-          ...errors,
-          email: "Email already exists",
-        }
-      }
-
       return res.status(409).json({
         code: "VALIDATION_ERROR",
         message: "User already exists",
-        errors,
+        errors: error,
       })
     }
 

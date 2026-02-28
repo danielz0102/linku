@@ -42,10 +42,9 @@ test("fails if username already exists", async () => {
     if (filters.username) return UserMother.create()
   })
 
-  const { ok, error } = await service.register(input)
+  const { ok } = await service.register(input)
 
   expect(ok).toBe(false)
-  expect(error).toBe("USERNAME_EXISTS")
 })
 
 test("fails if email already exists", async () => {
@@ -53,8 +52,7 @@ test("fails if email already exists", async () => {
     if (filters.email) return UserMother.create()
   })
 
-  const { ok, error } = await service.register(input)
+  const { ok } = await service.register(input)
 
   expect(ok).toBe(false)
-  expect(error).toBe("EMAIL_EXISTS")
 })

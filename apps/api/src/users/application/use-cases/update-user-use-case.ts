@@ -14,7 +14,7 @@ type Input = {
   bio?: string
 }
 
-type UpdateUserError = "USERNAME_EXISTS" | "EMAIL_EXISTS"
+type UpdateUserError = Partial<Record<"username" | "email", string>>
 
 export class UpdateUserUseCase {
   private readonly userRepo: UserRepository
@@ -31,7 +31,7 @@ export class UpdateUserUseCase {
       const existing = await this.userRepo.search({ username: data.username })
 
       if (existing && existing.id !== id) {
-        return Result.fail("USERNAME_EXISTS")
+        return Result.fail({ username: "Username already exists" })
       }
     }
 
@@ -39,7 +39,7 @@ export class UpdateUserUseCase {
       const existing = await this.userRepo.search({ email: data.email })
 
       if (existing && existing.id !== id) {
-        return Result.fail("EMAIL_EXISTS")
+        return Result.fail({ email: "Email already exists" })
       }
     }
 

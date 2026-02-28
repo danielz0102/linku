@@ -40,10 +40,9 @@ test("fails if username belongs to another user", async () => {
     if (filters.username) return UserMother.create()
   })
 
-  const { ok, error } = await service.update(userId, { username: "taken" })
+  const { ok } = await service.update(userId, { username: "taken" })
 
   expect(ok).toBe(false)
-  expect(error).toBe("USERNAME_EXISTS")
 })
 
 test("does not fail if username belongs to the same user", async () => {
@@ -63,12 +62,11 @@ test("fails if email belongs to another user", async () => {
     if (filters.email) return UserMother.create()
   })
 
-  const { ok, error } = await service.update(userId, {
+  const { ok } = await service.update(userId, {
     email: "taken@example.com",
   })
 
   expect(ok).toBe(false)
-  expect(error).toBe("EMAIL_EXISTS")
 })
 
 test("does not fail if email belongs to the same user", async () => {

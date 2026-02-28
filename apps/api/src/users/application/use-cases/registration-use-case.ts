@@ -16,7 +16,7 @@ type Input = {
   lastName: string
 }
 
-type RegisterError = "USERNAME_EXISTS" | "EMAIL_EXISTS"
+type RegisterError = Partial<Record<"username" | "email", string>>
 
 export class RegistrationUseCase {
   private readonly userRepo: UserRepository
@@ -36,11 +36,11 @@ export class RegistrationUseCase {
     ])
 
     if (usernameExists) {
-      return Result.fail("USERNAME_EXISTS")
+      return Result.fail({ username: "Username already exists" })
     }
 
     if (emailExists) {
-      return Result.fail("EMAIL_EXISTS")
+      return Result.fail({ email: "Email already exists" })
     }
 
     const hash = await this.hasher.hash(password)

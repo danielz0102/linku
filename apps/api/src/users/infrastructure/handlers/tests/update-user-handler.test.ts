@@ -35,7 +35,7 @@ test("sends 200 with updated user data", async () => {
 test("sends 409 if username exists", async () => {
   service.update.mockResolvedValueOnce({
     ok: false,
-    error: "USERNAME_EXISTS",
+    error: { username: "Username already exists" },
   })
 
   await request(app).patch("/").send(body).expect(409)
@@ -44,7 +44,7 @@ test("sends 409 if username exists", async () => {
 test("sends 409 if email exists", async () => {
   service.update.mockResolvedValueOnce({
     ok: false,
-    error: "EMAIL_EXISTS",
+    error: { email: "Email already exists" },
   })
 
   await request(app).patch("/").send(body).expect(409)
