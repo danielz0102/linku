@@ -1,8 +1,3 @@
-import type { ErrorBody, ErrorCode } from "./error.d.ts"
-import type { RegistrationBody } from "./registration.d.ts"
-import type { UpdateUserBody } from "./update-user.d.ts"
-import type { PublicUser } from "./user.d.ts"
-
 export namespace LinkuAPI {
   type ErrorCode = import("./error.d.ts").ErrorCode
   type ErrorBody = import("./error.d.ts").ErrorBody
@@ -17,7 +12,13 @@ export namespace LinkuAPI {
   }
 
   interface RegisterUser {
-    RequestBody: RegistrationBody
+    RequestBody: {
+      username: string
+      email: string
+      password: string
+      firstName: string
+      lastName: string
+    }
     ResponseBody: PublicUser | ErrorBody
   }
 
@@ -27,7 +28,13 @@ export namespace LinkuAPI {
   }
 
   interface UpdateUser {
-    RequestBody: UpdateUserBody
+    RequestBody: {
+      username?: string
+      email?: string
+      firstName?: string
+      lastName?: string
+      bio?: string
+    }
     ResponseBody: PublicUser | ErrorBody
   }
 
