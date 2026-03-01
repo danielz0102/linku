@@ -6,7 +6,7 @@ export default function Profile() {
   const { username, firstName, lastName, bio, profilePicUrl } = useUser()
 
   return (
-    <main className="flex size-full flex-col items-center justify-center gap-4 text-center">
+    <main className="flex size-full flex-col items-center justify-center gap-4 p-4 text-center">
       <img
         src={profilePicUrl || "/default-pp.jpg"}
         alt="Profile picture"

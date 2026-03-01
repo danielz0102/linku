@@ -29,7 +29,12 @@ export function useUpdateUserForm(defaultValues?: Inputs) {
     }),
     firstName: register("firstName"),
     lastName: register("lastName"),
-    bio: register("bio"),
+    bio: register("bio", {
+      maxLength: {
+        value: 200,
+        message: "Bio cannot exceed 200 characters",
+      },
+    }),
   }
 
   const submit = handleSubmit(async (data) => {
