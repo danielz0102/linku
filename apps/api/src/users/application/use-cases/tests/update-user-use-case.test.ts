@@ -5,43 +5,36 @@ import { UpdateUserUseCase } from "~/users/application/use-cases/update-user-use
 const repo = new UserRepositoryMock()
 const service = new UpdateUserUseCase({ userRepo: repo })
 
-const userId = crypto.randomUUID()
-
-type Input = Parameters<UpdateUserUseCase["execute"]>[1]
-const input: Input = {
-  username: "newusername",
-  email: "new@example.com",
-  firstName: "New",
-  lastName: "Name",
-  bio: "Hello!",
-}
-
 beforeEach(() => {
   repo.search.mockResolvedValue(undefined)
 })
 
 test("returns the updated public user", async () => {
-  const user = UserMother.create({ id: userId })
-  repo.update.mockResolvedValueOnce(user)
+  const userUpdated = UserMother.create()
+  repo.update.mockResolvedValueOnce(userUpdated)
 
-  const { ok, data } = await service.execute(userId, input)
+  const { ok, data } = await service.execute(crypto.randomUUID(), {
+    username: "newUsername",
+  })
 
   expect(ok).toBe(true)
   expect(data).toEqual({
-    id: user.id,
-    username: user.username,
-    email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    bio: user.bio,
-    profilePicUrl: user.profilePicUrl,
+    id: userUpdated.id,
+    username: userUpdated.username,
+    email: userUpdated.email,
+    firstName: userUpdated.firstName,
+    lastName: userUpdated.lastName,
+    bio: userUpdated.bio,
+    profilePicUrl: userUpdated.profilePicUrl,
   })
 })
 
 test("fails if username or email belongs to another user", async () => {
   repo.search.mockResolvedValueOnce(UserMother.create())
 
-  const { ok } = await service.execute(userId, { username: "taken" })
+  const { ok } = await service.execute(crypto.randomUUID(), {
+    username: "taken",
+  })
 
   expect(ok).toBe(false)
 })

@@ -11,7 +11,7 @@ const service = new RegistrationUseCase({
 
 type Input = Parameters<RegistrationUseCase["execute"]>[0]
 
-const input: Input = {
+const newUser: Input = {
   username: "testuser",
   email: "testuser@example.com",
   firstName: "Test",
@@ -24,27 +24,27 @@ beforeEach(() => {
 })
 
 test("returns a public user", async () => {
-  const user = UserMother.create()
-  repo.create.mockResolvedValue(user)
+  const userCreated = UserMother.create()
+  repo.create.mockResolvedValue(userCreated)
 
-  const { ok, data } = await service.execute(input)
+  const { ok, data } = await service.execute(newUser)
 
   expect(ok).toBe(true)
   expect(data).toEqual({
-    id: user.id,
-    username: user.username,
-    email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    bio: user.bio,
-    profilePicUrl: user.profilePicUrl,
+    id: userCreated.id,
+    username: userCreated.username,
+    email: userCreated.email,
+    firstName: userCreated.firstName,
+    lastName: userCreated.lastName,
+    bio: userCreated.bio,
+    profilePicUrl: userCreated.profilePicUrl,
   })
 })
 
 test("fails if user already exists", async () => {
   repo.search.mockResolvedValueOnce(UserMother.create())
 
-  const { ok } = await service.execute(input)
+  const { ok } = await service.execute(newUser)
 
   expect(ok).toBe(false)
 })
