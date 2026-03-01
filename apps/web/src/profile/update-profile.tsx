@@ -1,7 +1,9 @@
-import { useUser } from "~/auth/context/auth-context"
-import { UpdateUserForm } from "./components/update-user-form/update-user-form"
+import { useAuth, useUser } from "~/auth/context/auth-context"
+import { UpdateUserForm } from "./components/update-user-form"
+import { updateUser } from "./services/update-user"
 
 export default function UpdateProfile() {
+  const { refresh } = useAuth()
   const { username, email, firstName, lastName, bio } = useUser()
 
   return (
@@ -15,6 +17,10 @@ export default function UpdateProfile() {
           firstName,
           lastName,
           bio: bio ?? undefined,
+        }}
+        onSubmit={async (data) => {
+          await updateUser(data)
+          await refresh()
         }}
         className="md:min-w-lg"
       />
