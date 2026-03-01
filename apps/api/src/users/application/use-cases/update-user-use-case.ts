@@ -6,7 +6,7 @@ type Dependencies = {
   userRepo: UserRepository
 }
 
-type Input = {
+type Data = {
   username?: string
   email?: string
   firstName?: string
@@ -25,19 +25,13 @@ export class UpdateUserUseCase {
 
   async execute(
     id: string,
-    data: Input
+    data: Data
   ): Promise<Result<PublicUser, UpdateUserError>> {
     const [usernameExists, emailExists] = await Promise.all([
       data.username
-        ? this.userRepo
-            .search({ id, username: data.username })
-            .then((user) => Boolean(user))
+        ? this.userRepo.exists({ id, username: data.username })
         : false,
-      data.email
-        ? this.userRepo
-            .search({ id, email: data.email })
-            .then((user) => Boolean(user))
-        : false,
+      data.email ? this.userRepo.exists({ id, email: data.email }) : false,
     ])
 
     if (usernameExists || emailExists) {

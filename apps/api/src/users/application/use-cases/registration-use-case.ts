@@ -35,8 +35,8 @@ export class RegistrationUseCase {
     lastName,
   }: Data): Promise<Result<PublicUser, RegisterError>> {
     const [existingByUsername, existingByEmail] = await Promise.all([
-      this.userRepo.search({ username }).then((user) => Boolean(user)),
-      this.userRepo.search({ email }).then((user) => Boolean(user)),
+      this.userRepo.exists({ username }),
+      this.userRepo.exists({ email }),
     ])
 
     if (existingByUsername || existingByEmail) {

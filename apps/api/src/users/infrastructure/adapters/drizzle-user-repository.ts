@@ -19,6 +19,32 @@ export class DrizzleUserRepository implements UserRepository {
       .then(([row]) => row)
   }
 
+  async exists(filters: Filters): Promise<boolean> {
+    const { id, username, email } = filters
+    const conditions = []
+
+    if (id) {
+      conditions.push(eq(usersTable.id, id))
+    }
+    if (email) {
+      conditions.push(eq(usersTable.email, email))
+    }
+    if (username) {
+      conditions.push(eq(usersTable.username, username))
+    }
+
+    if (conditions.length === 0) {
+      return false
+    }
+
+    return db
+      .select({ id: usersTable.id })
+      .from(usersTable)
+      .where(conditions.length === 1 ? conditions[0] : and(...conditions))
+      .limit(1)
+      .then((rows) => rows.length > 0)
+  }
+
   async search({ id, username, email }: Filters): Promise<User | undefined> {
     const conditions = []
 

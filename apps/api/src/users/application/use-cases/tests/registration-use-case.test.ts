@@ -20,7 +20,7 @@ const newUser: Input = {
 }
 
 beforeEach(() => {
-  repo.search.mockResolvedValue(undefined)
+  repo.exists.mockResolvedValue(false)
 })
 
 test("returns a public user", async () => {
@@ -42,7 +42,7 @@ test("returns a public user", async () => {
 })
 
 test("fails if user already exists", async () => {
-  repo.search.mockResolvedValueOnce(UserMother.create())
+  repo.exists.mockResolvedValueOnce(true)
 
   const { ok } = await service.execute(newUser)
 
