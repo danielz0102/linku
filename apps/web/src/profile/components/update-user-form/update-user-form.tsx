@@ -67,6 +67,7 @@ export function UpdateUserForm({
           {...fields.bio}
           rows={4}
           placeholder="Tell us about yourself"
+          className="resize-none"
         />
       </FormField.Root>
 
