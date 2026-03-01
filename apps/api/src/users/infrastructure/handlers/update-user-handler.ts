@@ -3,7 +3,7 @@ import type { RequestHandler } from "express"
 import type { UpdateUserUseCase } from "../../application/use-cases/update-user-use-case.js"
 
 type UpdateUserHandler = (
-  service: UpdateUserUseCase
+  useCase: UpdateUserUseCase
 ) => RequestHandler<
   never,
   LinkuAPI.UpdateUser["ResponseBody"],
@@ -11,14 +11,14 @@ type UpdateUserHandler = (
 >
 
 export const updateUserHandler: UpdateUserHandler =
-  (service) => async (req, res) => {
+  (useCase) => async (req, res) => {
     const userId = req.session.userId
 
     if (!userId) {
       throw new Error("User ID not found in session")
     }
 
-    const { ok, data, error } = await service.execute(userId, req.body)
+    const { ok, data, error } = await useCase.execute(userId, req.body)
 
     if (!ok) {
       return res.status(409).json({

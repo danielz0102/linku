@@ -3,15 +3,15 @@ import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 
 type LoginHandler = (
-  service: LoginUseCase
+  useCase: LoginUseCase
 ) => RequestHandler<
   never,
   LinkuAPI.Login["ResponseBody"],
   LinkuAPI.Login["RequestBody"]
 >
 
-export const loginHandler: LoginHandler = (service) => async (req, res) => {
-  const { ok, data } = await service.execute(req.body)
+export const loginHandler: LoginHandler = (useCase) => async (req, res) => {
+  const { ok, data } = await useCase.execute(req.body)
 
   if (!ok) {
     return res.status(401).json({
