@@ -27,13 +27,13 @@ const body: LinkuAPI.UpdateUser["RequestBody"] = {
 
 test("sends 200 with updated user data", async () => {
   const user = UserMother.createPublicUser()
-  service.update.mockResolvedValueOnce({ ok: true, data: user })
+  service.execute.mockResolvedValueOnce({ ok: true, data: user })
 
   await request(app).patch("/").send(body).expect(200).expect(user)
 })
 
 test("sends 409 if username exists", async () => {
-  service.update.mockResolvedValueOnce({
+  service.execute.mockResolvedValueOnce({
     ok: false,
     error: { username: "Username already exists" },
   })
@@ -42,7 +42,7 @@ test("sends 409 if username exists", async () => {
 })
 
 test("sends 409 if email exists", async () => {
-  service.update.mockResolvedValueOnce({
+  service.execute.mockResolvedValueOnce({
     ok: false,
     error: { email: "Email already exists" },
   })

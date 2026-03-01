@@ -18,7 +18,7 @@ export const updateUserHandler: UpdateUserHandler =
       throw new Error("User ID not found in session")
     }
 
-    const { ok, data, error } = await service.update(userId, req.body)
+    const { ok, data, error } = await service.execute(userId, req.body)
 
     if (!ok) {
       return res.status(409).json({

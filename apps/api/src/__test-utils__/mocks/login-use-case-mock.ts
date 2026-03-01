@@ -10,5 +10,5 @@ export class LoginUseCaseMock extends LoginUseCase {
     })
   }
 
-  override login = vi.fn<LoginUseCase["login"]>()
+  override execute = vi.fn<LoginUseCase["execute"]>()
 }

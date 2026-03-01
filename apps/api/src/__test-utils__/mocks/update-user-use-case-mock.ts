@@ -8,5 +8,5 @@ export class UpdateUserUseCaseMock extends UpdateUserUseCase {
     })
   }
 
-  override update = vi.fn<UpdateUserUseCase["update"]>()
+  override execute = vi.fn<UpdateUserUseCase["execute"]>()
 }

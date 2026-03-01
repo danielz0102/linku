@@ -11,7 +11,7 @@ type LoginHandler = (
 >
 
 export const loginHandler: LoginHandler = (service) => async (req, res) => {
-  const { ok, data } = await service.login(req.body)
+  const { ok, data } = await service.execute(req.body)
 
   if (!ok) {
     return res.status(401).json({

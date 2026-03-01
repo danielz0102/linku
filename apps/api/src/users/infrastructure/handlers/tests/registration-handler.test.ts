@@ -20,7 +20,7 @@ const body: LinkuAPI.RegisterUser["RequestBody"] = {
 
 test("sends 200 with user data", async () => {
   const user = UserMother.createPublicUser()
-  service.register.mockResolvedValueOnce({
+  service.execute.mockResolvedValueOnce({
     ok: true,
     data: user,
   })
@@ -29,7 +29,7 @@ test("sends 200 with user data", async () => {
 })
 
 test("sends 409 if username exists", async () => {
-  service.register.mockResolvedValueOnce({
+  service.execute.mockResolvedValueOnce({
     ok: false,
     error: { username: "Username already exists" },
   })
@@ -38,7 +38,7 @@ test("sends 409 if username exists", async () => {
 })
 
 test("sends 409 if email exists", async () => {
-  service.register.mockResolvedValueOnce({
+  service.execute.mockResolvedValueOnce({
     ok: false,
     error: { email: "Email already exists" },
   })

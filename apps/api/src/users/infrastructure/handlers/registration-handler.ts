@@ -12,7 +12,7 @@ type RegistrationHandler = (
 
 export const registrationHandler: RegistrationHandler =
   (service) => async (req, res) => {
-    const { ok, data, error } = await service.register(req.body)
+    const { ok, data, error } = await service.execute(req.body)
 
     if (!ok) {
       return res.status(409).json({

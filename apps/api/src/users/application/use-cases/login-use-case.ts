@@ -19,7 +19,7 @@ export class LoginUseCase {
     this.hasher = hasher
   }
 
-  async login(input: {
+  async execute(input: {
     username: string
     password: string
   }): Promise<Result<PublicUser, LoginError>> {

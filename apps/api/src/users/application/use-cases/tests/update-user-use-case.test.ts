@@ -7,7 +7,7 @@ const service = new UpdateUserUseCase({ userRepo: repo })
 
 const userId = crypto.randomUUID()
 
-type Input = Parameters<UpdateUserUseCase["update"]>[1]
+type Input = Parameters<UpdateUserUseCase["execute"]>[1]
 const input: Input = {
   username: "newusername",
   email: "new@example.com",
@@ -21,7 +21,7 @@ test("returns the updated public user", async () => {
   repo.search.mockResolvedValueOnce(undefined)
   repo.update.mockResolvedValueOnce(user)
 
-  const { ok, data } = await service.update(userId, input)
+  const { ok, data } = await service.execute(userId, input)
 
   expect(ok).toBe(true)
   expect(data).toEqual({
@@ -40,7 +40,7 @@ test("fails if username belongs to another user", async () => {
     if (filters.username) return UserMother.create()
   })
 
-  const { ok } = await service.update(userId, { username: "taken" })
+  const { ok } = await service.execute(userId, { username: "taken" })
 
   expect(ok).toBe(false)
 })
@@ -52,7 +52,7 @@ test("does not fail if username belongs to the same user", async () => {
   })
   repo.update.mockResolvedValueOnce(user)
 
-  const { ok } = await service.update(userId, { username: user.username })
+  const { ok } = await service.execute(userId, { username: user.username })
 
   expect(ok).toBe(true)
 })
@@ -62,7 +62,7 @@ test("fails if email belongs to another user", async () => {
     if (filters.email) return UserMother.create()
   })
 
-  const { ok } = await service.update(userId, {
+  const { ok } = await service.execute(userId, {
     email: "taken@example.com",
   })
 
@@ -76,7 +76,7 @@ test("does not fail if email belongs to the same user", async () => {
   })
   repo.update.mockResolvedValueOnce(user)
 
-  const { ok } = await service.update(userId, { email: user.email })
+  const { ok } = await service.execute(userId, { email: user.email })
 
   expect(ok).toBe(true)
 })

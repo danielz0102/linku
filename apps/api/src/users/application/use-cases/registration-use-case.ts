@@ -27,7 +27,7 @@ export class RegistrationUseCase {
     this.hasher = hasher
   }
 
-  async register(input: Input): Promise<Result<PublicUser, RegisterError>> {
+  async execute(input: Input): Promise<Result<PublicUser, RegisterError>> {
     const { username, email, password, firstName, lastName } = input
 
     const [usernameExists, emailExists] = await Promise.all([

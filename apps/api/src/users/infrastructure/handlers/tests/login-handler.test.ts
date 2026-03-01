@@ -17,7 +17,7 @@ const body: LinkuAPI.Login["RequestBody"] = {
 
 test("sends 200 with user data", async () => {
   const user = UserMother.createPublicUser()
-  service.login.mockResolvedValueOnce({
+  service.execute.mockResolvedValueOnce({
     ok: true,
     data: user,
   })
@@ -26,7 +26,7 @@ test("sends 200 with user data", async () => {
 })
 
 test("sends 401 if credentials are invalid", async () => {
-  service.login.mockResolvedValueOnce({
+  service.execute.mockResolvedValueOnce({
     ok: false,
     error: "INVALID_CREDENTIALS",
   })

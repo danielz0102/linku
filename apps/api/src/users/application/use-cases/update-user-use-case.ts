@@ -23,7 +23,7 @@ export class UpdateUserUseCase {
     this.userRepo = userRepo
   }
 
-  async update(
+  async execute(
     id: string,
     data: Input
   ): Promise<Result<PublicUser, UpdateUserError>> {

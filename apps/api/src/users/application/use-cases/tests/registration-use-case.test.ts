@@ -9,7 +9,7 @@ const service = new RegistrationUseCase({
   hasher: new PasswordHasherMock(),
 })
 
-type Input = Parameters<RegistrationUseCase["register"]>[0]
+type Input = Parameters<RegistrationUseCase["execute"]>[0]
 
 const input: Input = {
   username: "testuser",
@@ -23,7 +23,7 @@ test("returns a public user", async () => {
   const user = UserMother.create()
   repo.create.mockResolvedValue(user)
 
-  const { ok, data } = await service.register(input)
+  const { ok, data } = await service.execute(input)
 
   expect(ok).toBe(true)
   expect(data).toEqual({
@@ -42,7 +42,7 @@ test("fails if username already exists", async () => {
     if (filters.username) return UserMother.create()
   })
 
-  const { ok } = await service.register(input)
+  const { ok } = await service.execute(input)
 
   expect(ok).toBe(false)
 })
@@ -52,7 +52,7 @@ test("fails if email already exists", async () => {
     if (filters.email) return UserMother.create()
   })
 
-  const { ok } = await service.register(input)
+  const { ok } = await service.execute(input)
 
   expect(ok).toBe(false)
 })

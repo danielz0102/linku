@@ -10,5 +10,5 @@ export class RegistrationUseCaseMock extends RegistrationUseCase {
     })
   }
 
-  override register = vi.fn<RegistrationUseCase["register"]>()
+  override execute = vi.fn<RegistrationUseCase["execute"]>()
 }
