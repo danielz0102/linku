@@ -1,6 +1,6 @@
+import type { RegistrationUseCase } from "#users/application/use-cases/registration-use-case.js"
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
-import type { RegistrationUseCase } from "../../application/use-cases/registration-use-case.js"
 
 type RegistrationHandler = (
   useCase: RegistrationUseCase

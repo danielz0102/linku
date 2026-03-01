@@ -1,6 +1,6 @@
+import type { UpdateUserUseCase } from "#users/application/use-cases/update-user-use-case.js"
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
-import type { UpdateUserUseCase } from "../../application/use-cases/update-user-use-case.js"
 
 type UpdateUserHandler = (
   useCase: UpdateUserUseCase
