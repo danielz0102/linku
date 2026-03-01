@@ -1,5 +1,7 @@
 import { LoadingSpinner } from "~/shared/components/loading-spinner"
 
+type SubmitButtonProps = React.PropsWithChildren<{ loading?: boolean }>
+
 export function SubmitButton({ loading = false, children }: SubmitButtonProps) {
   return (
     <button
@@ -11,5 +13,3 @@ export function SubmitButton({ loading = false, children }: SubmitButtonProps) {
     </button>
   )
 }
-
-type SubmitButtonProps = React.PropsWithChildren<{ loading?: boolean }>

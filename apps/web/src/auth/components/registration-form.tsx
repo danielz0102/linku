@@ -2,7 +2,7 @@ import { AtSign, Lock, Mail, User } from "lucide-react"
 import { Alert } from "~/shared/components/alert"
 import FormField from "~/shared/components/form-field"
 import { useRegistrationForm } from "../hooks/use-registration-form"
-import { SubmitButton } from "./submit-button"
+import { SubmitButton } from "../../shared/components/submit-button"
 
 export function RegistrationForm() {
   const { fields, errors, submit, isLoading } = useRegistrationForm()
