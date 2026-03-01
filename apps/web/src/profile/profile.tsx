@@ -20,7 +20,13 @@ export default function Profile() {
         <p className="text-sm text-neutral-300">@{username}</p>
       </div>
 
-      {bio ? <p>{bio}</p> : <p className="italic">No bio available.</p>}
+      {bio ? (
+        <p className="max-w-72 overflow-hidden wrap-break-word md:max-w-lg">
+          {bio}
+        </p>
+      ) : (
+        <p className="italic">No bio available.</p>
+      )}
 
       <Link to="/update-profile" className="link flex items-center gap-1">
         <SquarePen strokeWidth={1.5} size={18} />

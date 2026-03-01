@@ -69,6 +69,7 @@ export function UpdateUserForm({
           rows={4}
           placeholder="Tell us about yourself"
           className="resize-none"
+          maxLength={200}
         />
       </FormField.Root>
 
