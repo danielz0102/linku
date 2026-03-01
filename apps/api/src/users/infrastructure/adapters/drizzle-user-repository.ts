@@ -20,52 +20,31 @@ export class DrizzleUserRepository implements UserRepository {
   }
 
   async exists(filters: Filters): Promise<boolean> {
-    const { id, username, email } = filters
-    const conditions = []
+    const conditions = this.buildWhereCondtions(filters)
 
-    if (id) {
-      conditions.push(eq(usersTable.id, id))
-    }
-    if (email) {
-      conditions.push(eq(usersTable.email, email))
-    }
-    if (username) {
-      conditions.push(eq(usersTable.username, username))
-    }
-
-    if (conditions.length === 0) {
+    if (!conditions) {
       return false
     }
 
     return db
       .select({ id: usersTable.id })
       .from(usersTable)
-      .where(conditions.length === 1 ? conditions[0] : and(...conditions))
+      .where(conditions)
       .limit(1)
       .then((rows) => rows.length > 0)
   }
 
-  async search({ id, username, email }: Filters): Promise<User | undefined> {
-    const conditions = []
+  async search(filters: Filters): Promise<User | undefined> {
+    const conditions = this.buildWhereCondtions(filters)
 
-    if (id) {
-      conditions.push(eq(usersTable.id, id))
-    }
-    if (email) {
-      conditions.push(eq(usersTable.email, email))
-    }
-    if (username) {
-      conditions.push(eq(usersTable.username, username))
-    }
-
-    if (conditions.length === 0) {
+    if (!conditions) {
       return undefined
     }
 
     return db
       .select()
       .from(usersTable)
-      .where(conditions.length === 1 ? conditions[0] : and(...conditions))
+      .where(conditions)
       .limit(1)
       .then((rows) => rows[0])
   }
@@ -77,5 +56,21 @@ export class DrizzleUserRepository implements UserRepository {
       .where(eq(usersTable.id, id))
       .returning()
       .then(([row]) => row)
+  }
+
+  private buildWhereCondtions({ id, email, username }: Filters) {
+    const conditions = []
+
+    if (id) {
+      conditions.push(eq(usersTable.id, id))
+    }
+    if (email) {
+      conditions.push(eq(usersTable.email, email))
+    }
+    if (username) {
+      conditions.push(eq(usersTable.username, username))
+    }
+
+    return conditions.length === 1 ? conditions[0] : and(...conditions)
   }
 }
