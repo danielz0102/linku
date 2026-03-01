@@ -27,11 +27,23 @@ export class UpdateUserUseCase {
     id: string,
     data: Data
   ): Promise<Result<PublicUser, UpdateUserError>> {
+    const searchUsername = async () => {
+      if (!data.username) return false
+
+      const user = await this.userRepo.search({ username: data.username })
+      return user !== undefined && user.id !== id
+    }
+
+    const searchEmail = async () => {
+      if (!data.email) return false
+
+      const user = await this.userRepo.search({ email: data.email })
+      return user !== undefined && user.id !== id
+    }
+
     const [usernameExists, emailExists] = await Promise.all([
-      data.username
-        ? this.userRepo.exists({ id, username: data.username })
-        : false,
-      data.email ? this.userRepo.exists({ id, email: data.email }) : false,
+      searchUsername(),
+      searchEmail(),
     ])
 
     if (usernameExists || emailExists) {
