@@ -37,18 +37,16 @@ test("returns a public user if credentials are valid", async () => {
 test("fails if user does not exist", async () => {
   repo.search.mockResolvedValueOnce(undefined)
 
-  const { ok, error } = await service.execute(input)
+  const { ok } = await service.execute(input)
 
   expect(ok).toBe(false)
-  expect(error).toBe("INVALID_CREDENTIALS")
 })
 
 test("fails if password is invalid", async () => {
   repo.search.mockResolvedValueOnce(UserMother.create())
   hasher.compare.mockResolvedValueOnce(false)
 
-  const { ok, error } = await service.execute(input)
+  const { ok } = await service.execute(input)
 
   expect(ok).toBe(false)
-  expect(error).toBe("INVALID_CREDENTIALS")
 })

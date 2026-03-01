@@ -10,7 +10,7 @@ type Failure<E> = {
   data?: never
 }
 
-export type Result<D, E> = Success<D> | Failure<E>
+export type Result<D, E = string> = Success<D> | Failure<E>
 
 export const Result = {
   ok<D>(data: D): Result<D, never> {
