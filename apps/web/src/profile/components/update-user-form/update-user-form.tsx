@@ -3,17 +3,22 @@ import { AtSign, Mail, MessageSquare, User } from "lucide-react"
 import { Alert } from "~/shared/components/alert"
 import FormField from "~/shared/components/form-field"
 import { SubmitButton } from "~/shared/components/submit-button"
+import { cn } from "~/shared/utils/cn"
 import { useUpdateUserForm } from "./use-update-user-form"
 
 type UpdateUserFormProps = {
   defaultValues?: LinkuAPI.UpdateUser["RequestBody"]
+  className?: string
 }
 
-export function UpdateUserForm({ defaultValues }: UpdateUserFormProps) {
+export function UpdateUserForm({
+  defaultValues,
+  className,
+}: UpdateUserFormProps) {
   const { fields, errors, submit, isLoading } = useUpdateUserForm(defaultValues)
 
   return (
-    <form className="space-y-6" noValidate onSubmit={submit}>
+    <form className={cn("space-y-6", className)} noValidate onSubmit={submit}>
       {errors.root && <Alert>{errors.root.message}</Alert>}
 
       <FormField.Root
