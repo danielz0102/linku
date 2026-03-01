@@ -6,10 +6,7 @@ export default function Profile() {
   return (
     <main className="flex size-full flex-col items-center justify-center gap-4 text-center">
       <img
-        src={
-          profilePicUrl ||
-          "https://img.freepik.com/premium-vector/user-profile-icon-flat-style-member-avatar-vector-illustration-isolated-background-human-permission-sign-business-concept_157943-15752.jpg?semt=ais_user_personalization&w=740&q=80"
-        }
+        src={profilePicUrl || "/default-pp.jpg"}
         alt="Profile picture"
         className="size-32 rounded-full"
       />
