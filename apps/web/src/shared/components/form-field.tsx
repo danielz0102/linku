@@ -90,8 +90,38 @@ export function PasswordInput(props: Omit<InputProps, "type" | "className">) {
   )
 }
 
+type TextAreaProps = Omit<
+  React.ComponentProps<"textarea">,
+  "id" | "aria-invalid"
+>
+
+export function TextArea({ className, ...attrs }: TextAreaProps) {
+  const context = use(FormFieldContext)
+
+  if (!context) {
+    throw new Error(
+      "FormField.TextArea must be used within a FormField.Root component"
+    )
+  }
+
+  const { id, invalid } = context
+
+  return (
+    <textarea
+      id={id}
+      aria-invalid={invalid}
+      className={cn(
+        "w-full rounded-lg border border-neutral-700 bg-neutral-800/50 py-3 pr-4 pl-11 text-neutral-100 placeholder-neutral-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none aria-invalid:border-red-700 aria-invalid:ring-0",
+        className
+      )}
+      {...attrs}
+    />
+  )
+}
+
 export default {
   Root,
   Input,
   PasswordInput,
+  TextArea,
 }

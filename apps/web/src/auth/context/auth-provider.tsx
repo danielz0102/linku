@@ -24,8 +24,13 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
     setUser(Promise.resolve(null))
   }
 
+  const refresh = async () => {
+    const nextUser = await AuthService.getMe()
+    setUser(Promise.resolve(nextUser))
+  }
+
   return (
-    <AuthContext value={{ user, login, register, logout }}>
+    <AuthContext value={{ user, login, register, logout, refresh }}>
       {children}
     </AuthContext>
   )
