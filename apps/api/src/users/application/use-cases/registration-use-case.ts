@@ -8,7 +8,7 @@ type Dependencies = {
   hasher: PasswordHasher
 }
 
-type Input = {
+type Data = {
   username: string
   email: string
   password: string
@@ -27,9 +27,13 @@ export class RegistrationUseCase {
     this.hasher = hasher
   }
 
-  async execute(input: Input): Promise<Result<PublicUser, RegisterError>> {
-    const { username, email, password, firstName, lastName } = input
-
+  async execute({
+    username,
+    email,
+    password,
+    firstName,
+    lastName,
+  }: Data): Promise<Result<PublicUser, RegisterError>> {
     const [existingByUsername, existingByEmail] = await Promise.all([
       this.userRepo.search({ username }).then((user) => Boolean(user)),
       this.userRepo.search({ email }).then((user) => Boolean(user)),

@@ -8,6 +8,11 @@ type Dependencies = {
   hasher: PasswordHasher
 }
 
+type Credentials = {
+  username: string
+  password: string
+}
+
 export class LoginUseCase {
   private readonly userRepo: UserRepository
   private readonly hasher: PasswordHasher
@@ -17,18 +22,18 @@ export class LoginUseCase {
     this.hasher = hasher
   }
 
-  async execute(input: {
-    username: string
-    password: string
-  }): Promise<Result<PublicUser>> {
-    const user = await this.userRepo.search({ username: input.username })
+  async execute({
+    username,
+    password,
+  }: Credentials): Promise<Result<PublicUser, string>> {
+    const user = await this.userRepo.search({ username })
 
     if (!user) {
       return Result.fail("Invalid credentials")
     }
 
     const isValidPassword = await this.hasher.compare(
-      input.password,
+      password,
       user.hashedPassword
     )
 
