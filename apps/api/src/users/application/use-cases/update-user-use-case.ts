@@ -27,20 +27,24 @@ export class UpdateUserUseCase {
     id: string,
     data: Input
   ): Promise<Result<PublicUser, UpdateUserError>> {
-    if (data.username) {
-      const existing = await this.userRepo.search({ username: data.username })
+    const [usernameExists, emailExists] = await Promise.all([
+      data.username
+        ? this.userRepo
+            .search({ id, username: data.username })
+            .then((user) => Boolean(user))
+        : false,
+      data.email
+        ? this.userRepo
+            .search({ id, email: data.email })
+            .then((user) => Boolean(user))
+        : false,
+    ])
 
-      if (existing && existing.id !== id) {
-        return Result.fail({ username: "Username already exists" })
-      }
-    }
-
-    if (data.email) {
-      const existing = await this.userRepo.search({ email: data.email })
-
-      if (existing && existing.id !== id) {
-        return Result.fail({ email: "Email already exists" })
-      }
+    if (usernameExists || emailExists) {
+      return Result.fail({
+        username: usernameExists ? "Username already exists" : undefined,
+        email: emailExists ? "Email already exists" : undefined,
+      })
     }
 
     const user = await this.userRepo.update(id, data)

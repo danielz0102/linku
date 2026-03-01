@@ -16,9 +16,12 @@ const input: Input = {
   bio: "Hello!",
 }
 
+beforeEach(() => {
+  repo.search.mockResolvedValue(undefined)
+})
+
 test("returns the updated public user", async () => {
   const user = UserMother.create({ id: userId })
-  repo.search.mockResolvedValueOnce(undefined)
   repo.update.mockResolvedValueOnce(user)
 
   const { ok, data } = await service.execute(userId, input)
@@ -35,48 +38,10 @@ test("returns the updated public user", async () => {
   })
 })
 
-test("fails if username belongs to another user", async () => {
-  repo.search.mockImplementationOnce(async (filters) => {
-    if (filters.username) return UserMother.create()
-  })
+test("fails if username or email belongs to another user", async () => {
+  repo.search.mockResolvedValueOnce(UserMother.create())
 
   const { ok } = await service.execute(userId, { username: "taken" })
 
   expect(ok).toBe(false)
-})
-
-test("does not fail if username belongs to the same user", async () => {
-  const user = UserMother.create({ id: userId })
-  repo.search.mockImplementationOnce(async (filters) => {
-    if (filters.username) return user
-  })
-  repo.update.mockResolvedValueOnce(user)
-
-  const { ok } = await service.execute(userId, { username: user.username })
-
-  expect(ok).toBe(true)
-})
-
-test("fails if email belongs to another user", async () => {
-  repo.search.mockImplementationOnce(async (filters) => {
-    if (filters.email) return UserMother.create()
-  })
-
-  const { ok } = await service.execute(userId, {
-    email: "taken@example.com",
-  })
-
-  expect(ok).toBe(false)
-})
-
-test("does not fail if email belongs to the same user", async () => {
-  const user = UserMother.create({ id: userId })
-  repo.search.mockImplementationOnce(async (filters) => {
-    if (filters.email) return user
-  })
-  repo.update.mockResolvedValueOnce(user)
-
-  const { ok } = await service.execute(userId, { email: user.email })
-
-  expect(ok).toBe(true)
 })

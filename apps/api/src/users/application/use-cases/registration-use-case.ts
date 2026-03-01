@@ -30,17 +30,16 @@ export class RegistrationUseCase {
   async execute(input: Input): Promise<Result<PublicUser, RegisterError>> {
     const { username, email, password, firstName, lastName } = input
 
-    const [usernameExists, emailExists] = await Promise.all([
-      this.userRepo.search({ username }),
-      this.userRepo.search({ email }),
+    const [existingByUsername, existingByEmail] = await Promise.all([
+      this.userRepo.search({ username }).then((user) => Boolean(user)),
+      this.userRepo.search({ email }).then((user) => Boolean(user)),
     ])
 
-    if (usernameExists) {
-      return Result.fail({ username: "Username already exists" })
-    }
-
-    if (emailExists) {
-      return Result.fail({ email: "Email already exists" })
+    if (existingByUsername || existingByEmail) {
+      return Result.fail({
+        username: existingByUsername ? "Username already exists" : undefined,
+        email: existingByEmail ? "Email already exists" : undefined,
+      })
     }
 
     const hash = await this.hasher.hash(password)

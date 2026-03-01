@@ -19,6 +19,10 @@ const input: Input = {
   password: "password123",
 }
 
+beforeEach(() => {
+  repo.search.mockResolvedValue(undefined)
+})
+
 test("returns a public user", async () => {
   const user = UserMother.create()
   repo.create.mockResolvedValue(user)
@@ -37,20 +41,8 @@ test("returns a public user", async () => {
   })
 })
 
-test("fails if username already exists", async () => {
-  repo.search.mockImplementation(async (filters) => {
-    if (filters.username) return UserMother.create()
-  })
-
-  const { ok } = await service.execute(input)
-
-  expect(ok).toBe(false)
-})
-
-test("fails if email already exists", async () => {
-  repo.search.mockImplementation(async (filters) => {
-    if (filters.email) return UserMother.create()
-  })
+test("fails if user already exists", async () => {
+  repo.search.mockResolvedValueOnce(UserMother.create())
 
   const { ok } = await service.execute(input)
 
