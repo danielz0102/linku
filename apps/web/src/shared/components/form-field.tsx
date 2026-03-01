@@ -43,7 +43,7 @@ export function Root({
       </div>
 
       {error && (
-        <p role="status" className="text-sm text-red-600">
+        <p role="status" className="text-sm text-red-500">
           {error}
         </p>
       )}
