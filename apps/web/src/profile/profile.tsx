@@ -1,8 +1,9 @@
+import { SquarePen } from "lucide-react"
+import { Link } from "react-router"
 import { useUser } from "~/auth/context/auth-context"
-import { UpdateUserForm } from "./components/update-user-form/update-user-form"
 
 export default function Profile() {
-  const { username, email, firstName, lastName, bio, profilePicUrl } = useUser()
+  const { username, firstName, lastName, bio, profilePicUrl } = useUser()
 
   return (
     <main className="flex size-full flex-col items-center justify-center gap-4 text-center">
@@ -21,15 +22,10 @@ export default function Profile() {
 
       {bio ? <p>{bio}</p> : <p className="italic">No bio available.</p>}
 
-      <UpdateUserForm
-        defaultValues={{
-          username,
-          email,
-          firstName,
-          lastName,
-          bio: bio ?? undefined,
-        }}
-      />
+      <Link to="/update-profile" className="link flex items-center gap-1">
+        <SquarePen strokeWidth={1.5} size={18} />
+        Update profile
+      </Link>
     </main>
   )
 }

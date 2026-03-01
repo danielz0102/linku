@@ -1,7 +1,8 @@
-import { AtSign, Mail, MessageSquare, User } from "lucide-react"
 import type { LinkuAPI } from "@linku/api-contract"
+import { AtSign, Mail, MessageSquare, User } from "lucide-react"
 import { Alert } from "~/shared/components/alert"
 import FormField from "~/shared/components/form-field"
+import { SubmitButton } from "~/shared/components/submit-button"
 import { useUpdateUserForm } from "./use-update-user-form"
 
 type UpdateUserFormProps = {
@@ -64,13 +65,7 @@ export function UpdateUserForm({ defaultValues }: UpdateUserFormProps) {
         />
       </FormField.Root>
 
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="w-full cursor-pointer rounded-full bg-blue-600 py-3 font-medium text-white transition-colors hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-950 focus-visible:outline-none active:opacity-75 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        {isLoading ? "Saving..." : "Save Changes"}
-      </button>
+      <SubmitButton loading={isLoading}>Save changes</SubmitButton>
     </form>
   )
 }

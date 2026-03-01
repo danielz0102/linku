@@ -8,3 +8,7 @@ body {
 @utility fade {
   @apply opacity-0 transition-opacity transition-discrete duration-300 data-show:opacity-100 starting:opacity-0;
 }
+
+@utility link {
+  @apply font-medium text-blue-500 underline hover:text-blue-400;
+}

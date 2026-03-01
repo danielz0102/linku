@@ -7,6 +7,7 @@ const Home = lazy(() => import("~/home/home"))
 const Login = lazy(() => import("~/auth/login"))
 const Register = lazy(() => import("~/auth/register"))
 const Profile = lazy(() => import("~/profile/profile"))
+const UpdateProfile = lazy(() => import("~/profile/update-profile"))
 
 export function Router() {
   return (
@@ -21,6 +22,7 @@ export function Router() {
         >
           <Route index element={<Home />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="update-profile" element={<UpdateProfile />} />
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />

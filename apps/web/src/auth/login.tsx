@@ -14,10 +14,7 @@ export default function Login() {
 
         <p className="text-center text-sm text-neutral-400">
           New to Linku?{" "}
-          <Link
-            to="/register"
-            className="font-medium text-blue-500 hover:text-blue-400"
-          >
+          <Link to="/register" className="link">
             Create an account
           </Link>
         </p>
