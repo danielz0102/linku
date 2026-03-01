@@ -62,6 +62,7 @@ export function UpdateUserForm({
         label="Bio"
         Icon={MessageSquare}
         error={errors.bio?.message}
+        iconClassName="top-4 -translate-y-0"
       >
         <FormField.TextArea
           {...fields.bio}

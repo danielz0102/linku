@@ -11,9 +11,16 @@ type FormFieldProps = React.PropsWithChildren & {
   label: string
   Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
   error?: string
+  iconClassName?: string
 }
 
-export function Root({ label, Icon, error, children }: FormFieldProps) {
+export function Root({
+  label,
+  Icon,
+  error,
+  iconClassName,
+  children,
+}: FormFieldProps) {
   const id = useId()
 
   return (
@@ -23,7 +30,12 @@ export function Root({ label, Icon, error, children }: FormFieldProps) {
       </label>
 
       <div className="relative">
-        <Icon className="absolute top-1/2 left-3 size-5 -translate-y-1/2 text-neutral-500" />
+        <Icon
+          className={cn(
+            "absolute top-1/2 left-3 size-5 -translate-y-1/2 text-neutral-500",
+            iconClassName
+          )}
+        />
 
         <FormFieldContext value={{ id, invalid: Boolean(error) }}>
           {children}
