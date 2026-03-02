@@ -68,7 +68,10 @@ export function UpdateUserForm({
         Icon={User}
         error={errors.firstName?.message}
       >
-        <FormField.Input {...register("firstName")} placeholder="John" />
+        <FormField.Input
+          {...register("firstName", { required: "First name is required" })}
+          placeholder="John"
+        />
       </FormField.Root>
 
       <FormField.Root
@@ -76,7 +79,10 @@ export function UpdateUserForm({
         Icon={User}
         error={errors.lastName?.message}
       >
-        <FormField.Input {...register("lastName")} placeholder="Doe" />
+        <FormField.Input
+          {...register("lastName", { required: "Last name is required" })}
+          placeholder="Doe"
+        />
       </FormField.Root>
 
       <FormField.Root
@@ -84,7 +90,10 @@ export function UpdateUserForm({
         Icon={AtSign}
         error={errors.username?.message}
       >
-        <FormField.Input {...register("username")} placeholder="johndoe" />
+        <FormField.Input
+          {...register("username", { required: "Username is required" })}
+          placeholder="johndoe"
+        />
       </FormField.Root>
 
       <FormField.Root
@@ -94,6 +103,7 @@ export function UpdateUserForm({
       >
         <FormField.Input
           {...register("email", {
+            required: "Email is required",
             pattern: {
               value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
               message: "That's not an email!",
