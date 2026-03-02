@@ -3,13 +3,15 @@ import userEvent from "@testing-library/user-event"
 import { Renderer } from "~/__tests__/utils/renderer"
 import { RegistrationForm } from "~/auth/components/registration-form"
 
+const noop = async () => {}
+
 const renderer = new Renderer()
   .withRouter()
   .withQueryProvider()
   .withAuthProvider()
 
 test("has all form fields", async () => {
-  renderer.render(<RegistrationForm />)
+  renderer.render(<RegistrationForm onSubmit={noop} />)
 
   expect(await screen.findByLabelText(/first name/i)).toBeVisible()
   expect(screen.getByLabelText(/last name/i)).toBeVisible()
@@ -22,7 +24,7 @@ test("has all form fields", async () => {
 
 test("fails on missing fields", async () => {
   const user = userEvent.setup()
-  renderer.render(<RegistrationForm />)
+  renderer.render(<RegistrationForm onSubmit={noop} />)
 
   const button = screen.getByRole("button", { name: /create account/i })
   await user.click(button)
@@ -35,7 +37,7 @@ test("fails on missing fields", async () => {
 
 test("fails on invalid email", async () => {
   const user = userEvent.setup()
-  renderer.render(<RegistrationForm />)
+  renderer.render(<RegistrationForm onSubmit={noop} />)
 
   const emailInput = screen.getByLabelText(/email address/i)
   const button = screen.getByRole("button", { name: /create account/i })
@@ -48,7 +50,7 @@ test("fails on invalid email", async () => {
 
 test("fails on password mismatch", async () => {
   const user = userEvent.setup()
-  renderer.render(<RegistrationForm />)
+  renderer.render(<RegistrationForm onSubmit={noop} />)
 
   const passwordInput = screen.getByLabelText(/^password$/i)
   const confirmPasswordInput = screen.getByLabelText(/confirm password/i)
@@ -89,7 +91,7 @@ async function testPassword(password: string) {
     .withRouter()
     .withQueryProvider()
     .withAuthProvider()
-  renderer.render(<RegistrationForm />)
+  renderer.render(<RegistrationForm onSubmit={noop} />)
 
   const passwordInput = screen.getByLabelText(/^password$/i)
   const button = screen.getByRole("button", { name: /create account/i })

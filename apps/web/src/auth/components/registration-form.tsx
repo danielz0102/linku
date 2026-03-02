@@ -1,25 +1,25 @@
 import { AtSign, Lock, Mail, User } from "lucide-react"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router"
 import type { ApiError } from "~/shared/api/api-error"
 import { Alert } from "~/shared/components/alert"
 import FormField from "~/shared/components/form-field"
 import { SubmitButton } from "~/shared/components/submit-button"
-import { useAuth } from "../context/auth-context"
 
-type Inputs = {
+type Fields = {
   firstName: string
   lastName: string
   username: string
   email: string
   password: string
-  confirmPassword: string
 }
 
-export function RegistrationForm() {
-  const navigate = useNavigate()
-  const { register: registerUser } = useAuth()
+type Inputs = Fields & { confirmPassword: string }
 
+type RegistrationFormProps = {
+  onSubmit(data: Fields): Promise<void>
+}
+
+export function RegistrationForm({ onSubmit }: RegistrationFormProps) {
   const {
     register,
     setError,
@@ -29,18 +29,10 @@ export function RegistrationForm() {
   } = useForm<Inputs>()
 
   const submit = handleSubmit(async (data) => {
-    const { username, email, password, firstName, lastName } = data
+    const { confirmPassword: _, ...fields } = data
 
     try {
-      await registerUser({
-        username,
-        email,
-        password,
-        firstName,
-        lastName,
-      })
-
-      navigate("/")
+      await onSubmit(fields)
     } catch (error) {
       const apiError = error as ApiError
 

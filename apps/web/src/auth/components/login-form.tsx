@@ -1,21 +1,20 @@
 import { AtSign, Lock } from "lucide-react"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router"
 import type { ApiError } from "~/shared/api/api-error"
 import { Alert } from "~/shared/components/alert"
 import FormField from "~/shared/components/form-field"
 import { SubmitButton } from "~/shared/components/submit-button"
-import { useAuth } from "../context/auth-context"
 
 type Inputs = {
   username: string
   password: string
 }
 
-export function LoginForm() {
-  const navigate = useNavigate()
-  const { login } = useAuth()
+type LoginFormProps = {
+  onSubmit(data: Inputs): Promise<void>
+}
 
+export function LoginForm({ onSubmit }: LoginFormProps) {
   const {
     register,
     setError,
@@ -25,8 +24,7 @@ export function LoginForm() {
 
   const submit = handleSubmit(async (data) => {
     try {
-      await login(data)
-      navigate("/")
+      await onSubmit(data)
     } catch (error) {
       const { code, genericMessage } = error as ApiError
 
