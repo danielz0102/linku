@@ -1,7 +1,11 @@
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { RegistrationForm } from "~/auth/components/registration-form"
+import { useAuth } from "./context/auth-context"
 
 export default function Register() {
+  const navigate = useNavigate()
+  const { register: registerUser } = useAuth()
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6">
@@ -10,7 +14,12 @@ export default function Register() {
           <p className="text-neutral-400">Connect with friends instantly.</p>
         </div>
 
-        <RegistrationForm />
+        <RegistrationForm
+          onSubmit={async (data) => {
+            await registerUser(data)
+            navigate("/")
+          }}
+        />
 
         <p className="text-center text-sm text-neutral-400">
           Already have an account?{" "}
