@@ -1,9 +1,11 @@
 import { useAuth, useUser } from "~/auth/context/auth-context"
 import { UpdateUserForm } from "./components/update-user-form"
 import { updateUser } from "./services/update-user"
+import { useNavigate } from "react-router"
 
 export default function UpdateProfile() {
   const { refresh } = useAuth()
+  const navigate = useNavigate()
   const { username, email, firstName, lastName, bio } = useUser()
 
   return (
@@ -21,6 +23,7 @@ export default function UpdateProfile() {
         onSubmit={async (data) => {
           await updateUser(data)
           await refresh()
+          navigate("/profile")
         }}
         className="md:min-w-lg"
       />
