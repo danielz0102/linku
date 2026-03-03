@@ -93,10 +93,7 @@ export function PasswordInput(props: Omit<InputProps, "type" | "className">) {
         className="absolute top-1/2 right-3 -translate-y-1/2 text-neutral-500 hover:text-neutral-400"
         onClick={() => setIsVisible((prev) => !prev)}
       >
-        <Icon
-          className="size-5"
-          aria-label={isVisible ? "Hide password" : "Show password"}
-        />
+        <Icon className="size-5" aria-label={isVisible ? "Hide" : "Show"} />
       </button>
     </>
   )
