@@ -6,7 +6,7 @@ import FormField from "~/shared/components/form-field"
 import { SubmitButton } from "~/shared/components/submit-button"
 import { cn } from "~/shared/utils/cn"
 
-type Fields = {
+type UpdateUserData = {
   username?: string
   email?: string
   firstName?: string
@@ -15,8 +15,8 @@ type Fields = {
 }
 
 type UpdateUserFormProps = {
-  defaultValues?: Fields
-  onSubmit(data: Fields): Promise<void>
+  defaultValues?: UpdateUserData
+  onSubmit(data: UpdateUserData): Promise<void>
   className?: string
 }
 
@@ -31,7 +31,7 @@ export function UpdateUserForm({
     getValues,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<Fields>({
+  } = useForm<UpdateUserData>({
     defaultValues,
   })
 
@@ -51,7 +51,7 @@ export function UpdateUserForm({
         })
       }
 
-      const fieldKeys = Object.keys(getValues()) as (keyof Fields)[]
+      const fieldKeys = Object.keys(getValues()) as (keyof UpdateUserData)[]
 
       fieldKeys.forEach((k) => {
         const message = error.getValidationError(k)
