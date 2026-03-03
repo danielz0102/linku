@@ -1,6 +1,6 @@
 import { AtSign, Lock, Mail, User } from "lucide-react"
 import { useForm } from "react-hook-form"
-import type { ApiError } from "~/shared/api/api-error"
+import { ApiError } from "~/shared/api/api-error"
 import { Alert } from "~/shared/components/alert"
 import FormField from "~/shared/components/form-field"
 import { SubmitButton } from "~/shared/components/submit-button"
@@ -34,11 +34,15 @@ export function RegistrationForm({ onSubmit }: RegistrationFormProps) {
     try {
       await onSubmit(fields)
     } catch (error) {
-      const apiError = error as ApiError
-
-      if (apiError.code !== "VALIDATION_ERROR") {
+      if (!ApiError.isApiError(error)) {
         return setError("root", {
-          message: apiError.genericMessage,
+          message: new ApiError({ code: "UNEXPECTED_ERROR" }).genericMessage,
+        })
+      }
+
+      if (error.code !== "VALIDATION_ERROR") {
+        return setError("root", {
+          message: error.genericMessage,
         })
       }
 
@@ -47,7 +51,7 @@ export function RegistrationForm({ onSubmit }: RegistrationFormProps) {
       ) as (keyof RegistrationFormFields)[]
 
       fieldKeys.forEach((k) => {
-        const message = apiError.getValidationError(k)
+        const message = error.getValidationError(k)
 
         if (message) {
           setError(k, { message }, { shouldFocus: true })

@@ -1,6 +1,6 @@
 import { AtSign, Lock } from "lucide-react"
 import { useForm } from "react-hook-form"
-import type { ApiError } from "~/shared/api/api-error"
+import { ApiError } from "~/shared/api/api-error"
 import { Alert } from "~/shared/components/alert"
 import FormField from "~/shared/components/form-field"
 import { SubmitButton } from "~/shared/components/submit-button"
@@ -26,7 +26,13 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
     try {
       await onSubmit(data)
     } catch (error) {
-      const { code, genericMessage } = error as ApiError
+      if (!ApiError.isApiError(error)) {
+        return setError("root", {
+          message: new ApiError({ code: "UNEXPECTED_ERROR" }).genericMessage,
+        })
+      }
+
+      const { code, genericMessage } = error
 
       setError("root", {
         message:

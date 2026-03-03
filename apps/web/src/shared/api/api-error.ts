@@ -14,8 +14,12 @@ export class ApiError {
     this.validationErrors = errors
   }
 
+  static isApiError(error: unknown): error is ApiError {
+    return error instanceof this
+  }
+
   get genericMessage(): string {
-    return ERROR_MESSAGES[this.code]
+    return GenericErrorMessage[this.code]
   }
 
   getValidationError(field: string): string | undefined {
@@ -23,7 +27,7 @@ export class ApiError {
   }
 }
 
-const ERROR_MESSAGES: Record<LinkuAPI.ErrorCode, string> = {
+const GenericErrorMessage: Record<LinkuAPI.ErrorCode, string> = {
   VALIDATION_ERROR:
     "There was a validation error. Please check the provided data and try again.",
   NETWORK_ERROR:
@@ -33,4 +37,4 @@ const ERROR_MESSAGES: Record<LinkuAPI.ErrorCode, string> = {
   FORBIDDEN: "You do not have permission to perform this action.",
   UNAUTHORIZED: "You are not authorized to perform this action.",
   TOO_MANY_REQUESTS: "Too many attempts. Try again later.",
-}
+} as const
