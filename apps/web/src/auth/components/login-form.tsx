@@ -5,13 +5,13 @@ import { Alert } from "~/shared/components/alert"
 import FormField from "~/shared/components/form-field"
 import { SubmitButton } from "~/shared/components/submit-button"
 
-type Inputs = {
+type LoginData = {
   username: string
   password: string
 }
 
 type LoginFormProps = {
-  onSubmit(data: Inputs): Promise<void>
+  onSubmit(data: LoginData): Promise<void>
 }
 
 export function LoginForm({ onSubmit }: LoginFormProps) {
@@ -20,7 +20,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
     setError,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<Inputs>()
+  } = useForm<LoginData>()
 
   const submit = handleSubmit(async (data) => {
     try {

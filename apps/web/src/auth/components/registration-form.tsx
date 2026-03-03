@@ -5,7 +5,7 @@ import { Alert } from "~/shared/components/alert"
 import FormField from "~/shared/components/form-field"
 import { SubmitButton } from "~/shared/components/submit-button"
 
-type Fields = {
+type RegistrationData = {
   firstName: string
   lastName: string
   username: string
@@ -13,10 +13,10 @@ type Fields = {
   password: string
 }
 
-type Inputs = Fields & { confirmPassword: string }
+type RegistrationFormFields = RegistrationData & { confirmPassword: string }
 
 type RegistrationFormProps = {
-  onSubmit(data: Fields): Promise<void>
+  onSubmit(data: RegistrationData): Promise<void>
 }
 
 export function RegistrationForm({ onSubmit }: RegistrationFormProps) {
@@ -26,7 +26,7 @@ export function RegistrationForm({ onSubmit }: RegistrationFormProps) {
     getValues,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<Inputs>()
+  } = useForm<RegistrationFormFields>()
 
   const submit = handleSubmit(async (data) => {
     const { confirmPassword: _, ...fields } = data
@@ -42,7 +42,9 @@ export function RegistrationForm({ onSubmit }: RegistrationFormProps) {
         })
       }
 
-      const fieldKeys = Object.keys(getValues()) as (keyof Inputs)[]
+      const fieldKeys = Object.keys(
+        getValues()
+      ) as (keyof RegistrationFormFields)[]
 
       fieldKeys.forEach((k) => {
         const message = apiError.getValidationError(k)
