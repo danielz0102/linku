@@ -2,36 +2,49 @@ import { useEffect, useState } from "react"
 
 export function useImage() {
   const [preview, setPreview] = useState<string | null>(null)
-  const [invalid, setInvalid] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (invalid) {
+    if (error) {
       const id = setTimeout(() => {
-        setInvalid(false)
+        setError(null)
       }, 3000)
 
       return () => clearTimeout(id)
     }
-  }, [invalid])
+  }, [error])
 
   const updateImage = (file: File | null) => {
     if (!file) {
       setPreview(null)
-      return
+      setError(null)
+      return null
     }
 
-    if (!imageIsValid(file)) {
-      setInvalid(true)
-      return
+    const result = imageValidationError(file)
+
+    if (result) {
+      setError(result)
+      return null
     }
 
-    setInvalid(false)
+    setError(null)
     setPreview(URL.createObjectURL(file))
+    return file
   }
 
-  return { preview, invalid, updateImage }
+  return { preview, error, updateImage }
 }
 
-function imageIsValid(file: File) {
-  return file.type.startsWith("image/")
+const allowedMimeTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"]
+const maxSize = 5 * 1024 * 1024
+
+function imageValidationError(file: File) {
+  if (!allowedMimeTypes.includes(file.type)) {
+    return "Allowed files are: JPEG, PNG, JPG, WEBP"
+  }
+
+  if (file.size > maxSize) {
+    return "Picture file cannot be larger than 5MB"
+  }
 }

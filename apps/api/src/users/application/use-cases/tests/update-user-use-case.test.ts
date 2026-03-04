@@ -6,7 +6,7 @@ const repo = new UserRepositoryMock()
 const service = new UpdateUserUseCase({ userRepo: repo })
 
 beforeEach(() => {
-  repo.exists.mockResolvedValue(false)
+  repo.search.mockResolvedValue(undefined)
 })
 
 test("returns the updated public user", async () => {
@@ -30,7 +30,7 @@ test("returns the updated public user", async () => {
 })
 
 test("fails if username or email belongs to another user", async () => {
-  repo.exists.mockResolvedValueOnce(true)
+  repo.search.mockResolvedValueOnce(UserMother.create())
 
   const { ok } = await service.execute(crypto.randomUUID(), {
     username: "taken",

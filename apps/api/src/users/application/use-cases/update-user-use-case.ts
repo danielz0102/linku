@@ -12,6 +12,7 @@ type Data = {
   firstName?: string
   lastName?: string
   bio?: string
+  profilePicUrl?: string
 }
 
 type UpdateUserError = Partial<Record<"username" | "email", string>>

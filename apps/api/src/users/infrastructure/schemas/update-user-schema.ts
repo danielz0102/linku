@@ -6,4 +6,5 @@ export const updateUserSchema = z.object({
   firstName: z.string().trim().nonempty("First name is empty").optional(),
   lastName: z.string().trim().nonempty("Last name is empty").optional(),
   bio: z.string().trim().optional(),
+  profilePicUrl: z.url("Invalid profile picture URL").optional(),
 })

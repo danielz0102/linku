@@ -34,8 +34,20 @@ export namespace LinkuAPI {
       firstName?: string
       lastName?: string
       bio?: string
+      profilePicUrl?: string
     }
     ResponseBody: User | ErrorBody
+  }
+
+  interface UploadSignature {
+    RequestBody: never
+    ResponseBody: {
+      signature: string
+      timestamp: number
+      cloudName: string
+      apiKey: string
+      folder: string
+    }
   }
 
   interface Logout {

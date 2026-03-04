@@ -1,17 +1,30 @@
 import { SquarePen } from "lucide-react"
+import { useState } from "react"
 import { Link } from "react-router"
 import { useUser } from "~/auth/context/auth-context"
+import { UpdatePictureModal } from "./components/update-picture-modal"
 
 export default function Profile() {
   const { username, firstName, lastName, bio, profilePicUrl } = useUser()
+  const [pictureModalOpen, setPictureModalOpen] = useState(false)
 
   return (
     <main className="flex size-full flex-col items-center justify-center gap-4 p-4 text-center">
-      <img
-        src={profilePicUrl || "/default-pp.jpg"}
-        alt="Profile picture"
-        className="size-32 rounded-full"
-      />
+      <div className="relative">
+        <img
+          src={profilePicUrl || "/default-pp.jpg"}
+          alt="Profile picture"
+          className="size-32 rounded-full"
+        />
+        <button
+          type="button"
+          aria-label="Edit profile picture"
+          onClick={() => setPictureModalOpen(true)}
+          className="absolute right-0 bottom-0 cursor-pointer rounded-full border-4 border-blue-950 bg-blue-600 p-2"
+        >
+          <SquarePen strokeWidth={1.5} size={16} />
+        </button>
+      </div>
 
       <div className="space-y-1">
         <h1 className="text-2xl font-semibold">
@@ -32,6 +45,10 @@ export default function Profile() {
         <SquarePen strokeWidth={1.5} size={18} />
         Update profile
       </Link>
+
+      {pictureModalOpen && (
+        <UpdatePictureModal onClose={() => setPictureModalOpen(false)} />
+      )}
     </main>
   )
 }
