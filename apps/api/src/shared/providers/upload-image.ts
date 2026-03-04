@@ -20,7 +20,7 @@ export function createUploadSignature(): LinkuAPI.UploadSignature["ResponseBody"
   const signature = cloudinary.v2.utils.api_sign_request(
     {
       folder,
-      timestamp: timestamp.toString(),
+      timestamp,
     },
     CLOUDINARY_API_SECRET
   )

@@ -47,4 +47,6 @@ function imageValidationError(file: File) {
   if (file.size > maxSize) {
     return "Picture file cannot be larger than 5MB"
   }
+
+  return null
 }

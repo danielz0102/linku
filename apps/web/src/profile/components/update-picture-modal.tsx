@@ -13,6 +13,7 @@ export function UpdatePictureModal({ onClose }: UpdatePictureModalProps) {
   const { refresh } = useAuth()
   const [file, setFile] = useState<File | null>(null)
   const [isSubmitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/70 p-4">
@@ -20,6 +21,7 @@ export function UpdatePictureModal({ onClose }: UpdatePictureModalProps) {
         <h2 className="text-center text-lg font-semibold">Update picture</h2>
 
         <ImagePicker defaultImage={user.profilePicUrl} onChange={setFile} />
+        {error && <p className="text-sm text-red-400">{error}</p>}
 
         <div className="flex gap-2">
           <button
@@ -39,12 +41,15 @@ export function UpdatePictureModal({ onClose }: UpdatePictureModalProps) {
               }
 
               setSubmitting(true)
+              setError(null)
 
               try {
                 const profilePicUrl = await uploadProfileImage(file)
                 await updateUser({ profilePicUrl })
                 await refresh()
                 onClose()
+              } catch {
+                setError("Failed to update profile picture. Please try again.")
               } finally {
                 setSubmitting(false)
               }
