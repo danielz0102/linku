@@ -1,14 +1,14 @@
 import { useState } from "react"
 import { useAuth, useUser } from "~/auth/context/auth-context"
-import { ImagePicker } from "./image-picker/image-picker"
 import { updateUser } from "../services/update-user"
 import { uploadProfileImage } from "../services/upload-profile-image"
+import { ImagePicker } from "./image-picker/image-picker"
 
 type UpdatePictureModalProps = {
-  onClose(): void
+  ref: React.RefObject<HTMLDialogElement | null>
 }
 
-export function UpdatePictureModal({ onClose }: UpdatePictureModalProps) {
+export function UpdatePictureModal({ ref }: UpdatePictureModalProps) {
   const user = useUser()
   const { refresh } = useAuth()
   const [file, setFile] = useState<File | null>(null)
@@ -16,50 +16,51 @@ export function UpdatePictureModal({ onClose }: UpdatePictureModalProps) {
   const [error, setError] = useState<string | null>(null)
 
   return (
-    <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/70 p-4">
-      <div className="w-full max-w-sm space-y-4 rounded-2xl bg-slate-900 p-4">
-        <h2 className="text-center text-lg font-semibold">Update picture</h2>
+    <dialog
+      ref={ref}
+      className="absolute top-1/2 left-1/2 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 space-y-4 rounded-2xl bg-slate-900 p-4 text-white backdrop:bg-black/70"
+    >
+      <h2 className="text-center text-lg font-semibold">Update picture</h2>
 
-        <ImagePicker defaultImage={user.profilePicUrl} onChange={setFile} />
-        {error && <p className="text-sm text-red-400">{error}</p>}
+      <ImagePicker defaultImage={user.profilePicUrl} onChange={setFile} />
+      {error && <p className="text-sm text-red-400">{error}</p>}
 
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="w-full cursor-pointer rounded-full border border-neutral-600 py-2 transition-colors hover:bg-neutral-800"
-          >
-            Cancel
-          </button>
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={() => ref.current?.close()}
+          className="w-full cursor-pointer rounded-full border border-neutral-600 py-2 transition-colors hover:bg-neutral-800"
+        >
+          Cancel
+        </button>
 
-          <button
-            type="button"
-            disabled={!file || isSubmitting}
-            onClick={async () => {
-              if (!file) {
-                return
-              }
+        <button
+          type="button"
+          disabled={!file || isSubmitting}
+          onClick={async () => {
+            if (!file) {
+              return
+            }
 
-              setSubmitting(true)
-              setError(null)
+            setSubmitting(true)
+            setError(null)
 
-              try {
-                const profilePicUrl = await uploadProfileImage(file)
-                await updateUser({ profilePicUrl })
-                await refresh()
-                onClose()
-              } catch {
-                setError("Failed to update profile picture. Please try again.")
-              } finally {
-                setSubmitting(false)
-              }
-            }}
-            className="w-full cursor-pointer rounded-full bg-blue-600 py-2 transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            Confirm
-          </button>
-        </div>
+            try {
+              const profilePicUrl = await uploadProfileImage(file)
+              await updateUser({ profilePicUrl })
+              await refresh()
+              ref.current?.close()
+            } catch {
+              setError("Failed to update profile picture. Please try again.")
+            } finally {
+              setSubmitting(false)
+            }
+          }}
+          className="w-full cursor-pointer rounded-full bg-blue-600 py-2 transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Confirm
+        </button>
       </div>
-    </div>
+    </dialog>
   )
 }
