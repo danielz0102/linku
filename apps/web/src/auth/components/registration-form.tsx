@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form"
 import { ApiError } from "~/shared/api/api-error"
 import { Alert } from "~/shared/components/alert"
 import FormField from "~/shared/components/form-field"
-import { SubmitButton } from "~/shared/components/submit-button"
+import { PrimaryButton } from "~/shared/components/primary-button"
 
 type RegistrationData = {
   firstName: string
@@ -153,7 +153,9 @@ export function RegistrationForm({ onSubmit }: RegistrationFormProps) {
         />
       </FormField.Root>
 
-      <SubmitButton loading={isSubmitting}>Create Account</SubmitButton>
+      <PrimaryButton type="submit" loading={isSubmitting}>
+        Create Account
+      </PrimaryButton>
     </form>
   )
 }
