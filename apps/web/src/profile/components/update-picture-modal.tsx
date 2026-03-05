@@ -3,6 +3,7 @@ import { useAuth, useUser } from "~/auth/context/auth-context"
 import { updateUser } from "../services/update-user"
 import { uploadProfileImage } from "../services/upload-profile-image"
 import { ImagePicker } from "./image-picker/image-picker"
+import { PrimaryButton } from "~/shared/components/primary-button"
 
 type UpdatePictureModalProps = {
   ref: React.RefObject<HTMLDialogElement | null>
@@ -34,9 +35,8 @@ export function UpdatePictureModal({ ref }: UpdatePictureModalProps) {
           Cancel
         </button>
 
-        <button
-          type="button"
-          disabled={!file || isSubmitting}
+        <PrimaryButton
+          loading={isSubmitting}
           onClick={async () => {
             if (!file) {
               return
@@ -56,10 +56,9 @@ export function UpdatePictureModal({ ref }: UpdatePictureModalProps) {
               setSubmitting(false)
             }
           }}
-          className="w-full cursor-pointer rounded-full bg-blue-600 py-2 transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Confirm
-        </button>
+        </PrimaryButton>
       </div>
     </dialog>
   )
