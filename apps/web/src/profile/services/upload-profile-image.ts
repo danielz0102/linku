@@ -1,13 +1,15 @@
+import type { LinkuAPI } from "@linku/api-contract"
 import axios from "axios"
-import { getUploadSignature } from "./get-upload-signature"
+import { apiClient } from "~/shared/api"
 
 type CloudinaryUploadResponse = {
-  secure_url: string
+  secure_url?: string
 }
 
 export async function uploadProfileImage(file: File): Promise<string> {
-  const { signature, timestamp, cloudName, apiKey, folder } =
-    await getUploadSignature()
+  const { signature, timestamp, cloudName, apiKey, folder } = await apiClient
+    .post<LinkuAPI.UploadSignature["ResponseBody"]>("/users/upload-signature")
+    .then(({ data }) => data)
 
   const formData = new FormData()
   formData.append("file", file)
@@ -20,6 +22,11 @@ export async function uploadProfileImage(file: File): Promise<string> {
     `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
     formData
   )
+  const { secure_url } = data
 
-  return data.secure_url
+  if (!secure_url) {
+    throw new Error("Failed to upload image", { cause: { data } })
+  }
+
+  return secure_url
 }
