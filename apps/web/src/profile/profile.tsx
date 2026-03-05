@@ -14,7 +14,7 @@ export default function Profile() {
         <img
           src={profilePicUrl || "/default-pp.jpg"}
           alt="Profile picture"
-          className="size-32 rounded-full"
+          className="size-32 rounded-full object-cover"
         />
         <button
           type="button"
