@@ -3,6 +3,7 @@ import {
   CLOUDINARY_API_SECRET,
   CLOUDINARY_NAME,
 } from "#shared/config/env.js"
+import type { LinkuAPI } from "@linku/api-contract"
 import cloudinary from "cloudinary"
 
 cloudinary.v2.config({
@@ -12,32 +13,23 @@ cloudinary.v2.config({
   secure: true,
 })
 
-export async function uploadImage(buffer: Buffer): Promise<string> {
-  const { promise, resolve, reject } =
-    Promise.withResolvers<cloudinary.UploadApiResponse>()
+const folder = "linku/profile-pictures"
 
-  cloudinary.v2.uploader
-    .upload_stream({ folder: "linku/profile-pictures" }, (error, result) => {
-      if (error) {
-        return reject(error)
-      }
+export function createUploadSignature(): LinkuAPI.UploadSignature["ResponseBody"] {
+  const timestamp = Math.floor(Date.now() / 1000)
+  const signature = cloudinary.v2.utils.api_sign_request(
+    {
+      folder,
+      timestamp,
+    },
+    CLOUDINARY_API_SECRET
+  )
 
-      if (!result) {
-        return reject(
-          new Error("No result from Cloudinary", {
-            cause: {
-              error,
-              result,
-              buffer,
-            },
-          })
-        )
-      }
-
-      resolve(result)
-    })
-    .end(buffer)
-
-  const { secure_url } = await promise
-  return secure_url
+  return {
+    signature,
+    timestamp,
+    cloudName: CLOUDINARY_NAME,
+    apiKey: CLOUDINARY_API_KEY,
+    folder,
+  }
 }

@@ -23,6 +23,7 @@ export type UpdateData = {
   firstName?: string
   lastName?: string
   bio?: string
+  profilePicUrl?: string
 }
 
 type Filters = AtLeastOne<{
