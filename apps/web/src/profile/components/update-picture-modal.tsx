@@ -11,13 +11,13 @@ type UpdatePictureModalProps = {
 }
 
 export function UpdatePictureModal({ ref }: UpdatePictureModalProps) {
-  const user = useUser()
+  const { profilePicUrl } = useUser()
   const { refresh } = useAuth()
   const [file, setFile] = useState<File | null>(null)
 
   const { mutate, isPending, error } = useMutation({
-    mutationFn: async (imageFile: File) => {
-      const profilePicUrl = await uploadProfileImage(imageFile)
+    mutationFn: async (image: File) => {
+      const profilePicUrl = await uploadProfileImage(image)
       await updateUser({ profilePicUrl })
       await refresh()
     },
@@ -31,7 +31,7 @@ export function UpdatePictureModal({ ref }: UpdatePictureModalProps) {
     >
       <h2 className="text-center text-lg font-semibold">Update picture</h2>
 
-      <ImagePicker defaultImage={user.profilePicUrl} onChange={setFile} />
+      <ImagePicker defaultImage={profilePicUrl} onChange={setFile} />
       {error && (
         <p className="text-sm text-red-400">
           Failed to update profile picture. Please try again.

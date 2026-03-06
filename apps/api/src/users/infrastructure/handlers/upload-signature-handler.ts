@@ -13,11 +13,20 @@ import type { RequestHandler } from "express"
 export const uploadSignatureHandler: RequestHandler<
   never,
   LinkuAPI.UploadSignature["ResponseBody"]
-> = (_req, res) => {
+> = (req, res) => {
+  const { userId } = req.session
+
+  if (!userId) {
+    throw new Error("User ID is missing in session", {
+      cause: { session: req.session },
+    })
+  }
+
   const timestamp = Math.round(new Date().getTime() / 1000)
   const signature = cloudinaryClient.utils.api_sign_request(
     {
       folder: CloudinaryFolders.PROFILE_PICTURES,
+      public_id: userId,
       timestamp,
     },
     CLOUDINARY_API_SECRET
@@ -27,7 +36,8 @@ export const uploadSignatureHandler: RequestHandler<
     signature,
     timestamp,
     cloudName: CLOUDINARY_NAME,
-    apiKey: CLOUDINARY_API_KEY,
+    api_key: CLOUDINARY_API_KEY,
     folder: CloudinaryFolders.PROFILE_PICTURES,
+    public_id: userId,
   })
 }

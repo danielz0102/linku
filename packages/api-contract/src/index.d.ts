@@ -45,8 +45,9 @@ export namespace LinkuAPI {
       signature: string
       timestamp: number
       cloudName: string
-      apiKey: string
+      api_key: string
       folder: string
+      public_id: string
     }
   }
 
