@@ -2,6 +2,7 @@ import { lazy } from "react"
 import { BrowserRouter, Route, Routes } from "react-router"
 import { ProtectedRoute } from "~/auth/components/protected-route"
 import { Layout } from "~/shared/layout/layout"
+import { ErrorPage } from "./pages/error-page"
 
 const Home = lazy(() => import("~/home/home"))
 const Login = lazy(() => import("~/auth/login"))
@@ -26,6 +27,10 @@ export function Router() {
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route
+          path="*"
+          element={<ErrorPage status={404} message="Page not found" />}
+        />
       </Routes>
     </BrowserRouter>
   )
