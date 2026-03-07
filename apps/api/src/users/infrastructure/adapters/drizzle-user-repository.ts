@@ -38,7 +38,7 @@ export class DrizzleUserRepository implements UserRepository {
     const conditions = this.buildWhereCondtions(filters)
 
     if (!conditions) {
-      return undefined
+      return
     }
 
     return db

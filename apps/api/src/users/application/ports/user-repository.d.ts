@@ -7,7 +7,7 @@ export interface UserRepository {
   update: (id: string, data: UpdateData) => Promise<User>
 }
 
-type NewUser = {
+export type NewUser = {
   username: string
   email: string
   hashedPassword: string
@@ -26,7 +26,7 @@ export type UpdateData = {
   profilePicUrl?: string
 }
 
-type Filters = AtLeastOne<{
+export type Filters = AtLeastOne<{
   id: string
   email: string
   username: string
