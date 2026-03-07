@@ -1,50 +1,60 @@
 import { PasswordHasherMock } from "~/__test-utils__/mocks/password-hasher-mock.ts"
 import { UserRepositoryMock } from "~/__test-utils__/mocks/user-repository-mock.ts"
 import { UserMother } from "~/__test-utils__/mothers/user-mother.ts"
-import { RegistrationUseCase } from "~/users/application/use-cases/registration-use-case.ts"
+import {
+  RegistrationUseCase,
+  type RegistrationData,
+} from "~/users/application/use-cases/registration-use-case.ts"
+import { faker } from "@faker-js/faker"
 
 const repo = new UserRepositoryMock()
-const service = new RegistrationUseCase({
+const register = new RegistrationUseCase({
   userRepo: repo,
   hasher: new PasswordHasherMock(),
-})
-
-type Input = Parameters<RegistrationUseCase["execute"]>[0]
-
-const newUser: Input = {
-  username: "testuser",
-  email: "testuser@example.com",
-  firstName: "Test",
-  lastName: "User",
-  password: "password123",
-}
-
-beforeEach(() => {
-  repo.exists.mockResolvedValue(false)
 })
 
 test("returns a public user", async () => {
   const userCreated = UserMother.create()
   repo.create.mockResolvedValue(userCreated)
 
-  const { ok, data } = await service.execute(newUser)
+  const { ok, data } = await register.execute(createDto())
 
   expect(ok).toBe(true)
-  expect(data).toEqual({
-    id: userCreated.id,
-    username: userCreated.username,
-    email: userCreated.email,
-    firstName: userCreated.firstName,
-    lastName: userCreated.lastName,
-    bio: userCreated.bio,
-    profilePicUrl: userCreated.profilePicUrl,
-  })
+
+  const { hashedPassword: _, ...publicUser } = userCreated
+
+  expect(data).toEqual(publicUser)
 })
 
-test("fails if user already exists", async () => {
-  repo.exists.mockResolvedValueOnce(true)
+test("fails if there is a user with the same username", async () => {
+  const dto = createDto()
+  repo.search.mockResolvedValueOnce(
+    UserMother.create({ username: dto.username })
+  )
 
-  const { ok } = await service.execute(newUser)
+  const { ok, error } = await register.execute(dto)
 
   expect(ok).toBe(false)
+  expect(error).toEqual({ username: "Username already exists" })
 })
+
+test("fails if there is a user with the same email", async () => {
+  const dto = createDto()
+  repo.search.mockResolvedValueOnce(UserMother.create({ email: dto.email }))
+
+  const { ok, error } = await register.execute(dto)
+
+  expect(ok).toBe(false)
+  expect(error).toEqual({ email: "Email already exists" })
+})
+
+function createDto(overrides?: Partial<RegistrationData>): RegistrationData {
+  return {
+    username: faker.internet.username(),
+    email: faker.internet.email(),
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+    password: faker.internet.password(),
+    ...overrides,
+  }
+}

@@ -8,7 +8,7 @@ type Dependencies = {
   hasher: PasswordHasher
 }
 
-type Data = {
+export type RegistrationData = {
   username: string
   email: string
   password: string
@@ -33,16 +33,16 @@ export class RegistrationUseCase {
     password,
     firstName,
     lastName,
-  }: Data): Promise<Result<PublicUser, RegisterError>> {
-    const [existingByUsername, existingByEmail] = await Promise.all([
-      this.userRepo.exists({ username }),
-      this.userRepo.exists({ email }),
-    ])
+  }: RegistrationData): Promise<Result<PublicUser, RegisterError>> {
+    const exisiting = await this.userRepo.search({ username, email })
 
-    if (existingByUsername || existingByEmail) {
+    if (exisiting) {
+      const isSameUsername = exisiting.username === username
+      const isSameEmail = exisiting.email === email
+
       return Result.fail({
-        username: existingByUsername ? "Username already exists" : undefined,
-        email: existingByEmail ? "Email already exists" : undefined,
+        username: isSameUsername ? "Username already exists" : undefined,
+        email: isSameEmail ? "Email already exists" : undefined,
       })
     }
 
