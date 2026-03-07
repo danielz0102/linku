@@ -7,15 +7,13 @@ type Validator = (
 ) => RequestHandler<never, LinkuAPI.ErrorBody>
 
 export const validator: Validator = (schema) => (req, res, next) => {
-  const result = schema.safeParse(req.body)
+  const { success, error } = schema.safeParse(req.body)
 
-  if (!result.success) {
-    const errors = mapZodError(result.error)
-
+  if (!success) {
     return res.status(400).json({
       code: "VALIDATION_ERROR",
       message: "Invalid data",
-      errors,
+      errors: mapZodError(error),
     })
   }
 
@@ -25,13 +23,13 @@ export const validator: Validator = (schema) => (req, res, next) => {
 function mapZodError(
   error: z.ZodError<Record<string, unknown>>
 ): Record<string, string> | undefined {
-  const flattened = z.treeifyError(error).properties
+  const { properties } = z.treeifyError(error)
 
-  if (!flattened) {
+  if (!properties) {
     return
   }
 
-  const result = Object.entries(flattened).reduce<Record<string, string>>(
+  return Object.entries(properties).reduce<Record<string, string>>(
     (acc, [k, v]) => {
       if (!v) {
         return acc
@@ -44,6 +42,4 @@ function mapZodError(
     },
     {}
   )
-
-  return result
 }
