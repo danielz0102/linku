@@ -33,7 +33,7 @@ export function UpdatePictureModal({ ref }: UpdatePictureModalProps) {
 
       <ImagePicker defaultImage={profilePicUrl} onChange={setFile} />
       {error && (
-        <p className="text-sm text-red-400">
+        <p className="text-sm text-red-400" role="alert">
           Failed to update profile picture. Please try again.
         </p>
       )}
