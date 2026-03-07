@@ -34,11 +34,11 @@ export class RegistrationUseCase {
     firstName,
     lastName,
   }: RegistrationData): Promise<Result<PublicUser, RegisterError>> {
-    const exisiting = await this.userRepo.search({ username, email })
+    const existing = await this.userRepo.search({ username, email })
 
-    if (exisiting) {
-      const isSameUsername = exisiting.username === username
-      const isSameEmail = exisiting.email === email
+    if (existing) {
+      const isSameUsername = existing.username === username
+      const isSameEmail = existing.email === email
 
       return Result.fail({
         username: isSameUsername ? "Username already exists" : undefined,

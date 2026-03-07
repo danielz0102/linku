@@ -1,5 +1,5 @@
 import type {
-  Filters,
+  UserFilters,
   NewUser,
   UpdateData,
   UserRepository,
@@ -19,7 +19,7 @@ export class DrizzleUserRepository implements UserRepository {
       .then(([row]) => row)
   }
 
-  async exists(filters: Filters): Promise<boolean> {
+  async exists(filters: UserFilters): Promise<boolean> {
     const conditions = this.buildWhereCondtions(filters)
 
     if (!conditions) {
@@ -34,7 +34,7 @@ export class DrizzleUserRepository implements UserRepository {
       .then((rows) => rows.length > 0)
   }
 
-  async search(filters: Filters): Promise<User | undefined> {
+  async search(filters: UserFilters): Promise<User | undefined> {
     const conditions = this.buildWhereCondtions(filters)
 
     if (!conditions) {
@@ -58,7 +58,7 @@ export class DrizzleUserRepository implements UserRepository {
       .then(([row]) => row)
   }
 
-  private buildWhereCondtions({ id, email, username }: Filters) {
+  private buildWhereCondtions({ id, email, username }: UserFilters) {
     const conditions = []
 
     if (id) {
@@ -69,6 +69,10 @@ export class DrizzleUserRepository implements UserRepository {
     }
     if (username) {
       conditions.push(eq(usersTable.username, username))
+    }
+
+    if (conditions.length === 0) {
+      return
     }
 
     return conditions.length === 1 ? conditions[0] : and(...conditions)

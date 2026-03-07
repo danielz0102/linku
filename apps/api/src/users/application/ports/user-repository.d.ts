@@ -2,8 +2,8 @@ import { User } from "#users/domain/user.js"
 
 export interface UserRepository {
   create: (newUser: NewUser) => Promise<User>
-  exists: (filters: Filters) => Promise<boolean>
-  search: (filters: Filters) => Promise<User | undefined>
+  exists: (filters: UserFilters) => Promise<boolean>
+  search: (filters: UserFilters) => Promise<User | undefined>
   update: (id: string, data: UpdateData) => Promise<User>
 }
 
@@ -17,22 +17,17 @@ export type NewUser = {
   bio?: string
 }
 
-export type UpdateData = {
-  username?: string
-  email?: string
-  firstName?: string
-  lastName?: string
-  bio?: string
-  profilePicUrl?: string
-}
+export type UpdateData = Partial<{
+  username: string
+  email: string
+  firstName: string
+  lastName: string
+  bio: string
+  profilePicUrl: string
+}>
 
-export type Filters = AtLeastOne<{
+export type UserFilters = Partial<{
   id: string
   email: string
   username: string
 }>
-
-type AtLeastOne<T> = Partial<T> &
-  {
-    [K in keyof T]-?: Required<Pick<T, K>>
-  }[keyof T]
