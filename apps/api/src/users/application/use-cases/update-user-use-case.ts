@@ -6,7 +6,7 @@ type Dependencies = {
   userRepo: UserRepository
 }
 
-type Data = {
+export type UpdateUserData = {
   username?: string
   email?: string
   firstName?: string
@@ -26,7 +26,7 @@ export class UpdateUserUseCase {
 
   async execute(
     id: string,
-    data: Data
+    data: UpdateUserData
   ): Promise<Result<PublicUser, UpdateUserError>> {
     const searchUsername = async () => {
       if (!data.username) return false
