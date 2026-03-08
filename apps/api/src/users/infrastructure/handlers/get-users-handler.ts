@@ -13,18 +13,12 @@ type GetUsersHandler = (
 
 export const getUsersHandler: GetUsersHandler =
   (repository) => async (req, res) => {
-    const { username, firstName, lastName, limit, offset } = req.query
+    const { username, firstName, lastName, limit = 20, offset = 0 } = req.query
 
-    const filters = {
-      ...(username ? { username } : {}),
-      ...(firstName ? { firstName } : {}),
-      ...(lastName ? { lastName } : {}),
-    }
+    const users = await repository.search(
+      { username, firstName, lastName },
+      { limit: Number(limit), offset: Number(offset) }
+    )
 
-    const users = await repository.search(filters, {
-      limit: limit !== undefined ? Number(limit) : undefined,
-      offset: offset !== undefined ? Number(offset) : undefined,
-    })
-
-    return res.status(200).json(users.map((user) => user.toPublic()))
+    return res.status(200).json(users.map((u) => u.toPublic()))
   }
