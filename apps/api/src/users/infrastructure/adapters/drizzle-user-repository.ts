@@ -8,7 +8,7 @@ import type { User } from "#users/domain/user.js"
 
 import db from "#shared/db/drizzle/index.js"
 import { usersTable } from "#shared/db/drizzle/schemas.js"
-import { and, eq } from "drizzle-orm"
+import { and, eq, type SQL } from "drizzle-orm"
 
 export class DrizzleUserRepository implements UserRepository {
   async create(newUser: NewUser): Promise<User> {
@@ -19,17 +19,21 @@ export class DrizzleUserRepository implements UserRepository {
       .then(([row]) => row)
   }
 
-  async search(filters: UserFilters): Promise<User | undefined> {
-    const conditions = this.buildWhereCondtions(filters)
+  async search({
+    id,
+    email,
+    username,
+  }: UserFilters): Promise<User | undefined> {
+    const conditions: SQL[] = []
 
-    if (!conditions) {
-      return
-    }
+    if (id) conditions.push(eq(usersTable.id, id))
+    if (email) conditions.push(eq(usersTable.email, email))
+    if (username) conditions.push(eq(usersTable.username, username))
 
     return db
       .select()
       .from(usersTable)
-      .where(conditions)
+      .where(and(...conditions))
       .limit(1)
       .then((rows) => rows[0])
   }
@@ -41,25 +45,5 @@ export class DrizzleUserRepository implements UserRepository {
       .where(eq(usersTable.id, id))
       .returning()
       .then(([row]) => row)
-  }
-
-  private buildWhereCondtions({ id, email, username }: UserFilters) {
-    const conditions = []
-
-    if (id) {
-      conditions.push(eq(usersTable.id, id))
-    }
-    if (email) {
-      conditions.push(eq(usersTable.email, email))
-    }
-    if (username) {
-      conditions.push(eq(usersTable.username, username))
-    }
-
-    if (conditions.length === 0) {
-      return
-    }
-
-    return conditions.length === 1 ? conditions[0] : and(...conditions)
   }
 }
