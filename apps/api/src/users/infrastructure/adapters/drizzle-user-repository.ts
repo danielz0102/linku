@@ -8,7 +8,7 @@ import type { User } from "#users/domain/user.js"
 
 import db from "#shared/db/drizzle/index.js"
 import { usersTable } from "#shared/db/drizzle/schemas.js"
-import { and, eq, type SQL } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 
 export class DrizzleUserRepository implements UserRepository {
   async create(newUser: NewUser): Promise<User> {
@@ -19,16 +19,9 @@ export class DrizzleUserRepository implements UserRepository {
       .then(([row]) => row)
   }
 
-  async findOne({
-    id,
-    email,
-    username,
-  }: UserFilters): Promise<User | undefined> {
-    const conditions: SQL[] = []
-
-    if (id) conditions.push(eq(usersTable.id, id))
-    if (email) conditions.push(eq(usersTable.email, email))
-    if (username) conditions.push(eq(usersTable.username, username))
+  async findOne(filters: UserFilters): Promise<User | undefined> {
+    const entries = Object.entries(filters) as [keyof UserFilters, string][]
+    const conditions = entries.map(([k, v]) => eq(usersTable[k], v))
 
     if (conditions.length === 0) {
       throw new Error("At least one filter must be provided")

@@ -26,7 +26,11 @@ export type UpdateData = Partial<{
 }>
 
 export type UserFilters = Partial<{
-  id: string
-  email: string
-  username: string
+  [K in keyof {
+    id: string
+    username: string
+    email: string
+    firstName: string
+    lastName: string
+  }]: User[K]
 }>
