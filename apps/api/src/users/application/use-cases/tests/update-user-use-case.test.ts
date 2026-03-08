@@ -21,7 +21,7 @@ test("returns the updated public user", async () => {
 })
 
 test("fails if username belongs to another user", async () => {
-  repo.search.mockResolvedValueOnce(UserMother.create({ username: "taken" }))
+  repo.findOne.mockResolvedValueOnce(UserMother.create({ username: "taken" }))
 
   const { ok, error } = await service.execute(crypto.randomUUID(), {
     username: "taken",
@@ -32,7 +32,7 @@ test("fails if username belongs to another user", async () => {
 })
 
 test("fails if email belongs to another user", async () => {
-  repo.search.mockResolvedValueOnce(UserMother.create({ email: "taken" }))
+  repo.findOne.mockResolvedValueOnce(UserMother.create({ email: "taken" }))
 
   const { ok, error } = await service.execute(crypto.randomUUID(), {
     email: "taken",

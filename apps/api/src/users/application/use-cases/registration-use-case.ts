@@ -34,7 +34,7 @@ export class RegistrationUseCase {
     firstName,
     lastName,
   }: RegistrationData): Promise<Result<PublicUser, RegisterError>> {
-    const existing = await this.userRepo.search({ username, email })
+    const existing = await this.userRepo.findOne({ username, email })
 
     if (existing) {
       const isSameUsername = existing.username === username

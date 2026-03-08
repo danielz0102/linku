@@ -19,7 +19,7 @@ export class DrizzleUserRepository implements UserRepository {
       .then(([row]) => row)
   }
 
-  async search({
+  async findOne({
     id,
     email,
     username,

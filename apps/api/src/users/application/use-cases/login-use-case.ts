@@ -26,7 +26,7 @@ export class LoginUseCase {
     username,
     password,
   }: LoginCredentials): Promise<Result<PublicUser, string>> {
-    const user = await this.userRepo.search({ username })
+    const user = await this.userRepo.findOne({ username })
 
     if (!user) {
       return Result.fail("Invalid credentials")

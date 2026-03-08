@@ -28,7 +28,7 @@ export class UpdateUserUseCase {
     id: string,
     data: UpdateUserData
   ): Promise<Result<PublicUser, UpdateUserError>> {
-    const existing = await this.userRepo.search({
+    const existing = await this.userRepo.findOne({
       username: data.username,
       email: data.email,
     })
