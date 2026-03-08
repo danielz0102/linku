@@ -33,7 +33,7 @@ export class DrizzleUserRepository implements UserRepository {
       .from(usersTable)
       .where(or(...conditions))
       .limit(1)
-      .then(([u]) => (u ? new User(u) : undefined))
+      .then(([r]) => (r ? new User(r) : undefined))
   }
 
   async search(
@@ -53,7 +53,7 @@ export class DrizzleUserRepository implements UserRepository {
       .where(or(...conditions))
       .limit(limit)
       .offset(offset)
-      .then((rows) => rows.map((row) => new User(row)))
+      .then((rows) => rows.map((r) => new User(r)))
   }
 
   async update(id: string, data: UpdateData): Promise<User> {
@@ -62,6 +62,6 @@ export class DrizzleUserRepository implements UserRepository {
       .set(data)
       .where(eq(usersTable.id, id))
       .returning()
-      .then(([u]) => new User(u))
+      .then(([r]) => new User(r))
   }
 }
