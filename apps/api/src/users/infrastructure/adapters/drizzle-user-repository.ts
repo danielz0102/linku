@@ -17,7 +17,7 @@ export class DrizzleUserRepository implements UserRepository {
       .insert(usersTable)
       .values(newUser)
       .returning()
-      .then(([row]) => row)
+      .then(([u]) => u)
   }
 
   async findOne(filters: UserFilters): Promise<User | undefined> {
@@ -33,7 +33,7 @@ export class DrizzleUserRepository implements UserRepository {
       .from(usersTable)
       .where(or(...conditions))
       .limit(1)
-      .then((rows) => rows[0])
+      .then(([u]) => u)
   }
 
   async search(
@@ -62,6 +62,6 @@ export class DrizzleUserRepository implements UserRepository {
       .set(data)
       .where(eq(usersTable.id, id))
       .returning()
-      .then(([row]) => row)
+      .then(([u]) => u)
   }
 }
