@@ -41,14 +41,6 @@ export class LoginUseCase {
       return Result.fail("Invalid credentials")
     }
 
-    return Result.ok({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      bio: user.bio,
-      profilePicUrl: user.profilePicUrl,
-    })
+    return Result.ok(user.toPublic())
   }
 }

@@ -26,15 +26,5 @@ export const getUsersHandler: GetUsersHandler =
       offset: offset !== undefined ? Number(offset) : undefined,
     })
 
-    return res.status(200).json(
-      users.map((user) => ({
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        bio: user.bio,
-        profilePicUrl: user.profilePicUrl,
-      }))
-    )
+    return res.status(200).json(users.map((user) => user.toPublic()))
   }

@@ -22,15 +22,7 @@ test("returns a public user if credentials are valid", async () => {
   const { ok, data } = await useCase.execute(createDTO())
 
   expect(ok).toBe(true)
-  expect(data).toEqual({
-    id: user.id,
-    username: user.username,
-    email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    bio: user.bio,
-    profilePicUrl: user.profilePicUrl,
-  })
+  expect(data).toEqual(user.toPublic())
 })
 
 test("fails if user does not exist", async () => {

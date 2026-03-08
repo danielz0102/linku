@@ -20,10 +20,7 @@ test("returns a public user", async () => {
   const { ok, data } = await register.execute(createDto())
 
   expect(ok).toBe(true)
-
-  const { hashedPassword: _, ...publicUser } = userCreated
-
-  expect(data).toEqual(publicUser)
+  expect(data).toEqual(userCreated.toPublic())
 })
 
 test("fails if there is a user with the same username", async () => {

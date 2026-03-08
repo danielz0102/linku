@@ -12,15 +12,7 @@ test("sends 200 with a list of users", async () => {
   const users = [UserMother.create(), UserMother.create()]
   repo.search.mockResolvedValueOnce(users)
 
-  const expected = users.map((user) => ({
-    id: user.id,
-    username: user.username,
-    email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    bio: user.bio,
-    profilePicUrl: user.profilePicUrl,
-  }))
+  const expected = users.map((user) => user.toPublic())
 
   await request(app)
     .get("/")

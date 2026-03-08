@@ -1,4 +1,4 @@
-export type User = {
+type UserParams = {
   id: string
   username: string
   email: string
@@ -9,4 +9,38 @@ export type User = {
   bio: string | null
 }
 
-export type PublicUser = Omit<User, "hashedPassword">
+export type PublicUser = Omit<UserParams, "hashedPassword">
+
+export class User {
+  public readonly id: string
+  public readonly username: string
+  public readonly email: string
+  public readonly hashedPassword: string
+  public readonly firstName: string
+  public readonly lastName: string
+  public readonly profilePicUrl: string | null
+  public readonly bio: string | null
+
+  constructor(params: UserParams) {
+    this.id = params.id
+    this.username = params.username
+    this.email = params.email
+    this.hashedPassword = params.hashedPassword
+    this.firstName = params.firstName
+    this.lastName = params.lastName
+    this.profilePicUrl = params.profilePicUrl
+    this.bio = params.bio
+  }
+
+  toPublic(): PublicUser {
+    return {
+      id: this.id,
+      username: this.username,
+      email: this.email,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      profilePicUrl: this.profilePicUrl,
+      bio: this.bio,
+    }
+  }
+}

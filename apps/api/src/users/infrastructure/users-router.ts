@@ -16,7 +16,7 @@ router.get("/me", getMeEndpoint)
 router.post("/upload-signature", uploadSignatureEndpoint)
 router.post("/", registerUserEndpoint)
 router.patch("/", updateUserEndpoint)
-router.get("/", getUsersEndpoint)
+router.get("/", ...getUsersEndpoint)
 router.get("/:id", getUserByIdEndpoint)
 
 export { router as usersRouter }

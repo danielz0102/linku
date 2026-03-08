@@ -14,10 +14,7 @@ test("returns the updated public user", async () => {
   })
 
   expect(ok).toBe(true)
-
-  const { hashedPassword: _, ...publicUser } = userUpdated
-
-  expect(data).toEqual(publicUser)
+  expect(data).toEqual(userUpdated.toPublic())
 })
 
 test("fails if username belongs to another user", async () => {

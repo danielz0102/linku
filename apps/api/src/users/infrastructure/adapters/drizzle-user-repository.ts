@@ -5,7 +5,7 @@ import type {
   UserFilters,
   UserRepository,
 } from "#users/application/ports/user-repository.d.js"
-import type { User } from "#users/domain/user.js"
+import { User } from "#users/domain/user.js"
 
 import db from "#shared/db/drizzle/index.js"
 import { usersTable } from "#shared/db/drizzle/schemas.js"
@@ -17,7 +17,7 @@ export class DrizzleUserRepository implements UserRepository {
       .insert(usersTable)
       .values(newUser)
       .returning()
-      .then(([u]) => u)
+      .then(([u]) => new User(u))
   }
 
   async findOne(filters: UserFilters): Promise<User | undefined> {
@@ -33,7 +33,7 @@ export class DrizzleUserRepository implements UserRepository {
       .from(usersTable)
       .where(or(...conditions))
       .limit(1)
-      .then(([u]) => u)
+      .then(([u]) => (u ? new User(u) : undefined))
   }
 
   async search(
@@ -53,7 +53,7 @@ export class DrizzleUserRepository implements UserRepository {
       .where(or(...conditions))
       .limit(limit)
       .offset(offset)
-      .then((rows) => rows)
+      .then((rows) => rows.map((row) => new User(row)))
   }
 
   async update(id: string, data: UpdateData): Promise<User> {
@@ -62,6 +62,6 @@ export class DrizzleUserRepository implements UserRepository {
       .set(data)
       .where(eq(usersTable.id, id))
       .returning()
-      .then(([u]) => u)
+      .then(([u]) => new User(u))
   }
 }
