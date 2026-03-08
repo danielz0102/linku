@@ -8,7 +8,7 @@ type Dependencies = {
   hasher: PasswordHasher
 }
 
-type Credentials = {
+export type LoginCredentials = {
   username: string
   password: string
 }
@@ -25,7 +25,7 @@ export class LoginUseCase {
   async execute({
     username,
     password,
-  }: Credentials): Promise<Result<PublicUser, string>> {
+  }: LoginCredentials): Promise<Result<PublicUser, string>> {
     const user = await this.userRepo.search({ username })
 
     if (!user) {
