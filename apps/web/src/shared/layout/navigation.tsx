@@ -61,8 +61,9 @@ type NavItemProps = React.PropsWithChildren<{
 function NavItem({ children, isActive = false }: NavItemProps) {
   return (
     <li
-      className="p-2 text-sm data-active:rounded-lg data-active:bg-slate-700 md:w-full"
-      data-active={isActive ? "true" : undefined}
+      className={cn("p-2 text-sm md:w-full", {
+        "rounded-lg bg-slate-700": isActive,
+      })}
     >
       {children}
     </li>
