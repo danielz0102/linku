@@ -6,14 +6,14 @@ type Dependencies = {
   userRepo: UserRepository
 }
 
-export type UpdateUserData = {
-  username?: string
-  email?: string
-  firstName?: string
-  lastName?: string
-  bio?: string
-  profilePicUrl?: string
-}
+export type UpdateUserData = Partial<{
+  username: string
+  email: string
+  firstName: string
+  lastName: string
+  bio: string
+  profilePicUrl: string
+}>
 
 type UpdateUserError = Partial<Record<"username" | "email", string>>
 
