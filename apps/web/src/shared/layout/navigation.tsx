@@ -29,7 +29,7 @@ export function Navigation({ className }: NavigationProps) {
         <NavItem isActive={pathname === "/search-users"}>
           <Link to="/search-users" className="md:flex md:items-center md:gap-2">
             <Search strokeWidth={1.5} />
-            <span className="sr-only md:not-sr-only">Search</span>
+            <span className="sr-only md:not-sr-only">Search Users</span>
           </Link>
         </NavItem>
 
