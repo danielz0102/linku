@@ -51,6 +51,24 @@ export namespace LinkuAPI {
     }
   }
 
+  interface GetUserById {
+    Params: { id: string }
+    RequestBody: never
+    ResponseBody: User | ErrorBody
+  }
+
+  interface GetUsers {
+    Query: {
+      username?: string
+      firstName?: string
+      lastName?: string
+      limit?: string
+      offset?: string
+    }
+    RequestBody: never
+    ResponseBody: User[] | ErrorBody
+  }
+
   interface Logout {
     RequestBody: never
     ResponseBody: undefined | ErrorBody
