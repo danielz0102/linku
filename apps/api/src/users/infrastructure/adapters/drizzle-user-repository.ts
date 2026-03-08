@@ -1,15 +1,15 @@
 import type {
-  UserFilters,
   NewUser,
-  UpdateData,
-  UserRepository,
   SearchOptions,
+  UpdateData,
+  UserFilters,
+  UserRepository,
 } from "#users/application/ports/user-repository.d.js"
 import type { User } from "#users/domain/user.js"
 
 import db from "#shared/db/drizzle/index.js"
 import { usersTable } from "#shared/db/drizzle/schemas.js"
-import { and, eq, ilike, or } from "drizzle-orm"
+import { eq, ilike, or } from "drizzle-orm"
 
 export class DrizzleUserRepository implements UserRepository {
   async create(newUser: NewUser): Promise<User> {
@@ -31,7 +31,7 @@ export class DrizzleUserRepository implements UserRepository {
     return db
       .select()
       .from(usersTable)
-      .where(and(...conditions))
+      .where(or(...conditions))
       .limit(1)
       .then((rows) => rows[0])
   }
