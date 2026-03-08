@@ -9,6 +9,8 @@ const Login = lazy(() => import("~/auth/login"))
 const Register = lazy(() => import("~/auth/register"))
 const Profile = lazy(() => import("~/profile/profile"))
 const UpdateProfile = lazy(() => import("~/profile/update-profile"))
+const SearchUsers = lazy(() => import("~/users/search-users"))
+const PublicProfile = lazy(() => import("~/users/public-profile"))
 
 export function Router() {
   return (
@@ -24,6 +26,8 @@ export function Router() {
           <Route index element={<Home />} />
           <Route path="profile" element={<Profile />} />
           <Route path="update-profile" element={<UpdateProfile />} />
+          <Route path="search-users" element={<SearchUsers />} />
+          <Route path="users/:id" element={<PublicProfile />} />
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />

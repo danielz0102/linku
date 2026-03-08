@@ -1,4 +1,4 @@
-import { House, LogOut, User } from "lucide-react"
+import { House, LogOut, Search, User } from "lucide-react"
 import { Link, useLocation } from "react-router"
 import { useAuth } from "~/auth/context/auth-context"
 import { cn } from "../utils/cn"
@@ -23,6 +23,13 @@ export function Navigation({ className }: NavigationProps) {
           <Link to="/" className="md:flex md:items-center md:gap-2">
             <House strokeWidth={1.5} />
             <span className="sr-only md:not-sr-only">Home</span>
+          </Link>
+        </NavItem>
+
+        <NavItem isActive={pathname === "/search-users"}>
+          <Link to="/search-users" className="md:flex md:items-center md:gap-2">
+            <Search strokeWidth={1.5} />
+            <span className="sr-only md:not-sr-only">Search</span>
           </Link>
         </NavItem>
 
