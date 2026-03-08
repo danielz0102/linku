@@ -2,7 +2,6 @@ import { User } from "#users/domain/user.js"
 
 export interface UserRepository {
   create: (newUser: NewUser) => Promise<User>
-  exists: (filters: UserFilters) => Promise<boolean>
   search: (filters: UserFilters) => Promise<User | undefined>
   update: (id: string, data: UpdateData) => Promise<User>
 }
