@@ -4,14 +4,13 @@ import { UserRepositoryMock } from "~/__test-utils__/mocks/user-repository-mock.
 import { UserMother } from "~/__test-utils__/mothers/user-mother.ts"
 import { getUsersHandler } from "../get-users-handler.ts"
 
-const repository = new UserRepositoryMock()
-
+const repo = new UserRepositoryMock()
 const app = new AppBuilder().withSession().build()
-app.get("/", getUsersHandler(repository))
+app.get("/", getUsersHandler(repo))
 
 test("sends 200 with a list of users", async () => {
   const users = [UserMother.create(), UserMother.create()]
-  repository.search.mockResolvedValueOnce(users)
+  repo.search.mockResolvedValueOnce(users)
 
   const expected = users.map((user) => ({
     id: user.id,
@@ -31,7 +30,7 @@ test("sends 200 with a list of users", async () => {
 })
 
 test("sends 200 with an empty list when no users match", async () => {
-  repository.search.mockResolvedValueOnce([])
+  repo.search.mockResolvedValueOnce([])
 
   await request(app)
     .get("/")
@@ -42,7 +41,7 @@ test("sends 200 with an empty list when no users match", async () => {
 
 test("sends 200 with pagination options", async () => {
   const users = [UserMother.create()]
-  repository.search.mockResolvedValueOnce(users)
+  repo.search.mockResolvedValueOnce(users)
 
   await request(app)
     .get("/")
