@@ -30,6 +30,10 @@ export class DrizzleUserRepository implements UserRepository {
     if (email) conditions.push(eq(usersTable.email, email))
     if (username) conditions.push(eq(usersTable.username, username))
 
+    if (conditions.length === 0) {
+      throw new Error("At least one filter must be provided")
+    }
+
     return db
       .select()
       .from(usersTable)

@@ -12,3 +12,6 @@ export const updateUserSchema = z
       .startsWith("https://", "Profile picture URL must be a valid HTTPS URL"),
   })
   .partial()
+  .refine((d) => Object.keys(d).length > 0, {
+    message: "At least one field must be provided",
+  })
