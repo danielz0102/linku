@@ -1,5 +1,7 @@
 import { Router } from "express"
 import { getMeEndpoint } from "./endpoints/get-me-endpoint.js"
+import { getUserByIdEndpoint } from "./endpoints/get-user-by-id-endpoint.js"
+import { getUsersEndpoint } from "./endpoints/get-users-endpoint.js"
 import { loginEndpoint } from "./endpoints/login-endpoint.js"
 import { registerUserEndpoint } from "./endpoints/register-user-endpoint.js"
 import { uploadSignatureEndpoint } from "./endpoints/upload-signature-endpoint.js"
@@ -14,5 +16,7 @@ router.get("/me", getMeEndpoint)
 router.post("/upload-signature", uploadSignatureEndpoint)
 router.post("/", registerUserEndpoint)
 router.patch("/", updateUserEndpoint)
+router.get("/", getUsersEndpoint)
+router.get("/:id", getUserByIdEndpoint)
 
 export { router as usersRouter }
