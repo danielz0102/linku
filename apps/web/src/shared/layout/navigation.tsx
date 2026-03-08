@@ -2,6 +2,7 @@ import { House, LogOut, Search, User } from "lucide-react"
 import { Link, useLocation } from "react-router"
 import { useAuth } from "~/auth/context/auth-context"
 import { cn } from "../utils/cn"
+import type React from "react"
 
 type NavigationProps = {
   className?: string
@@ -9,7 +10,6 @@ type NavigationProps = {
 
 export function Navigation({ className }: NavigationProps) {
   const { logout } = useAuth()
-  const { pathname } = useLocation()
 
   return (
     <nav
@@ -19,26 +19,17 @@ export function Navigation({ className }: NavigationProps) {
       )}
     >
       <ul className="flex items-center justify-center gap-6 md:flex-col md:gap-4">
-        <NavItem isActive={pathname === "/"}>
-          <Link to="/" className="md:flex md:items-center md:gap-2">
-            <House strokeWidth={1.5} />
-            <span className="sr-only md:not-sr-only">Home</span>
-          </Link>
-        </NavItem>
+        <NavItemLink to="/" Icon={House}>
+          Home
+        </NavItemLink>
 
-        <NavItem isActive={pathname === "/search-users"}>
-          <Link to="/search-users" className="md:flex md:items-center md:gap-2">
-            <Search strokeWidth={1.5} />
-            <span className="sr-only md:not-sr-only">Search Users</span>
-          </Link>
-        </NavItem>
+        <NavItemLink to="/search-users" Icon={Search}>
+          Search Users
+        </NavItemLink>
 
-        <NavItem isActive={pathname === "/profile"}>
-          <Link to="/profile" className="md:flex md:items-center md:gap-2">
-            <User strokeWidth={1.5} />
-            <span className="sr-only md:not-sr-only">Profile</span>
-          </Link>
-        </NavItem>
+        <NavItemLink to="/profile" Icon={User}>
+          Profile
+        </NavItemLink>
 
         <NavItem>
           <button
@@ -66,6 +57,28 @@ function NavItem({ children, isActive = false }: NavItemProps) {
       })}
     >
       {children}
+    </li>
+  )
+}
+
+type NavItemLinkProps = React.PropsWithChildren<{
+  to: string
+  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+}>
+
+function NavItemLink({ to, Icon, children }: NavItemLinkProps) {
+  const { pathname } = useLocation()
+
+  return (
+    <li
+      className={cn("p-2 text-sm md:w-full", {
+        "rounded-lg bg-slate-700": pathname === to,
+      })}
+    >
+      <Link to={to} className="md:flex md:items-center md:gap-2">
+        <Icon strokeWidth={1.5} />
+        <span className="sr-only md:not-sr-only">{children}</span>
+      </Link>
     </li>
   )
 }
