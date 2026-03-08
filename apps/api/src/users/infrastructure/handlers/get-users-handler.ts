@@ -4,12 +4,16 @@ import type { RequestHandler } from "express"
 
 type GetUsersHandler = (
   repository: UserRepository
-) => RequestHandler<never, LinkuAPI.GetUsers["ResponseBody"]>
+) => RequestHandler<
+  never,
+  LinkuAPI.GetUsers["ResponseBody"],
+  never,
+  LinkuAPI.GetUsers["Query"]
+>
 
 export const getUsersHandler: GetUsersHandler =
   (repository) => async (req, res) => {
-    const { username, firstName, lastName, limit, offset } =
-      req.query as LinkuAPI.GetUsers["Query"]
+    const { username, firstName, lastName, limit, offset } = req.query
 
     const filters = {
       ...(username ? { username } : {}),
