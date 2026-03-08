@@ -5,11 +5,19 @@ type UserParams = {
   hashedPassword: string
   firstName: string
   lastName: string
+  profilePicUrl?: string | null
+  bio?: string | null
+}
+
+export type PublicUser = {
+  id: string
+  username: string
+  email: string
+  firstName: string
+  lastName: string
   profilePicUrl: string | null
   bio: string | null
 }
-
-export type PublicUser = Omit<UserParams, "hashedPassword">
 
 export class User {
   public readonly id: string
@@ -28,8 +36,8 @@ export class User {
     this.hashedPassword = params.hashedPassword
     this.firstName = params.firstName
     this.lastName = params.lastName
-    this.profilePicUrl = params.profilePicUrl
-    this.bio = params.bio
+    this.profilePicUrl = params.profilePicUrl ?? null
+    this.bio = params.bio ?? null
   }
 
   toPublic(): PublicUser {
