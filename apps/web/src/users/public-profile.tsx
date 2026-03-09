@@ -8,13 +8,17 @@ import { getUserById } from "./services/get-user-by-id"
 export default function PublicProfile() {
   const { id } = useParams<{ id: string }>()
 
+  if (!id) {
+    throw new Error("User ID is required to view public profile.")
+  }
+
   const {
     data: user,
     isPending,
     error,
   } = useQuery({
     queryKey: ["users", id],
-    queryFn: () => getUserById(id!),
+    queryFn: () => getUserById(id),
   })
 
   if (isPending) {
