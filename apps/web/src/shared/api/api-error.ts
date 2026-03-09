@@ -1,15 +1,10 @@
 import type { LinkuAPI } from "@linku/api-contract"
 
-type ApiErrorParams = {
-  code: LinkuAPI.ErrorCode
-  errors?: LinkuAPI.ErrorBody["errors"]
-}
-
 export class ApiError {
   readonly code: LinkuAPI.ErrorCode
   private validationErrors?: LinkuAPI.ErrorBody["errors"]
 
-  constructor({ code, errors }: ApiErrorParams) {
+  constructor(code: LinkuAPI.ErrorCode, errors?: LinkuAPI.ErrorBody["errors"]) {
     this.code = code
     this.validationErrors = errors
   }

@@ -76,7 +76,7 @@ test("shows root level API error messages", async () => {
   render(
     <RegistrationForm
       onSubmit={() => {
-        throw new ApiError({ code: "TOO_MANY_REQUESTS" })
+        throw new ApiError("TOO_MANY_REQUESTS")
       }}
     />
   )
@@ -95,12 +95,9 @@ test("shows root level API error messages", async () => {
 test("shows specific API error messages", async () => {
   const user = userEvent.setup()
   const onSubmit = vi.fn(async () => {
-    throw new ApiError({
-      code: "VALIDATION_ERROR",
-      errors: {
-        username: "Username is already taken",
-        email: "Email is already in use",
-      },
+    throw new ApiError("VALIDATION_ERROR", {
+      username: "Username is already taken",
+      email: "Email is already in use",
     })
   })
 

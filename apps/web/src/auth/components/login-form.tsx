@@ -28,7 +28,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
     } catch (error) {
       if (!ApiError.isApiError(error)) {
         return setError("root", {
-          message: new ApiError({ code: "UNEXPECTED_ERROR" }).genericMessage,
+          message: new ApiError("UNEXPECTED_ERROR").genericMessage,
         })
       }
 

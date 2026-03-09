@@ -36,7 +36,7 @@ test("shows unauthorized login error message", async () => {
   render(
     <LoginForm
       onSubmit={() => {
-        throw new ApiError({ code: "UNAUTHORIZED" })
+        throw new ApiError("UNAUTHORIZED")
       }}
     />
   )
@@ -53,7 +53,7 @@ test("shows root level API error messages", async () => {
   render(
     <LoginForm
       onSubmit={() => {
-        throw new ApiError({ code: "TOO_MANY_REQUESTS" })
+        throw new ApiError("TOO_MANY_REQUESTS")
       }}
     />
   )

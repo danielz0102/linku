@@ -13,18 +13,18 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
     if (!error.response) {
-      throw new ApiError({ code: "NETWORK_ERROR" })
+      throw new ApiError("NETWORK_ERROR")
     }
 
     const { data } = error.response
 
     if (!isErrorBody(data)) {
-      throw new ApiError({ code: "UNEXPECTED_ERROR" })
+      throw new ApiError("UNEXPECTED_ERROR")
     }
 
     const { code, errors } = data
 
-    throw new ApiError({ code, errors })
+    throw new ApiError(code, errors)
   }
 )
 
