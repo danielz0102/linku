@@ -1,7 +1,7 @@
-import { useParams } from "react-router"
 import { useQuery } from "@tanstack/react-query"
-import { ApiError } from "~/shared/api/api-error"
+import { useParams } from "react-router"
 import { ErrorPage } from "~/app/pages/error-page"
+import { ApiError } from "~/shared/api/api-error"
 import { LoadingSpinner } from "~/shared/components/loading-spinner"
 import { getUserById } from "./services/get-user-by-id"
 
