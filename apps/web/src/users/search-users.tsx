@@ -46,11 +46,7 @@ export default function SearchUsers() {
         </div>
 
         {showMenu && (
-          <ul
-            role="listbox"
-            aria-label="Search results"
-            className="absolute z-10 mt-1 w-full overflow-hidden rounded-xl border border-slate-700 bg-slate-800 shadow-lg"
-          >
+          <ul className="absolute z-10 mt-1 w-full overflow-hidden rounded-xl border border-slate-700 bg-slate-800 shadow-lg">
             {isPending && (
               <li className="flex items-center justify-center p-4">
                 <LoadingSpinner size="sm" />
@@ -63,7 +59,7 @@ export default function SearchUsers() {
               </li>
             )}
 
-            {!isPending && !error && users && users.length === 0 && (
+            {!isPending && !error && users.length === 0 && (
               <li className="p-4 text-center text-sm text-neutral-400">
                 No users found.
               </li>
@@ -71,7 +67,7 @@ export default function SearchUsers() {
 
             {!isPending &&
               !error &&
-              users?.map((user) => (
+              users.map((user) => (
                 <li key={user.id}>
                   <Link
                     to={`/users/${user.id}`}
