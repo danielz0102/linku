@@ -1,19 +1,15 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Link } from "react-router"
 import { useQuery } from "@tanstack/react-query"
 import { Search } from "lucide-react"
 import { Alert } from "~/shared/components/alert"
 import { LoadingSpinner } from "~/shared/components/loading-spinner"
+import { useDebounce } from "~/shared/hooks/use-debounce"
 import { searchUsers } from "./services/search-users"
 
 export default function SearchUsers() {
   const [query, setQuery] = useState("")
-  const [debouncedQuery, setDebouncedQuery] = useState("")
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedQuery(query), 350)
-    return () => clearTimeout(timer)
-  }, [query])
+  const debouncedQuery = useDebounce(query, 350)
 
   const {
     data: users,
