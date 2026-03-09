@@ -14,7 +14,7 @@ Linku is a real-time messaging web application that allows users to connect, cha
 
 - [x] Users can customize their profile
 - [x] Users can view their own profile
-- [ ] Users can view other users' profiles
+- [x] Users can view other users' profiles
 
 ### Messaging
 
