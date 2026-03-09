@@ -1,7 +1,7 @@
 import { lazy } from "react"
 import { BrowserRouter, Route, Routes } from "react-router"
 import { ProtectedRoute } from "~/auth/components/protected-route"
-import { Layout } from "~/shared/layout/layout"
+import { Layout } from "~/shared/components/layout/layout"
 import { ErrorPage } from "./pages/error-page"
 
 const Home = lazy(() => import("~/home/home"))

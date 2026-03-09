@@ -1,7 +1,7 @@
 import { House, LogOut, Search, User } from "lucide-react"
 import { Link, useLocation } from "react-router"
 import { useAuth } from "~/auth/context/auth-context"
-import { cn } from "../utils/cn"
+import { cn } from "../../utils/cn"
 import type React from "react"
 
 type NavigationProps = {
