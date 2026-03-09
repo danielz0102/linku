@@ -71,7 +71,7 @@ export default function SearchUsers() {
                 <li key={user.id}>
                   <Link
                     to={`/users/${user.id}`}
-                    className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-slate-700"
+                    className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-slate-700 focus-visible:bg-slate-700 focus-visible:outline-none"
                   >
                     <img
                       src={user.profilePicUrl || "/default-pp.jpg"}
