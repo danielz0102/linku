@@ -15,19 +15,17 @@ export default function SearchUsers() {
     return () => clearTimeout(timer)
   }, [query])
 
-  const trimmed = debouncedQuery.trim()
-
   const {
     data: users,
     isPending,
     error,
   } = useQuery({
-    queryKey: ["users", "search", trimmed],
-    queryFn: () => searchUsers(trimmed),
-    enabled: trimmed.length > 0,
+    queryKey: ["users", "search", debouncedQuery],
+    queryFn: () => searchUsers(debouncedQuery),
+    enabled: debouncedQuery.length > 0,
   })
 
-  const showMenu = trimmed.length > 0
+  const showMenu = debouncedQuery.length > 0
 
   return (
     <main className="flex size-full flex-col items-center gap-6 p-6">
@@ -44,7 +42,7 @@ export default function SearchUsers() {
           <input
             type="search"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => setQuery(e.target.value.trim())}
             placeholder="Search by name or username…"
             aria-label="Search users"
             className="w-full rounded-xl border border-slate-700 bg-slate-800 py-2 pr-4 pl-9 text-sm placeholder:text-neutral-500 focus:ring-1 focus:ring-blue-600 focus:outline-none"
