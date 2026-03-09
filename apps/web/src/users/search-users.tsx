@@ -75,7 +75,7 @@ export default function SearchUsers() {
                   >
                     <img
                       src={user.profilePicUrl || "/default-pp.jpg"}
-                      alt={user.username}
+                      alt=""
                       className="size-9 shrink-0 rounded-full object-cover"
                     />
                     <div className="text-left">
