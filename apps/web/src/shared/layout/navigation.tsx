@@ -31,32 +31,29 @@ export function Navigation({ className }: NavigationProps) {
           Profile
         </NavItemLink>
 
-        <NavItem>
-          <button
-            onClick={logout}
-            className="flex cursor-pointer items-center justify-center md:gap-2"
-          >
-            <LogOut strokeWidth={1.5} />
-            <span className="sr-only md:not-sr-only">Log out</span>
-          </button>
-        </NavItem>
+        <NavItemButton onClick={logout} Icon={LogOut}>
+          Log out
+        </NavItemButton>
       </ul>
     </nav>
   )
 }
 
-type NavItemProps = React.PropsWithChildren<{
-  isActive?: boolean
+type NavItemButtonProps = React.PropsWithChildren<{
+  onClick: () => void
+  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
 }>
 
-function NavItem({ children, isActive = false }: NavItemProps) {
+function NavItemButton({ onClick, Icon, children }: NavItemButtonProps) {
   return (
-    <li
-      className={cn("p-2 text-sm md:w-full", {
-        "rounded-lg bg-slate-700": isActive,
-      })}
-    >
-      {children}
+    <li className="p-2 text-sm md:w-full">
+      <button
+        onClick={onClick}
+        className="flex cursor-pointer items-center justify-center md:gap-2"
+      >
+        <Icon strokeWidth={1.5} />
+        <span className="sr-only md:not-sr-only">{children}</span>
+      </button>
     </li>
   )
 }
