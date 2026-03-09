@@ -10,18 +10,19 @@ import { searchUsers } from "./services/search-users"
 export default function SearchUsers() {
   const [query, setQuery] = useState("")
   const debouncedQuery = useDebounce(query, 350)
+  const searchTerm = debouncedQuery.trim()
+  const showMenu = searchTerm.length > 0
 
   const {
     data: users,
     isPending,
+    isSuccess,
     error,
   } = useQuery({
-    queryKey: ["users", "search", debouncedQuery],
-    queryFn: () => searchUsers(debouncedQuery),
-    enabled: debouncedQuery.length > 0,
+    queryKey: ["users", "search", searchTerm],
+    queryFn: () => searchUsers(searchTerm),
+    enabled: showMenu,
   })
-
-  const showMenu = debouncedQuery.length > 0
 
   return (
     <main className="flex size-full flex-col items-center gap-6 p-6">
@@ -32,41 +33,43 @@ export default function SearchUsers() {
           <Search
             size={16}
             strokeWidth={1.5}
-            aria-hidden="true"
             className="absolute left-3 text-neutral-400"
           />
+
           <input
             type="search"
             value={query}
-            onChange={(e) => setQuery(e.target.value.trim())}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="Search by name or username…"
-            aria-label="Search users"
             className="w-full rounded-xl border border-slate-700 bg-slate-800 py-2 pr-4 pl-9 text-sm placeholder:text-neutral-500 focus:ring-1 focus:ring-blue-600 focus:outline-none"
           />
         </div>
 
+        {isPending && (
+          <p className="sr-only" role="status">
+            Searching for users…
+          </p>
+        )}
+
+        {error && <Alert>Failed to search for users. Please try again.</Alert>}
+
+        {isSuccess && (
+          <p className="sr-only" role="status">
+            {users.length > 0
+              ? `Found ${users.length} user${users.length > 1 ? "s" : ""}.`
+              : "No users found."}
+          </p>
+        )}
+
         {showMenu && (
           <ul className="absolute z-10 mt-1 w-full overflow-hidden rounded-xl border border-slate-700 bg-slate-800 shadow-lg">
             {isPending && (
-              <li className="flex items-center justify-center p-4">
+              <li className="flex justify-center p-4">
                 <LoadingSpinner size="sm" />
               </li>
             )}
 
-            {!isPending && error && (
-              <li className="p-3">
-                <Alert>Failed to search for users. Please try again.</Alert>
-              </li>
-            )}
-
-            {!isPending && !error && users.length === 0 && (
-              <li className="p-4 text-center text-sm text-neutral-400">
-                No users found.
-              </li>
-            )}
-
-            {!isPending &&
-              !error &&
+            {isSuccess &&
               users.map((user) => (
                 <li key={user.id}>
                   <Link
@@ -78,7 +81,8 @@ export default function SearchUsers() {
                       alt=""
                       className="size-9 shrink-0 rounded-full object-cover"
                     />
-                    <div className="text-left">
+
+                    <div>
                       <p className="text-sm font-medium">
                         {user.firstName} {user.lastName}
                       </p>
