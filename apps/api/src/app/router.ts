@@ -1,3 +1,4 @@
+import { conversationsRouter } from "#messages/infrastructure/messages-router.js"
 import { usersRouter } from "#users/infrastructure/users-router.js"
 import { Router } from "express"
 
@@ -8,3 +9,4 @@ router.get("/health", (_, res) => {
 })
 
 router.use("/users", usersRouter)
+router.use("/conversations", conversationsRouter)

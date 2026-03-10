@@ -2,6 +2,8 @@ export namespace LinkuAPI {
   type ErrorCode = import("./error.d.ts").ErrorCode
   type ErrorBody = import("./error.d.ts").ErrorBody
   type User = import("./user.d.ts").User
+  type Message = import("./message.d.ts").Message
+  type Conversation = import("./message.d.ts").Conversation
 
   interface Login {
     RequestBody: {
@@ -72,5 +74,35 @@ export namespace LinkuAPI {
   interface Logout {
     RequestBody: never
     ResponseBody: undefined | ErrorBody
+  }
+
+  interface GetConversations {
+    RequestBody: never
+    ResponseBody: Conversation[] | ErrorBody
+  }
+
+  interface GetMessages {
+    Params: { conversationId: string }
+    Query: {
+      limit?: string
+      offset?: string
+    }
+    RequestBody: never
+    ResponseBody: Message[] | ErrorBody
+  }
+
+  interface WebSocketClientMessage {
+    type: "send_message"
+    payload: {
+      recipientId: string
+      content: string
+    }
+  }
+
+  interface WebSocketServerMessage {
+    type: "new_message"
+    payload: {
+      message: Message
+    }
   }
 }

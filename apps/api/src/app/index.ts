@@ -20,5 +20,5 @@ export function createApp() {
   app.use(notFound)
   app.use(unexpectedError)
 
-  return app
+  return { app, sessionMiddleware }
 }

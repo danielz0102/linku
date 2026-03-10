@@ -25,6 +25,14 @@ export class AppBuilder {
     return this
   }
 
+  withAuthenticatedUser(userId: string) {
+    this.app.use((req, _res, next) => {
+      req.session.userId = userId
+      next()
+    })
+    return this
+  }
+
   build() {
     return this.app
   }
