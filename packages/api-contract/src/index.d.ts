@@ -99,10 +99,17 @@ export namespace LinkuAPI {
     }
   }
 
-  interface WebSocketServerMessage {
-    type: "new_message"
-    payload: {
-      message: Message
-    }
-  }
+  type WebSocketServerMessage =
+    | {
+        type: "new_message"
+        payload: {
+          message: Message
+        }
+      }
+    | {
+        type: "error"
+        payload: {
+          message: string
+        }
+      }
 }

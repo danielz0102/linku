@@ -11,11 +11,6 @@ type AuthenticatedRequest = IncomingMessage & {
   session: Session & Partial<SessionData>
 }
 
-const sendMessageUseCase = new SendMessageUseCase({
-  conversationRepo: new DrizzleConversationRepository(),
-  messageRepo: new DrizzleMessageRepository(),
-})
-
 const connections = new Map<string, Set<WebSocket>>()
 
 function addConnection(userId: string, ws: WebSocket): void {
@@ -50,6 +45,12 @@ function broadcastToUser(
   }
 }
 
+function sendError(ws: WebSocket, message: string): void {
+  if (ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({ type: "error", payload: { message } }))
+  }
+}
+
 export function createWebSocketServer(
   httpServer: HttpServer,
   sessionMiddleware: (
@@ -58,6 +59,11 @@ export function createWebSocketServer(
     next: () => void
   ) => void
 ): WsServer {
+  const sendMessageUseCase = new SendMessageUseCase({
+    conversationRepo: new DrizzleConversationRepository(),
+    messageRepo: new DrizzleMessageRepository(),
+  })
+
   const wss = new WsServer({ server: httpServer })
 
   wss.on("connection", (ws, req: AuthenticatedRequest) => {
@@ -77,6 +83,7 @@ export function createWebSocketServer(
         try {
           message = JSON.parse(data.toString()) as LinkuAPI.WebSocketClientMessage
         } catch {
+          sendError(ws, "Invalid message format")
           return
         }
 
@@ -90,6 +97,7 @@ export function createWebSocketServer(
           })
 
           if (!result.ok) {
+            sendError(ws, result.error)
             return
           }
 
