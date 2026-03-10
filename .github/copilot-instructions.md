@@ -7,9 +7,10 @@ description: General guidelines for writing code in Linku.
 
 Linku is a messaging app. The codebase is a monorepo with the following packages:
 
-- `api`: The backend API for the project.
-- `web`: The frontend web application for the project.
-- `@linku/api-contract`: The shared types between the backend and frontend.
+- `api`: Backend API.
+- `web`: Web application.
+- `e2e`: End-to-end tests.
+- `@linku/api-contract`: Shared types between the backend and frontend.
 
 Check the requirements of the project [here](../docs/linku.md).
 
