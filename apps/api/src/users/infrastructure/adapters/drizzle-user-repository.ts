@@ -64,4 +64,42 @@ export class DrizzleUserRepository implements UserRepository {
       .returning()
       .then(([r]) => new User(r))
   }
+
+  async save(user: User): Promise<void> {
+    const {
+      id,
+      username,
+      email,
+      hashedPassword,
+      firstName,
+      lastName,
+      profilePicUrl,
+      bio,
+    } = user.toPrimitives()
+
+    await db
+      .insert(usersTable)
+      .values({
+        id: id,
+        username: username,
+        email: email,
+        hashedPassword: hashedPassword,
+        firstName: firstName,
+        lastName: lastName,
+        profilePicUrl: profilePicUrl,
+        bio: bio,
+      })
+      .onConflictDoUpdate({
+        target: usersTable.id,
+        set: {
+          username: username,
+          email: email,
+          hashedPassword: hashedPassword,
+          firstName: firstName,
+          lastName: lastName,
+          profilePicUrl: profilePicUrl,
+          bio: bio,
+        },
+      })
+  }
 }

@@ -40,6 +40,19 @@ export class User {
     this.bio = params.bio ?? null
   }
 
+  toPrimitives(): UserParams {
+    return {
+      id: this.id,
+      username: this.username,
+      email: this.email,
+      hashedPassword: this.hashedPassword,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      profilePicUrl: this.profilePicUrl,
+      bio: this.bio,
+    }
+  }
+
   toPublic(): PublicUser {
     return {
       id: this.id,

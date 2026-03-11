@@ -5,6 +5,7 @@ export interface UserRepository {
   findOne: (filters: UserFilters) => Promise<User | undefined>
   search: (filters: UserFilters, options?: SearchOptions) => Promise<User[]>
   update: (id: string, data: UpdateData) => Promise<User>
+  save: (user: User) => Promise<void>
 }
 
 export type NewUser = {
