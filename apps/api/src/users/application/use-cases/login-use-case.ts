@@ -1,7 +1,8 @@
 import { Result } from "#shared/lib/result.js"
-import type { PublicUser } from "#users/domain/user.js"
-import type { PasswordHasher } from "../ports/password-hasher.js"
 import type { UserRepository } from "../../domain/user-repository.js"
+import type { PrivateUser } from "../dtos/private-user.js"
+import { toPrivateUser } from "../dtos/user-mapper.js"
+import type { PasswordHasher } from "../ports/password-hasher.js"
 
 type Dependencies = {
   userRepo: UserRepository
@@ -22,25 +23,24 @@ export class LoginUseCase {
     this.hasher = hasher
   }
 
-  async execute({
-    username,
-    password,
-  }: LoginCredentials): Promise<Result<PublicUser, string>> {
-    const user = await this.userRepo.findOne({ username })
+  async execute(
+    credentials: LoginCredentials
+  ): Promise<Result<PrivateUser, string>> {
+    const user = await this.userRepo.findOne({ username: credentials.username })
 
     if (!user) {
       return Result.fail("Invalid credentials")
     }
 
     const isValidPassword = await this.hasher.compare(
-      password,
-      user.hashedPassword
+      credentials.password,
+      user.password
     )
 
     if (!isValidPassword) {
       return Result.fail("Invalid credentials")
     }
 
-    return Result.ok(user.toPublic())
+    return Result.ok(toPrivateUser(user))
   }
 }

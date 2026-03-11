@@ -1,6 +1,7 @@
 import { Result } from "#shared/lib/result.js"
-import { type PublicUser } from "#users/domain/user.js"
 import type { UserRepository } from "../../domain/user-repository.js"
+import type { PrivateUser } from "../dtos/private-user.js"
+import { toPrivateUser } from "../dtos/user-mapper.js"
 
 type Dependencies = {
   userRepo: UserRepository
@@ -27,7 +28,7 @@ export class UpdateUserUseCase {
   async execute(
     id: string,
     data: UpdateUserData
-  ): Promise<Result<PublicUser, UpdateUserError>> {
+  ): Promise<Result<PrivateUser, UpdateUserError>> {
     const existing = await this.userRepo.findOne({
       username: data.username,
       email: data.email,
@@ -45,6 +46,6 @@ export class UpdateUserUseCase {
 
     const user = await this.userRepo.update(id, data)
 
-    return Result.ok(user.toPublic())
+    return Result.ok(toPrivateUser(user))
   }
 }

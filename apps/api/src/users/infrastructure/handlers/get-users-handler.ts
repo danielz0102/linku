@@ -1,3 +1,4 @@
+import { toPrivateUser } from "#users/application/dtos/user-mapper.js"
 import type { UserRepository } from "#users/domain/user-repository.js"
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
@@ -20,5 +21,5 @@ export const getUsersHandler: GetUsersHandler =
       { limit: Number(limit), offset: Number(offset) }
     )
 
-    return res.status(200).json(users.map((u) => u.toPublic()))
+    return res.status(200).json(users.map((u) => toPrivateUser(u)))
   }

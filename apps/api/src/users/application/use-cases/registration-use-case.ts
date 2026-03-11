@@ -1,7 +1,9 @@
 import { Result } from "#shared/lib/result.js"
-import { User, type PublicUser } from "#users/domain/user.js"
-import type { PasswordHasher } from "../ports/password-hasher.js"
+import { User } from "#users/domain/user.js"
 import type { UserRepository } from "../../domain/user-repository.js"
+import type { PrivateUser } from "../dtos/private-user.js"
+import { toPrivateUser } from "../dtos/user-mapper.js"
+import type { PasswordHasher } from "../ports/password-hasher.js"
 
 type Dependencies = {
   userRepo: UserRepository
@@ -33,7 +35,7 @@ export class RegistrationUseCase {
     password,
     firstName,
     lastName,
-  }: RegistrationData): Promise<Result<PublicUser, RegisterError>> {
+  }: RegistrationData): Promise<Result<PrivateUser, RegisterError>> {
     const existing = await this.userRepo.findOne({ username, email })
 
     if (existing) {
@@ -56,6 +58,6 @@ export class RegistrationUseCase {
     })
     await this.userRepo.save(user)
 
-    return Result.ok(user.toPublic())
+    return Result.ok(toPrivateUser(user))
   }
 }

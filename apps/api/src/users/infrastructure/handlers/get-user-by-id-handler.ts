@@ -1,3 +1,5 @@
+import { UUID } from "#shared/domain/uuid.js"
+import { toPrivateUser } from "#users/application/dtos/user-mapper.js"
 import type { UserRepository } from "#users/domain/user-repository.js"
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
@@ -13,7 +15,7 @@ export const getUserByIdHandler: GetUserByIdHandler =
   (repository) => async (req, res) => {
     const { id } = req.params
 
-    const user = await repository.findOne({ id })
+    const user = await repository.findOne({ id: new UUID(id) })
 
     if (!user) {
       return res.status(404).json({
@@ -22,5 +24,5 @@ export const getUserByIdHandler: GetUserByIdHandler =
       })
     }
 
-    return res.status(200).json(user.toPublic())
+    return res.status(200).json(toPrivateUser(user))
   }

@@ -16,7 +16,7 @@ const register = new RegistrationUseCase({
 test("fails if there is a user with the same username", async () => {
   const dto = createDto()
   repo.findOne.mockResolvedValueOnce(
-    UserMother.create({ username: dto.username })
+    UserMother.create({ #username: dto.username })
   )
 
   const { ok, error } = await register.execute(dto)
@@ -27,7 +27,7 @@ test("fails if there is a user with the same username", async () => {
 
 test("fails if there is a user with the same email", async () => {
   const dto = createDto()
-  repo.findOne.mockResolvedValueOnce(UserMother.create({ email: dto.email }))
+  repo.findOne.mockResolvedValueOnce(UserMother.create({ #email: dto.email }))
 
   const { ok, error } = await register.execute(dto)
 
