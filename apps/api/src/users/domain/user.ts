@@ -1,5 +1,7 @@
+import { UUID } from "#shared/domain/uuid.js"
+
 type UserParams = {
-  id: string
+  id?: string
   username: string
   email: string
   hashedPassword: string
@@ -30,7 +32,7 @@ export class User {
   public readonly bio: string | null
 
   constructor(params: UserParams) {
-    this.id = params.id
+    this.id = new UUID(params.id).value
     this.username = params.username
     this.email = params.email
     this.hashedPassword = params.hashedPassword

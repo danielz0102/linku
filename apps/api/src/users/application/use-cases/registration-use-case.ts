@@ -1,5 +1,5 @@
 import { Result } from "#shared/lib/result.js"
-import type { PublicUser } from "#users/domain/user.js"
+import { User, type PublicUser } from "#users/domain/user.js"
 import type { PasswordHasher } from "../ports/password-hasher.js"
 import type { UserRepository } from "../../domain/user-repository.js"
 
@@ -47,13 +47,14 @@ export class RegistrationUseCase {
     }
 
     const hash = await this.hasher.hash(password)
-    const user = await this.userRepo.create({
+    const user = new User({
       username,
       email,
       hashedPassword: hash,
       firstName,
       lastName,
     })
+    await this.userRepo.save(user)
 
     return Result.ok(user.toPublic())
   }

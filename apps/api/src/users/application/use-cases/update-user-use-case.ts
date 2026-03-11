@@ -1,5 +1,5 @@
 import { Result } from "#shared/lib/result.js"
-import type { PublicUser } from "#users/domain/user.js"
+import { type PublicUser } from "#users/domain/user.js"
 import type { UserRepository } from "../../domain/user-repository.js"
 
 type Dependencies = {
