@@ -10,7 +10,7 @@ app.get("/", getUsersHandler(repo))
 
 test("sends 200 with a list of users", async () => {
   const users = [UserMother.create(), UserMother.create()]
-  repo.search.mockResolvedValueOnce(users)
+  repo.matching.mockResolvedValueOnce(users)
 
   const expected = users.map((user) => user.toPublic())
 
@@ -22,7 +22,7 @@ test("sends 200 with a list of users", async () => {
 })
 
 test("sends 200 with an empty list when no users match", async () => {
-  repo.search.mockResolvedValueOnce([])
+  repo.matching.mockResolvedValueOnce([])
 
   await request(app)
     .get("/")
@@ -33,7 +33,7 @@ test("sends 200 with an empty list when no users match", async () => {
 
 test("sends 200 with pagination options", async () => {
   const users = [UserMother.create()]
-  repo.search.mockResolvedValueOnce(users)
+  repo.matching.mockResolvedValueOnce(users)
 
   await request(app)
     .get("/")

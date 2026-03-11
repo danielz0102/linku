@@ -7,6 +7,7 @@ const service = new UpdateUserUseCase({ userRepo: repo })
 
 test("returns the updated public user", async () => {
   const userUpdated = UserMother.create()
+  repo.matching.mockResolvedValueOnce([])
   repo.update.mockResolvedValueOnce(userUpdated)
 
   const { ok, data } = await service.execute(crypto.randomUUID(), {
@@ -18,7 +19,7 @@ test("returns the updated public user", async () => {
 })
 
 test("fails if username belongs to another user", async () => {
-  repo.findOne.mockResolvedValueOnce(UserMother.create({ username: "taken" }))
+  repo.matching.mockResolvedValueOnce([UserMother.create({ username: "taken" })])
 
   const { ok, error } = await service.execute(crypto.randomUUID(), {
     username: "taken",
@@ -29,7 +30,7 @@ test("fails if username belongs to another user", async () => {
 })
 
 test("fails if email belongs to another user", async () => {
-  repo.findOne.mockResolvedValueOnce(UserMother.create({ email: "taken" }))
+  repo.matching.mockResolvedValueOnce([UserMother.create({ email: "taken" })])
 
   const { ok, error } = await service.execute(crypto.randomUUID(), {
     email: "taken",

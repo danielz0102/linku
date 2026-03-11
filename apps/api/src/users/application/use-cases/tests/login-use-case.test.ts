@@ -16,7 +16,7 @@ const useCase = new LoginUseCase({
 
 test("returns a public user if credentials are valid", async () => {
   const user = UserMother.create()
-  repo.findOne.mockResolvedValueOnce(user)
+  repo.matching.mockResolvedValueOnce([user])
   hasher.compare.mockResolvedValueOnce(true)
 
   const { ok, data } = await useCase.execute(createDTO())
@@ -26,7 +26,7 @@ test("returns a public user if credentials are valid", async () => {
 })
 
 test("fails if user does not exist", async () => {
-  repo.findOne.mockResolvedValueOnce(undefined)
+  repo.matching.mockResolvedValueOnce([])
 
   const { ok } = await useCase.execute(createDTO())
 
@@ -34,7 +34,7 @@ test("fails if user does not exist", async () => {
 })
 
 test("fails if password is invalid", async () => {
-  repo.findOne.mockResolvedValueOnce(UserMother.create())
+  repo.matching.mockResolvedValueOnce([UserMother.create()])
   hasher.compare.mockResolvedValueOnce(false)
 
   const { ok } = await useCase.execute(createDTO())

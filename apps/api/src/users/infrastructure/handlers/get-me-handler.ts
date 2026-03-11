@@ -1,3 +1,4 @@
+import { Criteria, Filter } from "#shared/domain/criteria.js"
 import type { UserRepository } from "#users/application/ports/user-repository.d.js"
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
@@ -13,7 +14,9 @@ export const getMeHandler: GetMeHandler = (repository) => async (req, res) => {
     throw new Error("User ID not found in session")
   }
 
-  const userFound = await repository.findOne({ id: userId })
+  const [userFound] = await repository.matching(
+    new Criteria({ filters: [new Filter("id", "eq", userId)], limit: 1 })
+  )
 
   if (!userFound) {
     throw new Error("User with session not found in database", {

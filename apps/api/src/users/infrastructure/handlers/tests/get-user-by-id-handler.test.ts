@@ -10,12 +10,12 @@ app.get("/:id", getUserByIdHandler(repo))
 
 test("sends 200 with user data", async () => {
   const user = UserMother.create()
-  repo.findOne.mockResolvedValueOnce(user)
+  repo.matching.mockResolvedValueOnce([user])
 
   await request(app).get(`/${user.id}`).expect(200).expect(user.toPublic())
 })
 
 test("sends 404 if user is not found", async () => {
-  repo.findOne.mockResolvedValueOnce(undefined)
+  repo.matching.mockResolvedValueOnce([])
   await request(app).get("/nonexistent-id").expect(404)
 })

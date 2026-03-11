@@ -1,3 +1,4 @@
+import { Criteria, Filter } from "#shared/domain/criteria.js"
 import { Result } from "#shared/lib/result.js"
 import type { PublicUser } from "#users/domain/user.js"
 import type { UserRepository } from "../ports/user-repository.d.js"
@@ -28,19 +29,25 @@ export class UpdateUserUseCase {
     id: string,
     data: UpdateUserData
   ): Promise<Result<PublicUser, UpdateUserError>> {
-    const existing = await this.userRepo.findOne({
-      username: data.username,
-      email: data.email,
-    })
+    const filters = [
+      data.username ? new Filter("username", "eq", data.username) : null,
+      data.email ? new Filter("email", "eq", data.email) : null,
+    ].filter((f): f is Filter => f !== null)
 
-    if (existing) {
-      const isSameUsername = existing.username === data.username
-      const isSameEmail = existing.email === data.email
+    if (filters.length > 0) {
+      const [existing] = await this.userRepo.matching(
+        new Criteria({ filters, filterType: "OR", limit: 1 })
+      )
 
-      return Result.fail({
-        username: isSameUsername ? "Username already exists" : undefined,
-        email: isSameEmail ? "Email already exists" : undefined,
-      })
+      if (existing) {
+        const isSameUsername = existing.username === data.username
+        const isSameEmail = existing.email === data.email
+
+        return Result.fail({
+          username: isSameUsername ? "Username already exists" : undefined,
+          email: isSameEmail ? "Email already exists" : undefined,
+        })
+      }
     }
 
     const user = await this.userRepo.update(id, data)

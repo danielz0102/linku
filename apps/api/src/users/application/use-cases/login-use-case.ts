@@ -1,3 +1,4 @@
+import { Criteria, Filter } from "#shared/domain/criteria.js"
 import { Result } from "#shared/lib/result.js"
 import type { PublicUser } from "#users/domain/user.js"
 import type { PasswordHasher } from "../ports/password-hasher.js"
@@ -26,7 +27,9 @@ export class LoginUseCase {
     username,
     password,
   }: LoginCredentials): Promise<Result<PublicUser, string>> {
-    const user = await this.userRepo.findOne({ username })
+    const [user] = await this.userRepo.matching(
+      new Criteria({ filters: [new Filter("username", "eq", username)], limit: 1 })
+    )
 
     if (!user) {
       return Result.fail("Invalid credentials")
