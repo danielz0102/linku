@@ -43,7 +43,7 @@ export class DrizzleUserRepository implements UserRepository {
     const entries = Object.entries(filters) as [keyof UserFilters, string][]
     const conditions = entries.map(([k, v]) => ilike(usersTable[k], `%${v}%`))
 
-    if (!conditions) {
+    if (conditions.length === 0) {
       throw new Error("At least one filter must be provided")
     }
 
