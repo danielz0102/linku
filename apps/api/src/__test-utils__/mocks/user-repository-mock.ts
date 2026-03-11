@@ -1,4 +1,4 @@
-import type { UserRepository } from "~/users/application/ports/user-repository.js"
+import type { UserRepository } from "~/users/domain/user-repository.js"
 
 export class UserRepositoryMock implements UserRepository {
   create = vi.fn<UserRepository["create"]>()

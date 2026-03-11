@@ -1,4 +1,4 @@
-import type { UserRepository } from "#users/application/ports/user-repository.d.js"
+import type { UserRepository } from "#users/domain/user-repository.js"
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 

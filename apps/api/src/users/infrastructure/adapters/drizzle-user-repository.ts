@@ -4,7 +4,7 @@ import type {
   UpdateData,
   UserFilters,
   UserRepository,
-} from "#users/application/ports/user-repository.d.js"
+} from "#users/domain/user-repository.js"
 import { User } from "#users/domain/user.js"
 
 import db from "#shared/db/drizzle/index.js"
