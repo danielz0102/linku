@@ -12,6 +12,17 @@ type UserParams = {
   bio?: string | null
 }
 
+type UserPrimitives = {
+  id: string
+  username: string
+  email: string
+  hashedPassword: string
+  firstName: string
+  lastName: string
+  profilePicUrl: string | null
+  bio: string | null
+}
+
 export class User {
   readonly #id: UUID
   readonly #username: string
@@ -47,16 +58,7 @@ export class User {
     return this.#hashedPassword
   }
 
-  toPrimitives(): {
-    id: string
-    username: string
-    email: string
-    hashedPassword: string
-    firstName: string
-    lastName: string
-    profilePicUrl: string | null
-    bio: string | null
-  } {
+  toPrimitives(): UserPrimitives {
     return {
       id: this.#id.value,
       username: this.#username,
