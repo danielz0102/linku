@@ -11,7 +11,7 @@ export type CriteriaConjunction = "AND" | "OR"
 
 export type Criteria<TFilters> = {
   filters?: Partial<{ [K in keyof TFilters]: FilterValue<TFilters[K]> }>
-  mode?: CriteriaConjunction
+  conjunction?: CriteriaConjunction
   limit?: number
   offset?: number
 }

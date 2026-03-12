@@ -17,7 +17,7 @@ type NormalizedFilter<T> = {
   op: FilterOperator
 }
 
-const DEFAULT_MODE: CriteriaConjunction = "AND"
+const DEFAULT_CONJUNCTION: CriteriaConjunction = "AND"
 const DEFAULT_OP: FilterOperator = "EQ"
 
 export function buildDrizzleWhere<TFilters>(
@@ -60,9 +60,9 @@ export function buildDrizzleWhere<TFilters>(
     return conditions[0]
   }
 
-  const mode = criteria.mode ?? DEFAULT_MODE
+  const conjunction = criteria.conjunction ?? DEFAULT_CONJUNCTION
 
-  return mode === "OR" ? or(...conditions) : and(...conditions)
+  return conjunction === "OR" ? or(...conditions) : and(...conditions)
 }
 
 function isOperatorObject<T>(

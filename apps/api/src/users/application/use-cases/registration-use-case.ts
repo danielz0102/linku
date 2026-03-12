@@ -37,7 +37,7 @@ export class RegistrationUseCase {
     lastName,
   }: RegistrationData): Promise<Result<PrivateUser, RegisterError>> {
     const [existing] = await this.userRepo.matching({
-      mode: "OR",
+      conjunction: "OR",
       filters: { username, email },
       limit: 1,
     })

@@ -31,7 +31,7 @@ export class UpdateUserUseCase {
   ): Promise<Result<PrivateUser, UpdateUserError>> {
     if (data.username || data.email) {
       const [existing] = await this.userRepo.matching({
-        mode: "OR",
+        conjunction: "OR",
         filters: {
           username: data.username,
           email: data.email,

@@ -17,7 +17,7 @@ export const getUsersHandler: GetUsersHandler =
     const { username, firstName, lastName, limit = 20, offset = 0 } = req.query
 
     const users = await repository.matching({
-      mode: "OR",
+      conjunction: "OR",
       filters: {
         username: username ? { value: username, op: "ILIKE" } : undefined,
         firstName: firstName ? { value: firstName, op: "ILIKE" } : undefined,
