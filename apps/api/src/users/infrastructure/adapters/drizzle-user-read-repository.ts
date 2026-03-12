@@ -1,44 +1,48 @@
 import db from "#shared/db/drizzle/index.js"
 import { usersTable } from "#shared/db/drizzle/schemas.js"
 import type { PublicUser } from "#users/application/dtos/public-user.js"
-import type { UserReadRepository } from "#users/application/ports/user-read-repository.js"
+import type {
+  Pagination,
+  UserFilters,
+  UserReadRepository,
+} from "#users/application/ports/user-read-repository.js"
 import { ilike, or } from "drizzle-orm"
 
 export class DrizzleUserReadRepository implements UserReadRepository {
   async search(
-    query: string,
-    limit?: number,
-    offset?: number
+    filters: UserFilters,
+    pagination: Pagination
   ): Promise<PublicUser[]> {
-    const statement = db
-      .select()
-      .from(usersTable)
-      .where(
-        or(
-          ilike(usersTable.username, `%${query}%`),
-          ilike(usersTable.firstName, `%${query}%`),
-          ilike(usersTable.lastName, `%${query}%`)
-        )
-      )
+    const whereClause = or(
+      filters.username
+        ? ilike(usersTable.username, `%${filters.username}%`)
+        : undefined,
+      filters.firstName
+        ? ilike(usersTable.firstName, `%${filters.firstName}%`)
+        : undefined,
+      filters.lastName
+        ? ilike(usersTable.lastName, `%${filters.lastName}%`)
+        : undefined
+    )
 
-    if (limit !== undefined) {
-      statement.limit(limit)
+    const query = db.select().from(usersTable)
+
+    if (whereClause) {
+      query.where(whereClause)
     }
 
-    if (offset !== undefined) {
-      statement.offset(offset)
+    if (pagination.limit !== undefined) {
+      query.limit(pagination.limit)
     }
 
-    const results = await statement.execute()
+    if (pagination.offset !== undefined) {
+      query.offset(pagination.offset)
+    }
 
-    return results.map((row) => ({
-      id: row.id,
-      username: row.username,
-      email: row.email,
-      firstName: row.firstName,
-      lastName: row.lastName,
-      profilePicUrl: row.profilePicUrl,
-      bio: row.bio,
+    const users = await query.execute()
+
+    return users.map(({ hashedPassword: _, ...rest }) => ({
+      ...rest,
     }))
   }
 }

@@ -1,5 +1,16 @@
 import type { PublicUser } from "../dtos/public-user.js"
 
 export interface UserReadRepository {
-  search(query: string, limit?: number, offset?: number): Promise<PublicUser[]>
+  search(filters: UserFilters, pagination: Pagination): Promise<PublicUser[]>
+}
+
+export type UserFilters = Partial<{
+  username: string
+  firstName: string
+  lastName: string
+}>
+
+export type Pagination = {
+  limit?: number
+  offset?: number
 }
