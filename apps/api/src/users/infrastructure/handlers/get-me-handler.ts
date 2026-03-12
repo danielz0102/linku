@@ -1,4 +1,3 @@
-import { UUID } from "#shared/domain/uuid.js"
 import { toPrivateUser } from "#users/application/dtos/user-mapper.js"
 import type { UserRepository } from "#users/domain/user-repository.js"
 import type { LinkuAPI } from "@linku/api-contract"
@@ -15,7 +14,10 @@ export const getMeHandler: GetMeHandler = (repository) => async (req, res) => {
     throw new Error("User ID not found in session")
   }
 
-  const userFound = await repository.findOne({ id: new UUID(userId) })
+  const [userFound] = await repository.matching({
+    filters: { id: userId },
+    limit: 1,
+  })
 
   if (!userFound) {
     throw new Error("User with session not found in database", {

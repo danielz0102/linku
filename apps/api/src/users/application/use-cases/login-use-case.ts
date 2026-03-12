@@ -26,7 +26,10 @@ export class LoginUseCase {
   async execute(
     credentials: LoginCredentials
   ): Promise<Result<PrivateUser, string>> {
-    const user = await this.userRepo.findOne({ username: credentials.username })
+    const [user] = await this.userRepo.matching({
+      filters: { username: credentials.username },
+      limit: 1,
+    })
 
     if (!user) {
       return Result.fail("Invalid credentials")

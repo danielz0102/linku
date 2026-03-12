@@ -1,9 +1,9 @@
 import { User } from "#users/domain/user.js"
+import type { Criteria } from "#shared/domain/criteria.js"
 
 export interface UserRepository {
   create(newUser: NewUser): Promise<User>
-  findOne(filters: UserFilters): Promise<User | undefined>
-  search(filters: UserFilters, options?: SearchOptions): Promise<User[]>
+  matching(criteria: Criteria<UserFilters>): Promise<User[]>
   update(id: string, data: UpdateData): Promise<User>
   save(user: User): Promise<void>
 }
@@ -28,16 +28,9 @@ export type UpdateData = Partial<{
 }>
 
 export type UserFilters = Partial<{
-  [K in keyof {
-    id: string
-    username: string
-    email: string
-    firstName: string
-    lastName: string
-  }]: User[K]
+  id: string
+  username: string
+  email: string
+  firstName: string
+  lastName: string
 }>
-
-export type SearchOptions = {
-  limit?: number
-  offset?: number
-}

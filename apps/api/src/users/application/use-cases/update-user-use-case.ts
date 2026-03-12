@@ -29,19 +29,25 @@ export class UpdateUserUseCase {
     id: string,
     data: UpdateUserData
   ): Promise<Result<PrivateUser, UpdateUserError>> {
-    const existing = await this.userRepo.findOne({
-      username: data.username,
-      email: data.email,
-    })
-
-    if (existing) {
-      const isSameUsername = existing.username === data.username
-      const isSameEmail = existing.email === data.email
-
-      return Result.fail({
-        username: isSameUsername ? "Username already exists" : undefined,
-        email: isSameEmail ? "Email already exists" : undefined,
+    if (data.username || data.email) {
+      const [existing] = await this.userRepo.matching({
+        mode: "OR",
+        filters: {
+          username: data.username,
+          email: data.email,
+        },
+        limit: 1,
       })
+
+      if (existing) {
+        const isSameUsername = existing.username === data.username
+        const isSameEmail = existing.email === data.email
+
+        return Result.fail({
+          username: isSameUsername ? "Username already exists" : undefined,
+          email: isSameEmail ? "Email already exists" : undefined,
+        })
+      }
     }
 
     const user = await this.userRepo.update(id, data)

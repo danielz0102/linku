@@ -1,15 +1,16 @@
 import type {
   NewUser,
-  SearchOptions,
   UpdateData,
   UserFilters,
   UserRepository,
 } from "#users/domain/user-repository.js"
 import { User } from "#users/domain/user.js"
+import type { Criteria } from "#shared/domain/criteria.js"
 
 import db from "#shared/db/drizzle/index.js"
 import { usersTable } from "#shared/db/drizzle/schemas.js"
-import { eq, ilike, or } from "drizzle-orm"
+import { buildDrizzleWhere } from "#shared/db/drizzle/criteria.js"
+import { eq } from "drizzle-orm"
 
 export class DrizzleUserRepository implements UserRepository {
   async create(newUser: NewUser): Promise<User> {
@@ -20,37 +21,20 @@ export class DrizzleUserRepository implements UserRepository {
       .then(([u]) => new User(u))
   }
 
-  async findOne(filters: UserFilters): Promise<User | undefined> {
-    const entries = Object.entries(filters) as [keyof UserFilters, string][]
-    const conditions = entries.map(([k, v]) => eq(usersTable[k], v))
-
-    if (conditions.length === 0) {
-      throw new Error("At least one filter must be provided")
-    }
-
-    return db
-      .select()
-      .from(usersTable)
-      .where(or(...conditions))
-      .limit(1)
-      .then(([r]) => (r ? new User(r) : undefined))
-  }
-
-  async search(
-    filters: UserFilters,
-    { limit = 20, offset = 0 }: SearchOptions = {}
-  ): Promise<User[]> {
-    const entries = Object.entries(filters) as [keyof UserFilters, string][]
-    const conditions = entries.map(([k, v]) => ilike(usersTable[k], `%${v}%`))
-
-    if (conditions.length === 0) {
-      throw new Error("At least one filter must be provided")
-    }
+  async matching(criteria: Criteria<UserFilters>): Promise<User[]> {
+    const { limit = 20, offset = 0 } = criteria
+    const where = buildDrizzleWhere(criteria, {
+      id: usersTable.id,
+      username: usersTable.username,
+      email: usersTable.email,
+      firstName: usersTable.firstName,
+      lastName: usersTable.lastName,
+    })
 
     return db
       .select()
       .from(usersTable)
-      .where(or(...conditions))
+      .where(where)
       .limit(limit)
       .offset(offset)
       .then((rows) => rows.map((r) => new User(r)))
