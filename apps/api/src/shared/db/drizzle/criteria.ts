@@ -1,5 +1,5 @@
-import { and, eq, ilike, or } from "drizzle-orm"
 import type { AnyColumn, SQL } from "drizzle-orm"
+import { and, eq, ilike, or } from "drizzle-orm"
 
 import type {
   Criteria,
@@ -20,20 +20,10 @@ type NormalizedFilter<T> = {
 const DEFAULT_MODE: CriteriaConjunction = "AND"
 const DEFAULT_OP: FilterOperator = "EQ"
 
-const isOperatorObject = <T>(
-  value: FilterValue<T>
-): value is { value: T; op?: FilterOperator } =>
-  typeof value === "object" && value !== null && "value" in value
-
-const normalizeFilterValue = <T>(value: FilterValue<T>): NormalizedFilter<T> =>
-  isOperatorObject(value)
-    ? { value: value.value, op: value.op ?? DEFAULT_OP }
-    : { value, op: DEFAULT_OP }
-
-export const buildDrizzleWhere = <TFilters>(
+export function buildDrizzleWhere<TFilters>(
   criteria: Criteria<TFilters>,
   columns: CriteriaColumnMap<TFilters>
-): SQL => {
+): SQL {
   const filters = criteria.filters ?? {}
   const entries = Object.entries(filters) as [
     keyof TFilters,
@@ -73,4 +63,16 @@ export const buildDrizzleWhere = <TFilters>(
   const mode = criteria.mode ?? DEFAULT_MODE
 
   return mode === "OR" ? or(...conditions) : and(...conditions)
+}
+
+function isOperatorObject<T>(
+  value: FilterValue<T>
+): value is { value: T; op?: FilterOperator } {
+  return typeof value === "object" && value !== null && "value" in value
+}
+
+function normalizeFilterValue<T>(value: FilterValue<T>): NormalizedFilter<T> {
+  return isOperatorObject(value)
+    ? { value: value.value, op: value.op ?? DEFAULT_OP }
+    : { value, op: DEFAULT_OP }
 }
