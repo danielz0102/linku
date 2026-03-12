@@ -1,4 +1,4 @@
-import { toPrivateUser } from "#users/application/dtos/user-mapper.js"
+import { toPublicUser } from "#users/application/dtos/user-mapper.js"
 import type { UserRepository } from "#users/domain/user-repository.js"
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
@@ -26,5 +26,5 @@ export const getUserByIdHandler: GetUserByIdHandler =
       })
     }
 
-    return res.status(200).json(toPrivateUser(user))
+    return res.status(200).json(toPublicUser(user))
   }

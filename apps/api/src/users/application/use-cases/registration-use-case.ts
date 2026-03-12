@@ -2,7 +2,7 @@ import { Result } from "#shared/lib/result.js"
 import { User } from "#users/domain/user.js"
 import type { UserRepository } from "../../domain/user-repository.js"
 import type { PublicUser } from "../dtos/public-user.js"
-import { toPrivateUser } from "../dtos/user-mapper.js"
+import { toPublicUser } from "../dtos/user-mapper.js"
 import type { PasswordHasher } from "../ports/password-hasher.js"
 
 type Dependencies = {
@@ -62,6 +62,6 @@ export class RegistrationUseCase {
     })
     await this.userRepo.save(user)
 
-    return Result.ok(toPrivateUser(user))
+    return Result.ok(toPublicUser(user))
   }
 }

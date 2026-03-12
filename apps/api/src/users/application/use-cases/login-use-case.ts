@@ -1,7 +1,7 @@
 import { Result } from "#shared/lib/result.js"
 import type { UserRepository } from "../../domain/user-repository.js"
 import type { PublicUser } from "../dtos/public-user.js"
-import { toPrivateUser } from "../dtos/user-mapper.js"
+import { toPublicUser } from "../dtos/user-mapper.js"
 import type { PasswordHasher } from "../ports/password-hasher.js"
 
 type Dependencies = {
@@ -44,6 +44,6 @@ export class LoginUseCase {
       return Result.fail("Invalid credentials")
     }
 
-    return Result.ok(toPrivateUser(user))
+    return Result.ok(toPublicUser(user))
   }
 }

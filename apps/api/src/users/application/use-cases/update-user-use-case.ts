@@ -1,7 +1,7 @@
 import { Result } from "#shared/lib/result.js"
 import type { UserRepository } from "../../domain/user-repository.js"
 import type { PublicUser } from "../dtos/public-user.js"
-import { toPrivateUser } from "../dtos/user-mapper.js"
+import { toPublicUser } from "../dtos/user-mapper.js"
 
 type Dependencies = {
   userRepo: UserRepository
@@ -52,6 +52,6 @@ export class UpdateUserUseCase {
 
     const user = await this.userRepo.update(id, data)
 
-    return Result.ok(toPrivateUser(user))
+    return Result.ok(toPublicUser(user))
   }
 }
