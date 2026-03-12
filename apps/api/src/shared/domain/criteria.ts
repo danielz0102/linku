@@ -7,11 +7,11 @@ export type FilterValue<T> =
       op?: FilterOperator
     }
 
-export type CriteriaMode = "AND" | "OR"
+export type CriteriaConjunction = "AND" | "OR"
 
 export type Criteria<TFilters> = {
   filters?: Partial<{ [K in keyof TFilters]: FilterValue<TFilters[K]> }>
-  mode?: CriteriaMode
+  mode?: CriteriaConjunction
   limit?: number
   offset?: number
 }

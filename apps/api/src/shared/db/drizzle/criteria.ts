@@ -3,7 +3,7 @@ import type { AnyColumn, SQL } from "drizzle-orm"
 
 import type {
   Criteria,
-  CriteriaMode,
+  CriteriaConjunction,
   FilterOperator,
   FilterValue,
 } from "#shared/domain/criteria.js"
@@ -17,7 +17,7 @@ type NormalizedFilter<T> = {
   op: FilterOperator
 }
 
-const DEFAULT_MODE: CriteriaMode = "AND"
+const DEFAULT_MODE: CriteriaConjunction = "AND"
 const DEFAULT_OP: FilterOperator = "EQ"
 
 const isOperatorObject = <T>(
@@ -37,7 +37,7 @@ export const buildDrizzleWhere = <TFilters>(
   const filters = criteria.filters ?? {}
   const entries = Object.entries(filters) as [
     keyof TFilters,
-    FilterValue<TFilters[keyof TFilters]>
+    FilterValue<TFilters[keyof TFilters]>,
   ][]
 
   const conditions = entries.flatMap(([key, rawValue]) => {
@@ -52,7 +52,9 @@ export const buildDrizzleWhere = <TFilters>(
 
     if (op === "ILIKE") {
       if (typeof value !== "string") {
-        throw new Error(`ILIKE operator requires a string value for ${String(key)}`)
+        throw new Error(
+          `ILIKE operator requires a string value for ${String(key)}`
+        )
       }
       return [ilike(column, `%${value}%`)]
     }
