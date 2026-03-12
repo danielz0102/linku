@@ -1,6 +1,6 @@
 import { Result } from "#shared/lib/result.js"
 import type { UserRepository } from "../../domain/user-repository.js"
-import type { PrivateUser } from "../dtos/private-user.js"
+import type { PublicUser } from "../dtos/public-user.js"
 import { toPrivateUser } from "../dtos/user-mapper.js"
 
 type Dependencies = {
@@ -28,7 +28,7 @@ export class UpdateUserUseCase {
   async execute(
     id: string,
     data: UpdateUserData
-  ): Promise<Result<PrivateUser, UpdateUserError>> {
+  ): Promise<Result<PublicUser, UpdateUserError>> {
     if (data.username || data.email) {
       const [existing] = await this.userRepo.matching({
         conjunction: "OR",

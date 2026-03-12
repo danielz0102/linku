@@ -1,6 +1,6 @@
 import { Result } from "#shared/lib/result.js"
 import type { UserRepository } from "../../domain/user-repository.js"
-import type { PrivateUser } from "../dtos/private-user.js"
+import type { PublicUser } from "../dtos/public-user.js"
 import { toPrivateUser } from "../dtos/user-mapper.js"
 import type { PasswordHasher } from "../ports/password-hasher.js"
 
@@ -25,7 +25,7 @@ export class LoginUseCase {
 
   async execute(
     credentials: LoginCredentials
-  ): Promise<Result<PrivateUser, string>> {
+  ): Promise<Result<PublicUser, string>> {
     const [user] = await this.userRepo.matching({
       filters: { username: credentials.username },
       limit: 1,

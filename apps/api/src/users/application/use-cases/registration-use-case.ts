@@ -1,7 +1,7 @@
 import { Result } from "#shared/lib/result.js"
 import { User } from "#users/domain/user.js"
 import type { UserRepository } from "../../domain/user-repository.js"
-import type { PrivateUser } from "../dtos/private-user.js"
+import type { PublicUser } from "../dtos/public-user.js"
 import { toPrivateUser } from "../dtos/user-mapper.js"
 import type { PasswordHasher } from "../ports/password-hasher.js"
 
@@ -35,7 +35,7 @@ export class RegistrationUseCase {
     password,
     firstName,
     lastName,
-  }: RegistrationData): Promise<Result<PrivateUser, RegisterError>> {
+  }: RegistrationData): Promise<Result<PublicUser, RegisterError>> {
     const [existing] = await this.userRepo.matching({
       conjunction: "OR",
       filters: { username, email },
