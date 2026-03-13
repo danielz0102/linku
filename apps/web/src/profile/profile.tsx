@@ -13,7 +13,7 @@ export default function Profile() {
       <div className="relative">
         <img
           src={profilePicUrl || "/default-pp.jpg"}
-          alt="Profile picture"
+          alt=""
           className="size-32 rounded-full object-cover"
         />
         <button

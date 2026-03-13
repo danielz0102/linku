@@ -43,7 +43,7 @@ export default function PublicProfile() {
     <main className="flex size-full flex-col items-center justify-center gap-4 p-4 text-center">
       <img
         src={user.profilePicUrl || "/default-pp.jpg"}
-        alt="Profile picture"
+        alt=""
         className="size-32 rounded-full object-cover"
       />
 
