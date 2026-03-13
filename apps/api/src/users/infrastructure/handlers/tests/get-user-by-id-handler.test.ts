@@ -12,7 +12,7 @@ test("sends 200 with user data", async () => {
   const user = UserMother.create()
   repo.findOne.mockResolvedValueOnce(user)
 
-  await request(app).get(`/${user.id}`).expect(200).expect(user.toPublic())
+  await request(app).get(`/${user.#id}`).expect(200).expect(user.toPublic())
 })
 
 test("sends 404 if user is not found", async () => {

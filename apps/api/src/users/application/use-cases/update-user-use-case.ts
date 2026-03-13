@@ -1,10 +1,9 @@
+import { UUID } from "#shared/domain/uuid.js"
 import { Result } from "#shared/lib/result.js"
-import type { PublicUser } from "#users/domain/user.js"
-import type { UserRepository } from "../ports/user-repository.d.js"
-
-type Dependencies = {
-  userRepo: UserRepository
-}
+import { Email } from "#users/domain/email.js"
+import type { UserRepository } from "../../domain/user-repository.js"
+import type { PublicUser } from "../dtos/public-user.js"
+import { toPublicUser } from "../dtos/user-mapper.js"
 
 export type UpdateUserData = Partial<{
   username: string
@@ -18,33 +17,39 @@ export type UpdateUserData = Partial<{
 type UpdateUserError = Partial<Record<"username" | "email", string>>
 
 export class UpdateUserUseCase {
-  private readonly userRepo: UserRepository
-
-  constructor({ userRepo }: Dependencies) {
-    this.userRepo = userRepo
-  }
+  constructor(private readonly repo: UserRepository) {}
 
   async execute(
     id: string,
     data: UpdateUserData
   ): Promise<Result<PublicUser, UpdateUserError>> {
-    const existing = await this.userRepo.findOne({
-      username: data.username,
-      email: data.email,
-    })
+    const user = await this.repo.findExisting({ id: new UUID(id) })
 
-    if (existing) {
-      const isSameUsername = existing.username === data.username
-      const isSameEmail = existing.email === data.email
-
-      return Result.fail({
-        username: isSameUsername ? "Username already exists" : undefined,
-        email: isSameEmail ? "Email already exists" : undefined,
-      })
+    if (!user) {
+      throw new Error("User who should be authenticated was not found")
     }
 
-    const user = await this.userRepo.update(id, data)
+    if (data.username || data.email) {
+      const existing = await this.repo.checkUniqueness({
+        id: new UUID(id),
+        username: data.username,
+        email: data.email ? new Email(data.email) : undefined,
+      })
 
-    return Result.ok(user.toPublic())
+      if (existing) {
+        const isSameUsername = existing.username === data.username
+        const isSameEmail = existing.email === data.email
+
+        return Result.fail({
+          username: isSameUsername ? "Username already exists" : undefined,
+          email: isSameEmail ? "Email already exists" : undefined,
+        })
+      }
+    }
+
+    user.update(data)
+    await this.repo.save(user)
+
+    return Result.ok(toPublicUser(user))
   }
 }

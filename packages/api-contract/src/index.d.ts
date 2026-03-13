@@ -59,9 +59,7 @@ export namespace LinkuAPI {
 
   interface GetUsers {
     Query: {
-      username?: string
-      firstName?: string
-      lastName?: string
+      q: string
       limit?: string
       offset?: string
     }
