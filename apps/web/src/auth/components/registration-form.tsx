@@ -16,7 +16,7 @@ type RegistrationData = {
 type RegistrationFormFields = RegistrationData & { confirmPassword: string }
 
 type RegistrationFormProps = {
-  onSubmit(data: RegistrationData): Promise<void>
+  onSubmit: (data: RegistrationData) => Promise<void>
 }
 
 export function RegistrationForm({ onSubmit }: RegistrationFormProps) {

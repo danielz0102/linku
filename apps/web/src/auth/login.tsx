@@ -17,7 +17,7 @@ export default function Login() {
         <LoginForm
           onSubmit={async (data) => {
             await login(data)
-            navigate("/")
+            await navigate("/")
           }}
         />
 

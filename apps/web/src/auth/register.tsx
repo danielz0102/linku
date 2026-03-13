@@ -17,7 +17,7 @@ export default function Register() {
         <RegistrationForm
           onSubmit={async (data) => {
             await registerUser(data)
-            navigate("/")
+            await navigate("/")
           }}
         />
 

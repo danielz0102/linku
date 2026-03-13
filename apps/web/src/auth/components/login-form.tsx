@@ -11,7 +11,7 @@ type LoginData = {
 }
 
 type LoginFormProps = {
-  onSubmit(data: LoginData): Promise<void>
+  onSubmit: (data: LoginData) => Promise<void>
 }
 
 export function LoginForm({ onSubmit }: LoginFormProps) {

@@ -23,7 +23,7 @@ export default function UpdateProfile() {
         onSubmit={async (data) => {
           await updateUser(data)
           await refresh()
-          navigate("/profile")
+          await navigate("/profile")
         }}
         className="md:min-w-lg"
       />

@@ -16,7 +16,7 @@ type UpdateUserData = {
 
 type UpdateUserFormProps = {
   defaultValues?: UpdateUserData
-  onSubmit(data: UpdateUserData): Promise<void>
+  onSubmit: (data: UpdateUserData) => Promise<void>
   className?: string
 }
 

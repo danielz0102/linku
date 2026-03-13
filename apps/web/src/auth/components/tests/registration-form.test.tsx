@@ -117,23 +117,23 @@ test("shows specific API error messages", async () => {
 
 describe("Password validation", () => {
   it("fails on password shorter than 8 characters", async () => {
-    testPassword("P1!")
+    await testPassword("P1!")
   })
 
   it("fails on password without uppercase letter", async () => {
-    testPassword("password123!")
+    await testPassword("password123!")
   })
 
   it("fails on password without lowercase letter", async () => {
-    testPassword("PASSWORD123!")
+    await testPassword("PASSWORD123!")
   })
 
   it("fails on password without number", async () => {
-    testPassword("Password!")
+    await testPassword("Password!")
   })
 
   it("fails on password without special character", async () => {
-    testPassword("Password123")
+    await testPassword("Password123")
   })
 })
 

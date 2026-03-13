@@ -3,10 +3,10 @@ import { createContext, use } from "react"
 
 type AuthContextValue = {
   user: LinkuAPI.User | null
-  login(credentials: LinkuAPI.Login["RequestBody"]): Promise<void>
-  register(newUser: LinkuAPI.RegisterUser["RequestBody"]): Promise<void>
-  refresh(): Promise<void>
-  logout(): Promise<void>
+  login: (credentials: LinkuAPI.Login["RequestBody"]) => Promise<void>
+  register: (newUser: LinkuAPI.RegisterUser["RequestBody"]) => Promise<void>
+  refresh: () => Promise<void>
+  logout: () => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null)
