@@ -117,22 +117,27 @@ test("shows specific API error messages", async () => {
 
 describe("Password validation", () => {
   it("fails on password shorter than 8 characters", async () => {
+    expect.hasAssertions()
     await testPassword("P1!")
   })
 
   it("fails on password without uppercase letter", async () => {
+    expect.hasAssertions()
     await testPassword("password123!")
   })
 
   it("fails on password without lowercase letter", async () => {
+    expect.hasAssertions()
     await testPassword("PASSWORD123!")
   })
 
   it("fails on password without number", async () => {
+    expect.hasAssertions()
     await testPassword("Password!")
   })
 
   it("fails on password without special character", async () => {
+    expect.hasAssertions()
     await testPassword("Password123")
   })
 })
