@@ -25,13 +25,13 @@ type UserPrimitives = {
 
 export class User {
   readonly #id: UUID
-  readonly #username: string
-  readonly #email: Email
+  #username: string
+  #email: Email
   readonly #hashedPassword: string
-  readonly #firstName: string
-  readonly #lastName: string
-  readonly #profilePicUrl: URL | null
-  readonly #bio: string | null
+  #firstName: string
+  #lastName: string
+  #profilePicUrl: URL | null
+  #bio: string | null
 
   constructor(params: UserParams) {
     this.#id = new UUID(params.id)
@@ -44,6 +44,10 @@ export class User {
       ? new URL(params.profilePicUrl)
       : null
     this.#bio = params.bio ?? null
+  }
+
+  get id(): string {
+    return this.#id.value
   }
 
   get username(): string {
@@ -68,6 +72,38 @@ export class User {
       lastName: this.#lastName,
       profilePicUrl: this.#profilePicUrl?.href ?? null,
       bio: this.#bio,
+    }
+  }
+
+  update(
+    fields: Partial<{
+      username: string
+      email: string
+      firstName: string
+      lastName: string
+      profilePicUrl: string
+      bio: string
+    }>
+  ) {
+    const { username, email, firstName, lastName, profilePicUrl, bio } = fields
+
+    if (username) {
+      this.#username = username
+    }
+    if (email) {
+      this.#email = new Email(email)
+    }
+    if (firstName) {
+      this.#firstName = firstName
+    }
+    if (lastName) {
+      this.#lastName = lastName
+    }
+    if (profilePicUrl) {
+      this.#profilePicUrl = new URL(profilePicUrl)
+    }
+    if (bio) {
+      this.#bio = bio
     }
   }
 }

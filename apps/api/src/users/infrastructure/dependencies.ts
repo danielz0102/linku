@@ -18,8 +18,6 @@ export const loginUseCase = new LoginUseCase({
   hasher: passwordHasher,
 })
 
-export const updateUserUseCase = new UpdateUserUseCase({
-  userRepo: userRepository,
-})
+export const updateUserUseCase = new UpdateUserUseCase(userRepository)
 
 export { userRepository }

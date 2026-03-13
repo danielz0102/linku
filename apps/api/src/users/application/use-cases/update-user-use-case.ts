@@ -1,11 +1,9 @@
+import { UUID } from "#shared/domain/uuid.js"
 import { Result } from "#shared/lib/result.js"
+import { Email } from "#users/domain/email.js"
 import type { UserRepository } from "../../domain/user-repository.js"
 import type { PublicUser } from "../dtos/public-user.js"
 import { toPublicUser } from "../dtos/user-mapper.js"
-
-type Dependencies = {
-  userRepo: UserRepository
-}
 
 export type UpdateUserData = Partial<{
   username: string
@@ -19,24 +17,23 @@ export type UpdateUserData = Partial<{
 type UpdateUserError = Partial<Record<"username" | "email", string>>
 
 export class UpdateUserUseCase {
-  private readonly userRepo: UserRepository
-
-  constructor({ userRepo }: Dependencies) {
-    this.userRepo = userRepo
-  }
+  constructor(private readonly repo: UserRepository) {}
 
   async execute(
     id: string,
     data: UpdateUserData
   ): Promise<Result<PublicUser, UpdateUserError>> {
+    const user = await this.repo.findExisting({ id: new UUID(id) })
+
+    if (!user) {
+      throw new Error("User who should be authenticated was not found")
+    }
+
     if (data.username || data.email) {
-      const [existing] = await this.userRepo.matching({
-        conjunction: "OR",
-        filters: {
-          username: data.username,
-          email: data.email,
-        },
-        limit: 1,
+      const existing = await this.repo.checkUniqueness({
+        id: new UUID(id),
+        username: data.username,
+        email: data.email ? new Email(data.email) : undefined,
       })
 
       if (existing) {
@@ -50,7 +47,8 @@ export class UpdateUserUseCase {
       }
     }
 
-    const user = await this.userRepo.update(id, data)
+    user.update(data)
+    await this.repo.save(user)
 
     return Result.ok(toPublicUser(user))
   }

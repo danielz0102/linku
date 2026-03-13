@@ -1,4 +1,5 @@
 import { Result } from "#shared/lib/result.js"
+import { Email } from "#users/domain/email.js"
 import { User } from "#users/domain/user.js"
 import type { UserRepository } from "../../domain/user-repository.js"
 import type { PublicUser } from "../dtos/public-user.js"
@@ -36,10 +37,9 @@ export class RegistrationUseCase {
     firstName,
     lastName,
   }: RegistrationData): Promise<Result<PublicUser, RegisterError>> {
-    const [existing] = await this.userRepo.matching({
-      conjunction: "OR",
-      filters: { username, email },
-      limit: 1,
+    const existing = await this.userRepo.checkUniqueness({
+      username,
+      email: new Email(email),
     })
 
     if (existing) {

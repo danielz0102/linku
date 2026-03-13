@@ -26,9 +26,8 @@ export class LoginUseCase {
   async execute(
     credentials: LoginCredentials
   ): Promise<Result<PublicUser, string>> {
-    const [user] = await this.userRepo.matching({
-      filters: { username: credentials.username },
-      limit: 1,
+    const user = await this.userRepo.findExisting({
+      username: credentials.username,
     })
 
     if (!user) {
