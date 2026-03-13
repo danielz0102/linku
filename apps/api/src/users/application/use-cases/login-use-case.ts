@@ -23,9 +23,7 @@ export class LoginUseCase {
     this.hasher = hasher
   }
 
-  async execute(
-    credentials: LoginCredentials
-  ): Promise<Result<PublicUser, string>> {
+  async execute(credentials: LoginCredentials): Promise<Result<PublicUser>> {
     const user = await this.userRepo.findExisting({
       username: credentials.username,
     })

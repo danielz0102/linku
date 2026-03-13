@@ -17,8 +17,8 @@ export function UpdatePictureModal({ ref }: UpdatePictureModalProps) {
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: async (image: File) => {
-      const profilePicUrl = await uploadProfileImage(image)
-      await updateUser({ profilePicUrl })
+      const uploadedPicture = await uploadProfileImage(image)
+      await updateUser({ profilePicUrl: uploadedPicture })
       await refresh()
     },
     onSuccess: () => ref.current?.close(),

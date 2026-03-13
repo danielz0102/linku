@@ -1,6 +1,6 @@
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
-import z from "zod"
+import { z } from "zod"
 
 type Validator = (
   schema: z.ZodObject

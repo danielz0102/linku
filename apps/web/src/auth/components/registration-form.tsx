@@ -46,6 +46,7 @@ export function RegistrationForm({ onSubmit }: RegistrationFormProps) {
         })
       }
 
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       const fieldKeys = Object.keys(
         getValues()
       ) as (keyof RegistrationFormFields)[]

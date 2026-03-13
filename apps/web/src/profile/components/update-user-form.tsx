@@ -51,6 +51,7 @@ export function UpdateUserForm({
         })
       }
 
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       const fieldKeys = Object.keys(getValues()) as (keyof UpdateUserData)[]
 
       fieldKeys.forEach((k) => {

@@ -1,20 +1,19 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": [
-    "oxc",
-    "typescript",
-    "unicorn",
-    "import",
-    "node",
-    "promise",
-    "vitest"
-  ],
-  "categories": {},
+  "plugins": ["oxc", "typescript", "unicorn", "import", "node", "promise"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
   "rules": {},
   "settings": {},
   "env": {
     "builtin": true
   },
-  "globals": {},
-  "ignorePatterns": []
+  "overrides": [
+    {
+      "files": ["**/*.test.{ts,tsx}"],
+      "plugins": ["vitest"]
+    }
+  ]
 }

@@ -1,4 +1,4 @@
-import z from "zod"
+import { z } from "zod"
 
 export const registrationSchema = z.object({
   username: z.string().trim().nonempty("Username is empty"),
