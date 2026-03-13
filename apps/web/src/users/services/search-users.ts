@@ -1,4 +1,5 @@
 import type { LinkuAPI } from "@linku/api-contract"
+
 import { apiClient } from "~/shared/api"
 
 export async function searchUsers(query: string): Promise<LinkuAPI.User[]> {

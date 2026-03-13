@@ -1,4 +1,5 @@
 import { Navigate } from "react-router"
+
 import { useAuth } from "~/auth/context/auth-context"
 
 export function ProtectedRoute({ children }: React.PropsWithChildren) {

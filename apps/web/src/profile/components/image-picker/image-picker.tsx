@@ -1,5 +1,6 @@
 import { Camera, Pencil } from "lucide-react"
 import { useRef } from "react"
+
 import { useImage } from "./use-image"
 
 type ImagePickerProps = {
@@ -31,16 +32,13 @@ export function ImagePicker({ defaultImage, onChange }: ImagePickerProps) {
               className="size-full object-cover"
             />
           ) : (
-            <Camera
-              className="size-10 text-neutral-500"
-              aria-label="Choose profile picture"
-            />
+            <Camera className="size-10 text-neutral-500" aria-label="Choose profile picture" />
           )}
         </div>
 
         <div
           data-show={error ? undefined : true}
-          className="fade absolute right-0 bottom-0 flex size-10 items-center justify-center rounded-full border-4 border-blue-950 bg-blue-600"
+          className="absolute right-0 bottom-0 flex size-10 items-center justify-center rounded-full border-4 border-blue-950 bg-blue-600 fade"
         >
           <Pencil className="size-4 text-white" />
         </div>

@@ -3,10 +3,7 @@ type ErrorPageProps = {
   message?: string
 }
 
-export function ErrorPage({
-  status = 500,
-  message = "Something went wrong.",
-}: ErrorPageProps) {
+export function ErrorPage({ status = 500, message = "Something went wrong." }: ErrorPageProps) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-4">
       <h1 className="text-4xl font-bold">{status}</h1>

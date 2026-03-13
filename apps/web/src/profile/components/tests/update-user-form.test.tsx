@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+
 import { UpdateUserForm } from "~/profile/components/update-user-form"
 
 test("submits valid update data", async () => {
@@ -41,9 +42,7 @@ test("renders default values", () => {
   expect(screen.getByLabelText(/first name/i)).toHaveValue("Jane")
   expect(screen.getByLabelText(/last name/i)).toHaveValue("Doe")
   expect(screen.getByLabelText(/username/i)).toHaveValue("janedoe")
-  expect(screen.getByLabelText(/email address/i)).toHaveValue(
-    "jane@example.com"
-  )
+  expect(screen.getByLabelText(/email address/i)).toHaveValue("jane@example.com")
   expect(screen.getByLabelText(/bio/i)).toHaveValue("Hello there")
 })
 

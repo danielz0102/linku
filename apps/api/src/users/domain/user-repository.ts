@@ -1,5 +1,7 @@
 import type { UUID } from "#shared/domain/uuid.js"
+
 import { User } from "#users/domain/user.js"
+
 import type { Email } from "./email.js"
 
 export interface UserRepository {

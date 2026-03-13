@@ -1,9 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Suspense } from "react"
 import { ErrorBoundary } from "react-error-boundary"
-import { LoadingSpinner } from "~/shared/components/loading-spinner"
+
 import { ErrorPage } from "~/app/pages/error-page"
 import { AuthProvider } from "~/auth/context/auth-provider"
+import { LoadingSpinner } from "~/shared/components/loading-spinner"
+
 import { Router } from "./router"
 
 const queryClient = new QueryClient()

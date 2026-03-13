@@ -1,8 +1,11 @@
 import type { LinkuAPI } from "@linku/api-contract"
+
 import request from "supertest"
+
 import { AppBuilder } from "~/__test-utils__/builders/app-builder.ts"
 import { RegistrationUseCaseMock } from "~/__test-utils__/mocks/registration-use-case-mock.ts"
 import { UserMother } from "~/__test-utils__/mothers/user-mother.ts"
+
 import { registrationHandler } from "../registration-handler.ts"
 
 const service = new RegistrationUseCaseMock()

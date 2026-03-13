@@ -1,8 +1,4 @@
-import {
-  CLOUDINARY_API_KEY,
-  CLOUDINARY_API_SECRET,
-  CLOUDINARY_NAME,
-} from "#shared/config/env.js"
+import { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_NAME } from "#shared/config/env.js"
 import cloudinary from "cloudinary"
 
 cloudinary.v2.config({

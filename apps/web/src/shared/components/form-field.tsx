@@ -1,5 +1,6 @@
 import { Eye, EyeOff } from "lucide-react"
 import { createContext, use, useId, useState } from "react"
+
 import { cn } from "../utils/cn"
 
 const FormFieldContext = createContext<{
@@ -14,13 +15,7 @@ type FormFieldProps = React.PropsWithChildren & {
   iconClassName?: string
 }
 
-export function Root({
-  label,
-  Icon,
-  error,
-  iconClassName,
-  children,
-}: FormFieldProps) {
+export function Root({ label, Icon, error, iconClassName, children }: FormFieldProps) {
   const id = useId()
 
   return (
@@ -37,9 +32,7 @@ export function Root({
           )}
         />
 
-        <FormFieldContext value={{ id, invalid: Boolean(error) }}>
-          {children}
-        </FormFieldContext>
+        <FormFieldContext value={{ id, invalid: Boolean(error) }}>{children}</FormFieldContext>
       </div>
 
       {error && (
@@ -57,9 +50,7 @@ export function Input({ className, ...attrs }: InputProps) {
   const context = use(FormFieldContext)
 
   if (!context) {
-    throw new Error(
-      "FormField.Input must be used within a FormField.Root component"
-    )
+    throw new Error("FormField.Input must be used within a FormField.Root component")
   }
 
   const { id, invalid } = context
@@ -83,11 +74,7 @@ export function PasswordInput(props: Omit<InputProps, "type" | "className">) {
 
   return (
     <>
-      <Input
-        className="pr-12"
-        type={isVisible ? "text" : "password"}
-        {...props}
-      />
+      <Input className="pr-12" type={isVisible ? "text" : "password"} {...props} />
       <button
         type="button"
         className="absolute top-1/2 right-3 -translate-y-1/2 text-neutral-500 hover:text-neutral-400"
@@ -99,18 +86,13 @@ export function PasswordInput(props: Omit<InputProps, "type" | "className">) {
   )
 }
 
-type TextAreaProps = Omit<
-  React.ComponentProps<"textarea">,
-  "id" | "aria-invalid"
->
+type TextAreaProps = Omit<React.ComponentProps<"textarea">, "id" | "aria-invalid">
 
 export function TextArea({ className, ...attrs }: TextAreaProps) {
   const context = use(FormFieldContext)
 
   if (!context) {
-    throw new Error(
-      "FormField.TextArea must be used within a FormField.Root component"
-    )
+    throw new Error("FormField.TextArea must be used within a FormField.Root component")
   }
 
   const { id, invalid } = context

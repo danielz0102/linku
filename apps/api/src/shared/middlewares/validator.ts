@@ -1,10 +1,9 @@
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
+
 import { z } from "zod"
 
-type Validator = (
-  schema: z.ZodObject
-) => RequestHandler<never, LinkuAPI.ErrorBody>
+type Validator = (schema: z.ZodObject) => RequestHandler<never, LinkuAPI.ErrorBody>
 
 export const validator: Validator = (schema) => (req, res, next) => {
   const { success, error } = schema.safeParse(req.body)
@@ -29,17 +28,14 @@ function mapZodError(
     return
   }
 
-  return Object.entries(properties).reduce<Record<string, string>>(
-    (acc, [k, v]) => {
-      if (!v) {
-        return acc
-      }
+  return Object.entries(properties).reduce<Record<string, string>>((acc, [k, v]) => {
+    if (!v) {
+      return acc
+    }
 
-      return {
-        ...acc,
-        [k]: v.errors[0],
-      }
-    },
-    {}
-  )
+    return {
+      ...acc,
+      [k]: v.errors[0],
+    }
+  }, {})
 }

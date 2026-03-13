@@ -1,5 +1,7 @@
 import type { LinkuAPI } from "@linku/api-contract"
+
 import axios from "axios"
+
 import { apiClient } from "~/shared/api"
 
 type CloudinaryUploadResponse = {
@@ -7,10 +9,9 @@ type CloudinaryUploadResponse = {
 }
 
 export async function uploadProfileImage(file: File): Promise<string> {
-  const { signature, timestamp, cloudName, api_key, folder, public_id } =
-    await apiClient
-      .post<LinkuAPI.UploadSignature["ResponseBody"]>("/users/upload-signature")
-      .then(({ data }) => data)
+  const { signature, timestamp, cloudName, api_key, folder, public_id } = await apiClient
+    .post<LinkuAPI.UploadSignature["ResponseBody"]>("/users/upload-signature")
+    .then(({ data }) => data)
 
   const formData = new FormData()
   formData.append("file", file)

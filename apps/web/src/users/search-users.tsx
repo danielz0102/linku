@@ -2,9 +2,11 @@ import { useQuery } from "@tanstack/react-query"
 import { Search } from "lucide-react"
 import { useState } from "react"
 import { Link } from "react-router"
+
 import { Alert } from "~/shared/components/alert"
 import { LoadingSpinner } from "~/shared/components/loading-spinner"
 import { useDebounce } from "~/shared/hooks/use-debounce"
+
 import { searchUsers } from "./services/search-users"
 
 export default function SearchUsers() {
@@ -30,11 +32,7 @@ export default function SearchUsers() {
 
       <div className="relative w-full max-w-md">
         <div className="relative flex items-center">
-          <Search
-            size={16}
-            strokeWidth={1.5}
-            className="absolute left-3 text-neutral-400"
-          />
+          <Search size={16} strokeWidth={1.5} className="absolute left-3 text-neutral-400" />
 
           <input
             type="search"
@@ -86,9 +84,7 @@ export default function SearchUsers() {
                       <p className="text-sm font-medium">
                         {user.firstName} {user.lastName}
                       </p>
-                      <p className="text-xs text-neutral-400">
-                        @{user.username}
-                      </p>
+                      <p className="text-xs text-neutral-400">@{user.username}</p>
                     </div>
                   </Link>
                 </li>

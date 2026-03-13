@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router"
+
 import { ErrorPage } from "~/app/pages/error-page"
 import { ApiError } from "~/shared/api/api-error"
 import { LoadingSpinner } from "~/shared/components/loading-spinner"
+
 import { getUserById } from "./services/get-user-by-id"
 
 export default function PublicProfile() {
@@ -55,9 +57,7 @@ export default function PublicProfile() {
       </div>
 
       {user.bio ? (
-        <p className="max-w-72 overflow-hidden wrap-break-word md:max-w-lg">
-          {user.bio}
-        </p>
+        <p className="max-w-72 overflow-hidden wrap-break-word md:max-w-lg">{user.bio}</p>
       ) : (
         <p className="italic">No bio available.</p>
       )}

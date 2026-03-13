@@ -1,4 +1,5 @@
 import type { LinkuAPI } from "@linku/api-contract"
+
 import { rateLimit } from "express-rate-limit"
 
 const body: LinkuAPI.ErrorBody = {

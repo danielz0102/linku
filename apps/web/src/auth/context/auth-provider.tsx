@@ -1,6 +1,9 @@
 import type { LinkuAPI } from "@linku/api-contract"
+
 import { use, useState } from "react"
+
 import { apiClient } from "~/shared/api"
+
 import { AuthContext } from "./auth-context"
 
 const initialUser = getMe()
@@ -18,9 +21,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
   }
 
   const register = async (newUser: LinkuAPI.RegisterUser["RequestBody"]) => {
-    const nextUser = await apiClient
-      .post<LinkuAPI.User>("/users", newUser)
-      .then(({ data }) => data)
+    const nextUser = await apiClient.post<LinkuAPI.User>("/users", newUser).then(({ data }) => data)
 
     setUser(Promise.resolve(nextUser))
   }
@@ -35,11 +36,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
     setUser(Promise.resolve(nextUser))
   }
 
-  return (
-    <AuthContext value={{ user, login, register, logout, refresh }}>
-      {children}
-    </AuthContext>
-  )
+  return <AuthContext value={{ user, login, register, logout, refresh }}>{children}</AuthContext>
 }
 
 async function getMe(): Promise<LinkuAPI.User | null> {

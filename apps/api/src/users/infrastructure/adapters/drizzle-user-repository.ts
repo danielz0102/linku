@@ -1,9 +1,7 @@
+import type { UniqueFields, UserRepository } from "#users/domain/user-repository.js"
+
 import db from "#shared/db/drizzle/index.js"
 import { usersTable } from "#shared/db/drizzle/schemas.js"
-import type {
-  UniqueFields,
-  UserRepository,
-} from "#users/domain/user-repository.js"
 import { User } from "#users/domain/user.js"
 import { and, eq, not, or, type SQL } from "drizzle-orm"
 
@@ -28,9 +26,7 @@ export class DrizzleUserRepository implements UserRepository {
       .then(([r]) => (r ? new User(r) : undefined))
   }
 
-  async checkUniqueness(
-    fields: Partial<UniqueFields>
-  ): Promise<User | undefined> {
+  async checkUniqueness(fields: Partial<UniqueFields>): Promise<User | undefined> {
     const { id, username, email } = this.uniqueFieldsToConditions(fields)
 
     return db
@@ -40,11 +36,7 @@ export class DrizzleUserRepository implements UserRepository {
       .then(([r]) => (r ? new User(r) : undefined))
   }
 
-  private uniqueFieldsToConditions({
-    id,
-    username,
-    email,
-  }: Partial<UniqueFields>): Partial<{
+  private uniqueFieldsToConditions({ id, username, email }: Partial<UniqueFields>): Partial<{
     id: SQL
     username: SQL
     email: SQL

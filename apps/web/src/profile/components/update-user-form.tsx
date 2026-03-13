@@ -1,5 +1,6 @@
 import { AtSign, Mail, MessageSquare, User } from "lucide-react"
 import { useForm } from "react-hook-form"
+
 import { ApiError } from "~/shared/api/api-error"
 import { Alert } from "~/shared/components/alert"
 import FormField from "~/shared/components/form-field"
@@ -20,11 +21,7 @@ type UpdateUserFormProps = {
   className?: string
 }
 
-export function UpdateUserForm({
-  defaultValues,
-  onSubmit,
-  className,
-}: UpdateUserFormProps) {
+export function UpdateUserForm({ defaultValues, onSubmit, className }: UpdateUserFormProps) {
   const {
     register,
     setError,
@@ -68,44 +65,28 @@ export function UpdateUserForm({
     <form className={cn("space-y-6", className)} noValidate onSubmit={submit}>
       {errors.root && <Alert>{errors.root.message}</Alert>}
 
-      <FormField.Root
-        label="First Name"
-        Icon={User}
-        error={errors.firstName?.message}
-      >
+      <FormField.Root label="First Name" Icon={User} error={errors.firstName?.message}>
         <FormField.Input
           {...register("firstName", { required: "First name is required" })}
           placeholder="John"
         />
       </FormField.Root>
 
-      <FormField.Root
-        label="Last Name"
-        Icon={User}
-        error={errors.lastName?.message}
-      >
+      <FormField.Root label="Last Name" Icon={User} error={errors.lastName?.message}>
         <FormField.Input
           {...register("lastName", { required: "Last name is required" })}
           placeholder="Doe"
         />
       </FormField.Root>
 
-      <FormField.Root
-        label="Username"
-        Icon={AtSign}
-        error={errors.username?.message}
-      >
+      <FormField.Root label="Username" Icon={AtSign} error={errors.username?.message}>
         <FormField.Input
           {...register("username", { required: "Username is required" })}
           placeholder="johndoe"
         />
       </FormField.Root>
 
-      <FormField.Root
-        label="Email Address"
-        Icon={Mail}
-        error={errors.email?.message}
-      >
+      <FormField.Root label="Email Address" Icon={Mail} error={errors.email?.message}>
         <FormField.Input
           {...register("email", {
             required: "Email is required",

@@ -1,5 +1,6 @@
-import { TriangleAlert } from "lucide-react"
 import type { PropsWithChildren } from "react"
+
+import { TriangleAlert } from "lucide-react"
 
 export function Alert({ children }: PropsWithChildren) {
   return (

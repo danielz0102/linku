@@ -23,10 +23,8 @@ export class ApiError {
 }
 
 const GenericErrorMessage: Record<LinkuAPI.ErrorCode, string> = {
-  VALIDATION_ERROR:
-    "There was a validation error. Please check the provided data and try again.",
-  NETWORK_ERROR:
-    "A network error occurred. Please check your connection and try again.",
+  VALIDATION_ERROR: "There was a validation error. Please check the provided data and try again.",
+  NETWORK_ERROR: "A network error occurred. Please check your connection and try again.",
   UNEXPECTED_ERROR: "An unexpected error occurred. Please try again later.",
   NOT_FOUND: "The requested resource was not found.",
   FORBIDDEN: "You do not have permission to perform this action.",

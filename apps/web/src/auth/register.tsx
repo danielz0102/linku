@@ -1,5 +1,7 @@
 import { Link, useNavigate } from "react-router"
+
 import { RegistrationForm } from "~/auth/components/registration-form"
+
 import { useAuth } from "./context/auth-context"
 
 export default function Register() {

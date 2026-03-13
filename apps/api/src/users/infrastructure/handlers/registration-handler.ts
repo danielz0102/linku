@@ -10,18 +10,17 @@ type RegistrationHandler = (
   LinkuAPI.RegisterUser["RequestBody"]
 >
 
-export const registrationHandler: RegistrationHandler =
-  (useCase) => async (req, res) => {
-    const { ok, data, error } = await useCase.execute(req.body)
+export const registrationHandler: RegistrationHandler = (useCase) => async (req, res) => {
+  const { ok, data, error } = await useCase.execute(req.body)
 
-    if (!ok) {
-      return res.status(409).json({
-        code: "VALIDATION_ERROR",
-        message: "User already exists",
-        errors: error,
-      })
-    }
-
-    req.session.userId = data.id
-    return res.status(200).json(data)
+  if (!ok) {
+    return res.status(409).json({
+      code: "VALIDATION_ERROR",
+      message: "User already exists",
+      errors: error,
+    })
   }
+
+  req.session.userId = data.id
+  return res.status(200).json(data)
+}

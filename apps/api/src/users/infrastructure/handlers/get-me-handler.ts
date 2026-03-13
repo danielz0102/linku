@@ -1,8 +1,9 @@
-import { UUID } from "#shared/domain/uuid.js"
-import { toPublicUser } from "#users/application/dtos/user-mapper.js"
 import type { UserRepository } from "#users/domain/user-repository.js"
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
+
+import { UUID } from "#shared/domain/uuid.js"
+import { toPublicUser } from "#users/application/dtos/user-mapper.js"
 
 type GetMeHandler = (
   repository: UserRepository

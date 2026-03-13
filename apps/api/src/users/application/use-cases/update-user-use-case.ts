@@ -1,8 +1,10 @@
 import { UUID } from "#shared/domain/uuid.js"
 import { Result } from "#shared/lib/result.js"
 import { Email } from "#users/domain/email.js"
+
 import type { UserRepository } from "../../domain/user-repository.js"
 import type { PublicUser } from "../dtos/public-user.js"
+
 import { toPublicUser } from "../dtos/user-mapper.js"
 
 export type UpdateUserData = Partial<{
@@ -19,10 +21,7 @@ type UpdateUserError = Partial<Record<"username" | "email", string>>
 export class UpdateUserUseCase {
   constructor(private readonly repo: UserRepository) {}
 
-  async execute(
-    id: string,
-    data: UpdateUserData
-  ): Promise<Result<PublicUser, UpdateUserError>> {
+  async execute(id: string, data: UpdateUserData): Promise<Result<PublicUser, UpdateUserError>> {
     const user = await this.repo.findExisting({ id: new UUID(id) })
 
     if (!user) {

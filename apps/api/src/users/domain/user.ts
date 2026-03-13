@@ -1,4 +1,5 @@
 import { UUID } from "#shared/domain/uuid.js"
+
 import { Email } from "./email.js"
 
 type UserParams = {
@@ -40,9 +41,7 @@ export class User {
     this.#hashedPassword = params.hashedPassword
     this.#firstName = params.firstName
     this.#lastName = params.lastName
-    this.#profilePicUrl = params.profilePicUrl
-      ? new URL(params.profilePicUrl)
-      : null
+    this.#profilePicUrl = params.profilePicUrl ? new URL(params.profilePicUrl) : null
     this.#bio = params.bio ?? null
   }
 

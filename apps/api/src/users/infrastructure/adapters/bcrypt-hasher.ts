@@ -1,4 +1,5 @@
 import { hash, compare } from "bcryptjs"
+
 import { PasswordHasher } from "../../application/ports/password-hasher.js"
 
 export class BcryptHasher extends PasswordHasher {

@@ -1,8 +1,10 @@
 import { Result } from "#shared/lib/result.js"
+
 import type { UserRepository } from "../../domain/user-repository.js"
 import type { PublicUser } from "../dtos/public-user.js"
-import { toPublicUser } from "../dtos/user-mapper.js"
 import type { PasswordHasher } from "../ports/password-hasher.js"
+
+import { toPublicUser } from "../dtos/user-mapper.js"
 
 type Dependencies = {
   userRepo: UserRepository
@@ -32,10 +34,7 @@ export class LoginUseCase {
       return Result.fail("Invalid credentials")
     }
 
-    const isValidPassword = await this.hasher.compare(
-      credentials.password,
-      user.password
-    )
+    const isValidPassword = await this.hasher.compare(credentials.password, user.password)
 
     if (!isValidPassword) {
       return Result.fail("Invalid credentials")

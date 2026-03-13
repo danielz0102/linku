@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+
 import { RegistrationForm } from "~/auth/components/registration-form"
 import { ApiError } from "~/shared/api/api-error"
 

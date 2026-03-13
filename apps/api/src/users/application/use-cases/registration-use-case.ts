@@ -1,10 +1,12 @@
 import { Result } from "#shared/lib/result.js"
 import { Email } from "#users/domain/email.js"
 import { User } from "#users/domain/user.js"
+
 import type { UserRepository } from "../../domain/user-repository.js"
 import type { PublicUser } from "../dtos/public-user.js"
-import { toPublicUser } from "../dtos/user-mapper.js"
 import type { PasswordHasher } from "../ports/password-hasher.js"
+
+import { toPublicUser } from "../dtos/user-mapper.js"
 
 type Dependencies = {
   userRepo: UserRepository

@@ -18,3 +18,4 @@ Check the requirements of the project [here](../docs/linku.md).
 
 - Use kebab-case for file names.
 - Use `pnpm test` in the project you are to run tests.
+- Use Context7 MCP when you need to investigate anything about a specific library or framework.

@@ -1,7 +1,10 @@
 import type { LinkuAPI } from "@linku/api-contract"
+
 import axios, { type AxiosError } from "axios"
 import { z } from "zod/mini"
+
 import { API_URL } from "~/shared/config/env"
+
 import { ApiError } from "./api-error"
 
 export const apiClient = axios.create({

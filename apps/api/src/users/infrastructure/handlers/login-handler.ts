@@ -4,11 +4,7 @@ import type { RequestHandler } from "express"
 
 type LoginHandler = (
   useCase: LoginUseCase
-) => RequestHandler<
-  never,
-  LinkuAPI.Login["ResponseBody"],
-  LinkuAPI.Login["RequestBody"]
->
+) => RequestHandler<never, LinkuAPI.Login["ResponseBody"], LinkuAPI.Login["RequestBody"]>
 
 export const loginHandler: LoginHandler = (useCase) => async (req, res) => {
   const { ok, data } = await useCase.execute(req.body)

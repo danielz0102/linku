@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router"
+
 import { useAuth, useUser } from "~/auth/context/auth-context"
+
 import { UpdateUserForm } from "./components/update-user-form"
 import { updateUser } from "./services/update-user"
-import { useNavigate } from "react-router"
 
 export default function UpdateProfile() {
   const { refresh } = useAuth()

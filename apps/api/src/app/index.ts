@@ -1,4 +1,5 @@
 import express from "express"
+
 import { corsMiddleware } from "./middlewares/cors-middleware.js"
 import { notFound } from "./middlewares/not-found.js"
 import { sessionMiddleware } from "./middlewares/session-middleware.js"

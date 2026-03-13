@@ -1,10 +1,12 @@
-import { useState } from "react"
 import { useMutation } from "@tanstack/react-query"
+import { useState } from "react"
+
 import { useAuth, useUser } from "~/auth/context/auth-context"
+import { PrimaryButton } from "~/shared/components/primary-button"
+
 import { updateUser } from "../services/update-user"
 import { uploadProfileImage } from "../services/upload-profile-image"
 import { ImagePicker } from "./image-picker/image-picker"
-import { PrimaryButton } from "~/shared/components/primary-button"
 
 type UpdatePictureModalProps = {
   ref: React.RefObject<HTMLDialogElement | null>

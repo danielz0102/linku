@@ -3,10 +3,7 @@ type LoadingSpinnerProps = {
   size?: "sm" | "md"
 }
 
-export function LoadingSpinner({
-  fullScreen = false,
-  size = "md",
-}: LoadingSpinnerProps) {
+export function LoadingSpinner({ fullScreen = false, size = "md" }: LoadingSpinnerProps) {
   return (
     <div
       data-full-screen={fullScreen}

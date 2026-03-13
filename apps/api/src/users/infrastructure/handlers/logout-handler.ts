@@ -1,11 +1,9 @@
-import { SESSION_COOKIE_NAME } from "#shared/constants/session.js"
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 
-export const logoutHandler: RequestHandler<
-  never,
-  LinkuAPI.Logout["ResponseBody"]
-> = (req, res) => {
+import { SESSION_COOKIE_NAME } from "#shared/constants/session.js"
+
+export const logoutHandler: RequestHandler<never, LinkuAPI.Logout["ResponseBody"]> = (req, res) => {
   req.session.destroy((error) => {
     if (error) {
       console.error("Error destroying session during logout:", error)

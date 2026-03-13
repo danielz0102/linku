@@ -1,4 +1,5 @@
 import { createApp } from "#app/index.js"
+
 import { PORT } from "./shared/config/env.js"
 
 const app = createApp()

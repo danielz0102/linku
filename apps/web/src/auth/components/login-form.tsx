@@ -1,5 +1,6 @@
 import { AtSign, Lock } from "lucide-react"
 import { useForm } from "react-hook-form"
+
 import { ApiError } from "~/shared/api/api-error"
 import { Alert } from "~/shared/components/alert"
 import FormField from "~/shared/components/form-field"
@@ -35,10 +36,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
       const { code, genericMessage } = error
 
       setError("root", {
-        message:
-          code === "UNAUTHORIZED"
-            ? "Invalid username or password"
-            : genericMessage,
+        message: code === "UNAUTHORIZED" ? "Invalid username or password" : genericMessage,
       })
     }
   })
@@ -47,22 +45,14 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
     <form className="space-y-6" noValidate onSubmit={submit}>
       {errors.root && <Alert>{errors.root.message}</Alert>}
 
-      <FormField.Root
-        label="Username"
-        Icon={AtSign}
-        error={errors.username?.message}
-      >
+      <FormField.Root label="Username" Icon={AtSign} error={errors.username?.message}>
         <FormField.Input
           {...register("username", { required: "Username is required" })}
           placeholder="johndoe"
         />
       </FormField.Root>
 
-      <FormField.Root
-        label="Password"
-        Icon={Lock}
-        error={errors.password?.message}
-      >
+      <FormField.Root label="Password" Icon={Lock} error={errors.password?.message}>
         <FormField.PasswordInput
           placeholder="••••••••"
           {...register("password", { required: "Password is required" })}

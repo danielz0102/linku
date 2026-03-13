@@ -1,14 +1,8 @@
-import {
-  cloudinaryClient,
-  CloudinaryFolders,
-} from "#shared/config/cloudinary.js"
-import {
-  CLOUDINARY_API_KEY,
-  CLOUDINARY_API_SECRET,
-  CLOUDINARY_NAME,
-} from "#shared/config/env.js"
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
+
+import { cloudinaryClient, CloudinaryFolders } from "#shared/config/cloudinary.js"
+import { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_NAME } from "#shared/config/env.js"
 
 export const uploadSignatureHandler: RequestHandler<
   never,

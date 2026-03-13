@@ -1,5 +1,5 @@
-import { defineConfig } from "drizzle-kit"
 import { DATABASE_URL } from "#shared/config/env.js"
+import { defineConfig } from "drizzle-kit"
 
 export default defineConfig({
   out: "./drizzle",

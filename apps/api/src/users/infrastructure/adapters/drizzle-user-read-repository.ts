@@ -1,28 +1,20 @@
-import db from "#shared/db/drizzle/index.js"
-import { usersTable } from "#shared/db/drizzle/schemas.js"
 import type { PublicUser } from "#users/application/dtos/public-user.js"
 import type {
   Pagination,
   UserFilters,
   UserReadRepository,
 } from "#users/application/ports/user-read-repository.js"
+
+import db from "#shared/db/drizzle/index.js"
+import { usersTable } from "#shared/db/drizzle/schemas.js"
 import { ilike, or } from "drizzle-orm"
 
 export class DrizzleUserReadRepository implements UserReadRepository {
-  async search(
-    filters: UserFilters,
-    pagination: Pagination
-  ): Promise<PublicUser[]> {
+  async search(filters: UserFilters, pagination: Pagination): Promise<PublicUser[]> {
     const whereClause = or(
-      filters.username
-        ? ilike(usersTable.username, `%${filters.username}%`)
-        : undefined,
-      filters.firstName
-        ? ilike(usersTable.firstName, `%${filters.firstName}%`)
-        : undefined,
-      filters.lastName
-        ? ilike(usersTable.lastName, `%${filters.lastName}%`)
-        : undefined
+      filters.username ? ilike(usersTable.username, `%${filters.username}%`) : undefined,
+      filters.firstName ? ilike(usersTable.firstName, `%${filters.firstName}%`) : undefined,
+      filters.lastName ? ilike(usersTable.lastName, `%${filters.lastName}%`) : undefined
     )
 
     const query = db.select().from(usersTable)

@@ -1,5 +1,6 @@
-import { Navigation } from "~/shared/components/layout/navigation"
 import { Outlet } from "react-router"
+
+import { Navigation } from "~/shared/components/layout/navigation"
 
 export function Layout() {
   return (

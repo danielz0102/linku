@@ -1,7 +1,9 @@
 import { SquarePen } from "lucide-react"
 import { useRef } from "react"
 import { Link } from "react-router"
+
 import { useUser } from "~/auth/context/auth-context"
+
 import { UpdatePictureModal } from "./components/update-picture-modal"
 
 export default function Profile() {
@@ -34,14 +36,12 @@ export default function Profile() {
       </div>
 
       {bio ? (
-        <p className="max-w-72 overflow-hidden wrap-break-word md:max-w-lg">
-          {bio}
-        </p>
+        <p className="max-w-72 overflow-hidden wrap-break-word md:max-w-lg">{bio}</p>
       ) : (
         <p className="italic">No bio available.</p>
       )}
 
-      <Link to="/update-profile" className="link flex items-center gap-1">
+      <Link to="/update-profile" className="flex items-center gap-1 link">
         <SquarePen strokeWidth={1.5} size={18} />
         Update profile
       </Link>

@@ -1,6 +1,8 @@
-import { User } from "~/users/domain/user.ts"
-import { faker } from "@faker-js/faker"
 import type { LinkuAPI } from "@linku/api-contract"
+
+import { faker } from "@faker-js/faker"
+
+import { User } from "~/users/domain/user.ts"
 
 export const UserMother = {
   create(overrides: Partial<User> = {}): User {

@@ -1,5 +1,6 @@
 import { AtSign, Lock, Mail, User } from "lucide-react"
 import { useForm } from "react-hook-form"
+
 import { ApiError } from "~/shared/api/api-error"
 import { Alert } from "~/shared/components/alert"
 import FormField from "~/shared/components/form-field"
@@ -47,9 +48,7 @@ export function RegistrationForm({ onSubmit }: RegistrationFormProps) {
       }
 
       // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-      const fieldKeys = Object.keys(
-        getValues()
-      ) as (keyof RegistrationFormFields)[]
+      const fieldKeys = Object.keys(getValues()) as (keyof RegistrationFormFields)[]
 
       fieldKeys.forEach((k) => {
         const message = error.getValidationError(k)
@@ -65,44 +64,28 @@ export function RegistrationForm({ onSubmit }: RegistrationFormProps) {
     <form className="space-y-6" noValidate onSubmit={submit}>
       {errors.root && <Alert>{errors.root.message}</Alert>}
 
-      <FormField.Root
-        label="First Name"
-        Icon={User}
-        error={errors.firstName?.message}
-      >
+      <FormField.Root label="First Name" Icon={User} error={errors.firstName?.message}>
         <FormField.Input
           {...register("firstName", { required: "First name is required" })}
           placeholder="John"
         />
       </FormField.Root>
 
-      <FormField.Root
-        label="Last Name"
-        Icon={User}
-        error={errors.lastName?.message}
-      >
+      <FormField.Root label="Last Name" Icon={User} error={errors.lastName?.message}>
         <FormField.Input
           {...register("lastName", { required: "Last name is required" })}
           placeholder="Doe"
         />
       </FormField.Root>
 
-      <FormField.Root
-        label="Username"
-        Icon={AtSign}
-        error={errors.username?.message}
-      >
+      <FormField.Root label="Username" Icon={AtSign} error={errors.username?.message}>
         <FormField.Input
           {...register("username", { required: "Username is required" })}
           placeholder="johndoe"
         />
       </FormField.Root>
 
-      <FormField.Root
-        label="Email Address"
-        Icon={Mail}
-        error={errors.email?.message}
-      >
+      <FormField.Root label="Email Address" Icon={Mail} error={errors.email?.message}>
         <FormField.Input
           {...register("email", {
             required: "Email address is required",
@@ -117,11 +100,7 @@ export function RegistrationForm({ onSubmit }: RegistrationFormProps) {
         />
       </FormField.Root>
 
-      <FormField.Root
-        label="Password"
-        Icon={Lock}
-        error={errors.password?.message}
-      >
+      <FormField.Root label="Password" Icon={Lock} error={errors.password?.message}>
         <FormField.PasswordInput
           placeholder="••••••••"
           {...register("password", {
@@ -135,11 +114,7 @@ export function RegistrationForm({ onSubmit }: RegistrationFormProps) {
         />
       </FormField.Root>
 
-      <FormField.Root
-        label="Confirm Password"
-        Icon={Lock}
-        error={errors.confirmPassword?.message}
-      >
+      <FormField.Root label="Confirm Password" Icon={Lock} error={errors.confirmPassword?.message}>
         <FormField.Input
           type="password"
           placeholder="••••••••"
