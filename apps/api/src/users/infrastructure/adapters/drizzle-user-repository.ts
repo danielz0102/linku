@@ -9,41 +9,13 @@ import { and, eq, not, or } from "drizzle-orm"
 
 export class DrizzleUserRepository implements UserRepository {
   async save(user: User): Promise<void> {
-    const {
-      id,
-      username,
-      email,
-      hashedPassword,
-      firstName,
-      lastName,
-      profilePicUrl,
-      bio,
-    } = user.toPrimitives()
+    const data = user.toPrimitives()
+    const { id: _, ...dataWithoutId } = data
 
-    await db
-      .insert(usersTable)
-      .values({
-        id: id,
-        username: username,
-        email: email,
-        hashedPassword: hashedPassword,
-        firstName: firstName,
-        lastName: lastName,
-        profilePicUrl: profilePicUrl,
-        bio: bio,
-      })
-      .onConflictDoUpdate({
-        target: usersTable.id,
-        set: {
-          username: username,
-          email: email,
-          hashedPassword: hashedPassword,
-          firstName: firstName,
-          lastName: lastName,
-          profilePicUrl: profilePicUrl,
-          bio: bio,
-        },
-      })
+    await db.insert(usersTable).values(data).onConflictDoUpdate({
+      target: usersTable.id,
+      set: dataWithoutId,
+    })
   }
 
   async findExisting({
