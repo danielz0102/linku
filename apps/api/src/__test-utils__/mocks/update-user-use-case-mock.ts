@@ -1,12 +1,10 @@
-import type { UserRepository } from "~/users/domain/user-repository.js"
+import type { UserRepository } from "~/core/users/user-repository.ts"
 
-import { UpdateUserUseCase } from "~/features/update-user/update-user-use-case.ts"
+import { UpdateUserUseCase } from "~/core/use-cases/update-user-use-case.ts"
 
 export class UpdateUserUseCaseMock extends UpdateUserUseCase {
   constructor() {
-    super({
-      userRepo: {} as UserRepository,
-    })
+    super({ userRepo: {} as UserRepository })
   }
 
   override execute = vi.fn<UpdateUserUseCase["execute"]>()
