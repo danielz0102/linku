@@ -1,5 +1,6 @@
-import { SESSION_MAX_AGE } from "#env.js"
 import { RedisStore } from "connect-redis"
+
+import { SESSION_MAX_AGE } from "#env.js"
 
 import { redisClient } from "./index.js"
 

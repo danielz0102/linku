@@ -1,7 +1,6 @@
 import type { LinkuAPI } from "@linku/api-contract"
 
 import { faker } from "@faker-js/faker"
-
 import { toPublicUser } from "~/core/use-cases/dtos/public-user.ts"
 import { User } from "~/core/users/user.ts"
 

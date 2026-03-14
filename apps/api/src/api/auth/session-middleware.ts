@@ -1,5 +1,6 @@
-import { SESSION_MAX_AGE, SESSION_SECRET, SESSION_SECURE } from "#env.js"
 import session from "express-session"
+
+import { SESSION_MAX_AGE, SESSION_SECRET, SESSION_SECURE } from "#env.js"
 
 import { SESSION_COOKIE_NAME } from "./constants/session.js"
 import { redisStore } from "./redis/session-store.js"

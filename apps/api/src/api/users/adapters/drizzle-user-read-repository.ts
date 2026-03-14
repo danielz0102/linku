@@ -1,3 +1,5 @@
+import { ilike, or } from "drizzle-orm"
+
 import type { PublicUser } from "#core/use-cases/dtos/public-user.js"
 import type {
   UserReadRepository,
@@ -7,7 +9,6 @@ import type {
 
 import { db } from "#api/shared/drizzle/db.js"
 import { usersTable } from "#api/shared/drizzle/schemas.js"
-import { ilike, or } from "drizzle-orm"
 
 export class DrizzleUserReadRepository implements UserReadRepository {
   async search(filters: UserFilters, pagination: Pagination): Promise<PublicUser[]> {

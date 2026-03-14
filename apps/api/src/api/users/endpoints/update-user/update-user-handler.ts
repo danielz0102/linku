@@ -1,6 +1,7 @@
-import type { UpdateUserError, UpdateUserUseCase } from "#core/use-cases/update-user-use-case.js"
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
+
+import type { UpdateUserError, UpdateUserUseCase } from "#core/use-cases/update-user-use-case.js"
 
 type UpdateUserHandler = (
   useCase: UpdateUserUseCase

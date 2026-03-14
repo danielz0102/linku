@@ -1,6 +1,7 @@
-import type { SearchUsersUseCase } from "#core/use-cases/search-users-use-case.js"
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
+
+import type { SearchUsersUseCase } from "#core/use-cases/search-users-use-case.js"
 
 type SearchUsersHandler = (
   search: SearchUsersUseCase

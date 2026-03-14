@@ -1,5 +1,6 @@
-import { PasswordHasher } from "#core/use-cases/ports/password-hasher.js"
 import { hash, compare } from "bcryptjs"
+
+import { PasswordHasher } from "#core/use-cases/ports/password-hasher.js"
 
 export class BcryptHasher extends PasswordHasher {
   hash(password: string): Promise<string> {

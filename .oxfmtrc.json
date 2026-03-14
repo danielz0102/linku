@@ -3,6 +3,7 @@
   "semi": false,
   "trailingComma": "es5",
   "sortImports": {
+    "internalPattern": ["#"],
     "groups": [
       "type-import",
       ["value-builtin", "value-external"],
@@ -10,15 +11,15 @@
       "value-internal",
       ["type-parent", "type-sibling", "type-index"],
       ["value-parent", "value-sibling", "value-index"],
-      "unknown"
-    ]
+      "unknown",
+    ],
   },
   "sortPackageJson": {
-    "sortScripts": true
+    "sortScripts": true,
   },
   "sortTailwindcss": {
     "stylesheet": "./apps/web/src/index.css",
     "functions": ["clsx", "cn"],
-    "preserveWhitespace": true
-  }
+    "preserveWhitespace": true,
+  },
 }
