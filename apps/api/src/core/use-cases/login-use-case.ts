@@ -1,4 +1,4 @@
-import type { UserRepository } from "#core/users/user-repository.d.js"
+import type { UserRepository } from "#core/users/user-repository.js"
 
 import { Result } from "#core/result.js"
 

@@ -1,7 +1,6 @@
-import type { UUID } from "#shared/domain/uuid.js"
-
-import type { Email } from "./email.ts"
-import type { User } from "./user.ts"
+import type { UUID } from "../uuid.js"
+import type { Email } from "./email.js"
+import type { User } from "./user.js"
 
 export interface UserRepository {
   save(user: User): Promise<void>

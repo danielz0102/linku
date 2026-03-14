@@ -1,4 +1,4 @@
-import type { UserRepository, UniqueFields } from "#core/users/user-repository.d.js"
+import type { UserRepository, UniqueFields } from "#core/users/user-repository.js"
 
 import { User } from "#core/users/user.js"
 import { and, eq, not, or, type SQL } from "drizzle-orm"
