@@ -1,7 +1,7 @@
-import type { PasswordHasher } from "~/users/application/ports/password-hasher.ts"
-import type { UserRepository } from "~/users/domain/user-repository.js"
+import type { PasswordHasher } from "~/core/use-cases/ports/password-hasher.ts"
+import type { UserRepository } from "~/core/users/user-repository.js"
 
-import { RegistrationUseCase } from "~/users/application/use-cases/registration-use-case.ts"
+import { RegistrationUseCase } from "~/core/use-cases/registration-use-case.ts"
 
 export class RegistrationUseCaseMock extends RegistrationUseCase {
   constructor() {

@@ -1,8 +1,7 @@
-import type { UserRepository } from "~/users/domain/user-repository.js"
+import type { UserRepository } from "~/core/users/user-repository.js"
 
 export class UserRepositoryMock implements UserRepository {
-  create = vi.fn<UserRepository["create"]>()
-  matching = vi.fn<UserRepository["matching"]>()
-  update = vi.fn<UserRepository["update"]>()
+  findExisting = vi.fn<UserRepository["findExisting"]>()
+  checkUniqueness = vi.fn<UserRepository["checkUniqueness"]>()
   save = vi.fn<UserRepository["save"]>()
 }

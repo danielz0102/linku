@@ -2,7 +2,8 @@ import type { LinkuAPI } from "@linku/api-contract"
 
 import { faker } from "@faker-js/faker"
 
-import { User } from "~/users/domain/user.ts"
+import { toPublicUser } from "~/core/use-cases/dtos/public-user.ts"
+import { User } from "~/core/users/user.ts"
 
 export const UserMother = {
   create(overrides: Partial<User> = {}): User {
@@ -19,6 +20,6 @@ export const UserMother = {
     })
   },
   createPublicUser(overrides: Partial<LinkuAPI.User> = {}): LinkuAPI.User {
-    return UserMother.create(overrides).toPublic()
+    return toPublicUser(this.create(overrides))
   },
 }

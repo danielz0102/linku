@@ -1,6 +1,6 @@
 import type { UserRepository } from "~/users/domain/user-repository.js"
 
-import { UpdateUserUseCase } from "~/users/application/use-cases/update-user-use-case.ts"
+import { UpdateUserUseCase } from "~/features/update-user/update-user-use-case.ts"
 
 export class UpdateUserUseCaseMock extends UpdateUserUseCase {
   constructor() {

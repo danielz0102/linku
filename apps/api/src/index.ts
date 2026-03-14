@@ -1,6 +1,6 @@
-import { createApp } from "#app/index.js"
+import { createApp } from "#server/index.js"
 
-import { PORT } from "./shared/config/env.js"
+import { PORT } from "./env.js"
 
 const app = createApp()
 
