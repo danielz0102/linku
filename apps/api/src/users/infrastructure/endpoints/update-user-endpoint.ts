@@ -1,4 +1,4 @@
-import { validator } from "#shared/middlewares/validator.js"
+import { validator } from "#shared/infrastructure/middlewares/validator.js"
 import { updateUserUseCase } from "#users/infrastructure/dependencies.js"
 import { updateUserHandler } from "#users/infrastructure/handlers/update-user-handler.js"
 import { onlyAuth } from "#users/infrastructure/middlewares/only-auth.js"

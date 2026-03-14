@@ -1,7 +1,7 @@
 import type { UniqueFields, UserRepository } from "#users/domain/user-repository.js"
 
-import db from "#shared/db/drizzle/index.js"
-import { usersTable } from "#shared/db/drizzle/schemas.js"
+import db from "#shared/infrastructure/db/drizzle/index.js"
+import { usersTable } from "#shared/infrastructure/db/drizzle/schemas.js"
 import { User } from "#users/domain/user.js"
 import { and, eq, not, or, type SQL } from "drizzle-orm"
 

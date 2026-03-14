@@ -5,8 +5,8 @@ import type {
   UserReadRepository,
 } from "#users/application/ports/user-read-repository.js"
 
-import db from "#shared/db/drizzle/index.js"
-import { usersTable } from "#shared/db/drizzle/schemas.js"
+import db from "#shared/infrastructure/db/drizzle/index.js"
+import { usersTable } from "#shared/infrastructure/db/drizzle/schemas.js"
 import { ilike, or } from "drizzle-orm"
 
 export class DrizzleUserReadRepository implements UserReadRepository {

@@ -1,4 +1,4 @@
-import { queryValidator } from "#shared/middlewares/query-validator.js"
+import { queryValidator } from "#shared/infrastructure/middlewares/query-validator.js"
 import { SearchUsersUseCase } from "#users/application/use-cases/search-users.js"
 import { searchUsersHandler } from "#users/infrastructure/handlers/search-users-handler.js"
 import { onlyAuth } from "#users/infrastructure/middlewares/only-auth.js"

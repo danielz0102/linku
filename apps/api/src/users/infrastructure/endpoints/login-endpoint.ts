@@ -1,5 +1,5 @@
 import { RATE_LIMIT_ENABLED } from "#shared/config/env.js"
-import { validator } from "#shared/middlewares/validator.js"
+import { validator } from "#shared/infrastructure/middlewares/validator.js"
 import { loginUseCase } from "#users/infrastructure/dependencies.js"
 import { loginHandler } from "#users/infrastructure/handlers/login-handler.js"
 import { loginRateLimit } from "#users/infrastructure/middlewares/login-rate-limit.js"

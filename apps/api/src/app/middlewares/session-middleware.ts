@@ -1,6 +1,6 @@
 import { SESSION_MAX_AGE, SESSION_SECRET, SESSION_SECURE } from "#shared/config/env.js"
 import { SESSION_COOKIE_NAME } from "#shared/constants/session.js"
-import { redisStore } from "#shared/db/redis/session-store.js"
+import { redisStore } from "#shared/infrastructure/db/redis/session-store.js"
 import session from "express-session"
 
 export const sessionMiddleware = session({
