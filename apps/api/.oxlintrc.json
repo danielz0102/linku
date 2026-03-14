@@ -2,10 +2,10 @@
   "extends": ["../../.oxlintrc.json"],
   "overrides": [
     {
-      "files": ["**/__test-utils__/**/*.ts"],
+      "files": ["**/tests/**/*.ts"],
       "rules": {
-        "typescript/no-unsafe-type-assertion": "off"
-      }
-    }
-  ]
+        "typescript/no-unsafe-type-assertion": "off",
+      },
+    },
+  ],
 }

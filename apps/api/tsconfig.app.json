@@ -29,8 +29,8 @@
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true
+    "skipLibCheck": true,
   },
   "include": ["src"],
-  "exclude": ["**/*.test.ts", "**/__test-utils__"]
+  "exclude": ["**/*.test.ts"],
 }

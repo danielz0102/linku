@@ -21,8 +21,9 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "~tests/*": ["./tests/*"],
     },
-    "allowImportingTsExtensions": true
-  }
+    "allowImportingTsExtensions": true,
+  },
 }
