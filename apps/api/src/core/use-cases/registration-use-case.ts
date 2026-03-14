@@ -16,14 +16,17 @@ export type RegistrationData = {
   lastName: string
 }
 
-type RegisterError = Partial<Record<"username" | "email", string>>
+export type RegistrationError = Partial<{
+  username: "USERNAME_TAKEN"
+  email: "EMAIL_TAKEN"
+}>
 
 export class RegistrationUseCase {
-  private readonly userRepo: UserRepository
+  private readonly users: UserRepository
   private readonly hasher: PasswordHasher
 
   constructor({ userRepo, hasher }: { userRepo: UserRepository; hasher: PasswordHasher }) {
-    this.userRepo = userRepo
+    this.users = userRepo
     this.hasher = hasher
   }
 
@@ -33,8 +36,8 @@ export class RegistrationUseCase {
     password,
     firstName,
     lastName,
-  }: RegistrationData): Promise<Result<PublicUser, RegisterError>> {
-    const existing = await this.userRepo.checkUniqueness({
+  }: RegistrationData): Promise<Result<PublicUser, RegistrationError>> {
+    const existing = await this.users.checkUniqueness({
       username,
       email: new Email(email),
     })
@@ -44,8 +47,8 @@ export class RegistrationUseCase {
       const isSameEmail = existing.email === email
 
       return Result.fail({
-        username: isSameUsername ? "Username already exists" : undefined,
-        email: isSameEmail ? "Email already exists" : undefined,
+        username: isSameUsername ? "USERNAME_TAKEN" : undefined,
+        email: isSameEmail ? "EMAIL_TAKEN" : undefined,
       })
     }
 
@@ -57,7 +60,7 @@ export class RegistrationUseCase {
       firstName,
       lastName,
     })
-    await this.userRepo.save(user)
+    await this.users.save(user)
 
     return Result.ok(toPublicUser(user))
   }

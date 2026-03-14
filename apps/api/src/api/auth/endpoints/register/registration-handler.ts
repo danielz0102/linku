@@ -1,4 +1,7 @@
-import type { RegistrationUseCase } from "#core/use-cases/registration-use-case.js"
+import type {
+  RegistrationError,
+  RegistrationUseCase,
+} from "#core/use-cases/registration-use-case.js"
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 
@@ -17,10 +20,24 @@ export const registrationHandler: RegistrationHandler = (useCase) => async (req,
     return res.status(409).json({
       code: "VALIDATION_ERROR",
       message: "User already exists",
-      errors: error,
+      errors: mapRegistrationError(error),
     })
   }
 
   req.session.userId = data.id
   return res.status(200).json(data)
+}
+
+function mapRegistrationError(error: RegistrationError) {
+  const errors: Record<string, string> = {}
+
+  if (error.username) {
+    errors["username"] = "Username is already taken"
+  }
+
+  if (error.email) {
+    errors["email"] = "Email is already taken"
+  }
+
+  return errors
 }

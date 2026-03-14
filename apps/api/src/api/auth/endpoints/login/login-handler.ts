@@ -1,7 +1,6 @@
+import type { LoginUseCase } from "#core/use-cases/login-use-case.js"
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
-
-import type { LoginUseCase } from "../../../../core/use-cases/login-use-case.js"
 
 type LoginHandler = (
   useCase: LoginUseCase

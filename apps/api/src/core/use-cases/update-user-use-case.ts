@@ -15,20 +15,23 @@ export type UpdateUserData = Partial<{
   profilePicUrl: string
 }>
 
-type UpdateUserError = Partial<Record<"username" | "email", string>>
+export type UpdateUserError = Partial<{
+  username: "USERNAME_TAKEN"
+  email: "EMAIL_TAKEN"
+}>
 
 export class UpdateUserUseCase {
-  constructor(private readonly repo: UserRepository) {}
+  constructor(private readonly users: UserRepository) {}
 
   async execute(id: string, data: UpdateUserData): Promise<Result<PublicUser, UpdateUserError>> {
-    const user = await this.repo.findExisting({ id: new UUID(id) })
+    const user = await this.users.findExisting({ id: new UUID(id) })
 
     if (!user) {
-      throw new Error("User who should be authenticated was not found")
+      throw new Error("Authenticated user was not found")
     }
 
     if (data.username || data.email) {
-      const existing = await this.repo.checkUniqueness({
+      const existing = await this.users.checkUniqueness({
         id: new UUID(id),
         username: data.username,
         email: data.email ? new Email(data.email) : undefined,
@@ -39,14 +42,14 @@ export class UpdateUserUseCase {
         const isSameEmail = existing.email === data.email
 
         return Result.fail({
-          username: isSameUsername ? "Username already exists" : undefined,
-          email: isSameEmail ? "Email already exists" : undefined,
+          username: isSameUsername ? "USERNAME_TAKEN" : undefined,
+          email: isSameEmail ? "EMAIL_TAKEN" : undefined,
         })
       }
     }
 
     user.update(data)
-    await this.repo.save(user)
+    await this.users.save(user)
 
     return Result.ok(toPublicUser(user))
   }

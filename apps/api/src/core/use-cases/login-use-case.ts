@@ -6,32 +6,33 @@ import type { PasswordHasher } from "./ports/password-hasher.js"
 
 import { toPublicUser, type PublicUser } from "./dtos/public-user.js"
 
+export type LoginCredentials = {
+  username: string
+  password: string
+}
+
+export type LoginError = "INVALID_CREDENTIALS"
+
 export class LoginUseCase {
-  private readonly userRepo: UserRepository
+  private readonly users: UserRepository
   private readonly hasher: PasswordHasher
 
   constructor({ userRepo, hasher }: { userRepo: UserRepository; hasher: PasswordHasher }) {
-    this.userRepo = userRepo
+    this.users = userRepo
     this.hasher = hasher
   }
 
-  async execute({
-    username,
-    password,
-  }: {
-    username: string
-    password: string
-  }): Promise<Result<PublicUser>> {
-    const user = await this.userRepo.findExisting({ username })
+  async execute({ username, password }: LoginCredentials): Promise<Result<PublicUser, LoginError>> {
+    const user = await this.users.findExisting({ username })
 
     if (!user) {
-      return Result.fail("Invalid credentials")
+      return Result.fail("INVALID_CREDENTIALS")
     }
 
     const isValidPassword = await this.hasher.compare(password, user.password)
 
     if (!isValidPassword) {
-      return Result.fail("Invalid credentials")
+      return Result.fail("INVALID_CREDENTIALS")
     }
 
     return Result.ok(toPublicUser(user))

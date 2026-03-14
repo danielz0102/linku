@@ -1,4 +1,4 @@
-import type { UpdateUserUseCase } from "#core/use-cases/update-user-use-case.js"
+import type { UpdateUserError, UpdateUserUseCase } from "#core/use-cases/update-user-use-case.js"
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 
@@ -19,9 +19,23 @@ export const updateUserHandler: UpdateUserHandler = (useCase) => async (req, res
     return res.status(409).json({
       code: "VALIDATION_ERROR",
       message: "User already exists",
-      errors: error,
+      errors: mapUpdateUserError(error),
     })
   }
 
   return res.status(200).json(data)
+}
+
+function mapUpdateUserError(error: UpdateUserError) {
+  const result: Record<string, string> = {}
+
+  if (error.username) {
+    result["username"] = "Username already exists"
+  }
+
+  if (error.email) {
+    result["email"] = "Email already exists"
+  }
+
+  return result
 }
