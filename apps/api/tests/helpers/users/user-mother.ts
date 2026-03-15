@@ -1,11 +1,10 @@
-import type { LinkuAPI } from "@linku/api-contract"
-
 import { faker } from "@faker-js/faker"
-import { toPublicUser } from "~/core/use-cases/dtos/public-user.ts"
-import { User } from "~/core/users/user.ts"
+
+import { toPublicUser, type PublicUser } from "~/core/use-cases/dtos/public-user.ts"
+import { User, type UserParams } from "~/core/users/user.ts"
 
 export const UserMother = {
-  create(overrides: Partial<User> = {}): User {
+  create(overrides: Partial<UserParams> = {}): User {
     return new User({
       id: faker.string.uuid(),
       username: faker.internet.username(),
@@ -18,7 +17,7 @@ export const UserMother = {
       ...overrides,
     })
   },
-  createPublicUser(overrides: Partial<LinkuAPI.User> = {}): LinkuAPI.User {
+  createPublicUser(overrides: Partial<UserParams> = {}): PublicUser {
     return toPublicUser(this.create(overrides))
   },
 }

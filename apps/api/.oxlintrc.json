@@ -5,6 +5,7 @@
       "files": ["**/tests/**/*.ts"],
       "rules": {
         "typescript/no-unsafe-type-assertion": "off",
+        "eslint/no-empty-pattern": "off",
       },
     },
   ],

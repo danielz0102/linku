@@ -3,7 +3,7 @@
   "semi": false,
   "trailingComma": "es5",
   "sortImports": {
-    "internalPattern": ["#"],
+    "internalPattern": ["#", "~/", "~tests/"],
     "groups": [
       "type-import",
       ["value-builtin", "value-external"],

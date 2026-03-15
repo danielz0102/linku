@@ -4,7 +4,7 @@ import { z } from "zod"
 dotenv.config({
   quiet: true,
   override: true,
-  path: process.env["ENV_PATH"],
+  path: setEnvPath(),
 })
 
 const envSchema = z.object({
@@ -42,3 +42,11 @@ export const {
 
   RATE_LIMIT_ENABLED,
 } = envSchema.parse(process.env)
+
+function setEnvPath() {
+  if (process.env["VITEST"]) {
+    return ".env.test"
+  }
+
+  return process.env["ENV_PATH"] || ".env"
+}

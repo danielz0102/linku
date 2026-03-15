@@ -1,7 +1,7 @@
 import { UUID } from "../uuid.js"
 import { Email } from "./email.js"
 
-type UserParams = {
+export type UserParams = {
   id?: string
   username: string
   email: string
@@ -12,7 +12,7 @@ type UserParams = {
   bio?: string | null
 }
 
-type UserPrimitives = {
+export type UserPrimitives = {
   id: string
   username: string
   email: string
