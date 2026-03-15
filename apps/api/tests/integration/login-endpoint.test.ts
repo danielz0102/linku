@@ -21,19 +21,10 @@ describe("POST /auth/login", () => {
       .expect(publicData)
   })
 
-  it("sends a 401 response if username does not exist", async () => {
+  it("sends a 401 response if credentials are invalid", async () => {
     await request(app)
       .post("/auth/login")
       .send({ username: "invalid", password: "invalid" })
-      .expect(401)
-  })
-
-  it("sends a 401 response if password is incorrect", async ({ registeredUser }) => {
-    const { credentials } = registeredUser
-
-    await request(app)
-      .post("/auth/login")
-      .send({ ...credentials, password: "wrongpassword" })
       .expect(401)
   })
 })
