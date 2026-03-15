@@ -16,7 +16,8 @@
     "lint": "oxlint --type-aware",
     "start": "node ./dist/index.js",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@linku/api-contract": "workspace:*",
@@ -44,6 +45,7 @@
     "@types/node": "^24.10.9",
     "@types/pg": "^8.16.0",
     "@types/supertest": "^6.0.3",
+    "@vitest/coverage-v8": "4.1.0",
     "drizzle-kit": "^0.31.8",
     "supertest": "^7.2.2",
     "tsx": "^4.21.0",
