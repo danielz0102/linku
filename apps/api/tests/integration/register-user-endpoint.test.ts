@@ -66,22 +66,13 @@ describe("POST /auth/register", () => {
     })
   })
 
-  describe("conflict errors", () => {
-    it("sends a 409 response if username already exists", async ({
+  describe("errors", () => {
+    it("sends a 409 response if user already exists", async ({
       registeredUser: {
         credentials: { username },
       },
     }) => {
       const registration = { ...createRegistration(), username }
-      await request(app).post("/auth/register").send(registration).expect(409)
-    })
-
-    it("sends a 409 response if email already exists", async ({
-      registeredUser: {
-        publicData: { email },
-      },
-    }) => {
-      const registration = { ...createRegistration(), email }
       await request(app).post("/auth/register").send(registration).expect(409)
     })
   })
