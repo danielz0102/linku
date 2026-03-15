@@ -1,0 +1,71 @@
+import request from "supertest"
+
+import { loginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
+import { getUsersEndpoint } from "~/api/users/endpoints/search-users/search-users-endpoint.ts"
+import { createAuthContext } from "~tests/fixtures/auth-context.ts"
+import { AppBuilder } from "~tests/helpers/app-builder.ts"
+import { DrizzleTestUserDAO } from "~tests/helpers/db/drizzle-test-user-dao.ts"
+import { seedUsers } from "~tests/helpers/users/seed-users.ts"
+
+const it = createAuthContext()
+const dao = new DrizzleTestUserDAO()
+
+describe("GET /users", () => {
+  const app = new AppBuilder().withSession().build()
+  app.post("/auth/login", loginEndpoint)
+  app.get("/users", ...getUsersEndpoint)
+
+  let seededUserIds: string[] = []
+
+  afterEach(async () => {
+    await Promise.all(seededUserIds.map((id) => dao.deleteById(id)))
+    seededUserIds = []
+  })
+
+  it("sends a list of users", async ({ registeredUser }) => {
+    const query = `pub${registeredUser.publicData.id.slice(0, 8)}`
+    const seededUsers = await seedUsers(dao, 2, (index) => ({
+      username: `${query}-${index}`,
+      firstName: query,
+      lastName: "Match",
+    }))
+    seededUserIds = seededUsers.map((user) => user.id)
+
+    const agent = request.agent(app)
+    await agent.post("/auth/login").send(registeredUser.credentials).expect(200)
+
+    const { body } = await agent.get("/users").query({ q: query }).expect(200)
+
+    expect(body).toHaveLength(2)
+    expect(body).toEqual(
+      expect.arrayContaining(seededUsers.map(({ hashedPassword: _, ...publicUser }) => publicUser))
+    )
+  })
+
+  it("sends a page of 20 users by default", async ({ registeredUser }) => {
+    const query = `pg${registeredUser.publicData.id.slice(0, 8)}`
+    const seededUsers = await seedUsers(dao, 25, (index) => ({
+      username: `${query}-${index}`,
+      firstName: query,
+      lastName: "Match",
+    }))
+    seededUserIds = seededUsers.map((user) => user.id)
+
+    const agent = request.agent(app)
+    await agent.post("/auth/login").send(registeredUser.credentials).expect(200)
+
+    const { body } = await agent.get("/users").query({ q: query }).expect(200)
+
+    expect(body).toHaveLength(20)
+  })
+
+  it("sends 401 if not authenticated", async () => {
+    await request(app).get("/users").query({ q: "any" }).expect(401)
+  })
+
+  it("validates query parameters", async ({ registeredUser }) => {
+    const agent = request.agent(app)
+    await agent.post("/auth/login").send(registeredUser.credentials).expect(200)
+    await agent.get("/users").query({ limit: -1 }).expect(400)
+  })
+})
