@@ -15,4 +15,12 @@ export class DrizzleTestUserDAO implements TestUserDAO<UserRecord> {
   async deleteById(id: string): Promise<void> {
     await db.delete(usersTable).where(eq(usersTable.id, id))
   }
+
+  async findByUsername(username: string): Promise<UserRecord | undefined> {
+    return db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.username, username))
+      .then(([r]) => r)
+  }
 }
