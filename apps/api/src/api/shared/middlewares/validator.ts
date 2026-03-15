@@ -6,7 +6,7 @@ import { z } from "zod"
 type Validator = (schema: z.ZodObject) => RequestHandler<never, LinkuAPI.ErrorBody>
 
 export const validator: Validator = (schema) => (req, res, next) => {
-  const { success, error } = schema.safeParse(req.body)
+  const { success, error, data } = schema.safeParse(req.body)
 
   if (!success) {
     return res.status(400).json({
@@ -16,6 +16,7 @@ export const validator: Validator = (schema) => (req, res, next) => {
     })
   }
 
+  req.body = data
   next()
 }
 
