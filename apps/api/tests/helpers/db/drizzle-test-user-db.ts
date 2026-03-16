@@ -14,10 +14,6 @@ export class DrizzleTestUserDB implements TestUserDB {
     await db.insert(usersTable).values(user.toPrimitives())
   }
 
-  async deleteById(id: string): Promise<void> {
-    await db.delete(usersTable).where(eq(usersTable.id, id))
-  }
-
   async findByUsername(username: string): Promise<User | undefined> {
     return db
       .select()
