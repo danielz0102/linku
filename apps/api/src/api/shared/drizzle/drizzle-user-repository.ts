@@ -1,8 +1,10 @@
 import { and, eq, not, or, type SQL } from "drizzle-orm"
 
-import type { UserRepository, UniqueFields } from "#core/users/user-repository.js"
+import type { UniqueField, UserRepository, UniqueFields } from "#core/users/user-repository.js"
 
+import { Email } from "#core/users/email.js"
 import { User } from "#core/users/user.js"
+import { UUID } from "#core/uuid.js"
 
 import { db } from "./db.js"
 import { usersTable } from "./schemas.js"
@@ -18,13 +20,13 @@ export class DrizzleUserRepository implements UserRepository {
     })
   }
 
-  async findOne(fields: Partial<UniqueFields>): Promise<User | undefined> {
-    const conditions = this.uniqueFieldsToConditions(fields)
+  async findOne(field: UniqueField): Promise<User | undefined> {
+    const condition = this.uniqueFieldToCondition(field)
 
     return db
       .select()
       .from(usersTable)
-      .where(and(...Object.values(conditions)))
+      .where(condition)
       .then(([r]) => (r ? new User(r) : undefined))
   }
 
@@ -52,5 +54,21 @@ export class DrizzleUserRepository implements UserRepository {
       username: username ? eq(usersTable.username, username) : undefined,
       email: email ? eq(usersTable.email, email.value) : undefined,
     }
+  }
+
+  private uniqueFieldToCondition(field: UniqueField): SQL {
+    if (typeof field === "string") {
+      return eq(usersTable.username, field)
+    }
+
+    if (field instanceof UUID) {
+      return eq(usersTable.id, field.value)
+    }
+
+    if (field instanceof Email) {
+      return eq(usersTable.email, field.value)
+    }
+
+    throw new Error("Invalid unique field")
   }
 }

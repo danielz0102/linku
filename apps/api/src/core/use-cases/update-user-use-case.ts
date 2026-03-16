@@ -24,7 +24,7 @@ export class UpdateUserUseCase {
   constructor(private readonly users: UserRepository) {}
 
   async execute(id: string, data: UpdateUserData): Promise<Result<PublicUser, UpdateUserError>> {
-    const user = await this.users.findOne({ id: new UUID(id) })
+    const user = await this.users.findOne(new UUID(id))
 
     if (!user) {
       throw new Error("Authenticated user was not found")

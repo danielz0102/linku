@@ -1,5 +1,8 @@
-import type { UniqueFields, UserRepository } from "~/core/users/user-repository.ts"
+import type { UniqueField, UniqueFields, UserRepository } from "~/core/users/user-repository.ts"
 import type { User } from "~/core/users/user.ts"
+
+import { Email } from "~/core/users/email.ts"
+import { UUID } from "~/core/uuid.ts"
 
 export class InMemoryUserRepository implements UserRepository {
   private users: User[] = []
@@ -28,25 +31,19 @@ export class InMemoryUserRepository implements UserRepository {
     })
   }
 
-  async findOne(fields: Partial<UniqueFields>) {
-    if (!fields.id && !fields.username && !fields.email) {
-      return undefined
+  async findOne(field: UniqueField) {
+    if (typeof field === "string") {
+      return this.users.find((user) => user.username === field)
     }
 
-    return this.users.find((user) => {
-      if (fields.id && user.id !== fields.id.value) {
-        return false
-      }
+    if (field instanceof UUID) {
+      return this.users.find((user) => user.id === field.value)
+    }
 
-      if (fields.username && user.username !== fields.username) {
-        return false
-      }
+    if (field instanceof Email) {
+      return this.users.find((user) => user.email === field.value)
+    }
 
-      if (fields.email && user.email !== fields.email.value) {
-        return false
-      }
-
-      return true
-    })
+    return undefined
   }
 }

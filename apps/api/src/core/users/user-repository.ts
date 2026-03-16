@@ -5,7 +5,7 @@ import type { User } from "./user.js"
 export interface UserRepository {
   save(user: User): Promise<void>
   findExisting(fields: Partial<UniqueFields>): Promise<User | undefined>
-  findOne(fields: Partial<UniqueFields>): Promise<User | undefined>
+  findOne(field: UniqueField): Promise<User | undefined>
 }
 
 export type UniqueFields = {
@@ -13,3 +13,5 @@ export type UniqueFields = {
   username: string
   email: Email
 }
+
+export type UniqueField = UniqueFields[keyof UniqueFields]
