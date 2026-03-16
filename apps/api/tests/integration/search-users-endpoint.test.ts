@@ -22,9 +22,9 @@ describe("GET /users", () => {
 
   it("sends a list of users", async ({ registeredUser }) => {
     const http = request.agent(app)
+    await http.post("/auth/login").send(registeredUser.credentials).expect(200)
     const query = faker.string.alphanumeric(5)
     const users = await db.seed(5, { username: query })
-    await http.post("/auth/login").send(registeredUser.credentials).expect(200)
 
     const { body } = await http.get("/users").query({ q: query }).expect(200)
 
@@ -32,11 +32,35 @@ describe("GET /users", () => {
     expect(body).toEqual(users.map((u) => toPublicUser(u)))
   })
 
+  it("sends an empty list if no users match the query", async ({
+    registeredUser: { credentials },
+  }) => {
+    const http = request.agent(app)
+    await http.post("/auth/login").send(credentials).expect(200)
+
+    const { body } = await http.get("/users").query({ q: "nonexistent" }).expect(200)
+
+    expect(body).toHaveLength(0)
+  })
+
+  it("sends a the number of users specified by the limit query parameter", async ({
+    registeredUser: { credentials },
+  }) => {
+    const http = request.agent(app)
+    await http.post("/auth/login").send(credentials).expect(200)
+    const query = faker.string.alphanumeric(5)
+    await db.seed(10, { username: query })
+
+    const { body } = await http.get("/users").query({ q: query, limit: 5 }).expect(200)
+
+    expect(body).toHaveLength(5)
+  })
+
   it("sends a page of 20 users by default", async ({ registeredUser: { credentials } }) => {
     const http = request.agent(app)
+    await http.post("/auth/login").send(credentials).expect(200)
     const query = faker.string.alphanumeric(5)
     await db.seed(25, { firstName: query })
-    await http.post("/auth/login").send(credentials).expect(200)
 
     const { body } = await http.get("/users").query({ q: query }).expect(200)
 
