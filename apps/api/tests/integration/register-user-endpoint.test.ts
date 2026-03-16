@@ -3,6 +3,7 @@ import request from "supertest"
 
 import { loginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
 import { registerUserEndpoint } from "~/api/auth/endpoints/register/register-user-endpoint.ts"
+import { toPublicUser } from "~/core/use-cases/dtos/public-user.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
 import { AppBuilder } from "~tests/helpers/app-builder.ts"
 import { DrizzleTestUserDAO } from "~tests/helpers/db/drizzle-test-user-dao.ts"
@@ -24,23 +25,17 @@ describe("POST /auth/register", () => {
   app.post("/auth/login", loginEndpoint)
 
   describe("successful registration", () => {
-    let registrationData: ReturnType<typeof createRegistration>
-
-    beforeEach(() => {
-      registrationData = createRegistration()
-    })
-
-    afterEach(async () => {
-      const user = await dao.findByUsername(registrationData.username)
-      if (user) await dao.deleteById(user.id)
+    afterAll(async () => {
+      await dao.reset()
     })
 
     it("sends a 200 response with public user data", async () => {
-      const { body } = await request(app).post("/auth/register").send(registrationData).expect(200)
-      const { password: _, ...publicData } = registrationData
+      const data = createRegistration()
 
-      expect(body).toMatchObject(publicData)
-      expect(body).not.toHaveProperty("hashedPassword")
+      const { body } = await request(app).post("/auth/register").send(data).expect(200)
+
+      const user = await dao.findByUsername(data.username)
+      expect(body).toMatchObject(toPublicUser(user))
     })
 
     it("sets a session cookie", async () => {
@@ -52,17 +47,22 @@ describe("POST /auth/register", () => {
     })
 
     it("allows the user to login after registration", async () => {
-      await request(app).post("/auth/register").send(registrationData).expect(200)
-      const { username, password } = registrationData
+      const data = createRegistration()
 
+      await request(app).post("/auth/register").send(data).expect(200)
+
+      const { username, password } = data
       await request(app).post("/auth/login").send({ username, password }).expect(200)
     })
 
     it("hashes the password", async () => {
-      await request(app).post("/auth/register").send(registrationData).expect(200)
-      const user = await dao.findByUsername(registrationData.username)
+      const data = createRegistration()
 
-      expect(user?.hashedPassword).not.toBe(registrationData.password)
+      await request(app).post("/auth/register").send(data).expect(200)
+
+      const user = await dao.findByUsername(data.username)
+      expectTypeOf(user).not.toBeUndefined()
+      expect(user?.password).not.toBe(data.password)
     })
   })
 

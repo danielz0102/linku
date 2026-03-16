@@ -2,6 +2,7 @@ import request from "supertest"
 
 import { loginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
 import { getUsersEndpoint } from "~/api/users/endpoints/search-users/search-users-endpoint.ts"
+import { toPublicUser } from "~/core/use-cases/dtos/public-user.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
 import { AppBuilder } from "~tests/helpers/app-builder.ts"
 import { DrizzleTestUserDAO } from "~tests/helpers/db/drizzle-test-user-dao.ts"
@@ -15,11 +16,8 @@ describe("GET /users", () => {
   app.post("/auth/login", loginEndpoint)
   app.get("/users", ...getUsersEndpoint)
 
-  let seededUserIds: string[] = []
-
-  afterEach(async () => {
-    await Promise.all(seededUserIds.map((id) => dao.deleteById(id)))
-    seededUserIds = []
+  afterAll(async () => {
+    await dao.reset()
   })
 
   it("sends a list of users", async ({ registeredUser }) => {
@@ -29,7 +27,6 @@ describe("GET /users", () => {
       firstName: query,
       lastName: "Match",
     }))
-    seededUserIds = seededUsers.map((user) => user.id)
 
     const agent = request.agent(app)
     await agent.post("/auth/login").send(registeredUser.credentials).expect(200)
@@ -37,19 +34,16 @@ describe("GET /users", () => {
     const { body } = await agent.get("/users").query({ q: query }).expect(200)
 
     expect(body).toHaveLength(2)
-    expect(body).toEqual(
-      expect.arrayContaining(seededUsers.map(({ hashedPassword: _, ...publicUser }) => publicUser))
-    )
+    expect(body).toEqual(expect.arrayContaining(seededUsers.map((u) => toPublicUser(u))))
   })
 
   it("sends a page of 20 users by default", async ({ registeredUser }) => {
     const query = `pg${registeredUser.publicData.id.slice(0, 8)}`
-    const seededUsers = await seedUsers(dao, 25, (index) => ({
+    await seedUsers(dao, 25, (index) => ({
       username: `${query}-${index}`,
       firstName: query,
       lastName: "Match",
     }))
-    seededUserIds = seededUsers.map((user) => user.id)
 
     const agent = request.agent(app)
     await agent.post("/auth/login").send(registeredUser.credentials).expect(200)
