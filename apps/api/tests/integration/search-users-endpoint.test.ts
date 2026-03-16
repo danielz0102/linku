@@ -21,6 +21,7 @@ describe("GET /users", () => {
   })
 
   it("sends a list of users", async ({ registeredUser }) => {
+    const http = request.agent(app)
     const query = `pub${registeredUser.publicData.id.slice(0, 8)}`
     const seededUsers = await seedUsers(dao, 2, (index) => ({
       username: `${query}-${index}`,
@@ -28,16 +29,15 @@ describe("GET /users", () => {
       lastName: "Match",
     }))
 
-    const agent = request.agent(app)
-    await agent.post("/auth/login").send(registeredUser.credentials).expect(200)
+    await http.post("/auth/login").send(registeredUser.credentials).expect(200)
 
-    const { body } = await agent.get("/users").query({ q: query }).expect(200)
-
+    const { body } = await http.get("/users").query({ q: query }).expect(200)
     expect(body).toHaveLength(2)
     expect(body).toEqual(expect.arrayContaining(seededUsers.map((u) => toPublicUser(u))))
   })
 
   it("sends a page of 20 users by default", async ({ registeredUser }) => {
+    const http = request.agent(app)
     const query = `pg${registeredUser.publicData.id.slice(0, 8)}`
     await seedUsers(dao, 25, (index) => ({
       username: `${query}-${index}`,
@@ -45,11 +45,9 @@ describe("GET /users", () => {
       lastName: "Match",
     }))
 
-    const agent = request.agent(app)
-    await agent.post("/auth/login").send(registeredUser.credentials).expect(200)
+    await http.post("/auth/login").send(registeredUser.credentials).expect(200)
 
-    const { body } = await agent.get("/users").query({ q: query }).expect(200)
-
+    const { body } = await http.get("/users").query({ q: query }).expect(200)
     expect(body).toHaveLength(20)
   })
 
@@ -58,8 +56,11 @@ describe("GET /users", () => {
   })
 
   it("validates query parameters", async ({ registeredUser }) => {
-    const agent = request.agent(app)
-    await agent.post("/auth/login").send(registeredUser.credentials).expect(200)
-    await agent.get("/users").query({ limit: -1 }).expect(400)
+    const http = request.agent(app)
+    await http.post("/auth/login").send(registeredUser.credentials).expect(200)
+
+    await http.get("/users").query({ q: "any", limit: -1 }).expect(400)
+    await http.get("/users").query({ q: "any", limit: 20, offset: -1 }).expect(400)
+    await http.get("/users").query({ q: "" }).expect(400)
   })
 })
