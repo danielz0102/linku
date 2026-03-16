@@ -64,7 +64,7 @@ describe("POST /register", () => {
     })
   })
 
-  describe("errors", () => {
+  describe("validation", () => {
     it("sends a 409 response if user already exists", async ({
       registeredUser: {
         credentials: { username },
@@ -73,9 +73,12 @@ describe("POST /register", () => {
       const registration = { ...createRegistration(), username }
       await request(app).post("/register").send(registration).expect(409)
     })
-  })
 
-  describe("password validation", () => {
+    it("sends a 400 response if email is not valid", async () => {
+      const registration = { ...createRegistration(), email: "not-an-email" }
+      await request(app).post("/register").send(registration).expect(400)
+    })
+
     it.each([
       { password: "Ab1!", description: "too short (< 8 characters)" },
       { password: "abcdefg1!", description: "missing uppercase letter" },
