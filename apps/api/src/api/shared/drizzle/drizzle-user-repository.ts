@@ -1,6 +1,6 @@
 import { and, eq, not, or, type SQL } from "drizzle-orm"
 
-import type { UniqueField, UserRepository, UniqueFields } from "#core/users/user-repository.js"
+import type { ConflictCheckFields, UniqueField, UserRepository } from "#core/users/user-repository.js"
 
 import { Email } from "#core/users/email.js"
 import { User } from "#core/users/user.js"
@@ -30,29 +30,21 @@ export class DrizzleUserRepository implements UserRepository {
       .then(([r]) => (r ? new User(r) : undefined))
   }
 
-  async findExisting(fields: Partial<UniqueFields>): Promise<User | undefined> {
-    const { id, username, email } = this.uniqueFieldsToConditions(fields)
+  async findConflict({ excludedId, username, email }: ConflictCheckFields) {
+    const usernameCondition = eq(usersTable.username, username)
+    const emailCondition = eq(usersTable.email, email.value)
+    const excludeCondition = excludedId ? not(eq(usersTable.id, excludedId.value)) : undefined
 
-    return db
+    const results = await db
       .select()
       .from(usersTable)
-      .where(and(id ? not(id) : undefined, or(username, email)))
-      .then(([r]) => (r ? new User(r) : undefined))
-  }
+      .where(and(excludeCondition, or(usernameCondition, emailCondition)))
 
-  private uniqueFieldsToConditions({ id, username, email }: Partial<UniqueFields>): Partial<{
-    id: SQL
-    username: SQL
-    email: SQL
-  }> {
-    if (!username && !email && !id) {
-      throw new Error("At least one filter must be provided")
-    }
+    if (results.length === 0) return undefined
 
     return {
-      id: id ? eq(usersTable.id, id.value) : undefined,
-      username: username ? eq(usersTable.username, username) : undefined,
-      email: email ? eq(usersTable.email, email.value) : undefined,
+      usernameExists: results.some((r) => r.username === username),
+      emailExists: results.some((r) => r.email === email.value),
     }
   }
 

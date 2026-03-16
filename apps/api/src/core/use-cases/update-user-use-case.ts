@@ -31,19 +31,16 @@ export class UpdateUserUseCase {
     }
 
     if (data.username || data.email) {
-      const existing = await this.users.findExisting({
-        id: new UUID(id),
-        username: data.username,
-        email: data.email ? new Email(data.email) : undefined,
+      const conflict = await this.users.findConflict({
+        excludedId: new UUID(id),
+        username: data.username ?? user.username,
+        email: data.email ? new Email(data.email) : new Email(user.email),
       })
 
-      if (existing) {
-        const isSameUsername = existing.username === data.username
-        const isSameEmail = existing.email === data.email
-
+      if (conflict) {
         return Result.fail({
-          username: isSameUsername ? "USERNAME_TAKEN" : undefined,
-          email: isSameEmail ? "EMAIL_TAKEN" : undefined,
+          username: conflict.usernameExists ? "USERNAME_TAKEN" : undefined,
+          email: conflict.emailExists ? "EMAIL_TAKEN" : undefined,
         })
       }
     }

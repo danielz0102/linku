@@ -1,4 +1,4 @@
-import type { UniqueField, UniqueFields, UserRepository } from "~/core/users/user-repository.ts"
+import type { ConflictCheckFields, UniqueField, UserRepository } from "~/core/users/user-repository.ts"
 import type { User } from "~/core/users/user.ts"
 
 import { Email } from "~/core/users/email.ts"
@@ -18,17 +18,21 @@ export class InMemoryUserRepository implements UserRepository {
     this.users[index] = user
   }
 
-  async findExisting(fields: Partial<UniqueFields>) {
-    return this.users.find((user) => {
-      if (fields.id && user.id === fields.id.value) {
+  async findConflict({ excludedId, username, email }: ConflictCheckFields) {
+    const conflicts = this.users.filter((user) => {
+      if (excludedId && user.id === excludedId.value) {
         return false
       }
 
-      const hasUsernameConflict = fields.username ? user.username === fields.username : false
-      const hasEmailConflict = fields.email ? user.email === fields.email.value : false
-
-      return hasUsernameConflict || hasEmailConflict
+      return user.username === username || user.email === email.value
     })
+
+    if (conflicts.length === 0) return undefined
+
+    return {
+      usernameExists: conflicts.some((u) => u.username === username),
+      emailExists: conflicts.some((u) => u.email === email.value),
+    }
   }
 
   async findOne(field: UniqueField) {
