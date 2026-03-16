@@ -1,5 +1,7 @@
 import { UUID } from "../uuid.js"
 import { Email } from "./email.js"
+import { FirstName } from "./first-name.js"
+import { LastName } from "./last-name.js"
 
 export type UserParams = {
   id?: string
@@ -28,8 +30,8 @@ export class User {
   #username: string
   #email: Email
   readonly #hashedPassword: string
-  #firstName: string
-  #lastName: string
+  #firstName: FirstName
+  #lastName: LastName
   #profilePicUrl: URL | null
   #bio: string | null
 
@@ -38,8 +40,8 @@ export class User {
     this.#username = params.username
     this.#email = new Email(params.email)
     this.#hashedPassword = params.hashedPassword
-    this.#firstName = params.firstName
-    this.#lastName = params.lastName
+    this.#firstName = new FirstName(params.firstName)
+    this.#lastName = new LastName(params.lastName)
     this.#profilePicUrl = params.profilePicUrl ? new URL(params.profilePicUrl) : null
     this.#bio = params.bio ?? null
   }
@@ -66,8 +68,8 @@ export class User {
       username: this.#username,
       email: this.#email.value,
       hashedPassword: this.#hashedPassword,
-      firstName: this.#firstName,
-      lastName: this.#lastName,
+      firstName: this.#firstName.value,
+      lastName: this.#lastName.value,
       profilePicUrl: this.#profilePicUrl?.href ?? null,
       bio: this.#bio,
     }
@@ -92,10 +94,10 @@ export class User {
       this.#email = new Email(email)
     }
     if (firstName) {
-      this.#firstName = firstName
+      this.#firstName = new FirstName(firstName)
     }
     if (lastName) {
-      this.#lastName = lastName
+      this.#lastName = new LastName(lastName)
     }
     if (profilePicUrl) {
       this.#profilePicUrl = new URL(profilePicUrl)

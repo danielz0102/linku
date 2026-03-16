@@ -10,6 +10,6 @@ export const registrationSchema = z.object({
     .regex(/[a-z]/, "Password must contain at least one lowercase letter")
     .regex(/[0-9]/, "Password must contain at least one number")
     .regex(/[\W_]/, "Password must contain at least one special character"),
-  firstName: z.string().trim().nonempty("First name is empty"),
-  lastName: z.string().trim().nonempty("Last name is empty"),
+  firstName: z.string().trim().nonempty("First name is empty").max(50, "First name must be at most 50 characters"),
+  lastName: z.string().trim().nonempty("Last name is empty").max(50, "Last name must be at most 50 characters"),
 })
