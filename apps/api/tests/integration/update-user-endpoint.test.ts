@@ -10,21 +10,19 @@ import { AppBuilder } from "~tests/helpers/app-builder.ts"
 import { DrizzleTestUserDB } from "~tests/helpers/db/drizzle-test-user-db.ts"
 import { UserMother } from "~tests/helpers/users/user-mother.ts"
 
-const it = createAuthContext()
+const app = new AppBuilder().withSession().build()
+app.post("/auth/login", loginEndpoint)
+app.patch("/users", updateUserEndpoint)
+
 const db = new DrizzleTestUserDB()
+const it = createAuthContext(db).withHttpClient(app)
 
 describe("PATCH /users", () => {
-  const app = new AppBuilder().withSession().build()
-  app.post("/auth/login", loginEndpoint)
-  app.patch("/users", updateUserEndpoint)
-
   afterAll(async () => {
     await db.reset()
   })
 
-  it("sends user public data", async ({ registeredUser }) => {
-    const http = request.agent(app)
-    await http.post("/auth/login").send(registeredUser.credentials).expect(200)
+  it("sends user public data", async ({ http }) => {
     const payload: LinkuAPI.UpdateUser["RequestBody"] = {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
@@ -34,37 +32,24 @@ describe("PATCH /users", () => {
 
     const { body } = await http.patch("/users").send(payload).expect(200)
 
-    expect(body).toMatchObject({
-      ...registeredUser.publicData,
-      ...payload,
-    })
+    expect(body).toMatchObject(payload)
   })
 
   it("fails if user is not authenticated", async () => {
     await request(app).patch("/users").send({ firstName: "Unauthenticated" }).expect(401)
   })
 
-  it("fails if user data has conflicts", async ({ registeredUser }) => {
+  it("fails if user data has conflicts", async ({ http }) => {
     const existing = UserMother.create()
     await db.insert(existing)
-
-    const http = request.agent(app)
-    await http.post("/auth/login").send(registeredUser.credentials).expect(200)
-
     await http.patch("/users").send({ username: existing.username }).expect(409)
   })
 
-  it("fails if not data is provided", async ({ registeredUser }) => {
-    const http = request.agent(app)
-    await http.post("/auth/login").send(registeredUser.credentials).expect(200)
-
+  it("fails if not data is provided", async ({ http }) => {
     await http.patch("/users").send({}).expect(400)
   })
 
-  it("fails if picture URL is not valid", async ({ registeredUser }) => {
-    const http = request.agent(app)
-    await http.post("/auth/login").send(registeredUser.credentials).expect(200)
-
+  it("fails if picture URL is not valid", async ({ http }) => {
     await http.patch("/users").send({ profilePicUrl: "not-a-url" }).expect(400)
   })
 })

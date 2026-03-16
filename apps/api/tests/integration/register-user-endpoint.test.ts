@@ -1,3 +1,5 @@
+import type { LinkuAPI } from "@linku/api-contract"
+
 import { faker } from "@faker-js/faker"
 import request from "supertest"
 
@@ -7,10 +9,10 @@ import { createAuthContext } from "~tests/fixtures/auth-context.ts"
 import { AppBuilder } from "~tests/helpers/app-builder.ts"
 import { DrizzleTestUserDB } from "~tests/helpers/db/drizzle-test-user-db.ts"
 
-const it = createAuthContext()
 const db = new DrizzleTestUserDB()
+const it = createAuthContext(db)
 
-const createRegistration = () => ({
+const createRegistration = (): LinkuAPI.RegisterUser["RequestBody"] => ({
   email: faker.internet.email(),
   username: faker.internet.username(),
   password: "Password1!",
