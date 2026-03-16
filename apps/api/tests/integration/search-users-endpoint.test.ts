@@ -24,22 +24,22 @@ describe("GET /users", () => {
     const http = request.agent(app)
     const query = faker.string.alphanumeric(5)
     const users = await db.seed(5, { username: query })
-
     await http.post("/auth/login").send(registeredUser.credentials).expect(200)
 
     const { body } = await http.get("/users").query({ q: query }).expect(200)
+
     expect(body).toHaveLength(5)
     expect(body).toEqual(users.map((u) => toPublicUser(u)))
   })
 
-  it("sends a page of 20 users by default", async ({ registeredUser }) => {
+  it("sends a page of 20 users by default", async ({ registeredUser: { credentials } }) => {
     const http = request.agent(app)
     const query = faker.string.alphanumeric(5)
     await db.seed(25, { firstName: query })
-
-    await http.post("/auth/login").send(registeredUser.credentials).expect(200)
+    await http.post("/auth/login").send(credentials).expect(200)
 
     const { body } = await http.get("/users").query({ q: query }).expect(200)
+
     expect(body).toHaveLength(20)
   })
 
@@ -47,9 +47,9 @@ describe("GET /users", () => {
     await request(app).get("/users").query({ q: "any" }).expect(401)
   })
 
-  it("validates query parameters", async ({ registeredUser }) => {
+  it("sends 400 for invalid query parameters", async ({ registeredUser: { credentials } }) => {
     const http = request.agent(app)
-    await http.post("/auth/login").send(registeredUser.credentials).expect(200)
+    await http.post("/auth/login").send(credentials).expect(200)
 
     await http.get("/users").query({ q: "any", limit: -1 }).expect(400)
     await http.get("/users").query({ q: "any", limit: 20, offset: -1 }).expect(400)
