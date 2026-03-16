@@ -27,11 +27,17 @@ export class DrizzleTestUserDB implements TestUserDB {
   }
 
   async seed(count: number, prefixes?: Prefixes): Promise<User[]> {
+    const uniques = {
+      usernames: faker.helpers.uniqueArray(() => faker.internet.username(), count),
+      emails: faker.helpers.uniqueArray(() => faker.internet.email(), count),
+    }
+
     const users = Array.from({ length: count }, (_, i) => {
       return UserMother.create({
-        username: `${prefixes?.username ?? "user"}-${faker.internet.username()}-${i}`,
+        username: `${prefixes?.username ?? "user"}-${uniques.usernames[i]}`,
         firstName: `${prefixes?.firstName ?? "FirstName"}-${faker.person.firstName()}`,
         lastName: `${prefixes?.lastName ?? "LastName"}-${faker.person.lastName()}`,
+        email: uniques.emails[i],
       })
     })
 
