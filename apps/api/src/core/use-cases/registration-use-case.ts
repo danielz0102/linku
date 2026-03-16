@@ -37,7 +37,7 @@ export class RegistrationUseCase {
     firstName,
     lastName,
   }: RegistrationData): Promise<Result<PublicUser, RegistrationError>> {
-    const existing = await this.users.checkUniqueness({
+    const existing = await this.users.findExisting({
       username,
       email: new Email(email),
     })

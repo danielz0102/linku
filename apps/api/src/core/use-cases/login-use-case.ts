@@ -23,7 +23,7 @@ export class LoginUseCase {
   }
 
   async execute({ username, password }: LoginCredentials): Promise<Result<PublicUser, LoginError>> {
-    const user = await this.users.findExisting({ username })
+    const user = await this.users.findOne({ username })
 
     if (!user) {
       return Result.fail("INVALID_CREDENTIALS")

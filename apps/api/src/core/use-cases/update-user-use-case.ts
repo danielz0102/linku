@@ -24,14 +24,14 @@ export class UpdateUserUseCase {
   constructor(private readonly users: UserRepository) {}
 
   async execute(id: string, data: UpdateUserData): Promise<Result<PublicUser, UpdateUserError>> {
-    const user = await this.users.findExisting({ id: new UUID(id) })
+    const user = await this.users.findOne({ id: new UUID(id) })
 
     if (!user) {
       throw new Error("Authenticated user was not found")
     }
 
     if (data.username || data.email) {
-      const existing = await this.users.checkUniqueness({
+      const existing = await this.users.findExisting({
         id: new UUID(id),
         username: data.username,
         email: data.email ? new Email(data.email) : undefined,

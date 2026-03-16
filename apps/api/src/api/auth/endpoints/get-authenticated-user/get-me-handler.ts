@@ -17,7 +17,7 @@ export const getMeHandler: GetMeHandler = (repository) => async (req, res) => {
     throw new Error("User ID not found in session")
   }
 
-  const userFound = await repository.findExisting({ id: new UUID(userId) })
+  const userFound = await repository.findOne({ id: new UUID(userId) })
 
   if (!userFound) {
     throw new Error("User with session not found in database", {

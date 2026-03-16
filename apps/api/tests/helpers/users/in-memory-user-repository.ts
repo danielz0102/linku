@@ -15,7 +15,7 @@ export class InMemoryUserRepository implements UserRepository {
     this.users[index] = user
   }
 
-  async checkUniqueness(fields: Partial<UniqueFields>) {
+  async findExisting(fields: Partial<UniqueFields>) {
     return this.users.find((user) => {
       if (fields.id && user.id === fields.id.value) {
         return false
@@ -28,7 +28,7 @@ export class InMemoryUserRepository implements UserRepository {
     })
   }
 
-  async findExisting(fields: Partial<UniqueFields>) {
+  async findOne(fields: Partial<UniqueFields>) {
     if (!fields.id && !fields.username && !fields.email) {
       return undefined
     }

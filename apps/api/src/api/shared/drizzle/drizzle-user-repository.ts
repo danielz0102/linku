@@ -18,7 +18,7 @@ export class DrizzleUserRepository implements UserRepository {
     })
   }
 
-  async findExisting(fields: Partial<UniqueFields>): Promise<User | undefined> {
+  async findOne(fields: Partial<UniqueFields>): Promise<User | undefined> {
     const conditions = this.uniqueFieldsToConditions(fields)
 
     return db
@@ -28,7 +28,7 @@ export class DrizzleUserRepository implements UserRepository {
       .then(([r]) => (r ? new User(r) : undefined))
   }
 
-  async checkUniqueness(fields: Partial<UniqueFields>): Promise<User | undefined> {
+  async findExisting(fields: Partial<UniqueFields>): Promise<User | undefined> {
     const { id, username, email } = this.uniqueFieldsToConditions(fields)
 
     return db

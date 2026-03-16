@@ -13,7 +13,7 @@ type GetUserByIdHandler = (
 export const getUserByIdHandler: GetUserByIdHandler = (repository) => async (req, res) => {
   const { id } = req.params
 
-  const user = await repository.findExisting({ id: new UUID(id) })
+  const user = await repository.findOne({ id: new UUID(id) })
 
   if (!user) {
     return res.status(404).json({
