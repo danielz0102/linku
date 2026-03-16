@@ -5,10 +5,10 @@ import { authRouter } from "~/api/auth/auth-router.ts"
 import { toPublicUser } from "~/core/use-cases/dtos/public-user.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
 import { AppBuilder } from "~tests/helpers/app-builder.ts"
-import { DrizzleTestUserDAO } from "~tests/helpers/db/drizzle-test-user-dao.ts"
+import { DrizzleTestUserDB } from "~tests/helpers/db/drizzle-test-user-db.ts"
 
 const it = createAuthContext()
-const dao = new DrizzleTestUserDAO()
+const db = new DrizzleTestUserDB()
 
 const createRegistration = () => ({
   email: faker.internet.email(),
@@ -24,7 +24,7 @@ describe("POST /register", () => {
 
   describe("successful registration", () => {
     afterAll(async () => {
-      await dao.reset()
+      await db.reset()
     })
 
     it("sends a 200 response with public user data", async () => {
@@ -32,7 +32,7 @@ describe("POST /register", () => {
 
       const { body } = await request(app).post("/register").send(data).expect(200)
 
-      const user = await dao.findByUsername(data.username)
+      const user = await db.findByUsername(data.username)
       expect(body).toMatchObject(toPublicUser(user))
     })
 
@@ -58,7 +58,7 @@ describe("POST /register", () => {
 
       await request(app).post("/register").send(data).expect(200)
 
-      const user = await dao.findByUsername(data.username)
+      const user = await db.findByUsername(data.username)
       expectTypeOf(user).not.toBeUndefined()
       expect(user?.password).not.toBe(data.password)
     })

@@ -7,9 +7,9 @@ import { usersTable } from "~/api/shared/drizzle/schemas.ts"
 import { User } from "~/core/users/user.ts"
 import { UserMother } from "~tests/helpers/users/user-mother.ts"
 
-import type { Prefixes, TestUserDAO } from "./test-user-dao.ts"
+import type { Prefixes, TestUserDB } from "./test-user-db.ts"
 
-export class DrizzleTestUserDAO implements TestUserDAO {
+export class DrizzleTestUserDB implements TestUserDB {
   async insert(user: User): Promise<void> {
     await db.insert(usersTable).values(user.toPrimitives())
   }

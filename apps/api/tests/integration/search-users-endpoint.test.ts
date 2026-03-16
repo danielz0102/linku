@@ -6,10 +6,10 @@ import { getUsersEndpoint } from "~/api/users/endpoints/search-users/search-user
 import { toPublicUser } from "~/core/use-cases/dtos/public-user.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
 import { AppBuilder } from "~tests/helpers/app-builder.ts"
-import { DrizzleTestUserDAO } from "~tests/helpers/db/drizzle-test-user-dao.ts"
+import { DrizzleTestUserDB } from "~tests/helpers/db/drizzle-test-user-db.ts"
 
 const it = createAuthContext()
-const dao = new DrizzleTestUserDAO()
+const db = new DrizzleTestUserDB()
 
 describe("GET /users", () => {
   const app = new AppBuilder().withSession().build()
@@ -17,25 +17,25 @@ describe("GET /users", () => {
   app.get("/users", ...getUsersEndpoint)
 
   afterAll(async () => {
-    await dao.reset()
+    await db.reset()
   })
 
   it("sends a list of users", async ({ registeredUser }) => {
     const http = request.agent(app)
     const query = faker.string.alphanumeric(5)
-    const users = await dao.seed(5, { username: query })
+    const users = await db.seed(5, { username: query })
 
     await http.post("/auth/login").send(registeredUser.credentials).expect(200)
 
     const { body } = await http.get("/users").query({ q: query }).expect(200)
     expect(body).toHaveLength(5)
-    expect(body).toEqual(expect.arrayContaining(users.map((u) => toPublicUser(u))))
+    expect(body).toEqual(users.map((u) => toPublicUser(u)))
   })
 
   it("sends a page of 20 users by default", async ({ registeredUser }) => {
     const http = request.agent(app)
     const query = faker.string.alphanumeric(5)
-    await dao.seed(25, { firstName: query })
+    await db.seed(25, { firstName: query })
 
     await http.post("/auth/login").send(registeredUser.credentials).expect(200)
 
