@@ -1,8 +1,7 @@
 import { faker } from "@faker-js/faker"
 import request from "supertest"
 
-import { loginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
-import { registerUserEndpoint } from "~/api/auth/endpoints/register/register-user-endpoint.ts"
+import { authRouter } from "~/api/auth/auth-router.ts"
 import { toPublicUser } from "~/core/use-cases/dtos/public-user.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
 import { AppBuilder } from "~tests/helpers/app-builder.ts"
@@ -19,10 +18,9 @@ const createRegistration = () => ({
   lastName: faker.person.lastName(),
 })
 
-describe("POST /auth/register", () => {
+describe("POST /register", () => {
   const app = new AppBuilder().withSession().build()
-  app.post("/auth/register", registerUserEndpoint)
-  app.post("/auth/login", loginEndpoint)
+  app.use(authRouter)
 
   describe("successful registration", () => {
     afterAll(async () => {
@@ -32,7 +30,7 @@ describe("POST /auth/register", () => {
     it("sends a 200 response with public user data", async () => {
       const data = createRegistration()
 
-      const { body } = await request(app).post("/auth/register").send(data).expect(200)
+      const { body } = await request(app).post("/register").send(data).expect(200)
 
       const user = await dao.findByUsername(data.username)
       expect(body).toMatchObject(toPublicUser(user))
@@ -40,7 +38,7 @@ describe("POST /auth/register", () => {
 
     it("sets a session cookie", async () => {
       await request(app)
-        .post("/auth/register")
+        .post("/register")
         .send(createRegistration())
         .expect(200)
         .expect("Set-Cookie", /.+/)
@@ -49,16 +47,16 @@ describe("POST /auth/register", () => {
     it("allows the user to login after registration", async () => {
       const data = createRegistration()
 
-      await request(app).post("/auth/register").send(data).expect(200)
+      await request(app).post("/register").send(data).expect(200)
 
       const { username, password } = data
-      await request(app).post("/auth/login").send({ username, password }).expect(200)
+      await request(app).post("/login").send({ username, password }).expect(200)
     })
 
     it("hashes the password", async () => {
       const data = createRegistration()
 
-      await request(app).post("/auth/register").send(data).expect(200)
+      await request(app).post("/register").send(data).expect(200)
 
       const user = await dao.findByUsername(data.username)
       expectTypeOf(user).not.toBeUndefined()
@@ -73,7 +71,7 @@ describe("POST /auth/register", () => {
       },
     }) => {
       const registration = { ...createRegistration(), username }
-      await request(app).post("/auth/register").send(registration).expect(409)
+      await request(app).post("/register").send(registration).expect(409)
     })
   })
 
@@ -86,7 +84,7 @@ describe("POST /auth/register", () => {
       { password: "Abcdefg1", description: "missing special character" },
     ])("sends a 400 response if password is $description", async ({ password }) => {
       const registration = { ...createRegistration(), password }
-      await request(app).post("/auth/register").send(registration).expect(400)
+      await request(app).post("/register").send(registration).expect(400)
     })
   })
 })

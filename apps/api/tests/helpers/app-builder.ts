@@ -1,8 +1,6 @@
 import express from "express"
 import session from "express-session"
 
-import { unexpectedError } from "~/server/middlewares/unexpected-error.ts"
-
 export class AppBuilder {
   private app: express.Express
 
@@ -28,7 +26,6 @@ export class AppBuilder {
   }
 
   build() {
-    this.app.use(unexpectedError)
     return this.app
   }
 }
