@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker"
 
-import { toPublicUser, type PublicUser } from "~/core/use-cases/dtos/public-user.ts"
 import { User, type UserParams } from "~/core/users/user.ts"
 
 export const UserMother = {
@@ -16,8 +15,5 @@ export const UserMother = {
       profilePicUrl: faker.datatype.boolean() ? faker.image.avatar() : null,
       ...overrides,
     })
-  },
-  createPublicUser(overrides: Partial<UserParams> = {}): PublicUser {
-    return toPublicUser(this.create(overrides))
   },
 }

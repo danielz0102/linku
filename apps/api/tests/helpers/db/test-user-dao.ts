@@ -5,4 +5,11 @@ export interface TestUserDAO {
   deleteById(id: string): Promise<void>
   findByUsername(username: string): Promise<User | undefined>
   reset(): Promise<void>
+  seed(count: number, prefixes?: Prefixes): Promise<User[]>
 }
+
+export type Prefixes = Partial<{
+  username: string
+  firstName: string
+  lastName: string
+}>
