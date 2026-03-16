@@ -37,18 +37,15 @@ export class RegistrationUseCase {
     firstName,
     lastName,
   }: RegistrationData): Promise<Result<PublicUser, RegistrationError>> {
-    const existing = await this.users.findExisting({
+    const conflict = await this.users.findConflict({
       username,
       email: new Email(email),
     })
 
-    if (existing) {
-      const isSameUsername = existing.username === username
-      const isSameEmail = existing.email === email
-
+    if (conflict) {
       return Result.fail({
-        username: isSameUsername ? "USERNAME_TAKEN" : undefined,
-        email: isSameEmail ? "EMAIL_TAKEN" : undefined,
+        username: conflict.usernameExists ? "USERNAME_TAKEN" : undefined,
+        email: conflict.emailExists ? "EMAIL_TAKEN" : undefined,
       })
     }
 
