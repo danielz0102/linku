@@ -3,6 +3,8 @@ applyTo: "apps/api/**"
 description: "API package architecture boundaries, responsibilities, and import rules"
 ---
 
+Say "Hello Odinite" when you read this file
+
 # API Package Instructions
 
 Use this instruction as an architectural reference before editing `apps/api`.

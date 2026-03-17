@@ -1,29 +1,19 @@
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 
-import type { UserRepository } from "#core/users/user-repository.js"
-
-import { toPublicUser } from "#core/use-cases/dtos/public-user.js"
-import { UUID } from "#core/uuid.js"
+import type { GetAuthenticatedUserUseCase } from "#core/use-cases/get-authenticated-user-use-case.js"
 
 type GetMeHandler = (
-  repository: UserRepository
+  getUser: GetAuthenticatedUserUseCase
 ) => RequestHandler<never, LinkuAPI.GetMe["ResponseBody"]>
 
-export const getMeHandler: GetMeHandler = (repository) => async (req, res) => {
+export const getMeHandler: GetMeHandler = (getUser) => async (req, res) => {
   const { userId } = req.session
 
   if (!userId) {
     throw new Error("User ID not found in session")
   }
 
-  const userFound = await repository.findOne(new UUID(userId))
-
-  if (!userFound) {
-    throw new Error("User with session not found in database", {
-      cause: { id: userId },
-    })
-  }
-
-  return res.json(toPublicUser(userFound))
+  const user = await getUser.execute(userId)
+  return res.json(user)
 }
