@@ -1,0 +1,42 @@
+import type { LinkuAPI } from "@linku/api-contract"
+
+import axios, { type AxiosError } from "axios"
+import { z } from "zod/mini"
+
+import { API_URL } from "~/env"
+
+import { ApiError } from "./api-error"
+
+export const apiClient = axios.create({
+  baseURL: API_URL,
+  withCredentials: true,
+})
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    if (!error.response) {
+      throw new ApiError("NETWORK_ERROR")
+    }
+
+    const { data } = error.response
+
+    if (!isErrorBody(data)) {
+      throw new ApiError("UNEXPECTED_ERROR")
+    }
+
+    const { code, errors } = data
+
+    throw new ApiError(code, errors)
+  }
+)
+
+function isErrorBody(data: unknown): data is LinkuAPI.ErrorBody {
+  return errorBodySchema.safeParse(data).success
+}
+
+const errorBodySchema = z.object({
+  code: z.string(),
+  message: z.string(),
+  errors: z.optional(z.record(z.string(), z.string())),
+})

@@ -1,0 +1,35 @@
+import { Link, useNavigate } from "react-router"
+
+import { useAuth } from "~/shared/context/auth-context"
+
+import { RegistrationForm } from "./components/registration-form"
+
+export default function Register() {
+  const navigate = useNavigate()
+  const { register: registerUser } = useAuth()
+
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md space-y-6">
+        <div className="text-center">
+          <h1 className="mb-2 text-4xl font-bold">Join Linku</h1>
+          <p className="text-neutral-400">Connect with friends instantly.</p>
+        </div>
+
+        <RegistrationForm
+          onSubmit={async (data) => {
+            await registerUser(data)
+            await navigate("/")
+          }}
+        />
+
+        <p className="text-center text-sm text-neutral-400">
+          Already have an account?{" "}
+          <Link to="/login" className="link">
+            Log In
+          </Link>
+        </p>
+      </div>
+    </main>
+  )
+}

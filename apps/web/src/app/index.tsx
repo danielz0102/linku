@@ -3,8 +3,8 @@ import { Suspense } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 
 import { ErrorPage } from "~/app/pages/error-page"
-import { AuthProvider } from "~/auth/context/auth-provider"
-import { LoadingSpinner } from "~/shared/components/loading-spinner"
+import { AuthProvider } from "~/shared/context/auth-provider"
+import { LoadingSpinner } from "~/ui/components/loading-spinner"
 
 import { Router } from "./router"
 

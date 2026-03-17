@@ -25,9 +25,9 @@
     "noUncheckedSideEffectImports": true,
 
     "paths": {
-      "~/*": ["./src/*"]
-    }
+      "~/*": ["./src/*"],
+    },
   },
   "include": ["src"],
-  "exclude": ["**/*.test.ts", "**/*.test.tsx", "src/__tests__"]
+  "exclude": ["**/*.test.ts", "**/*.test.tsx"],
 }

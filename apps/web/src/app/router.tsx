@@ -1,18 +1,18 @@
 import { lazy } from "react"
 import { BrowserRouter, Route, Routes } from "react-router"
 
-import { ProtectedRoute } from "~/auth/components/protected-route"
-import { Layout } from "~/shared/components/layout/layout"
+import { ProtectedRoute } from "~/sections/auth/components/protected-route"
+import { Layout } from "~/ui/layout/layout"
 
 import { ErrorPage } from "./pages/error-page"
 
-const Home = lazy(() => import("~/home/home"))
-const Login = lazy(() => import("~/auth/login"))
-const Register = lazy(() => import("~/auth/register"))
-const Profile = lazy(() => import("~/profile/profile"))
-const UpdateProfile = lazy(() => import("~/profile/update-profile"))
-const SearchUsers = lazy(() => import("~/users/search-users"))
-const PublicProfile = lazy(() => import("~/users/public-profile"))
+const Home = lazy(() => import("~/sections/home/home"))
+const Login = lazy(() => import("~/sections/auth/login"))
+const Register = lazy(() => import("~/sections/auth/register"))
+const Profile = lazy(() => import("~/sections/profile/profile"))
+const UpdateProfile = lazy(() => import("~/sections/profile/update-profile"))
+const SearchUsers = lazy(() => import("~/sections/users/search-users"))
+const PublicProfile = lazy(() => import("~/sections/users/public-profile"))
 
 export function Router() {
   return (
