@@ -33,9 +33,13 @@ function mapZodError(
       return acc
     }
 
-    return {
-      ...acc,
-      [k]: v.errors[0],
+    const firstError = v.errors[0]
+
+    if (!firstError) {
+      return acc
     }
+
+    acc[k] = firstError
+    return acc
   }, {})
 }
