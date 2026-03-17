@@ -1,19 +1,16 @@
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 
-import type { UserRepository } from "#core/users/user-repository.js"
-
-import { toPublicUser } from "#core/use-cases/dtos/public-user.js"
-import { UUID } from "#core/uuid.js"
+import type { GetUserByIdUseCase } from "#core/use-cases/get-user-by-id-use-case.js"
 
 type GetUserByIdHandler = (
-  repository: UserRepository
+  getUser: GetUserByIdUseCase
 ) => RequestHandler<LinkuAPI.GetUserById["Params"], LinkuAPI.GetUserById["ResponseBody"]>
 
-export const getUserByIdHandler: GetUserByIdHandler = (repository) => async (req, res) => {
+export const getUserByIdHandler: GetUserByIdHandler = (getUser) => async (req, res) => {
   const { id } = req.params
 
-  const user = await repository.findOne(new UUID(id))
+  const user = await getUser.execute(id)
 
   if (!user) {
     return res.status(404).json({
@@ -22,5 +19,5 @@ export const getUserByIdHandler: GetUserByIdHandler = (repository) => async (req
     })
   }
 
-  return res.status(200).json(toPublicUser(user))
+  return res.status(200).json(user)
 }
