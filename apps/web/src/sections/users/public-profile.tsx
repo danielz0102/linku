@@ -4,6 +4,7 @@ import { useParams } from "react-router"
 import { ApiError } from "~/api/api-error"
 import { ErrorPage } from "~/app/pages/error-page"
 import { LoadingSpinner } from "~/ui/components/loading-spinner"
+import { ProfileCard } from "~/ui/components/profile-card"
 
 import { getUserById } from "./services/get-user-by-id"
 
@@ -42,25 +43,14 @@ export default function PublicProfile() {
   }
 
   return (
-    <main className="flex size-full flex-col items-center justify-center gap-4 p-4 text-center">
-      <img
-        src={user.profilePicUrl || "/default-pp.jpg"}
-        alt=""
-        className="size-32 rounded-full object-cover"
+    <main className="flex size-full flex-col items-center justify-center p-4">
+      <ProfileCard
+        profilePicUrl={user.profilePicUrl}
+        firstName={user.firstName}
+        lastName={user.lastName}
+        username={user.username}
+        bio={user.bio}
       />
-
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold">
-          {user.firstName} {user.lastName}
-        </h1>
-        <p className="text-sm text-neutral-300">@{user.username}</p>
-      </div>
-
-      {user.bio ? (
-        <p className="max-w-72 overflow-hidden wrap-break-word md:max-w-lg">{user.bio}</p>
-      ) : (
-        <p className="italic">No bio available.</p>
-      )}
     </main>
   )
 }
