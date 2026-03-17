@@ -34,7 +34,6 @@ describe("RegistrationUseCase", () => {
     expect(result).toMatchObject(
       Result.ok({
         username: data.username,
-        email: data.email,
         firstName: data.firstName,
         lastName: data.lastName,
       })

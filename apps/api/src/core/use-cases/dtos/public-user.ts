@@ -3,7 +3,6 @@ import type { User } from "#core/users/user.js"
 export type PublicUser = {
   id: string
   username: string
-  email: string
   firstName: string
   lastName: string
   profilePicUrl: string | null
@@ -11,6 +10,6 @@ export type PublicUser = {
 }
 
 export function toPublicUser(user: User): PublicUser {
-  const { hashedPassword: _, ...rest } = user.toPrimitives()
-  return rest
+  const { id, username, firstName, lastName, profilePicUrl, bio } = user.toPrimitives()
+  return { id, username, firstName, lastName, profilePicUrl, bio }
 }
