@@ -6,6 +6,15 @@ import { apiClient } from "~/shared/api"
 
 import { AuthContext } from "./auth-context"
 
+async function getMe(): Promise<LinkuAPI.User | null> {
+  return apiClient
+    .get<LinkuAPI.User>("/auth/me", {
+      validateStatus: (status) => status === 200 || status === 401,
+    })
+    .then(({ data, status }) => (status === 401 ? null : data))
+    .catch(() => null)
+}
+
 const initialUser = getMe()
 
 export function AuthProvider({ children }: React.PropsWithChildren) {
@@ -39,11 +48,4 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
   }
 
   return <AuthContext value={{ user, login, register, logout, refresh }}>{children}</AuthContext>
-}
-
-async function getMe(): Promise<LinkuAPI.User | null> {
-  return apiClient
-    .get<LinkuAPI.User>("/auth/me")
-    .then(({ data }) => data)
-    .catch(() => null)
 }
