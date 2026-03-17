@@ -1,21 +1,18 @@
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 
-import type {
-  RegistrationError,
-  RegistrationUseCase,
-} from "#core/use-cases/registration-use-case.js"
+import type { RegistrationError, Register } from "#core/use-cases/register-use-case.js"
 
-type RegistrationHandler = (
-  useCase: RegistrationUseCase
+type RegisterHandler = (
+  register: Register
 ) => RequestHandler<
   never,
   LinkuAPI.RegisterUser["ResponseBody"],
   LinkuAPI.RegisterUser["RequestBody"]
 >
 
-export const registrationHandler: RegistrationHandler = (useCase) => async (req, res) => {
-  const { ok, data, error } = await useCase.execute(req.body)
+export const registerHandler: RegisterHandler = (register) => async (req, res) => {
+  const { ok, data, error } = await register.execute(req.body)
 
   if (!ok) {
     return res.status(409).json({

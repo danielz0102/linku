@@ -1,10 +1,10 @@
 import type { LinkuAPI } from "@linku/api-contract"
 import type { RequestHandler } from "express"
 
-import type { SearchUsersUseCase } from "#core/use-cases/search-users-use-case.js"
+import type { SearchUsers } from "#core/use-cases/search-users-use-case.js"
 
 type SearchUsersHandler = (
-  search: SearchUsersUseCase
+  search: SearchUsers
 ) => RequestHandler<never, LinkuAPI.GetUsers["ResponseBody"], never, LinkuAPI.GetUsers["Query"]>
 
 export const searchUsersHandler: SearchUsersHandler = (search) => async (req, res) => {

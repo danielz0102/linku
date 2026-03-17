@@ -1,10 +1,7 @@
 import { faker } from "@faker-js/faker"
 
 import { Result } from "~/core/result.ts"
-import {
-  RegistrationUseCase,
-  type RegistrationData,
-} from "~/core/use-cases/registration-use-case.ts"
+import { Register, type RegistrationData } from "~/core/use-cases/register-use-case.ts"
 import { PasswordHasherMock } from "~tests/helpers/adapters/password-hasher-mock.ts"
 import { InMemoryUserRepository } from "~tests/helpers/users/in-memory-user-repository.ts"
 import { UserMother } from "~tests/helpers/users/user-mother.ts"
@@ -20,12 +17,12 @@ const createDTO = (): RegistrationData => ({
 describe("RegistrationUseCase", () => {
   let users: InMemoryUserRepository
   let hasher: PasswordHasherMock
-  let register: RegistrationUseCase
+  let register: Register
 
   beforeEach(() => {
     users = new InMemoryUserRepository()
     hasher = new PasswordHasherMock()
-    register = new RegistrationUseCase({ userRepo: users, hasher })
+    register = new Register({ userRepo: users, hasher })
   })
 
   it("returns a public user", async () => {

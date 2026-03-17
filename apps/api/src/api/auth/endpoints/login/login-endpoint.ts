@@ -1,7 +1,7 @@
 import { BcryptHasher } from "#api/auth/adapters/bcrypt-hasher.js"
 import { DrizzleUserRepository } from "#api/shared/drizzle/drizzle-user-repository.js"
 import { validator } from "#api/shared/middlewares/validator.js"
-import { LoginUseCase } from "#core/use-cases/login-use-case.js"
+import { Login } from "#core/use-cases/login-use-case.js"
 import { RATE_LIMIT_ENABLED, SALT } from "#env.js"
 
 import { loginHandler } from "./login-handler.js"
@@ -12,7 +12,7 @@ export const loginEndpoint = [
   validator(loginSchema),
   ...(RATE_LIMIT_ENABLED ? [loginRateLimit] : []),
   loginHandler(
-    new LoginUseCase({
+    new Login({
       userRepo: new DrizzleUserRepository(),
       hasher: new BcryptHasher(SALT),
     })

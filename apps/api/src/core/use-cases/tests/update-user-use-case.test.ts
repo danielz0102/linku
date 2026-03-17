@@ -1,15 +1,15 @@
 import { Result } from "~/core/result.ts"
-import { UpdateUserUseCase } from "~/core/use-cases/update-user-use-case.ts"
+import { UpdateUser } from "~/core/use-cases/update-user-use-case.ts"
 import { InMemoryUserRepository } from "~tests/helpers/users/in-memory-user-repository.ts"
 import { UserMother } from "~tests/helpers/users/user-mother.ts"
 
 describe("UpdateUserUseCase", () => {
   let users: InMemoryUserRepository
-  let updateUser: UpdateUserUseCase
+  let updateUser: UpdateUser
 
   beforeEach(() => {
     users = new InMemoryUserRepository()
-    updateUser = new UpdateUserUseCase(users)
+    updateUser = new UpdateUser(users)
   })
 
   it("returns a public user", async () => {

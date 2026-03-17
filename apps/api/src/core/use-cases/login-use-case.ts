@@ -13,7 +13,7 @@ export type LoginCredentials = {
 
 export type LoginError = "INVALID_CREDENTIALS"
 
-export class LoginUseCase {
+export class Login {
   private readonly users: UserRepository
   private readonly hasher: PasswordHasher
 

@@ -4,7 +4,7 @@ import { UUID } from "#core/uuid.js"
 
 import { toPublicUser, type PublicUser } from "./dtos/public-user.js"
 
-export class GetAuthenticatedUserUseCase {
+export class GetAuthenticatedUser {
   constructor(private readonly users: UserRepository) {}
 
   async execute(id: string): Promise<PublicUser> {

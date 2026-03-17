@@ -20,7 +20,7 @@ export type UpdateUserError = Partial<{
   email: "EMAIL_TAKEN"
 }>
 
-export class UpdateUserUseCase {
+export class UpdateUser {
   constructor(private readonly users: UserRepository) {}
 
   async execute(id: string, data: UpdateUserData): Promise<Result<PublicUser, UpdateUserError>> {

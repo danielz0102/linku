@@ -3,17 +3,17 @@ import { InMemoryUserRepository } from "~tests/helpers/users/in-memory-user-repo
 import { UserMother } from "~tests/helpers/users/user-mother.ts"
 
 import { toPublicUser } from "../dtos/public-user.ts"
-import { LoginUseCase } from "../login-use-case.ts"
+import { Login } from "../login-use-case.ts"
 
 let users: InMemoryUserRepository
 let hasher: PasswordHasherMock
-let login: LoginUseCase
+let login: Login
 
 describe("LoginUseCase", () => {
   beforeEach(() => {
     users = new InMemoryUserRepository()
     hasher = new PasswordHasherMock()
-    login = new LoginUseCase({ userRepo: users, hasher })
+    login = new Login({ userRepo: users, hasher })
   })
 
   it("returns a public user", async () => {

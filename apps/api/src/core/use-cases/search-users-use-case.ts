@@ -1,6 +1,6 @@
 import type { UserReadRepository } from "./ports/user-read-repository.js"
 
-export class SearchUsersUseCase {
+export class SearchUsers {
   constructor(private users: UserReadRepository) {}
 
   async execute(query: string, limit?: number, offset?: number) {

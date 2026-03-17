@@ -4,7 +4,7 @@ import { Result } from "#core/result.js"
 import { Email } from "#core/users/email.js"
 import { User } from "#core/users/user.js"
 
-import type { PasswordHasher } from "./ports/password-hasher.js"
+import type { PasswordHasher } from "./ports/password-hasher.ts"
 
 import { toPublicUser, type PublicUser } from "./dtos/public-user.js"
 
@@ -21,7 +21,7 @@ export type RegistrationError = Partial<{
   email: "EMAIL_TAKEN"
 }>
 
-export class RegistrationUseCase {
+export class Register {
   private readonly users: UserRepository
   private readonly hasher: PasswordHasher
 
