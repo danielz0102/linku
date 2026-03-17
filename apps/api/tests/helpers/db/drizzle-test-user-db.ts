@@ -2,9 +2,9 @@ import { faker } from "@faker-js/faker"
 import { eq } from "drizzle-orm/sql/expressions/conditions"
 import { reset } from "drizzle-seed"
 
-import { db } from "~/api/shared/drizzle/db.ts"
-import { usersTable } from "~/api/shared/drizzle/schemas.ts"
 import { User } from "~/core/users/user.ts"
+import { db } from "~/db/drizzle/drizzle-client.ts"
+import { usersTable } from "~/db/drizzle/schemas.ts"
 import { UserMother } from "~tests/helpers/users/user-mother.ts"
 
 import type { Prefixes, TestUserDB } from "./test-user-db.ts"

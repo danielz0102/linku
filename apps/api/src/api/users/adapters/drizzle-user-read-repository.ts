@@ -7,8 +7,8 @@ import type {
   Pagination,
 } from "#core/use-cases/ports/user-read-repository.d.js"
 
-import { db } from "#api/shared/drizzle/db.js"
-import { usersTable } from "#api/shared/drizzle/schemas.js"
+import { db } from "#db/drizzle/drizzle-client.js"
+import { usersTable } from "#db/drizzle/schemas.js"
 
 export class DrizzleUserReadRepository implements UserReadRepository {
   async search(filters: UserFilters, pagination: Pagination): Promise<PublicUser[]> {

@@ -1,13 +1,17 @@
 import { and, eq, not, or, type SQL } from "drizzle-orm"
 
-import type { ConflictCheckFields, UniqueField, UserRepository } from "#core/users/user-repository.js"
+import type {
+  ConflictCheckFields,
+  UniqueField,
+  UserRepository,
+} from "#core/users/user-repository.js"
 
 import { Email } from "#core/users/email.js"
 import { User } from "#core/users/user.js"
 import { UUID } from "#core/uuid.js"
 
-import { db } from "./db.js"
-import { usersTable } from "./schemas.js"
+import { db } from "../../db/drizzle/drizzle-client.js"
+import { usersTable } from "../../db/drizzle/schemas.js"
 
 export class DrizzleUserRepository implements UserRepository {
   async save(user: User): Promise<void> {
