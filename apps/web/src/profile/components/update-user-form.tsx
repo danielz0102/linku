@@ -1,4 +1,4 @@
-import { AtSign, Mail, MessageSquare, User } from "lucide-react"
+import { AtSign, MessageSquare, User } from "lucide-react"
 import { useForm } from "react-hook-form"
 
 import { ApiError } from "~/shared/api/api-error"
@@ -9,7 +9,6 @@ import { cn } from "~/shared/utils/cn"
 
 type UpdateUserData = {
   username?: string
-  email?: string
   firstName?: string
   lastName?: string
   bio?: string
@@ -83,21 +82,6 @@ export function UpdateUserForm({ defaultValues, onSubmit, className }: UpdateUse
         <FormField.Input
           {...register("username", { required: "Username is required" })}
           placeholder="johndoe"
-        />
-      </FormField.Root>
-
-      <FormField.Root label="Email Address" Icon={Mail} error={errors.email?.message}>
-        <FormField.Input
-          {...register("email", {
-            required: "Email is required",
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: "That's not an email!",
-            },
-          })}
-          type="email"
-          placeholder="john_doe@example.com"
-          autoComplete="true"
         />
       </FormField.Root>
 

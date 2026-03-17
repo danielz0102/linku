@@ -8,7 +8,7 @@ import { updateUser } from "./services/update-user"
 export default function UpdateProfile() {
   const { refresh } = useAuth()
   const navigate = useNavigate()
-  const { username, email, firstName, lastName, bio } = useUser()
+  const { username, firstName, lastName, bio } = useUser()
 
   return (
     <main className="flex flex-col gap-4 p-4 md:items-center">
@@ -17,7 +17,6 @@ export default function UpdateProfile() {
       <UpdateUserForm
         defaultValues={{
           username,
-          email,
           firstName,
           lastName,
           bio: bio ?? undefined,
