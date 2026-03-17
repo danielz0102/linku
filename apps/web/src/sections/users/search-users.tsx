@@ -3,7 +3,7 @@ import { Search } from "lucide-react"
 import { useState } from "react"
 import { Link } from "react-router"
 
-import { useDebounce } from "~/sections/users/use-debounce"
+import { useDebounce } from "~/sections/users/hooks/use-debounce"
 import { Alert } from "~/ui/components/alert"
 import { LoadingSpinner } from "~/ui/components/loading-spinner"
 
