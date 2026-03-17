@@ -14,20 +14,22 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
   const login = async (credentials: LinkuAPI.Login["RequestBody"]) => {
     const nextUser = await apiClient
-      .post<LinkuAPI.User>("/users/login", credentials)
+      .post<LinkuAPI.User>("/auth/login", credentials)
       .then(({ data }) => data)
 
     setUser(Promise.resolve(nextUser))
   }
 
   const register = async (newUser: LinkuAPI.RegisterUser["RequestBody"]) => {
-    const nextUser = await apiClient.post<LinkuAPI.User>("/users", newUser).then(({ data }) => data)
+    const nextUser = await apiClient
+      .post<LinkuAPI.User>("/auth/register", newUser)
+      .then(({ data }) => data)
 
     setUser(Promise.resolve(nextUser))
   }
 
   const logout = async () => {
-    await apiClient.post("/users/logout")
+    await apiClient.post("/auth/logout")
     setUser(Promise.resolve(null))
   }
 
@@ -41,7 +43,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
 async function getMe(): Promise<LinkuAPI.User | null> {
   return apiClient
-    .get<LinkuAPI.User>("/users/me")
+    .get<LinkuAPI.User>("/auth/me")
     .then(({ data }) => data)
     .catch(() => null)
 }
