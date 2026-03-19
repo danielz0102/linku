@@ -7,10 +7,8 @@ import { authRouter } from "~/api/auth/auth-router.ts"
 import { toPublicUser } from "~/core/use-cases/dtos/public-user.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
 import { AppBuilder } from "~tests/helpers/app-builder.ts"
-import { DrizzleTestUserDB } from "~tests/helpers/db/drizzle-test-user-db.ts"
 
-const db = new DrizzleTestUserDB()
-const it = createAuthContext(db)
+const it = createAuthContext()
 
 const createRegistration = (): LinkuAPI.RegisterUser["RequestBody"] => ({
   email: faker.internet.email(),
@@ -20,16 +18,16 @@ const createRegistration = (): LinkuAPI.RegisterUser["RequestBody"] => ({
   lastName: faker.person.lastName(),
 })
 
-describe("POST /register", () => {
+it.describe("POST /register", () => {
   const app = new AppBuilder().withSession().build()
   app.use(authRouter)
 
   describe("successful registration", () => {
-    afterAll(async () => {
+    it.afterAll(async ({ db }) => {
       await db.reset()
     })
 
-    it("sends a 200 response with public user data", async () => {
+    it("sends a 200 response with public user data", async ({ db }) => {
       const data = createRegistration()
 
       const { body } = await request(app).post("/register").send(data).expect(200)
@@ -55,7 +53,7 @@ describe("POST /register", () => {
       await request(app).post("/login").send({ username, password }).expect(200)
     })
 
-    it("hashes the password", async () => {
+    it("hashes the password", async ({ db }) => {
       const data = createRegistration()
 
       await request(app).post("/register").send(data).expect(200)
