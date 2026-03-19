@@ -7,7 +7,7 @@ import { Pool } from "pg"
 
 import { User } from "~/core/users/user.ts"
 import { DATABASE_URL } from "~/env.ts"
-import { usersTable } from "~/db/drizzle/schemas.ts"
+import { messagesTable, usersTable } from "~/db/drizzle/schemas.ts"
 import { UserMother } from "~tests/helpers/users/user-mother.ts"
 
 import type { Prefixes, TestUserDB } from "./test-user-db.ts"
@@ -27,8 +27,9 @@ export class DrizzleTestUserDB implements TestUserDB {
   async #ready() {
     if (this.#isReady) return
 
-    await this.#db.execute(sql.raw(`CREATE SCHEMA IF NOT EXISTS "${this.#schema}"`))
-    await this.#db.execute(sql.raw(`SET search_path TO "${this.#schema}", public`))
+    assertSafeIdentifier(this.#schema)
+    await this.#db.execute(sql.raw(`CREATE SCHEMA IF NOT EXISTS ${quoteIdentifier(this.#schema)}`))
+    await this.#db.execute(sql.raw(`SET search_path TO ${quoteIdentifier(this.#schema)}, public`))
     await this.#db.execute(sql`
       CREATE TABLE IF NOT EXISTS "__drizzle_migrations" (
         id SERIAL PRIMARY KEY,
@@ -77,8 +78,8 @@ export class DrizzleTestUserDB implements TestUserDB {
 
   async reset(): Promise<void> {
     await this.#ready()
-    await this.#db.execute(sql`TRUNCATE TABLE "messages" CASCADE`)
-    await this.#db.execute(sql`TRUNCATE TABLE "users" CASCADE`)
+    await this.#db.delete(messagesTable)
+    await this.#db.delete(usersTable)
   }
 
   async seed(count: number, prefixes?: Prefixes): Promise<User[]> {
@@ -103,9 +104,22 @@ export class DrizzleTestUserDB implements TestUserDB {
 }
 
 function createSchemaDatabaseUrl(baseUrl: string, schema: string): string {
+  assertSafeIdentifier(schema)
   const url = new URL(baseUrl)
   const options = url.searchParams.get("options")
   const searchPathOption = `-c search_path=${schema},public`
   url.searchParams.set("options", options ? `${options} ${searchPathOption}` : searchPathOption)
   return url.toString()
+}
+
+function quoteIdentifier(identifier: string): string {
+  return `"${identifier.replaceAll('"', '""')}"`
+}
+
+function assertSafeIdentifier(identifier: string): void {
+  if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(identifier)) {
+    throw new Error(
+      `Invalid SQL identifier "${identifier}". It must start with a letter or underscore and contain only letters, numbers, and underscores.`
+    )
+  }
 }

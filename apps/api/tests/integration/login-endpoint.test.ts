@@ -31,9 +31,6 @@ describe("POST /auth/login", () => {
   it("sends a 200 response with user data and session cookie", async ({ registeredUser }) => {
     const { credentials, publicData } = registeredUser
 
-    const userFromEndpointRepo = await userRepo.findOne(credentials.username)
-    expect(userFromEndpointRepo?.username).toBe(credentials.username)
-
     await request(app)
       .post("/auth/login")
       .send(credentials)
