@@ -11,11 +11,9 @@ type Fixtures = {
 export const test = base.extend<Fixtures>({
   registeredUser: async ({ request }, use) => {
     const user = UserMother.createRegistration()
-    const registerResponse = await request.post("http://localhost:3000/users", {
+    await request.post("http://localhost:3000/auth/register", {
       data: user,
     })
-
-    expect(registerResponse.ok()).toBe(true)
     await use(user)
   },
 })

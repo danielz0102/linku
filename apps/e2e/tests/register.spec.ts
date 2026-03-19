@@ -51,5 +51,6 @@ test("fails if username already exists", async ({ page, registeredUser }) => {
   await submitButton.click()
 
   await expect(page).toHaveURL("/register")
-  await expect(page.getByText("Username already exists")).toBeVisible()
+  await expect(page.getByText("Username is already taken")).toBeVisible()
+  await expect(page.getByText("Email is already taken")).toBeVisible()
 })
