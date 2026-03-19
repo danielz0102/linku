@@ -13,10 +13,6 @@ app.get("/users", ...getUsersEndpoint)
 const it = createAuthContext().withHttpClient(app)
 
 describe("GET /users", () => {
-  it.afterAll(async ({ db }) => {
-    await db.reset()
-  })
-
   it("sends a list of users", async ({ db, http }) => {
     const query = faker.string.alphanumeric(5)
     await db.seed(5, { username: query })

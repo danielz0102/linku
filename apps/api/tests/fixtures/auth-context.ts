@@ -10,17 +10,12 @@ import { UserMother } from "~tests/helpers/users/user-mother.ts"
 import { it as base } from "./db-context.ts"
 
 export function createAuthContext() {
-  const test = base.extend("registeredUser", async ({ db }, { onCleanup }) => {
+  const test = base.extend("registeredUser", async ({ db }) => {
     const password = faker.internet.password()
     const hashedPassword = await hash(password, 1)
     const user = UserMother.create({ hashedPassword })
 
     await db.insert(user)
-
-    onCleanup(async () => {
-      await db.reset()
-    })
-
     return { publicData: toPublicUser(user), credentials: { username: user.username, password } }
   })
 

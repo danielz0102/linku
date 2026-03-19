@@ -16,10 +16,6 @@ app.patch("/users", updateUserEndpoint)
 const it = createAuthContext().withHttpClient(app)
 
 describe("PATCH /users", () => {
-  it.afterAll(async ({ db }) => {
-    await db.reset()
-  })
-
   it("sends user public data", async ({ http }) => {
     const payload: LinkuAPI.UpdateUser["RequestBody"] = {
       firstName: faker.person.firstName(),

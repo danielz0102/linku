@@ -23,10 +23,6 @@ it.describe("POST /register", () => {
   app.use(authRouter)
 
   describe("successful registration", () => {
-    it.afterAll(async ({ db }) => {
-      await db.reset()
-    })
-
     it("sends a 200 response with public user data", async ({ db }) => {
       const data = createRegistration()
 
