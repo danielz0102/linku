@@ -1,6 +1,9 @@
 import request from "supertest"
 
-import { loginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
+import { BcryptHasher } from "~/api/auth/adapters/bcrypt-hasher.ts"
+import { createLoginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
+import { Login } from "~/core/use-cases/login-use-case.ts"
+import { DrizzleUserRepository } from "~/shared/adapters/drizzle-user-repository.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
 import { AppBuilder } from "~tests/helpers/app-builder.ts"
 
@@ -8,7 +11,13 @@ const it = createAuthContext()
 
 describe("POST /auth/login", () => {
   const app = new AppBuilder().withSession().build()
-  app.post("/auth/login", loginEndpoint)
+
+  it.beforeAll(({ dbClient }) => {
+    const repo = new DrizzleUserRepository(dbClient)
+    const hasher = new BcryptHasher(1)
+    const useCase = new Login({ userRepo: repo, hasher })
+    app.post("/auth/login", createLoginEndpoint(useCase))
+  })
 
   it("sends a 200 response with user data and session cookie", async ({ registeredUser }) => {
     const { credentials, publicData } = registeredUser

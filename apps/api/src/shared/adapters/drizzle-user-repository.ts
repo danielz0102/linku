@@ -1,4 +1,5 @@
 import { and, eq, not, or, type SQL } from "drizzle-orm"
+import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres"
 
 import type {
   ConflictCheckFields,
@@ -9,16 +10,17 @@ import type {
 import { Email } from "#core/users/email.js"
 import { User } from "#core/users/user.js"
 import { UUID } from "#core/uuid.js"
-
-import { db } from "../../db/drizzle/drizzle-client.js"
-import { usersTable } from "../../db/drizzle/schemas.js"
+import { usersTable } from "#db/drizzle/schemas.js"
+import { DATABASE_URL } from "#env.js"
 
 export class DrizzleUserRepository implements UserRepository {
+  constructor(private readonly db: NodePgDatabase = drizzle(DATABASE_URL)) {}
+
   async save(user: User): Promise<void> {
     const data = user.toPrimitives()
     const { id: _, ...dataWithoutId } = data
 
-    await db.insert(usersTable).values(data).onConflictDoUpdate({
+    await this.db.insert(usersTable).values(data).onConflictDoUpdate({
       target: usersTable.id,
       set: dataWithoutId,
     })
@@ -27,7 +29,7 @@ export class DrizzleUserRepository implements UserRepository {
   async findOne(field: UniqueField): Promise<User | undefined> {
     const condition = this.uniqueFieldToCondition(field)
 
-    return db
+    return this.db
       .select()
       .from(usersTable)
       .where(condition)
@@ -39,7 +41,7 @@ export class DrizzleUserRepository implements UserRepository {
     const emailCondition = eq(usersTable.email, email.value)
     const excludeCondition = excludedId ? not(eq(usersTable.id, excludedId.value)) : undefined
 
-    const results = await db
+    const results = await this.db
       .select()
       .from(usersTable)
       .where(and(excludeCondition, or(usernameCondition, emailCondition)))

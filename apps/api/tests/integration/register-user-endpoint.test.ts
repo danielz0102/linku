@@ -29,6 +29,7 @@ it.describe("POST /register", () => {
       const { body } = await request(app).post("/register").send(data).expect(200)
 
       const user = await db.findByUsername(data.username)
+      assert(user !== undefined)
       expect(body).toMatchObject(toPublicUser(user))
     })
 

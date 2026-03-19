@@ -18,3 +18,11 @@ export const loginEndpoint = [
     })
   ),
 ]
+
+export function createLoginEndpoint(login: Login) {
+  return [
+    validator(loginSchema),
+    ...(RATE_LIMIT_ENABLED ? [loginRateLimit] : []),
+    loginHandler(login),
+  ]
+}
