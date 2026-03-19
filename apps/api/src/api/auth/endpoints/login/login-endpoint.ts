@@ -8,13 +8,25 @@ import { loginHandler } from "./login-handler.js"
 import { loginRateLimit } from "./login-rate-limit.js"
 import { loginSchema } from "./login-schema.js"
 
-export const loginEndpoint = [
-  validator(loginSchema),
-  ...(RATE_LIMIT_ENABLED ? [loginRateLimit] : []),
-  loginHandler(
+export function createLoginEndpoint(dependencies?: {
+  login?: Login
+  userRepo?: DrizzleUserRepository
+  hasher?: BcryptHasher
+}) {
+  const userRepo = dependencies?.userRepo ?? new DrizzleUserRepository()
+  const hasher = dependencies?.hasher ?? new BcryptHasher(SALT)
+  const login =
+    dependencies?.login ??
     new Login({
-      userRepo: new DrizzleUserRepository(),
-      hasher: new BcryptHasher(SALT),
+      userRepo,
+      hasher,
     })
-  ),
-]
+
+  return [
+    validator(loginSchema),
+    ...(RATE_LIMIT_ENABLED ? [loginRateLimit] : []),
+    loginHandler(login),
+  ]
+}
+
+export const loginEndpoint = createLoginEndpoint()

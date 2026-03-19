@@ -3,8 +3,13 @@ import type { LinkuAPI } from "@linku/api-contract"
 import { faker } from "@faker-js/faker"
 import request from "supertest"
 
-import { authRouter } from "~/api/auth/auth-router.ts"
+import { BcryptHasher } from "~/api/auth/adapters/bcrypt-hasher.ts"
+import { createLoginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
+import { createRegisterEndpoint } from "~/api/auth/endpoints/register/register-endpoint.ts"
+import { Login } from "~/core/use-cases/login-use-case.ts"
+import { Register } from "~/core/use-cases/register-use-case.ts"
 import { toPublicUser } from "~/core/use-cases/dtos/public-user.ts"
+import { DrizzleUserRepository } from "~/shared/adapters/drizzle-user-repository.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
 import { AppBuilder } from "~tests/helpers/app-builder.ts"
 import { DrizzleTestUserDB } from "~tests/helpers/db/drizzle-test-user-db.ts"
@@ -22,7 +27,11 @@ const createRegistration = (): LinkuAPI.RegisterUser["RequestBody"] => ({
 
 describe("POST /register", () => {
   const app = new AppBuilder().withSession().build()
-  app.use(authRouter)
+  const userRepo = new DrizzleUserRepository(db.db)
+  const hasher = new BcryptHasher(1)
+
+  app.post("/register", createRegisterEndpoint({ register: new Register({ userRepo, hasher }) }))
+  app.post("/login", createLoginEndpoint({ login: new Login({ userRepo, hasher }) }))
 
   describe("successful registration", () => {
     afterAll(async () => {
