@@ -1,10 +1,11 @@
 import type { LinkuAPI } from "@linku/api-contract"
 
-export class ApiError {
+export class ApiError extends Error {
   readonly code: LinkuAPI.ErrorCode
   private validationErrors?: LinkuAPI.ErrorBody["errors"]
 
   constructor(code: LinkuAPI.ErrorCode, errors?: LinkuAPI.ErrorBody["errors"]) {
+    super(GenericErrorMessage[code], { cause: errors })
     this.code = code
     this.validationErrors = errors
   }
@@ -14,7 +15,7 @@ export class ApiError {
   }
 
   get genericMessage(): string {
-    return GenericErrorMessage[this.code]
+    return this.message
   }
 
   getValidationError(field: string): string | undefined {
