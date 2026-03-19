@@ -20,10 +20,13 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
+
+    // Imports
     "paths": {
       "~/*": ["./src/*"],
       "~tests/*": ["./tests/*"],
     },
     "allowImportingTsExtensions": true,
+    "customConditions": ["development"],
   },
 }
