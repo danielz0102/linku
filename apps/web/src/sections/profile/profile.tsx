@@ -8,17 +8,13 @@ import { ProfileCard } from "~/ui/components/profile-card"
 import { UpdatePictureModal } from "./components/update-picture-modal"
 
 export default function Profile() {
-  const { username, firstName, lastName, bio, profilePicUrl } = useUser()
+  const user = useUser()
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   return (
     <main className="flex size-full flex-col items-center justify-center p-4">
       <ProfileCard
-        profilePicUrl={profilePicUrl}
-        firstName={firstName}
-        lastName={lastName}
-        username={username}
-        bio={bio}
+        data={user}
         pictureOverlay={
           <button
             type="button"

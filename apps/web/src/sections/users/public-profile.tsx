@@ -44,13 +44,7 @@ export default function PublicProfile() {
 
   return (
     <main className="flex size-full flex-col items-center justify-center p-4">
-      <ProfileCard
-        profilePicUrl={user.profilePicUrl}
-        firstName={user.firstName}
-        lastName={user.lastName}
-        username={user.username}
-        bio={user.bio}
-      />
+      <ProfileCard data={user} />
     </main>
   )
 }
