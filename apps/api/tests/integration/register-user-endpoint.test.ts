@@ -4,12 +4,12 @@ import { faker } from "@faker-js/faker"
 import request from "supertest"
 
 import { BcryptHasher } from "~/api/auth/adapters/bcrypt-hasher.ts"
+import { logOutHandler } from "~/api/auth/endpoints/log-out/log-out-handler.ts"
 import { LoginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
 import { RegisterEndpoint } from "~/api/auth/endpoints/register/register-endpoint.ts"
-import { logOutHandler } from "~/api/auth/endpoints/log-out/log-out-handler.ts"
+import { toPublicUser } from "~/core/use-cases/dtos/public-user.ts"
 import { Login } from "~/core/use-cases/login-use-case.ts"
 import { Register } from "~/core/use-cases/register-use-case.ts"
-import { toPublicUser } from "~/core/use-cases/dtos/public-user.ts"
 import { DrizzleUserRepository } from "~/shared/adapters/drizzle-user-repository.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
 import { createTestApp } from "~tests/helpers/app-builder.ts"
@@ -94,21 +94,21 @@ it.describe("POST /register", () => {
       await request(app).post("/register").send(registration).expect(400)
     })
 
-    it.each([
+    it.for([
       { field: "firstName", description: "first name exceeds 50 characters" },
       { field: "lastName", description: "last name exceeds 50 characters" },
-    ])("sends a 400 response if $description", async ({ app, field }) => {
+    ])("sends a 400 response if $description", async ({ field }, { app }) => {
       const registration = { ...createRegistration(), [field]: "a".repeat(51) }
       await request(app).post("/register").send(registration).expect(400)
     })
 
-    it.each([
+    it.for([
       { password: "Ab1!", description: "too short (< 8 characters)" },
       { password: "abcdefg1!", description: "missing uppercase letter" },
       { password: "ABCDEFG1!", description: "missing lowercase letter" },
       { password: "Abcdefg!", description: "missing number" },
       { password: "Abcdefg1", description: "missing special character" },
-    ])("sends a 400 response if password is $description", async ({ app, password }) => {
+    ])("sends a 400 response if password is $description", async ({ password }, { app }) => {
       const registration = { ...createRegistration(), password }
       await request(app).post("/register").send(registration).expect(400)
     })

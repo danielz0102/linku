@@ -1,6 +1,5 @@
 ---
 applyTo: "**"
-description: "Linku monorepo structure, naming, and workflow rules"
 ---
 
 # Linku Workspace Instructions
