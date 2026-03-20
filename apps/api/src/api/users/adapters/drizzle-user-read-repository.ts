@@ -1,18 +1,18 @@
 import { ilike, or } from "drizzle-orm"
-import type { NodePgDatabase } from "drizzle-orm/node-postgres"
+import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres"
 
 import type { PublicUser } from "#core/use-cases/dtos/public-user.js"
 import type {
-  UserReadRepository,
-  UserFilters,
   Pagination,
+  UserFilters,
+  UserReadRepository,
 } from "#core/use-cases/ports/user-read-repository.d.js"
 
-import { db as defaultDb } from "#db/drizzle/drizzle-client.js"
 import { usersTable } from "#db/drizzle/schemas.js"
+import { DATABASE_URL } from "#env.js"
 
 export class DrizzleUserReadRepository implements UserReadRepository {
-  constructor(private readonly db: NodePgDatabase = defaultDb) {}
+  constructor(private readonly db: NodePgDatabase = drizzle(DATABASE_URL)) {}
 
   async search(filters: UserFilters, pagination: Pagination): Promise<PublicUser[]> {
     const whereClause = or(
