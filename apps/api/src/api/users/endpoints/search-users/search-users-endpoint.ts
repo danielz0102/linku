@@ -6,8 +6,14 @@ import { queryValidator } from "#shared/middlewares/query-validator.js"
 import { getUsersSchema } from "./get-users-schema.js"
 import { searchUsersHandler } from "./search-users-handler.js"
 
-export const getUsersEndpoint = [
-  onlyAuth,
-  queryValidator(getUsersSchema),
-  searchUsersHandler(new SearchUsers(new DrizzleUserReadRepository())),
-]
+export class SearchUsersEndpoint {
+  constructor(private readonly search: SearchUsers) {}
+
+  static buildDefault() {
+    return new SearchUsersEndpoint(new SearchUsers(new DrizzleUserReadRepository())).build()
+  }
+
+  build() {
+    return [onlyAuth, queryValidator(getUsersSchema), searchUsersHandler(this.search)]
+  }
+}
