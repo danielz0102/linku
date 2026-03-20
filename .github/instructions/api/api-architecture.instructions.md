@@ -12,21 +12,21 @@ Use this instruction as an architectural reference before editing `apps/api`.
 ```txt
 apps/api
 ├─ src
-│  ├─ core      # Domain and use-case logic
-│  ├─ api       # HTTP modules, routers, adapters, middleware wiring
-│  ├─ shared    # Shared adapters/middlewares/validation used by API modules
-│  ├─ db        # Database client and schema definitions
-│  ├─ server    # Runtime/bootstrap to start the app
-│  └─ env.ts    # Environment variables access
-└─ tests        # Integration tests and shared test helpers
+│  ├─ core
+│  ├─ api
+│  ├─ shared
+│  ├─ db
+│  ├─ server
+│  └─ env.ts
+└─ tests
 ```
 
 ## Directory Responsibilities
 
 - `src/core`: Business logic boundary. Must not import from outside.
 - `src/api`: Feature modules and routers. Modules export routers and wire endpoints.
-- `src/shared`: Shared infrastructure adapters, middlewares, and validation helpers.
-- `src/db`: Database clients, schema metadata, and persistence wiring.
+- `src/shared`: Shared infrastructure adapters, authentication, and validation middlewares.
+- `src/db`: Database set-up and schema definitions.
 - `src/server`: Application runtime and startup code. Imports the API router.
 - `src/env.ts`: Centralized environment variable access.
 - `tests`: Integration tests and test helpers only. Unit tests are colocated with source modules.

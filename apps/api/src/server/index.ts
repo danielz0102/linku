@@ -1,6 +1,6 @@
 import express from "express"
 
-import { sessionMiddleware } from "#api/auth/session-middleware.js"
+import { sessionMiddleware } from "#shared/auth/session-middleware.js"
 
 import { apiRouter } from "../api/api-router.js"
 import { corsMiddleware } from "./middlewares/cors-middleware.js"

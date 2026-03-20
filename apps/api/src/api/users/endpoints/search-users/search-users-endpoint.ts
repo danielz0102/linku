@@ -1,7 +1,7 @@
 import { SearchUsers } from "#core/use-cases/search-users-use-case.js"
 import { DrizzleUserReadRepository } from "#shared/adapters/drizzle-user-read-repository.js"
-import { onlyAuth } from "#shared/middlewares/only-auth.js"
-import { queryValidator } from "#shared/middlewares/query-validator.js"
+import { onlyAuth } from "#shared/auth/only-auth.js"
+import { queryValidator } from "#shared/validation/query-validator.js"
 
 import { getUsersSchema } from "./get-users-schema.js"
 import { searchUsersHandler } from "./search-users-handler.js"

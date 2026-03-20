@@ -3,7 +3,7 @@ import type { RequestHandler } from "express"
 
 import type { GetAuthenticatedUser } from "#core/use-cases/get-authenticated-user-use-case.js"
 
-import { SESSION_COOKIE_NAME } from "#api/auth/constants/session.js"
+import { SESSION_COOKIE_NAME } from "#shared/auth/constants.js"
 
 type GetMeHandler = (
   getUser: GetAuthenticatedUser

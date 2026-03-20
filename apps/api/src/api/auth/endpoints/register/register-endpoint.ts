@@ -2,7 +2,7 @@ import { Register } from "#core/use-cases/register-use-case.js"
 import { SALT } from "#env.js"
 import { BcryptHasher } from "#shared/adapters/bcrypt-hasher.js"
 import { DrizzleUserRepository } from "#shared/adapters/drizzle-user-repository.js"
-import { validator } from "#shared/middlewares/validator.js"
+import { validator } from "#shared/validation/validator.js"
 
 import { registerHandler } from "./register-handler.js"
 import { registerSchema } from "./register-schema.js"
