@@ -3,14 +3,14 @@ import type { LinkuAPI } from "@linku/api-contract"
 import { faker } from "@faker-js/faker"
 import request from "supertest"
 
-import { loginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
+import { LoginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
 import { updateUserEndpoint } from "~/api/users/endpoints/update-user/update-user-endpoint.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
 import { AppBuilder } from "~tests/helpers/app-builder.ts"
 import { UserMother } from "~tests/helpers/users/user-mother.ts"
 
 const app = new AppBuilder().withSession().build()
-app.post("/auth/login", loginEndpoint)
+app.post("/auth/login", LoginEndpoint.buildDefault())
 app.patch("/users", updateUserEndpoint)
 
 const it = createAuthContext().withHttpClient(app)

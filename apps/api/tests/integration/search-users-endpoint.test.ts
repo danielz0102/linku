@@ -1,13 +1,13 @@
 import { faker } from "@faker-js/faker"
 import request from "supertest"
 
-import { loginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
+import { LoginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
 import { getUsersEndpoint } from "~/api/users/endpoints/search-users/search-users-endpoint.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
 import { AppBuilder } from "~tests/helpers/app-builder.ts"
 
 const app = new AppBuilder().withSession().build()
-app.post("/auth/login", loginEndpoint)
+app.post("/auth/login", LoginEndpoint.buildDefault())
 app.get("/users", ...getUsersEndpoint)
 
 const it = createAuthContext().withHttpClient(app)
