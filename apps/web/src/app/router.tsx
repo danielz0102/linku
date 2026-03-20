@@ -1,7 +1,7 @@
 import { lazy } from "react"
 import { BrowserRouter, Route, Routes } from "react-router"
 
-import { ProtectedRoute } from "~/sections/auth/components/protected-route"
+import { ProtectedRoute } from "~/shared/components/protected-route"
 import { Layout } from "~/ui/layout/layout"
 
 import { ErrorPage } from "./pages/error-page"
