@@ -4,7 +4,6 @@ import { faker } from "@faker-js/faker"
 import request from "supertest"
 
 import { BcryptHasher } from "~/api/auth/adapters/bcrypt-hasher.ts"
-import { logOutHandler } from "~/api/auth/endpoints/log-out/log-out-handler.ts"
 import { LoginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
 import { RegisterEndpoint } from "~/api/auth/endpoints/register/register-endpoint.ts"
 import { toPublicUser } from "~/core/use-cases/dtos/public-user.ts"
@@ -23,7 +22,6 @@ const it = createAuthContext().extend("app", ({ dbClient }) => {
 
   app.post("/register", new RegisterEndpoint(register).build())
   app.post("/login", new LoginEndpoint(login).build(false))
-  app.post("/logout", logOutHandler)
   return app
 })
 
