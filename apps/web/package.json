@@ -10,8 +10,8 @@
     "format": "oxfmt",
     "lint": "oxlint --type-aware",
     "preview": "vite preview",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "vitest run --browser.headless",
+    "test:watch": "vitest --browser.headless"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",
@@ -29,20 +29,17 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.1.18",
+    "@tailwindcss/vite": "^4.2.2",
     "@tanstack/eslint-plugin-query": "^5.91.4",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.2",
-    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react-swc": "^4.2.2",
-    "globals": "^16.5.0",
-    "happy-dom": "^20.4.0",
-    "tailwindcss": "^4.1.18",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/browser-playwright": "^4.1.0",
+    "tailwindcss": "^4.2.2",
     "typescript": "~5.9.3",
-    "vite": "^7.2.4",
-    "vitest": "^4.0.18"
+    "vite": "^8.0.1",
+    "vitest": "^4.1.0",
+    "vitest-browser-react": "^2.1.0"
   }
 }

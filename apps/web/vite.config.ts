@@ -1,7 +1,7 @@
-/// <reference types="vitest/config" />
 import tailwind from "@tailwindcss/vite"
-import react from "@vitejs/plugin-react-swc"
-import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
+import { playwright } from "@vitest/browser-playwright"
+import { defineConfig } from "vitest/config"
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -12,8 +12,11 @@ export default defineConfig({
     },
   },
   test: {
-    environment: "happy-dom",
     globals: true,
-    setupFiles: "./tests/setup.ts",
+    browser: {
+      enabled: true,
+      provider: playwright(),
+      instances: [{ browser: "chromium" }],
+    },
   },
 })

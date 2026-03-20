@@ -1,19 +1,17 @@
-import { render, screen } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
+import { render } from "vitest-browser-react"
 
 import { UpdateUserForm } from "~/sections/profile/components/update-user-form"
 
 test("submits valid update data", async () => {
-  const user = userEvent.setup()
   const onSubmit = vi.fn()
 
-  render(<UpdateUserForm onSubmit={onSubmit} />)
+  const screen = await render(<UpdateUserForm onSubmit={onSubmit} />)
 
-  await user.type(screen.getByLabelText(/first name/i), "John")
-  await user.type(screen.getByLabelText(/last name/i), "Doe")
-  await user.type(screen.getByLabelText(/username/i), "johndoe")
-  await user.type(screen.getByLabelText(/bio/i), "Hi, I'm John")
-  await user.click(screen.getByRole("button", { name: /save changes/i }))
+  await screen.getByLabelText(/first name/i).fill("John")
+  await screen.getByLabelText(/last name/i).fill("Doe")
+  await screen.getByLabelText(/username/i).fill("johndoe")
+  await screen.getByLabelText(/bio/i).fill("Hi, I'm John")
+  await screen.getByRole("button", { name: /save changes/i }).click()
 
   expect(onSubmit).toHaveBeenCalledWith({
     firstName: "John",
@@ -23,8 +21,8 @@ test("submits valid update data", async () => {
   })
 })
 
-test("renders default values", () => {
-  render(
+test("renders default values", async () => {
+  const screen = await render(
     <UpdateUserForm
       onSubmit={vi.fn()}
       defaultValues={{
@@ -36,32 +34,30 @@ test("renders default values", () => {
     />
   )
 
-  expect(screen.getByLabelText(/first name/i)).toHaveValue("Jane")
-  expect(screen.getByLabelText(/last name/i)).toHaveValue("Doe")
-  expect(screen.getByLabelText(/username/i)).toHaveValue("janedoe")
-  expect(screen.getByLabelText(/bio/i)).toHaveValue("Hello there")
+  await expect.element(screen.getByLabelText(/first name/i)).toHaveValue("Jane")
+  await expect.element(screen.getByLabelText(/last name/i)).toHaveValue("Doe")
+  await expect.element(screen.getByLabelText(/username/i)).toHaveValue("janedoe")
+  await expect.element(screen.getByLabelText(/bio/i)).toHaveValue("Hello there")
 })
 
 test("does not submit invalid form", async () => {
-  const user = userEvent.setup()
   const onSubmit = vi.fn()
 
-  render(<UpdateUserForm onSubmit={onSubmit} />)
+  const screen = await render(<UpdateUserForm onSubmit={onSubmit} />)
 
-  await user.click(screen.getByRole("button", { name: /save changes/i }))
+  await screen.getByRole("button", { name: /save changes/i }).click()
 
-  expect(screen.getByLabelText(/first name/i)).toBeInvalid()
-  expect(screen.getByLabelText(/last name/i)).toBeInvalid()
-  expect(screen.getByLabelText(/username/i)).toBeInvalid()
+  await expect.element(screen.getByLabelText(/first name/i)).toBeInvalid()
+  await expect.element(screen.getByLabelText(/last name/i)).toBeInvalid()
+  await expect.element(screen.getByLabelText(/username/i)).toBeInvalid()
   expect(onSubmit).not.toHaveBeenCalled()
 })
 
 test("truncates bio input to 200 characters", async () => {
-  const user = userEvent.setup()
-  render(<UpdateUserForm onSubmit={vi.fn()} />)
+  const screen = await render(<UpdateUserForm onSubmit={vi.fn()} />)
 
   const bioInput = screen.getByLabelText(/bio/i)
-  await user.type(bioInput, "A".repeat(250))
+  await bioInput.fill("A".repeat(250))
 
-  expect(bioInput).toHaveValue("A".repeat(200))
+  await expect.element(bioInput).toHaveValue("A".repeat(200))
 })

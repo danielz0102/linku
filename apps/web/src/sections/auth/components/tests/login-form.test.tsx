@@ -1,17 +1,15 @@
-import { render, screen } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
+import { render } from "vitest-browser-react"
 
 import { ApiError } from "~/api/api-error"
 import { LoginForm } from "~/sections/auth/components/login-form"
 
 test("submits valid credentials", async () => {
-  const user = userEvent.setup()
   const onSubmit = vi.fn()
-  render(<LoginForm onSubmit={onSubmit} />)
+  const screen = await render(<LoginForm onSubmit={onSubmit} />)
 
-  await user.type(screen.getByLabelText(/username/i), "johndoe")
-  await user.type(screen.getByLabelText(/password/i), "Password123!")
-  await user.click(screen.getByRole("button", { name: /log in/i }))
+  await screen.getByLabelText(/username/i).fill("johndoe")
+  await screen.getByLabelText(/password/i).fill("Password123!")
+  await screen.getByRole("button", { name: /log in/i }).click()
 
   expect(onSubmit).toHaveBeenCalledWith({
     username: "johndoe",
@@ -20,21 +18,21 @@ test("submits valid credentials", async () => {
 })
 
 test("does not submit on missing fields", async () => {
-  const user = userEvent.setup()
   const onSubmit = vi.fn()
-  render(<LoginForm onSubmit={onSubmit} />)
+  const screen = await render(<LoginForm onSubmit={onSubmit} />)
 
-  await user.click(screen.getByRole("button", { name: /log in/i }))
+  const usernameInput = screen.getByLabelText(/username/i)
+  const passwordInput = screen.getByLabelText(/password/i)
 
-  expect(screen.getByLabelText(/username/i)).toBeInvalid()
-  expect(screen.getByLabelText(/password/i)).toBeInvalid()
+  await screen.getByRole("button", { name: /log in/i }).click()
+
+  await expect.element(usernameInput).toBeInvalid()
+  await expect.element(passwordInput).toBeInvalid()
   expect(onSubmit).not.toHaveBeenCalled()
 })
 
 test("shows unauthorized login error message", async () => {
-  const user = userEvent.setup()
-
-  render(
+  const screen = await render(
     <LoginForm
       onSubmit={() => {
         throw new ApiError("UNAUTHORIZED")
@@ -42,16 +40,15 @@ test("shows unauthorized login error message", async () => {
     />
   )
 
-  await user.type(screen.getByLabelText(/username/i), "johndoe")
-  await user.type(screen.getByLabelText(/password/i), "wrong-password")
-  await user.click(screen.getByRole("button", { name: /log in/i }))
+  await screen.getByLabelText(/username/i).fill("johndoe")
+  await screen.getByLabelText(/password/i).fill("wrong-password")
+  await screen.getByRole("button", { name: /log in/i }).click()
 
-  expect(await screen.findByText(/invalid username or password/i)).toBeVisible()
+  await expect.element(screen.getByText(/invalid username or password/i)).toBeVisible()
 })
 
 test("shows root level API error messages", async () => {
-  const user = userEvent.setup()
-  render(
+  const screen = await render(
     <LoginForm
       onSubmit={() => {
         throw new ApiError("TOO_MANY_REQUESTS")
@@ -59,9 +56,9 @@ test("shows root level API error messages", async () => {
     />
   )
 
-  await user.type(screen.getByLabelText(/username/i), "johndoe")
-  await user.type(screen.getByLabelText(/password/i), "Password123!")
-  await user.click(screen.getByRole("button", { name: /log in/i }))
+  await screen.getByLabelText(/username/i).fill("johndoe")
+  await screen.getByLabelText(/password/i).fill("Password123!")
+  await screen.getByRole("button", { name: /log in/i }).click()
 
-  expect(await screen.findByText(/too many attempts/i)).toBeVisible()
+  await expect.element(screen.getByText(/too many attempts/i)).toBeVisible()
 })
