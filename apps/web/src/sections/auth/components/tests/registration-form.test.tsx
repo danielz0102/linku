@@ -110,40 +110,36 @@ test("shows specific API error messages", async () => {
 })
 
 describe("Password validation", () => {
-  it("fails on password shorter than 8 characters", async () => {
-    expect.hasAssertions()
-    await testPassword("P1!")
-  })
+  it.each([
+    {
+      description: "fails on password shorter than 8 characters",
+      password: "P1!",
+    },
+    {
+      description: "fails on password without uppercase letter",
+      password: "password123!",
+    },
+    {
+      description: "fails on password without lowercase letter",
+      password: "PASSWORD123!",
+    },
+    {
+      description: "fails on password without number",
+      password: "Password!",
+    },
+    {
+      description: "fails on password without special character",
+      password: "Password123",
+    },
+  ])("$description", async ({ password }) => {
+    const screen = await render(<RegistrationForm onSubmit={vi.fn()} />)
 
-  it("fails on password without uppercase letter", async () => {
-    expect.hasAssertions()
-    await testPassword("password123!")
-  })
+    const passwordInput = screen.getByLabelText(/^password$/i)
+    const button = screen.getByRole("button", { name: /create account/i })
 
-  it("fails on password without lowercase letter", async () => {
-    expect.hasAssertions()
-    await testPassword("PASSWORD123!")
-  })
+    await passwordInput.fill(password)
+    await button.click()
 
-  it("fails on password without number", async () => {
-    expect.hasAssertions()
-    await testPassword("Password!")
-  })
-
-  it("fails on password without special character", async () => {
-    expect.hasAssertions()
-    await testPassword("Password123")
+    await expect.element(passwordInput).toBeInvalid()
   })
 })
-
-async function testPassword(password: string) {
-  const screen = await render(<RegistrationForm onSubmit={vi.fn()} />)
-
-  const passwordInput = screen.getByLabelText(/^password$/i)
-  const button = screen.getByRole("button", { name: /create account/i })
-
-  await passwordInput.fill(password)
-  await button.click()
-
-  await expect.element(passwordInput).toBeInvalid()
-}
