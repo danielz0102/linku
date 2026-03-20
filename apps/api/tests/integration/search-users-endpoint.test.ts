@@ -20,7 +20,7 @@ const it = createAuthContext()
     })
     const search = new SearchUsers(new DrizzleUserReadRepository(dbClient))
     app.post("/auth/login", new LoginEndpoint(login).build(false))
-    app.get("/users", new SearchUsersEndpoint(search).build())
+    app.get("/users", ...new SearchUsersEndpoint(search).build())
     return app
   })
   .extend("http", async ({ app, registeredUser }) => {
