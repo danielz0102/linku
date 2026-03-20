@@ -1,5 +1,5 @@
 ---
-applyTo: "apps/web/src/**"
+applyTo: "apps/web/**"
 description: "Use when editing the web SPA in apps/web. Enforces feature-first architecture, file structure, and import boundaries."
 ---
 
@@ -29,22 +29,6 @@ apps/web/src
 - `shared`: Cross-feature code that is reused by multiple sections. This includes shared context and other reusable modules that are not pure UI.
 - `api`: Shared API client setup and cross-feature error handling.
 - `lib`: Small pure utilities with no feature knowledge.
-
-## Dependency Rules
-
-- `sections/<feature>` may import from:
-  - Its own feature subtree
-  - `ui/**`
-  - `shared/**`
-  - `api/**`
-  - `lib/**`
-  - External packages (including `@linku/api-contract`)
-- `sections/<feature>` must not import from other feature folders under `sections/`. If code is needed in more than one section, move it to `shared/**`.
-- `sections/**` must not import from `app/**`.
-- `ui/components/**` must not import from `sections/**`, `shared/**`, or `api/**`.
-- `api/**` must not import from `sections/**` or `ui/**`.
-
-If a change appears to require a forbidden import, extract shared code into `shared`, `lib`, or `ui` instead of bypassing boundaries.
 
 ## File Structure Conventions
 
