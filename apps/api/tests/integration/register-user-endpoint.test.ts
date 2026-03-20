@@ -16,14 +16,11 @@ import { createTestApp } from "~tests/helpers/app-builder.ts"
 
 const it = createAuthContext().extend("app", ({ dbClient }) => {
   const app = createTestApp()
-  const register = new Register({
-    userRepo: new DrizzleUserRepository(dbClient),
-    hasher: new BcryptHasher(1),
-  })
-  const login = new Login({
-    userRepo: new DrizzleUserRepository(dbClient),
-    hasher: new BcryptHasher(1),
-  })
+  const userRepo = new DrizzleUserRepository(dbClient)
+  const hasher = new BcryptHasher(1)
+  const register = new Register({ userRepo, hasher })
+  const login = new Login({ userRepo, hasher })
+
   app.post("/register", new RegisterEndpoint(register).build())
   app.post("/login", new LoginEndpoint(login).build(false))
   app.post("/logout", logOutHandler)
