@@ -8,13 +8,23 @@ import { loginHandler } from "./login-handler.js"
 import { loginRateLimit } from "./login-rate-limit.js"
 import { loginSchema } from "./login-schema.js"
 
-export const loginEndpoint = [
-  validator(loginSchema),
-  ...(RATE_LIMIT_ENABLED ? [loginRateLimit] : []),
-  loginHandler(
-    new Login({
-      userRepo: new DrizzleUserRepository(),
-      hasher: new BcryptHasher(SALT),
-    })
-  ),
-]
+export class LoginEndpoint {
+  constructor(private login: Login) {}
+
+  static buildDefault() {
+    return new LoginEndpoint(
+      new Login({
+        userRepo: new DrizzleUserRepository(),
+        hasher: new BcryptHasher(SALT),
+      })
+    ).build(RATE_LIMIT_ENABLED)
+  }
+
+  build(withRateLimit: boolean) {
+    return [
+      validator(loginSchema),
+      ...(withRateLimit ? [loginRateLimit] : []),
+      loginHandler(this.login),
+    ]
+  }
+}

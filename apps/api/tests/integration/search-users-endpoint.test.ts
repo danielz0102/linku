@@ -1,25 +1,19 @@
 import { faker } from "@faker-js/faker"
 import request from "supertest"
 
-import { loginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
+import { LoginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
 import { getUsersEndpoint } from "~/api/users/endpoints/search-users/search-users-endpoint.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
-import { AppBuilder } from "~tests/helpers/app-builder.ts"
-import { DrizzleTestUserDB } from "~tests/helpers/db/drizzle-test-user-db.ts"
+import { createTestApp } from "~tests/helpers/app-builder.ts"
 
-const app = new AppBuilder().withSession().build()
-app.post("/auth/login", loginEndpoint)
+const app = createTestApp()
+app.post("/auth/login", LoginEndpoint.buildDefault())
 app.get("/users", ...getUsersEndpoint)
 
-const db = new DrizzleTestUserDB()
-const it = createAuthContext(db).withHttpClient(app)
+const it = createAuthContext().withHttpClient(app)
 
 describe("GET /users", () => {
-  afterAll(async () => {
-    await db.reset()
-  })
-
-  it("sends a list of users", async ({ http }) => {
+  it("sends a list of users", async ({ db, http }) => {
     const query = faker.string.alphanumeric(5)
     await db.seed(5, { username: query })
 
@@ -34,7 +28,7 @@ describe("GET /users", () => {
     expect(body).toHaveLength(0)
   })
 
-  it("sends the number of users specified by the limit query parameter", async ({ http }) => {
+  it("sends the number of users specified by the limit query parameter", async ({ db, http }) => {
     const query = faker.string.alphanumeric(5)
     await db.seed(10, { username: query })
 
@@ -43,7 +37,7 @@ describe("GET /users", () => {
     expect(body).toHaveLength(5)
   })
 
-  it("sends a page of 20 users by default", async ({ http }) => {
+  it("sends a page of 20 users by default", async ({ db, http }) => {
     const query = faker.string.alphanumeric(5)
     await db.seed(25, { firstName: query })
 

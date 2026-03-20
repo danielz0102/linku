@@ -1,29 +1,26 @@
 import { faker } from "@faker-js/faker"
+import { NodePgDatabase } from "drizzle-orm/node-postgres"
 import { eq } from "drizzle-orm/sql/expressions/conditions"
-import { reset } from "drizzle-seed"
 
 import { User } from "~/core/users/user.ts"
-import { db } from "~/db/drizzle/drizzle-client.ts"
 import { usersTable } from "~/db/drizzle/schemas.ts"
 import { UserMother } from "~tests/helpers/users/user-mother.ts"
 
 import type { Prefixes, TestUserDB } from "./test-user-db.ts"
 
 export class DrizzleTestUserDB implements TestUserDB {
+  constructor(private readonly db: NodePgDatabase) {}
+
   async insert(user: User): Promise<void> {
-    await db.insert(usersTable).values(user.toPrimitives())
+    await this.db.insert(usersTable).values(user.toPrimitives())
   }
 
   async findByUsername(username: string): Promise<User | undefined> {
-    return db
+    return this.db
       .select()
       .from(usersTable)
       .where(eq(usersTable.username, username))
       .then(([r]) => (r ? new User(r) : undefined))
-  }
-
-  async reset(): Promise<void> {
-    await reset(db, usersTable)
   }
 
   async seed(count: number, prefixes?: Prefixes): Promise<User[]> {
@@ -41,7 +38,7 @@ export class DrizzleTestUserDB implements TestUserDB {
       })
     })
 
-    await db.insert(usersTable).values(users.map((u) => u.toPrimitives()))
+    await this.db.insert(usersTable).values(users.map((u) => u.toPrimitives()))
     return users
   }
 }
