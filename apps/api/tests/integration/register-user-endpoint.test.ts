@@ -58,7 +58,7 @@ it.describe("POST /register", () => {
       await request(app).post("/register").send(data).expect(200)
 
       const user = await db.findByUsername(data.username)
-      expectTypeOf(user).not.toBeUndefined()
+      assert(user !== undefined)
       expect(user?.password).not.toBe(data.password)
     })
   })
