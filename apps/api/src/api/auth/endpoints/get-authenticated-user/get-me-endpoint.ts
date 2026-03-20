@@ -4,7 +4,14 @@ import { onlyAuth } from "#shared/middlewares/only-auth.js"
 
 import { getMeHandler } from "./get-me-handler.js"
 
-export const getMeEndpoint = [
-  onlyAuth,
-  getMeHandler(new GetAuthenticatedUser(new DrizzleUserRepository())),
-]
+export class GetMeEndpoint {
+  constructor(private readonly getUser: GetAuthenticatedUser) {}
+
+  static buildDefault() {
+    return new GetMeEndpoint(new GetAuthenticatedUser(new DrizzleUserRepository())).build()
+  }
+
+  build() {
+    return [onlyAuth, getMeHandler(this.getUser)]
+  }
+}

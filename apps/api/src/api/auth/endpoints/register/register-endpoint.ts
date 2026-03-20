@@ -7,12 +7,19 @@ import { validator } from "#shared/middlewares/validator.js"
 import { registerHandler } from "./register-handler.js"
 import { registerSchema } from "./register-schema.js"
 
-export const registerEndpoint = [
-  validator(registerSchema),
-  registerHandler(
-    new Register({
-      userRepo: new DrizzleUserRepository(),
-      hasher: new BcryptHasher(SALT),
-    })
-  ),
-]
+export class RegisterEndpoint {
+  constructor(private readonly register: Register) {}
+
+  static buildDefault() {
+    return new RegisterEndpoint(
+      new Register({
+        userRepo: new DrizzleUserRepository(),
+        hasher: new BcryptHasher(SALT),
+      })
+    ).build()
+  }
+
+  build() {
+    return [validator(registerSchema), registerHandler(this.register)]
+  }
+}

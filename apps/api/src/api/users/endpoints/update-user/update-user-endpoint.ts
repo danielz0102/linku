@@ -6,8 +6,14 @@ import { validator } from "#shared/middlewares/validator.js"
 import { updateUserHandler } from "./update-user-handler.js"
 import { updateUserSchema } from "./update-user-schema.js"
 
-export const updateUserEndpoint = [
-  onlyAuth,
-  validator(updateUserSchema),
-  updateUserHandler(new UpdateUser(new DrizzleUserRepository())),
-]
+export class UpdateUserEndpoint {
+  constructor(private readonly updateUser: UpdateUser) {}
+
+  static buildDefault() {
+    return new UpdateUserEndpoint(new UpdateUser(new DrizzleUserRepository())).build()
+  }
+
+  build() {
+    return [onlyAuth, validator(updateUserSchema), updateUserHandler(this.updateUser)]
+  }
+}

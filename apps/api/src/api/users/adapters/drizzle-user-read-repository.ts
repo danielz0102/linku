@@ -1,4 +1,5 @@
 import { ilike, or } from "drizzle-orm"
+import type { NodePgDatabase } from "drizzle-orm/node-postgres"
 
 import type { PublicUser } from "#core/use-cases/dtos/public-user.js"
 import type {
@@ -7,10 +8,12 @@ import type {
   Pagination,
 } from "#core/use-cases/ports/user-read-repository.d.js"
 
-import { db } from "#db/drizzle/drizzle-client.js"
+import { db as defaultDb } from "#db/drizzle/drizzle-client.js"
 import { usersTable } from "#db/drizzle/schemas.js"
 
 export class DrizzleUserReadRepository implements UserReadRepository {
+  constructor(private readonly db: NodePgDatabase = defaultDb) {}
+
   async search(filters: UserFilters, pagination: Pagination): Promise<PublicUser[]> {
     const whereClause = or(
       filters.username ? ilike(usersTable.username, `%${filters.username}%`) : undefined,
@@ -18,7 +21,7 @@ export class DrizzleUserReadRepository implements UserReadRepository {
       filters.lastName ? ilike(usersTable.lastName, `%${filters.lastName}%`) : undefined
     )
 
-    const query = db.select().from(usersTable)
+    const query = this.db.select().from(usersTable)
 
     if (whereClause) {
       query.where(whereClause)
