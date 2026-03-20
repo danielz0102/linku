@@ -28,10 +28,21 @@ const it = createAuthContext()
   .extend("data", (): LinkuAPI.RegisterUser["RequestBody"] => ({
     email: faker.internet.email(),
     username: faker.internet.username(),
-    password: "Password1!",
+    password: generateRandomPassword(),
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
   }))
+
+function generateRandomPassword(): string {
+  const uppercase = faker.string.alpha({ casing: "upper" })
+  const lowercase = faker.string.alpha({ casing: "lower" })
+  const numbers = faker.string.numeric()
+  const special = faker.string.fromCharacters("!@#$%^&*()_+-=[]{}|;':,.<>?")
+  const remaining = faker.string.alphanumeric({ length: 5 })
+
+  const allChars = uppercase + lowercase + numbers + special + remaining
+  return faker.helpers.shuffle(allChars.split("")).join("")
+}
 
 it.describe("POST /register", () => {
   describe("successful registration", () => {
