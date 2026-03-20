@@ -10,10 +10,10 @@ import { Login } from "~/core/use-cases/login-use-case.ts"
 import { Register } from "~/core/use-cases/register-use-case.ts"
 import { BcryptHasher } from "~/shared/adapters/bcrypt-hasher.ts"
 import { DrizzleUserRepository } from "~/shared/adapters/drizzle-user-repository.ts"
-import { createAuthContext } from "~tests/fixtures/auth-context.ts"
+import { it as base } from "~tests/fixtures/auth-context.ts"
 import { createTestApp } from "~tests/helpers/app-builder.ts"
 
-const it = createAuthContext()
+const it = base
   .extend("app", ({ dbClient }) => {
     const app = createTestApp()
     const userRepo = new DrizzleUserRepository(dbClient)

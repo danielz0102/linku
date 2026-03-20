@@ -9,11 +9,11 @@ import { Login } from "~/core/use-cases/login-use-case.ts"
 import { UpdateUser } from "~/core/use-cases/update-user-use-case.ts"
 import { BcryptHasher } from "~/shared/adapters/bcrypt-hasher.ts"
 import { DrizzleUserRepository } from "~/shared/adapters/drizzle-user-repository.ts"
-import { createAuthContext } from "~tests/fixtures/auth-context.ts"
+import { it as base } from "~tests/fixtures/auth-context.ts"
 import { createTestApp } from "~tests/helpers/app-builder.ts"
 import { UserMother } from "~tests/helpers/users/user-mother.ts"
 
-const it = createAuthContext()
+const it = base
   .extend("app", ({ dbClient }) => {
     const app = createTestApp()
     const login = new Login({

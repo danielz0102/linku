@@ -8,10 +8,10 @@ import { SearchUsers } from "~/core/use-cases/search-users-use-case.ts"
 import { BcryptHasher } from "~/shared/adapters/bcrypt-hasher.ts"
 import { DrizzleUserReadRepository } from "~/shared/adapters/drizzle-user-read-repository.ts"
 import { DrizzleUserRepository } from "~/shared/adapters/drizzle-user-repository.ts"
-import { createAuthContext } from "~tests/fixtures/auth-context.ts"
+import { it as base } from "~tests/fixtures/auth-context.ts"
 import { createTestApp } from "~tests/helpers/app-builder.ts"
 
-const it = createAuthContext()
+const it = base
   .extend("app", ({ dbClient }) => {
     const app = createTestApp()
     const login = new Login({
