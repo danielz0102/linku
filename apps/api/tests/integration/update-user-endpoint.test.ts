@@ -6,10 +6,10 @@ import request from "supertest"
 import { LoginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
 import { updateUserEndpoint } from "~/api/users/endpoints/update-user/update-user-endpoint.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
-import { AppBuilder } from "~tests/helpers/app-builder.ts"
+import { createTestApp } from "~tests/helpers/app-builder.ts"
 import { UserMother } from "~tests/helpers/users/user-mother.ts"
 
-const app = new AppBuilder().withSession().build()
+const app = createTestApp()
 app.post("/auth/login", LoginEndpoint.buildDefault())
 app.patch("/users", updateUserEndpoint)
 

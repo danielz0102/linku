@@ -6,7 +6,7 @@ import request from "supertest"
 import { authRouter } from "~/api/auth/auth-router.ts"
 import { toPublicUser } from "~/core/use-cases/dtos/public-user.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
-import { AppBuilder } from "~tests/helpers/app-builder.ts"
+import { createTestApp } from "~tests/helpers/app-builder.ts"
 
 const it = createAuthContext()
 
@@ -19,7 +19,7 @@ const createRegistration = (): LinkuAPI.RegisterUser["RequestBody"] => ({
 })
 
 it.describe("POST /register", () => {
-  const app = new AppBuilder().withSession().build()
+  const app = createTestApp()
   app.use(authRouter)
 
   describe("successful registration", () => {

@@ -5,12 +5,12 @@ import { LoginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
 import { Login } from "~/core/use-cases/login-use-case.ts"
 import { DrizzleUserRepository } from "~/shared/adapters/drizzle-user-repository.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
-import { AppBuilder } from "~tests/helpers/app-builder.ts"
+import { createTestApp } from "~tests/helpers/app-builder.ts"
 
 const it = createAuthContext()
 
 describe("POST /auth/login", () => {
-  const app = new AppBuilder().withSession().build()
+  const app = createTestApp()
 
   it.beforeAll(({ dbClient }) => {
     const repo = new DrizzleUserRepository(dbClient)

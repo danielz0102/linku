@@ -4,9 +4,9 @@ import request from "supertest"
 import { LoginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
 import { getUsersEndpoint } from "~/api/users/endpoints/search-users/search-users-endpoint.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
-import { AppBuilder } from "~tests/helpers/app-builder.ts"
+import { createTestApp } from "~tests/helpers/app-builder.ts"
 
-const app = new AppBuilder().withSession().build()
+const app = createTestApp()
 app.post("/auth/login", LoginEndpoint.buildDefault())
 app.get("/users", ...getUsersEndpoint)
 
