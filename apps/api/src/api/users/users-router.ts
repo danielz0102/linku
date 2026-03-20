@@ -9,5 +9,5 @@ export const usersRouter = Router()
 
 usersRouter.post("/upload-signature", uploadSignatureEndpoint)
 usersRouter.patch("/", UpdateUserEndpoint.buildDefault())
-usersRouter.get("/", SearchUsersEndpoint.buildDefault())
+usersRouter.get("/", ...SearchUsersEndpoint.buildDefault())
 usersRouter.get("/:id", GetUserByIdEndpoint.buildDefault())
