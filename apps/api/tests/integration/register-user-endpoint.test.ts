@@ -13,31 +13,29 @@ import { DrizzleUserRepository } from "~/shared/adapters/drizzle-user-repository
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
 import { createTestApp } from "~tests/helpers/app-builder.ts"
 
-const it = createAuthContext().extend("app", ({ dbClient }) => {
-  const app = createTestApp()
-  const userRepo = new DrizzleUserRepository(dbClient)
-  const hasher = new BcryptHasher(1)
-  const register = new Register({ userRepo, hasher })
-  const login = new Login({ userRepo, hasher })
+const it = createAuthContext()
+  .extend("app", ({ dbClient }) => {
+    const app = createTestApp()
+    const userRepo = new DrizzleUserRepository(dbClient)
+    const hasher = new BcryptHasher(1)
+    const register = new Register({ userRepo, hasher })
+    const login = new Login({ userRepo, hasher })
 
-  app.post("/register", new RegisterEndpoint(register).build())
-  app.post("/login", new LoginEndpoint(login).build(false))
-  return app
-})
-
-const createRegistration = (): LinkuAPI.RegisterUser["RequestBody"] => ({
-  email: faker.internet.email(),
-  username: faker.internet.username(),
-  password: "Password1!",
-  firstName: faker.person.firstName(),
-  lastName: faker.person.lastName(),
-})
+    app.post("/register", new RegisterEndpoint(register).build())
+    app.post("/login", new LoginEndpoint(login).build(false))
+    return app
+  })
+  .extend("data", (): LinkuAPI.RegisterUser["RequestBody"] => ({
+    email: faker.internet.email(),
+    username: faker.internet.username(),
+    password: "Password1!",
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+  }))
 
 it.describe("POST /register", () => {
   describe("successful registration", () => {
-    it("sends a 200 response with public user data", async ({ app, db }) => {
-      const data = createRegistration()
-
+    it("sends a 200 response with public user data", async ({ app, db, data }) => {
       const { body } = await request(app).post("/register").send(data).expect(200)
 
       const user = await db.findByUsername(data.username)
@@ -45,26 +43,18 @@ it.describe("POST /register", () => {
       expect(body).toMatchObject(toPublicUser(user))
     })
 
-    it("sets a session cookie", async ({ app }) => {
-      await request(app)
-        .post("/register")
-        .send(createRegistration())
-        .expect(200)
-        .expect("Set-Cookie", /.+/)
+    it("sets a session cookie", async ({ app, data }) => {
+      await request(app).post("/register").send(data).expect(200).expect("Set-Cookie", /.+/)
     })
 
-    it("allows the user to login after registration", async ({ app }) => {
-      const data = createRegistration()
-
+    it("allows the user to login after registration", async ({ app, data }) => {
       await request(app).post("/register").send(data).expect(200)
 
       const { username, password } = data
       await request(app).post("/login").send({ username, password }).expect(200)
     })
 
-    it("hashes the password", async ({ app, db }) => {
-      const data = createRegistration()
-
+    it("hashes the password", async ({ app, db, data }) => {
       await request(app).post("/register").send(data).expect(200)
 
       const user = await db.findByUsername(data.username)
@@ -76,25 +66,26 @@ it.describe("POST /register", () => {
   describe("validation", () => {
     it("sends a 409 response if user already exists", async ({
       app,
+      data,
       registeredUser: {
         credentials: { username },
       },
     }) => {
-      const registration = { ...createRegistration(), username }
-      await request(app).post("/register").send(registration).expect(409)
+      const conflictingData = { ...data, username }
+      await request(app).post("/register").send(conflictingData).expect(409)
     })
 
-    it("sends a 400 response if email is not valid", async ({ app }) => {
-      const registration = { ...createRegistration(), email: "not-an-email" }
-      await request(app).post("/register").send(registration).expect(400)
+    it("sends a 400 response if email is not valid", async ({ app, data }) => {
+      const invalidData = { ...data, email: "not-an-email" }
+      await request(app).post("/register").send(invalidData).expect(400)
     })
 
     it.for([
       { field: "firstName", description: "first name exceeds 50 characters" },
       { field: "lastName", description: "last name exceeds 50 characters" },
-    ])("sends a 400 response if $description", async ({ field }, { app }) => {
-      const registration = { ...createRegistration(), [field]: "a".repeat(51) }
-      await request(app).post("/register").send(registration).expect(400)
+    ])("sends a 400 response if $description", async ({ field }, { app, data }) => {
+      const invalidData = { ...data, [field]: "a".repeat(51) }
+      await request(app).post("/register").send(invalidData).expect(400)
     })
 
     it.for([
@@ -103,9 +94,9 @@ it.describe("POST /register", () => {
       { password: "ABCDEFG1!", description: "missing lowercase letter" },
       { password: "Abcdefg!", description: "missing number" },
       { password: "Abcdefg1", description: "missing special character" },
-    ])("sends a 400 response if password is $description", async ({ password }, { app }) => {
-      const registration = { ...createRegistration(), password }
-      await request(app).post("/register").send(registration).expect(400)
+    ])("sends a 400 response if password is $description", async ({ password }, { app, data }) => {
+      const invalidData = { ...data, password }
+      await request(app).post("/register").send(invalidData).expect(400)
     })
   })
 })
