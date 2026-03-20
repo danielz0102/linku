@@ -1,6 +1,6 @@
-import { BcryptHasher } from "#api/auth/adapters/bcrypt-hasher.js"
 import { Login } from "#core/use-cases/login-use-case.js"
 import { RATE_LIMIT_ENABLED, SALT } from "#env.js"
+import { BcryptHasher } from "#shared/adapters/bcrypt-hasher.js"
 import { DrizzleUserRepository } from "#shared/adapters/drizzle-user-repository.js"
 import { validator } from "#shared/middlewares/validator.js"
 

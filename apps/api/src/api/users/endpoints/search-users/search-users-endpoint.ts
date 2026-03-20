@@ -1,5 +1,5 @@
-import { DrizzleUserReadRepository } from "#api/users/adapters/drizzle-user-read-repository.js"
 import { SearchUsers } from "#core/use-cases/search-users-use-case.js"
+import { DrizzleUserReadRepository } from "#shared/adapters/drizzle-user-read-repository.js"
 import { onlyAuth } from "#shared/middlewares/only-auth.js"
 import { queryValidator } from "#shared/middlewares/query-validator.js"
 

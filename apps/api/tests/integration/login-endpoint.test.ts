@@ -1,8 +1,8 @@
 import request from "supertest"
 
-import { BcryptHasher } from "~/api/auth/adapters/bcrypt-hasher.ts"
 import { LoginEndpoint } from "~/api/auth/endpoints/login/login-endpoint.ts"
 import { Login } from "~/core/use-cases/login-use-case.ts"
+import { BcryptHasher } from "~/shared/adapters/bcrypt-hasher.ts"
 import { DrizzleUserRepository } from "~/shared/adapters/drizzle-user-repository.ts"
 import { createAuthContext } from "~tests/fixtures/auth-context.ts"
 import { createTestApp } from "~tests/helpers/app-builder.ts"
