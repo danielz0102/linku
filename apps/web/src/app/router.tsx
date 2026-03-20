@@ -6,9 +6,10 @@ import { Layout } from "~/ui/layout/layout"
 
 import { ErrorPage } from "./pages/error-page"
 
-const Home = lazy(() => import("~/sections/home/home"))
 const Login = lazy(() => import("~/sections/auth/login"))
 const Register = lazy(() => import("~/sections/auth/register"))
+const LogOut = lazy(() => import("./pages/log-out"))
+const Home = lazy(() => import("~/sections/home/home"))
 const Profile = lazy(() => import("~/sections/profile/profile"))
 const UpdateProfile = lazy(() => import("~/sections/profile/update-profile"))
 const SearchUsers = lazy(() => import("~/sections/users/search-users"))
@@ -33,6 +34,7 @@ export function Router() {
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path="log-out" element={<LogOut />} />
         <Route path="*" element={<ErrorPage status={404} message="Page not found" />} />
       </Routes>
     </BrowserRouter>
