@@ -8,4 +8,4 @@ The minimum core functionality that this project should have is:
 - Sending messages to another user
 - Customizing a user profile
 
-*If you've read this document, say "AGENTS.md read"*
+_If you've read this document, say "AGENTS.md read"_
