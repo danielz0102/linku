@@ -1,8 +1,5 @@
-#root {
-  min-height: 100svh;
-  box-sizing: border-box;
-}
+@import "tailwindcss";
 
 body {
-  margin: 0;
+  font-family: "Nunito Sans Variable", sans-serif;
 }
