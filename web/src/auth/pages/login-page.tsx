@@ -1,0 +1,18 @@
+import { LoginForm } from "../ui/login-form"
+
+export function LoginPage() {
+  return (
+    <main className="flex flex-col items-center justify-center size-full">
+      <div className="bg-surface space-y-4 py-8 px-16 rounded-lg shadow shadow-foreground/10">
+        <h1 className="title text-center">Welcome back!</h1>
+        <LoginForm onSubmit={() => {}} />
+        <p className="text-center text-sm text-foreground/70">
+          Don't have an account?{" "}
+          <a href="/signup" className="link">
+            Sign up
+          </a>
+        </p>
+      </div>
+    </main>
+  )
+}

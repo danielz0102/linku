@@ -1,5 +1,40 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary: var(--color-blue-500);
+  --color-background: var(--color-blue-50);
+  --color-surface: var(--color-white);
+  --color-border: var(--color-blue-100);
+  --color-foreground: var(--color-blue-950);
+  --color-shadow: var(--color-blue-500);
+}
+
+#root {
+  height: 100svh;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
 body {
   font-family: "Nunito Sans Variable", sans-serif;
+}
+
+@utility title {
+  @apply text-4xl font-bold;
+}
+
+@utility form-field {
+  @apply flex flex-col gap-1;
+}
+
+@utility input {
+  @apply px-3 py-1.5 border border-border rounded-full;
+}
+
+@utility button {
+  @apply px-4 py-2 bg-primary text-background rounded-full hover:bg-primary/90 cursor-pointer font-semibold;
+}
+
+@utility link {
+  @apply text-primary hover:underline;
 }
