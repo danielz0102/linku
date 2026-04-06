@@ -44,7 +44,7 @@ export function SignUpForm({ onSubmit }: SignUpFormProps) {
           className="input"
         />
       </div>
-      <button type="submit" className="button w-full mt-4">
+      <button type="submit" className="button mt-4 w-full">
         Sign up
       </button>
     </form>

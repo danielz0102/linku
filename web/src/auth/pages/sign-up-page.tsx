@@ -6,15 +6,15 @@ export default function SignUpPage() {
   const navigate = useNavigate()
 
   return (
-    <main className="flex flex-col items-center justify-center size-full">
-      <div className="bg-surface space-y-4 py-8 px-16 rounded-lg shadow shadow-foreground/10">
+    <main className="flex size-full flex-col items-center justify-center">
+      <div className="bg-surface shadow-foreground/10 space-y-4 rounded-lg px-16 py-8 shadow">
         <h1 className="title text-center">Create your account</h1>
         <SignUpForm
           onSubmit={() => {
             navigate("/")
           }}
         />
-        <p className="text-center text-sm text-foreground/70">
+        <p className="text-foreground/70 text-center text-sm">
           Already have an account?{" "}
           <Link to="/log-in" className="link">
             Log in

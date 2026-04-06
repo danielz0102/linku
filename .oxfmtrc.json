@@ -3,5 +3,6 @@
   "semi": false,
   "trailingComma": "es5",
   "sortImports": true,
+  "sortTailwindcss": true,
   "ignorePatterns": []
 }

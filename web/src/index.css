@@ -28,11 +28,11 @@ body {
 }
 
 @utility input {
-  @apply px-3 py-1.5 border border-border rounded-full;
+  @apply border-border rounded-full border px-3 py-1.5;
 }
 
 @utility button {
-  @apply px-4 py-2 bg-primary text-background rounded-full hover:bg-primary/90 cursor-pointer font-semibold;
+  @apply bg-primary text-background hover:bg-primary/90 cursor-pointer rounded-full px-4 py-2 font-semibold;
 }
 
 @utility link {
