@@ -1,6 +1,8 @@
+import { Link } from "react-router"
+
 import { LoginForm } from "../ui/login-form"
 
-export function LoginPage() {
+export default function LoginPage() {
   return (
     <main className="flex flex-col items-center justify-center size-full">
       <div className="bg-surface space-y-4 py-8 px-16 rounded-lg shadow shadow-foreground/10">
@@ -8,9 +10,9 @@ export function LoginPage() {
         <LoginForm onSubmit={() => {}} />
         <p className="text-center text-sm text-foreground/70">
           Don't have an account?{" "}
-          <a href="/signup" className="link">
+          <Link to="/sign-up" className="link">
             Sign up
-          </a>
+          </Link>
         </p>
       </div>
     </main>
