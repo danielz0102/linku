@@ -1,5 +1,11 @@
 interface SignUpFormProps {
-  onSubmit: (username: string, password: string, confirmPassword: string) => void
+  onSubmit: (
+    firstName: string,
+    lastName: string,
+    username: string,
+    password: string,
+    confirmPassword: string
+  ) => void
 }
 
 export function SignUpForm({ onSubmit }: SignUpFormProps) {
@@ -8,12 +14,22 @@ export function SignUpForm({ onSubmit }: SignUpFormProps) {
       onSubmit={(e) => {
         e.preventDefault()
         const formData = new FormData(e.target as HTMLFormElement)
+        const firstName = formData.get("first-name") as string
+        const lastName = formData.get("last-name") as string
         const username = formData.get("username") as string
         const password = formData.get("password") as string
         const confirmPassword = formData.get("confirm-password") as string
-        onSubmit(username, password, confirmPassword)
+        onSubmit(firstName, lastName, username, password, confirmPassword)
       }}
     >
+      <div className="form-field mb-2">
+        <label htmlFor="first-name">First name</label>
+        <input id="first-name" type="text" name="first-name" placeholder="John" className="input" />
+      </div>
+      <div className="form-field mb-2">
+        <label htmlFor="last-name">Last name</label>
+        <input id="last-name" type="text" name="last-name" placeholder="Doe" className="input" />
+      </div>
       <div className="form-field mb-2">
         <label htmlFor="email">Username</label>
         <input
