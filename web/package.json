@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@fontsource-variable/nunito-sans": "^5.2.7",
+    "@tabler/icons-react": "^3.41.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router": "^7.14.0"

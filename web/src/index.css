@@ -7,6 +7,8 @@
   --color-border: var(--color-blue-100);
   --color-foreground: var(--color-blue-950);
   --color-shadow: var(--color-blue-500);
+  --color-sidebar: var(--color-blue-100);
+  --color-sidebar-hover: var(--color-blue-200);
 }
 
 #root {
@@ -37,4 +39,8 @@ body {
 
 @utility link {
   @apply text-primary hover:underline;
+}
+
+@utility nav-link {
+  @apply text-foreground hover:bg-sidebar-hover data-current:bg-sidebar-hover flex items-center gap-1 rounded px-4 py-2;
 }
