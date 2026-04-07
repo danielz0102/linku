@@ -9,7 +9,7 @@ export function Layout() {
   const navigate = useNavigate()
 
   return (
-    <div className="flex">
+    <div className="flex size-full">
       <Sidebar open={isSidebarOpen} onClose={() => setIsSidebarOpen(false)}>
         <Sidebar.Link Icon={IconHome} to="/" current={window.location.pathname === "/"}>
           Home

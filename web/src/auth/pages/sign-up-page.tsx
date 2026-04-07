@@ -10,7 +10,12 @@ export default function SignUpPage() {
       <div className="bg-surface shadow-foreground/10 space-y-4 rounded-lg px-16 py-8 shadow">
         <h1 className="title text-center">Create your account</h1>
         <SignUpForm
-          onSubmit={() => {
+          onSubmit={(firstName, lastName, username, password, confirmPassword) => {
+            void firstName
+            void lastName
+            void username
+            void password
+            void confirmPassword
             navigate("/")
           }}
         />

@@ -6,6 +6,7 @@ import { Layout } from "./shared/ui/layout"
 const LoginPage = lazy(() => import("./auth/pages/login-page"))
 const SignUpPage = lazy(() => import("./auth/pages/sign-up-page"))
 const HomePage = lazy(() => import("./users/pages/home"))
+const ProfilePage = lazy(() => import("./users/pages/profile.tsx"))
 
 export function Router() {
   return (
@@ -15,6 +16,7 @@ export function Router() {
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route element={<Layout />}>
           <Route index element={<HomePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
       </Routes>
     </BrowserRouter>
