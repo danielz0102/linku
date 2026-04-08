@@ -14,7 +14,11 @@ export function ProfileCard({ avatarUrl, username, firstName, lastName, bio }: P
       <h1 className="title text-center md:text-left">{`${firstName} ${lastName}`}</h1>
       <div className="flex flex-col items-center gap-4 md:flex-row md:items-start">
         <ProfileAvatar avatarUrl={avatarUrl} firstName={firstName} lastName={lastName} />
-        <ProfileTextSection username={username} bio={bio} />
+
+        <div className="space-y-3 text-center md:text-left">
+          <h2 className="text-2xl font-bold">{username}</h2>
+          <p className="text-muted max-w-prose">{bio}</p>
+        </div>
       </div>
     </section>
   )
@@ -47,20 +51,6 @@ function ProfileAvatar({ avatarUrl, firstName, lastName }: ProfileAvatarProps) {
           onError={() => setHasImageError(true)}
         />
       )}
-    </div>
-  )
-}
-
-type ProfileTextSectionProps = {
-  username: string
-  bio: string
-}
-
-function ProfileTextSection({ username, bio }: ProfileTextSectionProps) {
-  return (
-    <div className="space-y-3 text-center md:text-left">
-      <h2 className="text-2xl font-bold">{username}</h2>
-      <p className="text-muted max-w-prose">{bio}</p>
     </div>
   )
 }
