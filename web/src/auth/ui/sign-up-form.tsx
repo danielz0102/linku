@@ -1,11 +1,11 @@
 interface SignUpFormProps {
-  onSubmit: (
-    firstName: string,
-    lastName: string,
-    username: string,
-    password: string,
+  onSubmit: (data: {
+    firstName: string
+    lastName: string
+    username: string
+    password: string
     confirmPassword: string
-  ) => void
+  }) => void
 }
 
 export function SignUpForm({ onSubmit }: SignUpFormProps) {
@@ -19,7 +19,7 @@ export function SignUpForm({ onSubmit }: SignUpFormProps) {
         const username = formData.get("username") as string
         const password = formData.get("password") as string
         const confirmPassword = formData.get("confirm-password") as string
-        onSubmit(firstName, lastName, username, password, confirmPassword)
+        onSubmit({ firstName, lastName, username, password, confirmPassword })
       }}
     >
       <div className="form-field mb-2">
