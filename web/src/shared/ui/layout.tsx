@@ -1,24 +1,21 @@
 import { IconHome, IconLogout, IconMenu2, IconUserCircle } from "@tabler/icons-react"
 import { useState } from "react"
-import { Outlet, useNavigate } from "react-router"
+import { Outlet, useNavigate, useLocation } from "react-router"
 
 import { Sidebar } from "./sidebar"
 
 export function Layout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const navigate = useNavigate()
+  const { pathname } = useLocation()
 
   return (
     <div className="flex size-full">
       <Sidebar open={isSidebarOpen} onClose={() => setIsSidebarOpen(false)}>
-        <Sidebar.Link Icon={IconHome} to="/" current={window.location.pathname === "/"}>
+        <Sidebar.Link Icon={IconHome} to="/" current={pathname === "/"}>
           Home
         </Sidebar.Link>
-        <Sidebar.Link
-          Icon={IconUserCircle}
-          to="/profile"
-          current={window.location.pathname === "/profile"}
-        >
+        <Sidebar.Link Icon={IconUserCircle} to="/profile" current={pathname === "/profile"}>
           Profile
         </Sidebar.Link>
         <Sidebar.Button Icon={IconLogout} onClick={() => navigate("/log-in")}>
