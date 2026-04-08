@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-type ProfileViewProps = {
+type ProfileCardProps = {
   avatarUrl?: string
   username: string
   firstName: string
@@ -8,7 +8,7 @@ type ProfileViewProps = {
   bio: string
 }
 
-export function ProfileView({ avatarUrl, username, firstName, lastName, bio }: ProfileViewProps) {
+export function ProfileCard({ avatarUrl, username, firstName, lastName, bio }: ProfileCardProps) {
   return (
     <section className="bg-surface shadow-foreground/10 w-full max-w-2xl space-y-4 rounded-xl p-6 shadow">
       <h1 className="title text-center md:text-left">{`${firstName} ${lastName}`}</h1>
