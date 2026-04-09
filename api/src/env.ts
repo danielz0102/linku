@@ -6,6 +6,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
   CLIENT_ORIGIN: z.url(),
   DB_URL: z.url(),
+  SALT: z.coerce.number().default(15),
 })
 
-export const { PORT, CLIENT_ORIGIN, DB_URL } = envSchema.parse(process.env)
+export const { PORT, CLIENT_ORIGIN, DB_URL, SALT } = envSchema.parse(process.env)
