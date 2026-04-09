@@ -10,8 +10,8 @@ export default function SignUpPage() {
       <div className="bg-surface shadow-foreground/10 space-y-4 rounded-lg px-16 py-8 shadow">
         <h1 className="title text-center">Create your account</h1>
         <SignUpForm
-          onSubmit={() => {
-            navigate("/")
+          onSubmit={async () => {
+            await navigate("/")
           }}
         />
         <p className="text-foreground/70 text-center text-sm">

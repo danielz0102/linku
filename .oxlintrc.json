@@ -17,5 +17,8 @@
       "files": ["**/*.tsx"],
       "plugins": ["react", "jsx-a11y"]
     }
-  ]
+  ],
+  "options": {
+    "typeAware": true
+  }
 }
