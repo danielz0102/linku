@@ -4,5 +4,3 @@ packages:
 
 allowBuilds:
   esbuild: true
-
-minimumReleaseAge: 1440
