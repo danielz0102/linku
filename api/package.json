@@ -16,11 +16,14 @@
   "dependencies": {
     "@trpc/server": "^11.16.0",
     "cors": "^2.8.6",
+    "drizzle-orm": "^0.45.2",
+    "pg": "^8.20.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/node": "^25.5.2",
+    "drizzle-kit": "^0.31.10",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   },
