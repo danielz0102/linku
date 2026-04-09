@@ -11,7 +11,9 @@
     "start": "node ./dist/index.js",
     "dev": "tsx --watch ./src/index.ts",
     "build": "tsc",
-    "format": "oxfmt"
+    "format": "oxfmt",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@trpc/server": "^11.16.0",
@@ -32,7 +34,8 @@
     "@types/node": "^25.5.2",
     "drizzle-kit": "^0.31.10",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.4"
   },
   "packageManager": "pnpm@10.33.0"
 }
