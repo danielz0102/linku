@@ -15,7 +15,7 @@ The minimum core functionality that this project should have is:
 This is a monorepo with the following packages:
 
 - `web`: The frontend web app
-- `api` _(not implemented yet)_: The backend API
+- `api`: The backend API
 
 ---
 
