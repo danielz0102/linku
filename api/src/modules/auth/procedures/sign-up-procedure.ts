@@ -19,7 +19,7 @@ export const signUp = publicProcedure
         .regex(/^(?=.*[^a-zA-Z0-9])/, "Password must contain at least one special character"),
     })
   )
-  .mutation(async ({ input }) => {
+  .mutation(async ({ input, ctx }) => {
     const service = new SignUpService(userRepo, hasher)
     const user = await service.execute(input)
 
@@ -27,6 +27,7 @@ export const signUp = publicProcedure
       throw new TRPCError({ code: "CONFLICT", message: "Username already exists" })
     }
 
-    //4. Create session (cookie)
-    //5. Return the user data (without password)
+    ctx.req.session.userId = user.id
+
+    return user
   })

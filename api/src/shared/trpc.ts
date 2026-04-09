@@ -1,13 +1,16 @@
 import { initTRPC } from "@trpc/server"
-import type { CreateHTTPContextOptions } from "@trpc/server/adapters/standalone"
+import type { CreateExpressContextOptions } from "@trpc/server/adapters/express"
+
+export type Context = {
+  req: CreateExpressContextOptions["req"]
+  res: CreateExpressContextOptions["res"]
+}
 
 const t = initTRPC.context<Context>().create()
 
 export const router = t.router
 export const publicProcedure = t.procedure
 
-export async function createContext({ req }: CreateHTTPContextOptions) {
-  return { req }
+export function createContext({ req, res }: CreateExpressContextOptions): Context {
+  return { req, res }
 }
-
-export type Context = Awaited<ReturnType<typeof createContext>>
