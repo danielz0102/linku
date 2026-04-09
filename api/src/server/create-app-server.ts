@@ -4,8 +4,8 @@ import express from "express"
 import { redisClient } from "../db/redis/redis-client.ts"
 import { createContext } from "../shared/trpc.ts"
 import { appRouter } from "./app-router.ts"
-import { corsMiddleware } from "./cors-middleware.ts"
-import { sessionMiddleware } from "./session-middleware.ts"
+import { corsMiddleware } from "./middlewares/cors-middleware.ts"
+import { sessionMiddleware } from "./middlewares/session-middleware.ts"
 
 export const createAppServer = async () => {
   const app = express()

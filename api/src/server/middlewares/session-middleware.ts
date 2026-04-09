@@ -1,8 +1,8 @@
 import { RedisStore } from "connect-redis"
 import session from "express-session"
 
-import { redisClient } from "../db/redis/redis-client.ts"
-import { COOKIE_HTTPS, SESSION_SECRET } from "../env.ts"
+import { redisClient } from "../../db/redis/redis-client.ts"
+import { COOKIE_HTTPS, SESSION_SECRET } from "../../env.ts"
 
 const redisStore = new RedisStore({
   client: redisClient,
