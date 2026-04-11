@@ -1,5 +1,6 @@
-import { auth } from "#modules/users/auth-router.ts"
 import { publicProcedure, router } from "#shared/trpc.ts"
+
+import { auth } from "./routers/auth-router.ts"
 
 export const appRouter = router({
   sayHi: publicProcedure.query(async () => {
