@@ -1,4 +1,4 @@
 import { router } from "../../shared/trpc.ts"
-import { signUp } from "./commands/sign-up/sign-up-procedure.ts"
+import { signUpProcedure } from "./commands/sign-up/sign-up-procedure.ts"
 
-export const auth = router({ signUp })
+export const auth = router({ signUp: signUpProcedure })

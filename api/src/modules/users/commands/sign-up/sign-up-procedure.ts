@@ -1,17 +1,15 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
-import { userRepo } from "../../../../shared/implementations/drizzle-user-repository.ts"
 import { publicProcedure } from "../../../../shared/trpc.ts"
-import { hasher } from "../../implementations/bcrypt-hasher.ts"
-import { SignUpService } from "./sign-up-service.ts"
+import { signUp } from "./sign-up-service.ts"
 
-export const signUp = publicProcedure
+export const signUpProcedure = publicProcedure
   .input(
     z.object({
-      username: z.string().trim().min(3).max(20),
-      firstName: z.string().trim().nonempty().max(30),
-      lastName: z.string().trim().nonempty().max(30),
+      username: z.string().trim().nonempty(),
+      firstName: z.string().trim().nonempty(),
+      lastName: z.string().trim().nonempty(),
       password: z
         .string()
         .trim()
@@ -20,14 +18,11 @@ export const signUp = publicProcedure
     })
   )
   .mutation(async ({ input, ctx }) => {
-    const service = new SignUpService(userRepo, hasher)
-    const user = await service.execute(input)
+    const id = await signUp(input)
 
-    if (!user) {
+    if (!id) {
       throw new TRPCError({ code: "CONFLICT", message: "Username already exists" })
     }
 
-    ctx.req.session.userId = user.id
-
-    return user
+    ctx.req.session.userId = id
   })
