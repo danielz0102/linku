@@ -1,10 +1,10 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
-import { userRepo } from "../../../shared/implementations/drizzle-user-repository.ts"
-import { publicProcedure } from "../../../shared/trpc.ts"
-import { hasher } from "../implementations/bcrypt-hasher.ts"
-import { SignUpService } from "../services/sign-up-service.ts"
+import { userRepo } from "../../../../shared/implementations/drizzle-user-repository.ts"
+import { publicProcedure } from "../../../../shared/trpc.ts"
+import { hasher } from "../../implementations/bcrypt-hasher.ts"
+import { SignUpService } from "./sign-up-service.ts"
 
 export const signUp = publicProcedure
   .input(

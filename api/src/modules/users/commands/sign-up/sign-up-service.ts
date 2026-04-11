@@ -1,6 +1,6 @@
-import type { UserRepository } from "../../../shared/interfaces/user-repository.ts"
-import type { PublicUser } from "../../../shared/user.ts"
-import type { PasswordHasher } from "../interfaces/password-hasher.ts"
+import type { UserRepository } from "../../../../shared/interfaces/user-repository.ts"
+import type { PublicUser } from "../../../../shared/user.ts"
+import type { PasswordHasher } from "../../interfaces/password-hasher.ts"
 
 export class SignUpService {
   constructor(
