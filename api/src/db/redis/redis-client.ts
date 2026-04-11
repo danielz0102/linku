@@ -1,6 +1,6 @@
 import { createClient } from "redis"
 
-import { REDIS_URL } from "../../env.ts"
+import { REDIS_URL } from "#env.ts"
 
 export const redisClient = createClient({ url: REDIS_URL })
 

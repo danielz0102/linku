@@ -1,8 +1,8 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
-import { publicProcedure } from "../../../../shared/trpc.ts"
-import { signUp } from "./sign-up-service.ts"
+import { signUp } from "#modules/users/commands/sign-up/sign-up-service.ts"
+import { publicProcedure } from "#shared/trpc.ts"
 
 export const signUpProcedure = publicProcedure
   .input(

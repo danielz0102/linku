@@ -1,9 +1,9 @@
 import bcrypt from "bcryptjs"
 import { eq } from "drizzle-orm"
 
-import { db } from "../../../../db/drizzle/drizzle-client.ts"
-import { users } from "../../../../db/drizzle/schemas.ts"
-import { SALT } from "../../../../env.ts"
+import { db } from "#db/drizzle/drizzle-client.ts"
+import { users } from "#db/drizzle/schemas.ts"
+import { SALT } from "#env.ts"
 
 type SignUpCommand = {
   username: string

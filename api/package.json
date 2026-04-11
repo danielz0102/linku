@@ -7,13 +7,19 @@
   "author": "",
   "type": "module",
   "main": "index.js",
+  "imports": {
+    "#*.ts": {
+      "source": "./src/*.ts",
+      "default": "./dist/*.js"
+    }
+  },
   "scripts": {
     "start": "node ./dist/index.js",
-    "dev": "tsx --watch ./src/index.ts",
+    "dev": "NODE_OPTIONS='--conditions=source' tsx --watch ./src/index.ts",
     "build": "tsc",
     "format": "oxfmt",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "NODE_OPTIONS='--conditions=source' vitest run",
+    "test:watch": "NODE_OPTIONS='--conditions=source' vitest"
   },
   "dependencies": {
     "@trpc/server": "^11.16.0",

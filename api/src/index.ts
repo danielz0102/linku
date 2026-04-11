@@ -1,5 +1,5 @@
-import { PORT } from "./env.ts"
-import { createAppServer } from "./server/create-app-server.ts"
+import { PORT } from "#env.ts"
+import { createAppServer } from "#server/create-app-server.ts"
 
 const server = await createAppServer()
 

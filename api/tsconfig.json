@@ -9,6 +9,7 @@
     "target": "esnext",
     "lib": ["esnext"],
     "types": ["node"],
+    "customConditions": ["source"],
     "allowImportingTsExtensions": true,
     "rewriteRelativeImportExtensions": true,
 
