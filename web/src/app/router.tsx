@@ -1,7 +1,7 @@
 import { lazy } from "react"
 import { BrowserRouter, Routes, Route } from "react-router"
 
-import { Layout } from "../shared/ui/layout"
+import { Layout } from "~/shared/ui/layout"
 
 const LoginPage = lazy(() => import("../auth/pages/login-page"))
 const SignUpPage = lazy(() => import("../auth/pages/sign-up-page"))

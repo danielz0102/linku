@@ -6,4 +6,9 @@ import { defineConfig } from "vite"
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), babel({ presets: [reactCompilerPreset()] }), tailwindcss()],
+  resolve: {
+    alias: {
+      "~": new URL("./src", import.meta.url).pathname,
+    },
+  },
 })
