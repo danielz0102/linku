@@ -1,66 +1,120 @@
-interface SignUpFormProps {
+import { useForm } from "react-hook-form"
+
+import { FormField } from "~/shared/components/form-field"
+
+type SignUpFormProps = {
   onSubmit: (data: {
     firstName: string
     lastName: string
     username: string
     password: string
-    confirmPassword: string
   }) => void
 }
 
+type SignUpInputs = {
+  firstName: string
+  lastName: string
+  username: string
+  password: string
+  confirmPassword: string
+}
+
 export function SignUpForm({ onSubmit }: SignUpFormProps) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpInputs>()
+
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        const formData = new FormData(e.target as HTMLFormElement)
-        const firstName = formData.get("first-name") as string
-        const lastName = formData.get("last-name") as string
-        const username = formData.get("username") as string
-        const password = formData.get("password") as string
-        const confirmPassword = formData.get("confirm-password") as string
-        onSubmit({ firstName, lastName, username, password, confirmPassword })
-      }}
+      className="space-y-4"
+      onSubmit={handleSubmit((data) => {
+        onSubmit({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          username: data.username,
+          password: data.password,
+        })
+      })}
     >
-      <div className="form-field mb-2">
-        <label htmlFor="first-name">First name</label>
-        <input id="first-name" type="text" name="first-name" placeholder="John" className="input" />
-      </div>
-      <div className="form-field mb-2">
-        <label htmlFor="last-name">Last name</label>
-        <input id="last-name" type="text" name="last-name" placeholder="Doe" className="input" />
-      </div>
-      <div className="form-field mb-2">
-        <label htmlFor="email">Username</label>
-        <input
-          id="email"
-          type="username"
-          name="username"
-          placeholder="john_doe"
-          className="input"
-        />
-      </div>
-      <div className="form-field mb-2">
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          name="password"
-          placeholder="••••••••"
-          className="input"
-        />
-      </div>
-      <div className="form-field">
-        <label htmlFor="confirm-password">Confirm Password</label>
-        <input
-          id="confirm-password"
-          type="password"
-          name="confirm-password"
-          placeholder="••••••••"
-          className="input"
-        />
-      </div>
-      <button type="submit" className="button mt-4 w-full">
+      <FormField label="First Name" error={errors.firstName?.message}>
+        {(props) => (
+          <input
+            {...register("firstName", { required: "First name is required" })}
+            {...props}
+            placeholder="John"
+            className="input"
+            autoComplete="name"
+          />
+        )}
+      </FormField>
+
+      <FormField label="Last Name" error={errors.lastName?.message}>
+        {(props) => (
+          <input
+            {...register("lastName", { required: "Last name is required" })}
+            {...props}
+            placeholder="Doe"
+            className="input"
+          />
+        )}
+      </FormField>
+
+      <FormField label="Username" error={errors.username?.message}>
+        {(props) => (
+          <input
+            {...register("username", { required: "Username is required" })}
+            {...props}
+            placeholder="john_doe"
+            className="input"
+            autoComplete="username"
+          />
+        )}
+      </FormField>
+
+      <FormField label="Password" error={errors.password?.message}>
+        {(props) => (
+          <input
+            {...register("password", {
+              required: "Password is required",
+              pattern: {
+                value: /^(?=.*[^\w\s]).+$/,
+                message: "Password must contain at least one special character",
+              },
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters long",
+              },
+            })}
+            {...props}
+            type="password"
+            placeholder="••••••••"
+            className="input"
+          />
+        )}
+      </FormField>
+
+      <FormField label="Confirm Password" error={errors.confirmPassword?.message}>
+        {(props) => (
+          <input
+            {...register("confirmPassword", {
+              required: "Please confirm your password",
+              validate: (value, { password }) => {
+                if (value !== password) {
+                  return "Passwords do not match"
+                }
+              },
+            })}
+            {...props}
+            type="password"
+            placeholder="••••••••"
+            className="input"
+          />
+        )}
+      </FormField>
+
+      <button type="submit" className="button w-full">
         Sign up
       </button>
     </form>
