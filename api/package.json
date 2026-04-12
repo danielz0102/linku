@@ -19,7 +19,8 @@
     "build": "tsc",
     "format": "oxfmt",
     "test": "NODE_OPTIONS='--conditions=source' vitest run",
-    "test:watch": "NODE_OPTIONS='--conditions=source' vitest"
+    "test:watch": "NODE_OPTIONS='--conditions=source' vitest",
+    "db:push": "drizzle-kit push"
   },
   "dependencies": {
     "@trpc/server": "^11.16.0",
@@ -38,6 +39,7 @@
     "@types/express": "^5.0.6",
     "@types/express-session": "^1.18.2",
     "@types/node": "^25.5.2",
+    "dotenv": "^17.4.1",
     "drizzle-kit": "^0.31.10",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2",
