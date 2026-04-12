@@ -1,24 +1,23 @@
-import { Link } from "react-router"
-import { useNavigate } from "react-router"
+import { Link, useNavigate } from "react-router"
 
-import { LoginForm } from "../ui/login-form"
+import { SignUpForm } from "./sign-up-form"
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const navigate = useNavigate()
 
   return (
     <main className="flex size-full flex-col items-center justify-center">
       <div className="bg-surface shadow-foreground/10 space-y-4 rounded-lg px-16 py-8 shadow">
-        <h1 className="title text-center">Welcome back!</h1>
-        <LoginForm
+        <h1 className="title text-center">Create your account</h1>
+        <SignUpForm
           onSubmit={async () => {
             await navigate("/")
           }}
         />
         <p className="text-foreground/70 text-center text-sm">
-          Don't have an account?{" "}
-          <Link to="/sign-up" className="link">
-            Sign up
+          Already have an account?{" "}
+          <Link to="/log-in" className="link">
+            Log in
           </Link>
         </p>
       </div>

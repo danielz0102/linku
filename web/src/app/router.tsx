@@ -1,12 +1,12 @@
 import { lazy } from "react"
 import { BrowserRouter, Routes, Route } from "react-router"
 
-import { Layout } from "~/shared/ui/layout"
+import { Layout } from "./layout/layout"
 
-const LoginPage = lazy(() => import("../auth/pages/login-page"))
-const SignUpPage = lazy(() => import("../auth/pages/sign-up-page"))
-const HomePage = lazy(() => import("../users/pages/home-page.tsx"))
-const ProfilePage = lazy(() => import("../users/pages/profile-page.tsx"))
+const LoginPage = lazy(() => import("~/modules/users/pages/login/login-page"))
+const SignUpPage = lazy(() => import("~/modules/users/pages/sign-up/sign-up-page"))
+const HomePage = lazy(() => import("~/modules/users/pages/home/home-page"))
+const ProfilePage = lazy(() => import("~/modules/users/pages/profile/profile-page"))
 
 export function Router() {
   return (

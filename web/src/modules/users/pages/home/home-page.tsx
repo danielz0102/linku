@@ -1,6 +1,6 @@
 import { Link } from "react-router"
 
-import { ChatCard } from "../ui/chat-card"
+import { ChatCard } from "./chat-card"
 
 export default function HomePage() {
   return (
