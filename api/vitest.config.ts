@@ -5,4 +5,10 @@ export default defineConfig({
     environment: "node",
     globals: true,
   },
+  resolve: {
+    alias: {
+      "~": "./src",
+      "~tests": "./tests",
+    },
+  },
 })

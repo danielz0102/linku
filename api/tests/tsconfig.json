@@ -6,7 +6,6 @@
     "target": "esnext",
     "lib": ["esnext"],
     "types": ["node", "vitest/globals"],
-    "customConditions": ["source"],
     "allowImportingTsExtensions": true,
     "noEmit": true,
 
@@ -28,6 +27,13 @@
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+
+    // Import Aliases
+    "paths": {
+      "~/*": ["../src/*"],
+      "~tests/*": ["./tests/*"]
+    }
+  },
+  "include": ["../src/", "."]
 }
