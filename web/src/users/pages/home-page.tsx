@@ -1,14 +1,8 @@
-import { useQuery } from "@tanstack/react-query"
 import { Link } from "react-router"
 
-import { api } from "../../api/api-tanstack-proxy"
 import { ChatCard } from "../ui/chat-card"
 
 export default function HomePage() {
-  const { data } = useQuery(api.sayHi.queryOptions())
-
-  console.log(data)
-
   return (
     <main className="flex flex-col">
       <Link to="/chat/1" className="hover:bg-hover max-w-lg rounded">
