@@ -1,11 +1,10 @@
-import * as trpcExpress from "@trpc/server/adapters/express"
 import express from "express"
 
 import { redisClient } from "#db/redis/redis-client.ts"
-import { appRouter } from "#server/app-router.ts"
-import { corsMiddleware } from "#server/middlewares/cors-middleware.ts"
-import { sessionMiddleware } from "#server/middlewares/session-middleware.ts"
-import { createContext } from "#shared/trpc.ts"
+
+import { corsMiddleware } from "./middlewares/cors-middleware.ts"
+import { sessionMiddleware } from "./middlewares/session-middleware.ts"
+import { trpcMiddleware } from "./middlewares/trpc-middleware.ts"
 
 export const createAppServer = async () => {
   const app = express()
@@ -16,14 +15,7 @@ export const createAppServer = async () => {
 
   app.use(corsMiddleware)
   app.use(sessionMiddleware)
-
-  app.use(
-    "/trpc",
-    trpcExpress.createExpressMiddleware({
-      router: appRouter,
-      createContext,
-    })
-  )
+  app.use("/trpc", trpcMiddleware)
 
   return app
 }
