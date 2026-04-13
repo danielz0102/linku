@@ -7,16 +7,22 @@ authRouter.post("/logout", async (req, res) => {
     return
   }
 
-  await new Promise<void>((resolve, reject) => {
-    req.session.destroy((error) => {
-      if (error) {
-        reject(error)
-        return
-      }
+  try {
+    await new Promise<void>((resolve, reject) => {
+      req.session.destroy((error) => {
+        if (error) {
+          reject(error)
+          return
+        }
 
-      resolve()
+        resolve()
+      })
     })
-  })
+  } catch (error) {
+    console.error("Error destroying session:", error)
+    res.status(500).json({ message: "Failed to logout" })
+    return
+  }
 
   res.clearCookie(SESSION_COOKIE_NAME)
   res.sendStatus(204)
