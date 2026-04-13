@@ -22,5 +22,5 @@ export const loginHandler: RequestHandler = async (req, res) => {
   }
 
   req.session.userId = id
-  res.sendStatus(200)
+  res.sendStatus(201)
 }
