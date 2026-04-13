@@ -1,9 +1,7 @@
-import { router } from "#shared/trpc.ts"
+import { Router } from "express"
 
-import { auth } from "./auth-router.ts"
+import { authRouter } from "./auth-router.ts"
 
-export const appRouter = router({
-  auth,
-})
+export const appRouter = Router()
 
-export type AppRouter = typeof appRouter
+appRouter.use("/auth", authRouter)
