@@ -20,9 +20,6 @@ importers:
 
   api:
     dependencies:
-      '@trpc/server':
-        specifier: ^11.16.0
-        version: 11.16.0(typescript@6.0.2)
       bcryptjs:
         specifier: ^3.0.3
         version: 3.0.3
@@ -1244,12 +1241,6 @@ packages:
     resolution: {integrity: sha512-sYyzzJT4G0g02azzJ8o55VFFV31XvFpdUpG+unxS0vSaYsJnSPKGoI6WdPwUucJL1wpgGfwfmntNX/Ub1uOViA==}
     peerDependencies:
       react: ^18 || ^19
-
-  '@trpc/server@11.16.0':
-    resolution: {integrity: sha512-XgGuUMddrUTd04+za/WE5GFuZ1/YU9XQG0t3VL5WOIu2JspkOlq6k4RYEiqS6HSJt+S0RXaPdIoE2anIP/BBRQ==}
-    hasBin: true
-    peerDependencies:
-      typescript: '>=5.7.2'
 
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
@@ -2970,10 +2961,6 @@ snapshots:
     dependencies:
       '@tanstack/query-core': 5.96.2
       react: 19.2.5
-
-  '@trpc/server@11.16.0(typescript@6.0.2)':
-    dependencies:
-      typescript: 6.0.2
 
   '@tybys/wasm-util@0.10.1':
     dependencies:
