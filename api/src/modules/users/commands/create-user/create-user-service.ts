@@ -5,14 +5,14 @@ import { db } from "#db/drizzle/drizzle-client.ts"
 import { users } from "#db/drizzle/schemas.ts"
 import { SALT } from "#env.ts"
 
-type SignUpCommand = {
+type CreateUserCommand = {
   username: string
   password: string
   firstName: string
   lastName: string
 }
 
-export async function signUp(cmd: SignUpCommand): Promise<string | undefined> {
+export async function createUser(cmd: CreateUserCommand): Promise<string | undefined> {
   const userExists = await db
     .select({ exists: users.id })
     .from(users)

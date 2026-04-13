@@ -3,8 +3,8 @@ import { randomUUID } from "node:crypto"
 import { sql } from "drizzle-orm"
 
 import { db } from "~/db/drizzle/drizzle-client.ts"
+import { createUser } from "~/modules/users/commands/create-user/create-user-service.ts"
 import { login } from "~/modules/users/commands/login/login-service.ts"
-import { signUp } from "~/modules/users/commands/sign-up/sign-up-service.ts"
 
 describe("Login Service", () => {
   afterAll(async () => {
@@ -14,7 +14,7 @@ describe("Login Service", () => {
   it("returns user id", async () => {
     const username = `user-${randomUUID()}`
 
-    const signedUpId = await signUp({
+    const signedUpId = await createUser({
       username,
       password: "pass1234",
       firstName: "John",
@@ -43,7 +43,7 @@ describe("Login Service", () => {
   it("returns nothing if password doesn't match", async () => {
     const username = `user-${randomUUID()}`
 
-    await signUp({
+    await createUser({
       username,
       password: "pass1234",
       firstName: "John",

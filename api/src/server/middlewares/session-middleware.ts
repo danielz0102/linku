@@ -3,7 +3,7 @@ import session from "express-session"
 
 import { redisClient } from "#db/redis/redis-client.ts"
 import { COOKIE_HTTPS, SESSION_SECRET } from "#env.ts"
-import { SESSION_COOKIE_NAME } from "#shared/trpc.ts"
+import { SESSION_COOKIE_NAME } from "#shared/session.ts"
 
 const redisStore = new RedisStore({
   client: redisClient,
