@@ -7,6 +7,7 @@ type LoginCommand = {
 
 export async function login(cmd: LoginCommand): Promise<boolean> {
   const res = await fetch(`${API_URL}/session`, {
+    credentials: "include",
     method: "POST",
     headers: {
       "Content-Type": "application/json",
