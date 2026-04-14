@@ -1,7 +1,7 @@
 import { lazy } from "react"
-import { BrowserRouter, Routes, Route } from "react-router"
+import { BrowserRouter, Route, Routes } from "react-router"
 
-import { Layout } from "./layout/layout"
+import { ProtectedLayout } from "~/modules/users/components/protected-layout"
 
 const LoginPage = lazy(() => import("~/modules/users/pages/login/login-page"))
 const SignUpPage = lazy(() => import("~/modules/users/pages/sign-up/sign-up-page"))
@@ -14,7 +14,7 @@ export function Router() {
       <Routes>
         <Route path="/log-in" element={<LoginPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
-        <Route element={<Layout />}>
+        <Route element={<ProtectedLayout />}>
           <Route index element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Route>
