@@ -27,5 +27,7 @@ export const createUserHandler: RequestHandler = async (req, res) => {
     return res.status(409).json({ message: "User is already registered" })
   }
 
+  req.session.userId = id
+
   res.sendStatus(201)
 }

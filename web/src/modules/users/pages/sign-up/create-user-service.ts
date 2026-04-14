@@ -8,7 +8,7 @@ type CreateUserCommand = {
 }
 
 export async function createUser(cmd: CreateUserCommand): Promise<boolean> {
-  const res = await fetch(`${API_URL}/user`, {
+  const res = await fetch(`${API_URL}/users`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

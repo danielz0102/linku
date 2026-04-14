@@ -1,10 +1,12 @@
 import { Link, useNavigate } from "react-router"
 
+import { useAuth } from "../../context/auth-context"
 import { createUser } from "./create-user-service"
 import { SignUpForm } from "./sign-up-form"
 
 export default function SignUpPage() {
   const navigate = useNavigate()
+  const { refresh } = useAuth()
 
   return (
     <main className="flex size-full flex-col items-center justify-center">
@@ -12,6 +14,7 @@ export default function SignUpPage() {
         <h1 className="title text-center">Create your account</h1>
         <SignUpForm
           onSubmit={async () => {
+            await refresh()
             await navigate("/")
           }}
           createUser={createUser}
