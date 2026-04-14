@@ -6,4 +6,4 @@ import { userRouter } from "./user-router.ts"
 export const appRouter = Router()
 
 appRouter.use("/session", sessionRouter)
-appRouter.use("/user", userRouter)
+appRouter.use("/users", userRouter)

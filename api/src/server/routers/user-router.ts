@@ -5,5 +5,5 @@ import { whoamiHandler } from "#modules/users/queries/whoami/whoami-http-handler
 
 export const userRouter = Router()
 
-userRouter.get("/", whoamiHandler)
 userRouter.post("/", createUserHandler)
+userRouter.get("/me", whoamiHandler)
