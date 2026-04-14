@@ -1,8 +1,7 @@
 import { createContext, use, useState, type PropsWithChildren } from "react"
 
-import { API_URL } from "~/env"
-
 import type { User } from "../domain/user"
+import { getCurrentUser } from "../services/get-current-user"
 
 type AuthContextValue =
   | {
@@ -34,16 +33,4 @@ export function useAuth() {
   }
 
   return value
-}
-
-async function getCurrentUser(): Promise<User | undefined> {
-  const response = await fetch(`${API_URL}/users/me`, {
-    credentials: "include",
-  })
-
-  if (response.status !== 200) {
-    return undefined
-  }
-
-  return response.json()
 }
