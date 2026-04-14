@@ -2,12 +2,16 @@ import { IconHome, IconLogout, IconMenu2, IconUserCircle } from "@tabler/icons-r
 import { useState } from "react"
 import { Outlet, useNavigate, useLocation } from "react-router"
 
-import { Sidebar } from "./sidebar"
+import { useAuth } from "~/modules/users/context/auth-context"
+import { logOut } from "~/modules/users/services/log-out"
+
+import { Sidebar } from "../shared/components/sidebar"
 
 export function Layout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const { refresh } = useAuth()
 
   return (
     <div className="flex size-full">
@@ -18,7 +22,14 @@ export function Layout() {
         <Sidebar.Link Icon={IconUserCircle} to="/profile" current={pathname === "/profile"}>
           Profile
         </Sidebar.Link>
-        <Sidebar.Button Icon={IconLogout} onClick={() => navigate("/log-in")}>
+        <Sidebar.Button
+          Icon={IconLogout}
+          onClick={async () => {
+            await logOut()
+            await refresh()
+            await navigate("/log-in")
+          }}
+        >
           Log out
         </Sidebar.Button>
       </Sidebar>
