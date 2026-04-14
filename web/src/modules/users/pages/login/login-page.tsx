@@ -2,6 +2,7 @@ import { Link } from "react-router"
 import { useNavigate } from "react-router"
 
 import { LoginForm } from "./login-form"
+import { login } from "./login-service"
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -14,6 +15,7 @@ export default function LoginPage() {
           onSubmit={async () => {
             await navigate("/")
           }}
+          login={login}
         />
         <p className="text-foreground/70 text-center text-sm">
           Don't have an account?{" "}

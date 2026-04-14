@@ -1,9 +1,11 @@
+import { IconAlertTriangle } from "@tabler/icons-react"
 import { useForm } from "react-hook-form"
 
 import { FormField } from "~/shared/components/form-field"
 
 interface LoginFormProps {
-  onSubmit: (username: string, password: string) => void
+  onSubmit: () => void
+  login: (data: { username: string; password: string }) => Promise<boolean>
 }
 
 type LoginFormInputs = {
@@ -11,15 +13,40 @@ type LoginFormInputs = {
   password: string
 }
 
-export function LoginForm({ onSubmit }: LoginFormProps) {
+export function LoginForm({ login, onSubmit }: LoginFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<LoginFormInputs>()
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit((data) => onSubmit(data.username, data.password))}>
+    <form
+      className="space-y-4"
+      onSubmit={handleSubmit(async (data) => {
+        const success = await login(data)
+
+        if (success) {
+          onSubmit()
+        } else {
+          setError("root", { message: "Invalid credentials" })
+        }
+      })}
+    >
+      <div
+        role="alert"
+        hidden={!errors.root}
+        className="flex items-center justify-center gap-2 rounded bg-red-300 py-1 text-red-700"
+      >
+        {errors.root && (
+          <>
+            <IconAlertTriangle size={20} strokeWidth={1.5} />
+            {errors.root.message}
+          </>
+        )}
+      </div>
+
       <FormField label="Username" error={errors.username?.message}>
         {(props) => (
           <input
