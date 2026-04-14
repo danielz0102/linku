@@ -12,21 +12,15 @@ type AuthContextValue =
   | undefined
 
 const AuthContext = createContext<AuthContextValue>(undefined)
+const currentUser = getCurrentUser()
 
 export function AuthProvider({ children }: PropsWithChildren) {
-  const [user, setUser] = useState<User | undefined>()
+  const [userPromise, setUserPromise] = useState(currentUser)
+  const user = use(userPromise)
 
   const refresh = async () => {
-    const response = await fetch(`${API_URL}/users/me`, {
-      credentials: "include",
-    })
-
-    if (response.status !== 200) {
-      return setUser(undefined)
-    }
-
-    const userData = await response.json()
-    setUser(userData)
+    const newUserPromise = getCurrentUser()
+    setUserPromise(newUserPromise)
   }
 
   return <AuthContext value={{ user, refresh }}>{children}</AuthContext>
@@ -40,4 +34,16 @@ export function useAuth() {
   }
 
   return value
+}
+
+async function getCurrentUser(): Promise<User | undefined> {
+  const response = await fetch(`${API_URL}/users/me`, {
+    credentials: "include",
+  })
+
+  if (response.status !== 200) {
+    return undefined
+  }
+
+  return response.json()
 }
