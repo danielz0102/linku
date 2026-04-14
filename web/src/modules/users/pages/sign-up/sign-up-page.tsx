@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router"
 
+import { createUser } from "./create-user-service"
 import { SignUpForm } from "./sign-up-form"
 
 export default function SignUpPage() {
@@ -13,6 +14,7 @@ export default function SignUpPage() {
           onSubmit={async () => {
             await navigate("/")
           }}
+          createUser={createUser}
         />
         <p className="text-foreground/70 text-center text-sm">
           Already have an account?{" "}

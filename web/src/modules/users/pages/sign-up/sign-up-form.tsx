@@ -3,12 +3,13 @@ import { useForm } from "react-hook-form"
 import { FormField } from "~/shared/components/form-field"
 
 type SignUpFormProps = {
-  onSubmit: (data: {
+  onSubmit: () => void
+  createUser: (data: {
     firstName: string
     lastName: string
     username: string
     password: string
-  }) => void
+  }) => Promise<boolean>
 }
 
 type SignUpInputs = {
@@ -19,23 +20,25 @@ type SignUpInputs = {
   confirmPassword: string
 }
 
-export function SignUpForm({ onSubmit }: SignUpFormProps) {
+export function SignUpForm({ createUser, onSubmit }: SignUpFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<SignUpInputs>()
 
   return (
     <form
       className="space-y-4"
-      onSubmit={handleSubmit((data) => {
-        onSubmit({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          username: data.username,
-          password: data.password,
-        })
+      onSubmit={handleSubmit(async (data) => {
+        const success = await createUser(data)
+
+        if (success) {
+          return onSubmit()
+        } else {
+          setError("username", { message: "Username is already taken" })
+        }
       })}
     >
       <FormField label="First Name" error={errors.firstName?.message}>
