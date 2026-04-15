@@ -7,6 +7,7 @@ export async function signUp(data: {
   password: string
 }): Promise<boolean> {
   const res = await fetch(`${API_URL}/users`, {
+    credentials: "include",
     method: "POST",
     headers: {
       "Content-Type": "application/json",
