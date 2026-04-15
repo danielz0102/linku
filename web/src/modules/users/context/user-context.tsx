@@ -7,6 +7,8 @@ import {
   type SetStateAction,
 } from "react"
 
+import { api } from "~/shared/api/api"
+
 import type { User } from "../domain/user"
 
 type UserContextValue =
@@ -18,8 +20,10 @@ type UserContextValue =
 
 const UserContext = createContext<UserContextValue>(undefined)
 
+const me = await api.users.whoami()
+
 export function UserProvider({ children }: PropsWithChildren) {
-  const [user, setUser] = useState<User | undefined>()
+  const [user, setUser] = useState<User | undefined>(me)
 
   return <UserContext value={{ user, setUser }}>{children}</UserContext>
 }
