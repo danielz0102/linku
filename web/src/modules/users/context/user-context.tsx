@@ -30,3 +30,13 @@ export function useUser() {
 
   return value
 }
+
+export function useAuthenticatedUser() {
+  const { user } = useUser()
+
+  if (!user) {
+    throw new Error("User is not authenticated")
+  }
+
+  return user
+}

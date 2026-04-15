@@ -1,14 +1,17 @@
+import { useAuthenticatedUser } from "../../context/user-context"
 import { ProfileCard } from "./profile-card"
 
 export default function ProfilePage() {
+  const user = useAuthenticatedUser()
+
   return (
     <main className="flex size-full items-center justify-center">
       <ProfileCard
-        avatarUrl="https://cataas.com/cat"
-        username="john_doe"
-        firstName="John"
-        lastName="Doe"
-        bio="Coffee-fueled builder, cat enthusiast, and always shipping small improvements."
+        avatarUrl={user.profilePictureUrl ?? undefined}
+        username={user.username}
+        firstName={user.firstName}
+        lastName={user.lastName}
+        bio={user.bio}
       />
     </main>
   )

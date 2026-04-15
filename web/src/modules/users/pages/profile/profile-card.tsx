@@ -5,7 +5,7 @@ type ProfileCardProps = {
   username: string
   firstName: string
   lastName: string
-  bio: string
+  bio: string | null
 }
 
 export function ProfileCard({ avatarUrl, username, firstName, lastName, bio }: ProfileCardProps) {
@@ -17,7 +17,9 @@ export function ProfileCard({ avatarUrl, username, firstName, lastName, bio }: P
 
         <div className="space-y-3 text-center md:text-left">
           <h2 className="text-2xl font-bold">{username}</h2>
-          <p className="text-muted max-w-prose">{bio}</p>
+          <p className="text-muted max-w-prose">
+            {bio ? bio : <span className="italic">No bio available</span>}
+          </p>
         </div>
       </div>
     </section>
