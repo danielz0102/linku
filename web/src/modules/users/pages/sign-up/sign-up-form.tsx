@@ -4,7 +4,7 @@ import { FormField } from "~/shared/components/form-field"
 
 type SignUpFormProps = {
   onSubmit: () => void
-  createUser: (data: {
+  signUp: (data: {
     firstName: string
     lastName: string
     username: string
@@ -20,7 +20,7 @@ type SignUpInputs = {
   confirmPassword: string
 }
 
-export function SignUpForm({ createUser, onSubmit }: SignUpFormProps) {
+export function SignUpForm({ signUp, onSubmit }: SignUpFormProps) {
   const {
     register,
     handleSubmit,
@@ -32,7 +32,7 @@ export function SignUpForm({ createUser, onSubmit }: SignUpFormProps) {
     <form
       className="space-y-4"
       onSubmit={handleSubmit(async (data) => {
-        const success = await createUser(data)
+        const success = await signUp(data)
 
         if (success) {
           return onSubmit()

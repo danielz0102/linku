@@ -19,7 +19,7 @@ export default function SignUpPage() {
             setUser(user)
             await navigate("/")
           }}
-          createUser={api.users.signUp}
+          signUp={api.users.signUp}
         />
         <p className="text-foreground/70 text-center text-sm">
           Already have an account?{" "}
