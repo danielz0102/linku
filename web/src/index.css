@@ -20,6 +20,10 @@
   font-family: "Nunito Sans Variable", sans-serif;
 }
 
+dialog {
+  color: var(--color-foreground);
+}
+
 @utility title {
   @apply text-4xl font-bold;
 }
