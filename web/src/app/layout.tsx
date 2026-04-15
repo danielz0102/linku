@@ -7,7 +7,9 @@ import { api } from "~/shared/api/api"
 
 import { Sidebar } from "../shared/components/sidebar"
 
-export function Layout({ children }: React.PropsWithChildren) {
+export type LayoutProps = React.PropsWithChildren
+
+export function Layout({ children }: LayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const navigate = useNavigate()
   const { pathname } = useLocation()

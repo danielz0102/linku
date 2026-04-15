@@ -1,11 +1,12 @@
-import { Layout } from "~/app/layout"
+import { Layout, type LayoutProps } from "~/app/layout"
 
 import { useUser } from "../context/user-context"
 
-export function ProtectedLayout({
-  redirectTo,
-  children,
-}: React.PropsWithChildren<{ redirectTo: React.ReactNode }>) {
+type ProtectedLayoutProps = LayoutProps & {
+  redirectTo: React.ReactNode
+}
+
+export function ProtectedLayout({ redirectTo, children }: ProtectedLayoutProps) {
   const { user } = useUser()
 
   if (!user) {
