@@ -12,7 +12,9 @@ export default function ProfilePage() {
         firstName={user.firstName}
         lastName={user.lastName}
         bio={user.bio}
-      />
+      >
+        <ProfileCard.EditButton onClick={() => {}} />
+      </ProfileCard>
     </main>
   )
 }

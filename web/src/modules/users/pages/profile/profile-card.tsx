@@ -1,14 +1,21 @@
 import { useState } from "react"
 
-type ProfileCardProps = {
+type ProfileCardProps = React.PropsWithChildren<{
   avatarUrl?: string
   username: string
   firstName: string
   lastName: string
   bio: string | null
-}
+}>
 
-export function ProfileCard({ avatarUrl, username, firstName, lastName, bio }: ProfileCardProps) {
+export function ProfileCard({
+  avatarUrl,
+  username,
+  firstName,
+  lastName,
+  bio,
+  children,
+}: ProfileCardProps) {
   return (
     <section className="bg-surface shadow-foreground/10 w-full max-w-2xl space-y-4 rounded-xl p-6 shadow">
       <h1 className="title text-center md:text-left">{`${firstName} ${lastName}`}</h1>
@@ -21,8 +28,17 @@ export function ProfileCard({ avatarUrl, username, firstName, lastName, bio }: P
             {bio ? bio : <span className="italic">No bio available</span>}
           </p>
         </div>
+        {children}
       </div>
     </section>
+  )
+}
+
+ProfileCard.EditButton = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <button className="button ml-auto self-end rounded-xl" onClick={onClick}>
+      Edit Profile
+    </button>
   )
 }
 
