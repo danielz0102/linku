@@ -1,13 +1,13 @@
 import { IconHome, IconLogout, IconMenu2, IconUserCircle } from "@tabler/icons-react"
 import { useState } from "react"
-import { Outlet, useLocation, useNavigate } from "react-router"
+import { useLocation, useNavigate } from "react-router"
 
 import { useUser } from "~/modules/users/context/user-context"
 import { api } from "~/shared/api/api"
 
 import { Sidebar } from "../shared/components/sidebar"
 
-export function Layout() {
+export function Layout({ children }: React.PropsWithChildren) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const navigate = useNavigate()
   const { pathname } = useLocation()
@@ -39,7 +39,7 @@ export function Layout() {
           <IconMenu2 strokeWidth={1.5} aria-label="Open menu" size={16} />
         </button>
 
-        <Outlet />
+        {children}
       </div>
     </div>
   )

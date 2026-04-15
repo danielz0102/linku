@@ -1,5 +1,5 @@
 import { lazy } from "react"
-import { BrowserRouter, Route, Routes } from "react-router"
+import { BrowserRouter, Route, Routes, Navigate, Outlet } from "react-router"
 
 import { ProtectedLayout } from "~/modules/users/components/protected-layout"
 
@@ -14,7 +14,13 @@ export function Router() {
       <Routes>
         <Route path="/log-in" element={<LoginPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
-        <Route element={<ProtectedLayout />}>
+        <Route
+          element={
+            <ProtectedLayout redirectTo={<Navigate to="/log-in" replace />}>
+              <Outlet />
+            </ProtectedLayout>
+          }
+        >
           <Route index element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Route>

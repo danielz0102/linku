@@ -1,15 +1,16 @@
-import { Navigate } from "react-router"
-
 import { Layout } from "~/app/layout"
 
 import { useUser } from "../context/user-context"
 
-export function ProtectedLayout() {
+export function ProtectedLayout({
+  redirectTo,
+  children,
+}: React.PropsWithChildren<{ redirectTo: React.ReactNode }>) {
   const { user } = useUser()
 
   if (!user) {
-    return <Navigate to="/log-in" replace />
+    return <>{redirectTo}</>
   }
 
-  return <Layout />
+  return <Layout>{children}</Layout>
 }
