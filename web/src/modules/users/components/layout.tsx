@@ -2,10 +2,10 @@ import { IconHome, IconLogout, IconMenu2, IconUserCircle } from "@tabler/icons-r
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router"
 
-import { useUser } from "~/modules/users/context/user-context"
 import { api } from "~/shared/api/api"
+import { Sidebar } from "~/shared/components/sidebar"
 
-import { Sidebar } from "../shared/components/sidebar"
+import { useUser } from "../context/user-context"
 
 export type LayoutProps = React.PropsWithChildren
 

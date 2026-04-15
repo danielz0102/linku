@@ -1,6 +1,5 @@
-import { Layout, type LayoutProps } from "~/app/layout"
-
 import { useUser } from "../context/user-context"
+import { Layout, type LayoutProps } from "./layout"
 
 type ProtectedLayoutProps = LayoutProps & {
   redirectTo: React.ReactNode
