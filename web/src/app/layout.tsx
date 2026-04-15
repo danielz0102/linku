@@ -1,9 +1,9 @@
 import { IconHome, IconLogout, IconMenu2, IconUserCircle } from "@tabler/icons-react"
 import { useState } from "react"
-import { Outlet, useNavigate, useLocation } from "react-router"
+import { Outlet, useLocation, useNavigate } from "react-router"
 
-import { useAuth } from "~/modules/users/context/auth-context"
-import { logOut } from "~/modules/users/services/log-out"
+import { useUser } from "~/modules/users/context/user-context"
+import { api } from "~/shared/api/api"
 
 import { Sidebar } from "../shared/components/sidebar"
 
@@ -11,7 +11,7 @@ export function Layout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { refresh } = useAuth()
+  const { setUser } = useUser()
 
   return (
     <div className="flex size-full">
@@ -25,8 +25,8 @@ export function Layout() {
         <Sidebar.Button
           Icon={IconLogout}
           onClick={async () => {
-            await logOut()
-            await refresh()
+            await api.users.logOut()
+            setUser(undefined)
             await navigate("/log-in")
           }}
         >

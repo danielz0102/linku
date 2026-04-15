@@ -1,13 +1,13 @@
-import { Link } from "react-router"
-import { useNavigate } from "react-router"
+import { Link, useNavigate } from "react-router"
 
-import { useAuth } from "../../context/auth-context"
+import { api } from "~/shared/api/api"
+
+import { useUser } from "../../context/user-context"
 import { LoginForm } from "./login-form"
-import { login } from "./login-service"
 
 export default function LoginPage() {
   const navigate = useNavigate()
-  const { refresh } = useAuth()
+  const { setUser } = useUser()
 
   return (
     <main className="flex size-full flex-col items-center justify-center">
@@ -15,10 +15,11 @@ export default function LoginPage() {
         <h1 className="title text-center">Welcome back!</h1>
         <LoginForm
           onSubmit={async () => {
-            await refresh()
+            const user = await api.users.whoami()
+            setUser(user)
             await navigate("/")
           }}
-          login={login}
+          login={api.users.login}
         />
         <p className="text-foreground/70 text-center text-sm">
           Don't have an account?{" "}
