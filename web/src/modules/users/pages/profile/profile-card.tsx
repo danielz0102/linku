@@ -15,7 +15,7 @@ export function ProfileCard({ avatarUrl, username, firstName, lastName, bio }: P
       <div className="flex flex-col items-center gap-4 md:flex-row md:items-start">
         <ProfileAvatar avatarUrl={avatarUrl} firstName={firstName} lastName={lastName} />
 
-        <div className="space-y-3 text-center md:text-left">
+        <div className="space-y-1 text-center md:text-left">
           <h2 className="text-2xl font-bold">{username}</h2>
           <p className="text-muted max-w-prose">
             {bio ? bio : <span className="italic">No bio available</span>}
@@ -44,7 +44,7 @@ function ProfileAvatar({ avatarUrl, firstName, lastName }: ProfileAvatarProps) {
   return (
     <div className="bg-primary/10 text-primary size-28 shrink-0 overflow-hidden rounded-full text-3xl font-bold">
       {showFallback ? (
-        <span>{initials}</span>
+        <span className="grid size-full place-content-center">{initials}</span>
       ) : (
         <img
           src={avatarUrl}
