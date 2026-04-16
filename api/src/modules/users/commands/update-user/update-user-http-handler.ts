@@ -1,0 +1,34 @@
+import type { RequestHandler } from "express"
+import { z } from "zod"
+
+import { updateUser } from "./update-user-service.ts"
+
+const updateUserRequestSchema = z.object({
+  username: z.string().trim().nonempty(),
+  firstName: z.string().trim().nonempty(),
+  lastName: z.string().trim().nonempty(),
+  profilePictureUrl: z.url().nullable(),
+  bio: z.string().trim().nullable(),
+})
+
+export const updateUserHandler: RequestHandler = async (req, res) => {
+  const id = req.session.userId
+
+  if (!id) {
+    return res.sendStatus(401)
+  }
+
+  const result = updateUserRequestSchema.safeParse(req.body)
+
+  if (!result.success) {
+    return res.status(400).json({ message: "Invalid request body", details: result.error.issues })
+  }
+
+  const ok = await updateUser({ id, ...result.data })
+
+  if (!ok) {
+    return res.status(409).json({ message: "Username is already taken" })
+  }
+
+  return res.sendStatus(204)
+}

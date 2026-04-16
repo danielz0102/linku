@@ -8,8 +8,8 @@ type UpdateUserCommand = {
   username: string
   firstName: string
   lastName: string
-  profilePictureUrl: string
-  bio: string
+  profilePictureUrl: string | null
+  bio: string | null
 }
 
 export async function updateUser(cmd: UpdateUserCommand): Promise<boolean> {
