@@ -116,4 +116,28 @@ describe("Update User Service", () => {
       bio: null,
     })
   })
+
+  it("doesn't returns false if username is not changed", async () => {
+    const username = `user-${randomUUID()}`
+
+    const id = await createUser({
+      username,
+      password: "pass1234",
+      firstName: "John",
+      lastName: "Doe",
+    })
+
+    expect.assert(id !== undefined)
+
+    const ok = await updateUser({
+      id,
+      username,
+      firstName: "New",
+      lastName: "Name",
+      profilePictureUrl: "https://example.com/new-avatar.png",
+      bio: "This should be saved",
+    })
+
+    expect(ok).toBe(true)
+  })
 })

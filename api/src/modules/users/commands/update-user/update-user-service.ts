@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm"
+import { and, eq, not } from "drizzle-orm"
 
 import { db } from "#db/drizzle/drizzle-client.ts"
 import { users } from "#db/drizzle/schemas.ts"
@@ -16,7 +16,7 @@ export async function updateUser(cmd: UpdateUserCommand): Promise<boolean> {
   const isUnique = await db
     .select({ id: users.id })
     .from(users)
-    .where(eq(users.username, cmd.username))
+    .where(and(eq(users.username, cmd.username), not(eq(users.id, cmd.id))))
     .then((r) => r.length === 0)
 
   if (!isUnique) return false
