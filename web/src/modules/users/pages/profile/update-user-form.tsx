@@ -10,6 +10,7 @@ type UpdateUserFormInputs = {
   firstName: string
   lastName: string
   username: string
+  bio: string | null
 }
 
 export function UpdateUserForm({ initialData }: UpdateUserFormProps) {
@@ -32,6 +33,16 @@ export function UpdateUserForm({ initialData }: UpdateUserFormProps) {
       <FormField label="Username">
         {(props) => (
           <input {...register("username")} {...props} className="input" placeholder="John" />
+        )}
+      </FormField>
+      <FormField label="Bio">
+        {(props) => (
+          <textarea
+            {...register("bio")}
+            {...props}
+            className="input h-24 resize-none rounded md:min-w-sm"
+            placeholder="Tell us about yourself..."
+          />
         )}
       </FormField>
 

@@ -33,6 +33,7 @@ export default function ProfilePage() {
             firstName: user.firstName,
             lastName: user.lastName,
             username: user.username,
+            bio: user.bio,
           }}
         />
       </Dialog>
