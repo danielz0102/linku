@@ -14,31 +14,53 @@ type UpdateUserFormInputs = {
 }
 
 export function UpdateUserForm({ initialData }: UpdateUserFormProps) {
-  const { register } = useForm<UpdateUserFormInputs>({
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<UpdateUserFormInputs>({
     defaultValues: initialData,
   })
 
   return (
-    <form className="space-y-2">
-      <FormField label="First Name">
+    <form className="space-y-2" onSubmit={handleSubmit((data) => {})}>
+      <FormField label="First Name" error={errors.firstName?.message}>
         {(props) => (
-          <input {...register("firstName")} {...props} className="input" placeholder="John" />
+          <input
+            {...register("firstName", { required: "First name is required" })}
+            {...props}
+            className="input"
+            placeholder="John"
+          />
         )}
       </FormField>
-      <FormField label="Last Name">
+      <FormField label="Last Name" error={errors.lastName?.message}>
         {(props) => (
-          <input {...register("lastName")} {...props} className="input" placeholder="John" />
+          <input
+            {...register("lastName", { required: "Last name is required" })}
+            {...props}
+            className="input"
+            placeholder="John"
+          />
         )}
       </FormField>
-      <FormField label="Username">
+      <FormField label="Username" error={errors.username?.message}>
         {(props) => (
-          <input {...register("username")} {...props} className="input" placeholder="John" />
+          <input
+            {...register("username", { required: "Username is required" })}
+            {...props}
+            className="input"
+            placeholder="John"
+          />
         )}
       </FormField>
-      <FormField label="Bio">
+      <FormField label="Bio" error={errors.bio?.message}>
         {(props) => (
           <textarea
-            {...register("bio")}
+            {...register("bio", {
+              required: "Bio is required",
+              maxLength: { value: 160, message: "Bio must be less than 160 characters" },
+            })}
             {...props}
             className="input h-24 resize-none rounded md:min-w-sm"
             placeholder="Tell us about yourself..."
