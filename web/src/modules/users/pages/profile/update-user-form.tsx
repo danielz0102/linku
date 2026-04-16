@@ -4,26 +4,41 @@ import { FormField } from "~/shared/components/form-field"
 
 type UpdateUserFormProps = {
   initialData: UpdateUserFormInputs
+  updateUser: (data: UpdateUserFormInputs) => Promise<boolean>
+  onSubmit: () => void
 }
 
 type UpdateUserFormInputs = {
   firstName: string
   lastName: string
   username: string
+  profilePictureUrl: string | null
   bio: string | null
 }
 
-export function UpdateUserForm({ initialData }: UpdateUserFormProps) {
+export function UpdateUserForm({ initialData, updateUser, onSubmit }: UpdateUserFormProps) {
   const {
     register,
     formState: { errors },
     handleSubmit,
+    setError,
   } = useForm<UpdateUserFormInputs>({
     defaultValues: initialData,
   })
 
   return (
-    <form className="space-y-2" onSubmit={handleSubmit((data) => {})}>
+    <form
+      className="space-y-2"
+      onSubmit={handleSubmit(async (data) => {
+        const success = await updateUser(data)
+
+        if (!success) {
+          return setError("username", { message: "Username is already taken" })
+        }
+
+        onSubmit()
+      })}
+    >
       <FormField label="First Name" error={errors.firstName?.message}>
         {(props) => (
           <input
