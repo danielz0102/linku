@@ -73,7 +73,6 @@ export function UpdateUserForm({ initialData, updateUser, onSubmit }: UpdateUser
         {(props) => (
           <textarea
             {...register("bio", {
-              required: "Bio is required",
               maxLength: { value: 160, message: "Bio must be less than 160 characters" },
             })}
             {...props}
