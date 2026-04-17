@@ -21,13 +21,12 @@ export const createUserHandler: RequestHandler = async (req, res) => {
     return res.status(400).json({ message: "Invalid request body", details: result.error.issues })
   }
 
-  const id = await createUser(result.data)
+  const user = await createUser(result.data)
 
-  if (!id) {
+  if (!user) {
     return res.status(409).json({ message: "User is already registered" })
   }
 
-  req.session.userId = id
-
-  res.sendStatus(201)
+  req.session.userId = user.id
+  res.status(201).json(user)
 }
