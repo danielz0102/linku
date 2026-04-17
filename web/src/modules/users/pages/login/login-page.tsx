@@ -15,13 +15,12 @@ export default function LoginPage() {
         <h1 className="title text-center">Welcome back!</h1>
         <LoginForm
           onSubmit={async (data) => {
-            const success = await api.users.login(data)
+            const user = await api.users.login(data)
 
-            if (!success) {
+            if (!user) {
               return false
             }
 
-            const user = await api.users.whoami()
             setUser(user)
             await navigate("/")
             return true

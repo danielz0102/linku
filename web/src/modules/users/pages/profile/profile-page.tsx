@@ -32,13 +32,12 @@ export default function ProfilePage() {
         <h2 className="title">Edit Profile</h2>
         <UpdateUserForm
           onSubmit={async (data) => {
-            const success = await api.users.updateUser(data)
+            const user = await api.users.updateUser(data)
 
-            if (!success) {
+            if (!user) {
               return false
             }
 
-            const user = await api.users.whoami()
             setUser(user)
             dlgRef.current?.close()
             return true

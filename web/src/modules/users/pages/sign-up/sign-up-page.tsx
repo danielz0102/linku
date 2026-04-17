@@ -15,18 +15,17 @@ export default function SignUpPage() {
         <h1 className="title text-center">Create your account</h1>
         <SignUpForm
           onSubmit={async (data) => {
-            const success = await api.users.signUp({
+            const user = await api.users.signUp({
               firstName: data.firstName,
               lastName: data.lastName,
               username: data.username,
               password: data.password,
             })
 
-            if (!success) {
+            if (!user) {
               return false
             }
 
-            const user = await api.users.whoami()
             setUser(user)
             await navigate("/")
             return true
