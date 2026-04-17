@@ -14,16 +14,19 @@ describe("Login Service", () => {
   })
 
   it("returns user data", async () => {
-    const username = `user-${randomUUID()}`
     const password = "pass1234"
-    const hashedPassword = await bcrypt.hash(password, 1)
     const registeredUser = await db
       .insert(users)
-      .values({ username, hashedPassword, firstName: "John", lastName: "Doe" })
+      .values({
+        username: `user-${randomUUID()}`,
+        hashedPassword: await bcrypt.hash(password, 1),
+        firstName: "John",
+        lastName: "Doe",
+      })
       .returning()
       .then((r) => toDomain(r[0]))
 
-    const user = await login({ username, password })
+    const user = await login({ username: registeredUser.username, password })
 
     expect(user).toEqual(registeredUser)
   })
@@ -40,7 +43,12 @@ describe("Login Service", () => {
   it("returns nothing if password doesn't match", async () => {
     const username = `user-${randomUUID()}`
     const hashedPassword = await bcrypt.hash("pass1234", 1)
-    await db.insert(users).values({ username, hashedPassword, firstName: "John", lastName: "Doe" })
+    await db.insert(users).values({
+      username: `user-${randomUUID()}`,
+      hashedPassword,
+      firstName: "John",
+      lastName: "Doe",
+    })
 
     const id = await login({
       username,
