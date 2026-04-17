@@ -4,8 +4,7 @@ import { FormField } from "~/shared/components/form-field"
 
 type UpdateUserFormProps = {
   initialData: UpdateUserFormInputs
-  updateUser: (data: UpdateUserFormInputs) => Promise<boolean>
-  onSubmit: () => void
+  onSubmit: (data: UpdateUserFormInputs) => Promise<boolean>
 }
 
 type UpdateUserFormInputs = {
@@ -16,7 +15,7 @@ type UpdateUserFormInputs = {
   bio: string | null
 }
 
-export function UpdateUserForm({ initialData, updateUser, onSubmit }: UpdateUserFormProps) {
+export function UpdateUserForm({ initialData, onSubmit }: UpdateUserFormProps) {
   const {
     register,
     formState: { errors },
@@ -30,13 +29,11 @@ export function UpdateUserForm({ initialData, updateUser, onSubmit }: UpdateUser
     <form
       className="space-y-2"
       onSubmit={handleSubmit(async (data) => {
-        const success = await updateUser(data)
+        const success = await onSubmit(data)
 
         if (!success) {
           return setError("username", { message: "Username is already taken" })
         }
-
-        onSubmit()
       })}
     >
       <FormField label="First Name" error={errors.firstName?.message}>

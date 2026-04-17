@@ -4,8 +4,7 @@ import { useForm } from "react-hook-form"
 import { FormField } from "~/shared/components/form-field"
 
 interface LoginFormProps {
-  onSubmit: () => void
-  login: (data: { username: string; password: string }) => Promise<boolean>
+  onSubmit: (data: { username: string; password: string }) => Promise<boolean>
 }
 
 type LoginFormInputs = {
@@ -13,7 +12,7 @@ type LoginFormInputs = {
   password: string
 }
 
-export function LoginForm({ login, onSubmit }: LoginFormProps) {
+export function LoginForm({ onSubmit }: LoginFormProps) {
   const {
     register,
     handleSubmit,
@@ -25,11 +24,9 @@ export function LoginForm({ login, onSubmit }: LoginFormProps) {
     <form
       className="space-y-4"
       onSubmit={handleSubmit(async (data) => {
-        const success = await login(data)
+        const success = await onSubmit(data)
 
-        if (success) {
-          onSubmit()
-        } else {
+        if (!success) {
           setError("root", { message: "Invalid credentials" })
         }
       })}

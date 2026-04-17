@@ -14,12 +14,18 @@ export default function LoginPage() {
       <div className="bg-surface shadow-foreground/10 space-y-4 rounded-lg px-16 py-8 shadow">
         <h1 className="title text-center">Welcome back!</h1>
         <LoginForm
-          onSubmit={async () => {
+          onSubmit={async (data) => {
+            const success = await api.users.login(data)
+
+            if (!success) {
+              return false
+            }
+
             const user = await api.users.whoami()
             setUser(user)
             await navigate("/")
+            return true
           }}
-          login={api.users.login}
         />
         <p className="text-foreground/70 text-center text-sm">
           Don't have an account?{" "}

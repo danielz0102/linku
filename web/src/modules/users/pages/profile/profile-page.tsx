@@ -31,11 +31,17 @@ export default function ProfilePage() {
       <Dialog ref={dlgRef}>
         <h2 className="title">Edit Profile</h2>
         <UpdateUserForm
-          updateUser={api.users.updateUser}
-          onSubmit={async () => {
+          onSubmit={async (data) => {
+            const success = await api.users.updateUser(data)
+
+            if (!success) {
+              return false
+            }
+
             const user = await api.users.whoami()
             setUser(user)
             dlgRef.current?.close()
+            return true
           }}
           initialData={{
             firstName: user.firstName,
