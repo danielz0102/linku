@@ -15,12 +15,12 @@ export const loginHandler: RequestHandler = async (req, res) => {
     return res.status(400).json({ message: "Invalid request body", details: result.error.issues })
   }
 
-  const id = await login(result.data)
+  const user = await login(result.data)
 
-  if (!id) {
+  if (!user) {
     return res.sendStatus(401)
   }
 
-  req.session.userId = id
-  res.sendStatus(201)
+  req.session.userId = user.id
+  res.status(201).json(user)
 }
