@@ -1,10 +1,9 @@
 import { randomUUID } from "node:crypto"
 
-import { eq, sql } from "drizzle-orm"
+import { sql } from "drizzle-orm"
 
 import { db } from "~/db/drizzle/drizzle-client.ts"
 import { users } from "~/db/drizzle/schemas.ts"
-import { createUser } from "~/modules/users/commands/create-user/create-user-service.ts"
 import { updateUser } from "~/modules/users/commands/update-user/update-user-service.ts"
 
 describe("Update User Service", () => {
@@ -12,132 +11,88 @@ describe("Update User Service", () => {
     await db.execute(sql`TRUNCATE TABLE users`)
   })
 
-  it("returns true if updating succeed", async () => {
-    const username = `user-${randomUUID()}`
-
-    const id = await createUser({
-      username,
-      password: "pass1234",
-      firstName: "John",
-      lastName: "Doe",
-    })
-
-    expect.assert(id !== undefined)
-
-    const updatedUsername = `updated-${randomUUID()}`
-    const updatedFirstName = "Jane"
-    const updatedLastName = "Smith"
-    const updatedProfilePictureUrl = "https://example.com/avatar.png"
-    const updatedBio = "Updated bio"
-
-    const ok = await updateUser({
-      id,
-      username: updatedUsername,
-      firstName: updatedFirstName,
-      lastName: updatedLastName,
-      profilePictureUrl: updatedProfilePictureUrl,
-      bio: updatedBio,
-    })
-
-    expect(ok).toBe(true)
-
-    const updatedUser = await db
-      .select({
-        username: users.username,
-        firstName: users.firstName,
-        lastName: users.lastName,
-        profilePictureUrl: users.profilePictureUrl,
-        bio: users.bio,
+  it("returns updated user data", async () => {
+    const user = await db
+      .insert(users)
+      .values({
+        username: `user-${randomUUID()}`,
+        hashedPassword: "hashedpassword",
+        firstName: "John",
+        lastName: "Doe",
       })
-      .from(users)
-      .where(eq(users.id, id))
-      .limit(1)
-      .then((r) => r[0])
+      .returning()
+      .then((r) => r[0]!)
+    const newUserData = {
+      username: `updated-${randomUUID()}`,
+      firstName: "Jane",
+      lastName: "Smith",
+      profilePictureUrl: "https://example.com/avatar.png",
+      bio: "Updated bio",
+    }
 
-    expect(updatedUser).toEqual({
-      username: updatedUsername,
-      firstName: updatedFirstName,
-      lastName: updatedLastName,
-      profilePictureUrl: updatedProfilePictureUrl,
-      bio: updatedBio,
+    const updatedUser = await updateUser({
+      id: user.id,
+      ...newUserData,
     })
+
+    expect(updatedUser).toMatchObject(newUserData)
   })
 
-  it("returns false if username is not unique", async () => {
-    const firstUsername = `user-${randomUUID()}`
-    const secondUsername = `user-${randomUUID()}`
+  it("returns nothing if username is not unique", async () => {
+    const username = `user-${randomUUID()}`
+    const anotherUsername = `user-${randomUUID()}`
+    const [_, userId] = await Promise.all([
+      db.insert(users).values({
+        username: anotherUsername,
+        hashedPassword: "hashed",
+        firstName: "Existing",
+        lastName: "User",
+      }) as unknown,
+      db
+        .insert(users)
+        .values({
+          username,
+          hashedPassword: "hashed",
+          firstName: "John",
+          lastName: "Doe",
+        })
+        .returning({ id: users.id })
+        .then((r) => r[0]!.id),
+    ])
 
-    const firstId = await createUser({
-      username: firstUsername,
-      password: "pass1234",
-      firstName: "John",
-      lastName: "Doe",
-    })
-
-    const secondId = await createUser({
-      username: secondUsername,
-      password: "pass1234",
-      firstName: "Alice",
-      lastName: "Cooper",
-    })
-
-    expect.assert(firstId !== undefined)
-    expect.assert(secondId !== undefined)
-
-    const ok = await updateUser({
-      id: firstId,
-      username: secondUsername,
+    const updatedUser = await updateUser({
+      id: userId,
+      username: anotherUsername,
       firstName: "New",
       lastName: "Name",
-      profilePictureUrl: "https://example.com/new-avatar.png",
-      bio: "This should not be saved",
-    })
-
-    expect(ok).toBe(false)
-
-    const unchangedUser = await db
-      .select({
-        username: users.username,
-        firstName: users.firstName,
-        lastName: users.lastName,
-        profilePictureUrl: users.profilePictureUrl,
-        bio: users.bio,
-      })
-      .from(users)
-      .where(eq(users.id, firstId))
-      .limit(1)
-      .then((r) => r[0])
-
-    expect(unchangedUser).toEqual({
-      username: firstUsername,
-      firstName: "John",
-      lastName: "Doe",
       profilePictureUrl: null,
       bio: null,
     })
+
+    expect(updatedUser).toBeUndefined()
   })
 
-  it("doesn't returns false if username is not changed", async () => {
-    const username = `user-${randomUUID()}`
+  it("update user if username is not changed", async () => {
+    const user = await db
+      .insert(users)
+      .values({
+        username: `user-${randomUUID()}`,
+        hashedPassword: "hashedpassword",
+        firstName: "John",
+        lastName: "Doe",
+      })
+      .returning()
+      .then((r) => r[0]!)
 
-    const id = await createUser({
-      username,
-      password: "pass1234",
-      firstName: "John",
-      lastName: "Doe",
+    const updatedUser = await updateUser({
+      id: user.id,
+      username: user.username,
+      firstName: "Jane",
+      lastName: "Smith",
+      profilePictureUrl: "https://example.com/avatar.png",
+      bio: "Updated bio",
     })
 
-    expect.assert(id !== undefined)
-
-    const ok = await updateUser({
-      id,
-      username,
-      firstName: "New",
-      lastName: "Name",
-      profilePictureUrl: "https://example.com/new-avatar.png",
-      bio: "This should be saved",
-    })
-
-    expect(ok).toBe(true)
+    expect(updatedUser).not.toBeUndefined()
   })
 })

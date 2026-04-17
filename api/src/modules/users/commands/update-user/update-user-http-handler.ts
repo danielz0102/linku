@@ -24,11 +24,11 @@ export const updateUserHandler: RequestHandler = async (req, res) => {
     return res.status(400).json({ message: "Invalid request body", details: result.error.issues })
   }
 
-  const ok = await updateUser({ id, ...result.data })
+  const user = await updateUser({ id, ...result.data })
 
-  if (!ok) {
+  if (!user) {
     return res.status(409).json({ message: "Username is already taken" })
   }
 
-  return res.sendStatus(204)
+  return res.json(user)
 }
