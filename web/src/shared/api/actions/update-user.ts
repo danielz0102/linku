@@ -1,5 +1,7 @@
 import { API_URL } from "~/env"
 
+import type { UserResponse } from "../user-response"
+
 type UpdateUserPayload = {
   firstName: string
   lastName: string
@@ -8,7 +10,7 @@ type UpdateUserPayload = {
   bio: string | null
 }
 
-export async function updateUser(data: UpdateUserPayload): Promise<boolean> {
+export async function updateUser(data: UpdateUserPayload): Promise<UserResponse | undefined> {
   const res = await fetch(`${API_URL}/users/me`, {
     credentials: "include",
     method: "PUT",
@@ -20,11 +22,11 @@ export async function updateUser(data: UpdateUserPayload): Promise<boolean> {
 
   if (!res.ok) {
     if (res.status === 409) {
-      return false
+      return
     }
 
     throw new Error("Failed to update user")
   }
 
-  return true
+  return res.json()
 }

@@ -1,6 +1,11 @@
 import { API_URL } from "~/env"
 
-export async function login(data: { username: string; password: string }): Promise<boolean> {
+import type { UserResponse } from "../user-response"
+
+export async function login(data: {
+  username: string
+  password: string
+}): Promise<UserResponse | undefined> {
   const res = await fetch(`${API_URL}/session`, {
     credentials: "include",
     method: "POST",
@@ -12,11 +17,11 @@ export async function login(data: { username: string; password: string }): Promi
 
   if (!res.ok) {
     if (res.status === 401) {
-      return false
+      return
     }
 
     throw new Error("Failed to login")
   }
 
-  return true
+  return res.json()
 }

@@ -1,11 +1,13 @@
 import { API_URL } from "~/env"
 
+import type { UserResponse } from "../user-response"
+
 export async function signUp(data: {
   firstName: string
   lastName: string
   username: string
   password: string
-}): Promise<boolean> {
+}): Promise<UserResponse | undefined> {
   const res = await fetch(`${API_URL}/users`, {
     credentials: "include",
     method: "POST",
@@ -17,11 +19,11 @@ export async function signUp(data: {
 
   if (!res.ok) {
     if (res.status === 409) {
-      return false
+      return
     }
 
     throw new Error("Failed to create user")
   }
 
-  return true
+  return res.json()
 }
