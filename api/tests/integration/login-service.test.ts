@@ -24,7 +24,7 @@ describe("Login Service", () => {
         lastName: "Doe",
       })
       .returning()
-      .then((r) => toDomain(r[0]))
+      .then((r) => toDomain(r[0]!))
 
     const user = await login({ username: registeredUser.username, password })
 
@@ -50,11 +50,11 @@ describe("Login Service", () => {
       lastName: "Doe",
     })
 
-    const id = await login({
+    const user = await login({
       username,
       password: "wrong-password",
     })
 
-    expect(id).toBeUndefined()
+    expect(user).toBeUndefined()
   })
 })

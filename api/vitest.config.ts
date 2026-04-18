@@ -11,4 +11,5 @@ export default defineConfig({
       "~tests": "./tests",
     },
   },
+  ssr: { resolve: { conditions: ["source"] } },
 })

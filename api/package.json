@@ -17,8 +17,8 @@
     "dev": "NODE_OPTIONS='--conditions=source' tsx --watch ./src/index.ts",
     "build": "tsc",
     "format": "oxfmt",
-    "test": "NODE_OPTIONS='--conditions=source' vitest run",
-    "test:watch": "NODE_OPTIONS='--conditions=source' vitest",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
