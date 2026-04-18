@@ -2,7 +2,7 @@ import { RedisStore } from "connect-redis"
 import session from "express-session"
 
 import { redisClient } from "#db/redis/redis-client.ts"
-import { COOKIE_HTTPS, SESSION_SECRET } from "#env.ts"
+import { SESSION_COOKIE_IS_HTTPS, SESSION_SECRET } from "#env.ts"
 import { SESSION_COOKIE_NAME } from "#shared/session.ts"
 
 const redisStore = new RedisStore({
@@ -19,7 +19,7 @@ export const sessionMiddleware = session({
   cookie: {
     httpOnly: true,
     sameSite: "lax",
-    secure: COOKIE_HTTPS,
+    secure: SESSION_COOKIE_IS_HTTPS,
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
 })
