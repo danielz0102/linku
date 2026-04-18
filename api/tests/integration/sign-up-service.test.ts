@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto"
 
+import { users } from "#db/drizzle/schemas.ts"
 import { SignUpService } from "#modules/users/commands/sign-up/sign-up-service.ts"
-import { users } from "~/db/drizzle/schemas.ts"
 
 import { it as base } from "../helpers/db-context.ts"
 

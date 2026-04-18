@@ -32,8 +32,7 @@
 
     // Import Aliases
     "paths": {
-      "~/*": ["../src/*"],
-      "~tests/*": ["./tests/*"]
+      "~/*": ["./*"]
     }
   },
   "include": ["../src/", "."]

@@ -2,9 +2,9 @@ import { randomUUID } from "node:crypto"
 
 import bcrypt from "bcryptjs"
 
-import { users } from "~/db/drizzle/schemas.ts"
-import { LoginService } from "~/modules/users/commands/login/login-service.ts"
-import { toDomain } from "~/modules/users/database/user-model.ts"
+import { users } from "#db/drizzle/schemas.ts"
+import { LoginService } from "#modules/users/commands/login/login-service.ts"
+import { toDomain } from "#modules/users/database/user-model.ts"
 
 import { it as base } from "../helpers/db-context.ts"
 
