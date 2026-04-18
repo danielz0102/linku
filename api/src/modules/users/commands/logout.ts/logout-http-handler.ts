@@ -8,10 +8,9 @@ export const logoutHandler: RequestHandler = async (req, res) => {
   req.session.destroy((error) => {
     if (error) {
       console.error("Error destroying session:", error)
-    } else {
-      res.clearCookie(SESSION_COOKIE_NAME)
     }
 
+    res.clearCookie(SESSION_COOKIE_NAME)
     res.sendStatus(204)
   })
 }
