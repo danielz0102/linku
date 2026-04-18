@@ -3,10 +3,10 @@ import { z } from "zod"
 
 import { db } from "#db/drizzle/drizzle-client.ts"
 
-import { SignUpService } from "./create-user-service.ts"
+import { SignUpService } from "./sign-up-service.ts"
 
 const signUp = new SignUpService(db)
-const createUserRequestSchema = z.object({
+const signUpRequestSchema = z.object({
   username: z.string().trim().nonempty(),
   firstName: z.string().trim().nonempty(),
   lastName: z.string().trim().nonempty(),
@@ -17,8 +17,8 @@ const createUserRequestSchema = z.object({
     .regex(/^(?=.*[^a-zA-Z0-9])/, "Password must contain at least one special character"),
 })
 
-export const createUserHandler: RequestHandler = async (req, res) => {
-  const result = createUserRequestSchema.safeParse(req.body)
+export const signUpHandler: RequestHandler = async (req, res) => {
+  const result = signUpRequestSchema.safeParse(req.body)
 
   if (!result.success) {
     return res.status(400).json({ message: "Invalid request body", details: result.error.issues })
