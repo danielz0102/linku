@@ -20,7 +20,9 @@ export function ProfileCard({
     <section className="bg-surface shadow-foreground/10 w-full max-w-2xl space-y-4 rounded-xl p-6 shadow">
       <h1 className="title text-center md:text-left">{`${firstName} ${lastName}`}</h1>
       <div className="flex flex-col items-center gap-4 md:flex-row md:items-start">
-        <ProfileAvatar avatarUrl={avatarUrl} firstName={firstName} lastName={lastName} />
+        <ProfileAvatar avatarUrl={avatarUrl} firstName={firstName} lastName={lastName}>
+          <ProfileAvatar.EditButton onClick={() => {}} />
+        </ProfileAvatar>
 
         <div className="space-y-1 text-center md:text-left">
           <h2 className="text-2xl font-bold">{username}</h2>
