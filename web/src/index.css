@@ -33,7 +33,7 @@ dialog {
 }
 
 @utility input {
-  @apply border-border rounded-full border px-3 py-1.5;
+  @apply border-border rounded border px-3 py-1.5;
 }
 
 @utility button {
