@@ -32,13 +32,16 @@ export default function ProfilePage() {
         <h2 className="title">Edit Profile</h2>
         <UpdateUserForm
           onSubmit={async (data) => {
-            const user = await api.users.updateUser(data)
+            const updatedUser = await api.users.updateUser({
+              ...data,
+              profilePictureUrl: user.profilePictureUrl ?? null,
+            })
 
-            if (!user) {
+            if (!updatedUser) {
               return false
             }
 
-            setUser(user)
+            setUser(updatedUser)
             dlgRef.current?.close()
             return true
           }}
@@ -46,7 +49,6 @@ export default function ProfilePage() {
             firstName: user.firstName,
             lastName: user.lastName,
             username: user.username,
-            profilePictureUrl: user.profilePictureUrl,
             bio: user.bio,
           }}
         />
