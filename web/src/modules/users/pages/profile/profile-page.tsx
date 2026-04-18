@@ -4,6 +4,7 @@ import { api } from "~/shared/api/api"
 import { Dialog } from "~/shared/components/dialog"
 
 import { useAuthenticatedUser, useUser } from "../../context/user-context"
+import { ProfileAvatar } from "./profile-avatar"
 import { ProfileCard } from "./profile-card"
 import { UpdateUserForm } from "./update-user-form"
 
@@ -15,11 +16,21 @@ export default function ProfilePage() {
   return (
     <main className="flex size-full items-center justify-center">
       <ProfileCard
-        avatarUrl={user.profilePictureUrl ?? undefined}
-        username={user.username}
-        firstName={user.firstName}
-        lastName={user.lastName}
-        bio={user.bio}
+        data={{
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          bio: user.bio,
+        }}
+        Avatar={
+          <ProfileAvatar
+            firstName={user.firstName}
+            lastName={user.lastName}
+            avatarUrl={user.profilePictureUrl ?? undefined}
+          >
+            <ProfileAvatar.EditButton onClick={() => {}} />
+          </ProfileAvatar>
+        }
       >
         <ProfileCard.EditButton
           onClick={() => {
@@ -31,6 +42,12 @@ export default function ProfilePage() {
       <Dialog ref={dlgRef}>
         <h2 className="title">Edit Profile</h2>
         <UpdateUserForm
+          initialData={{
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            bio: user.bio,
+          }}
           onSubmit={async (data) => {
             const updatedUser = await api.users.updateUser({
               ...data,
@@ -44,12 +61,6 @@ export default function ProfilePage() {
             setUser(updatedUser)
             dlgRef.current?.close()
             return true
-          }}
-          initialData={{
-            firstName: user.firstName,
-            lastName: user.lastName,
-            username: user.username,
-            bio: user.bio,
           }}
         />
       </Dialog>
