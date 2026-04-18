@@ -12,7 +12,21 @@ const envSchema = z.object({
   SESSION_SECRET: z.string().min(32),
   SALT: z.coerce.number().default(15),
   COOKIE_HTTPS: z.coerce.boolean().default(true),
+
+  CLOUDINARY_NAME: z.string().nonempty(),
+  CLOUDINARY_API_KEY: z.string().nonempty(),
+  CLOUDINARY_SECRET: z.string().nonempty(),
 })
 
-export const { PORT, CLIENT_ORIGIN, DB_URL, REDIS_URL, SESSION_SECRET, SALT, COOKIE_HTTPS } =
-  envSchema.parse(process.env)
+export const {
+  PORT,
+  CLIENT_ORIGIN,
+  DB_URL,
+  REDIS_URL,
+  SESSION_SECRET,
+  SALT,
+  COOKIE_HTTPS,
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_SECRET,
+  CLOUDINARY_NAME,
+} = envSchema.parse(process.env)
