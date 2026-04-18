@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs"
 import { eq } from "drizzle-orm"
+import type { NodePgDatabase } from "drizzle-orm/node-postgres"
 
-import { db } from "#db/drizzle/drizzle-client.ts"
 import { users } from "#db/drizzle/schemas.ts"
 import { toDomain } from "#modules/users/database/user-model.ts"
 import type { User } from "#modules/users/domain/user.ts"
@@ -11,19 +11,23 @@ type LoginCommand = {
   password: string
 }
 
-export async function login(cmd: LoginCommand): Promise<User | undefined> {
-  const record = await db
-    .select()
-    .from(users)
-    .where(eq(users.username, cmd.username))
-    .limit(1)
-    .then((r) => r[0])
+export class LoginService {
+  constructor(private readonly db: NodePgDatabase) {}
 
-  if (!record) return
+  async execute(cmd: LoginCommand): Promise<User | undefined> {
+    const record = await this.db
+      .select()
+      .from(users)
+      .where(eq(users.username, cmd.username))
+      .limit(1)
+      .then((r) => r[0])
 
-  const isValid = await bcrypt.compare(cmd.password, record.hashedPassword)
+    if (!record) return
 
-  if (!isValid) return
+    const isValid = await bcrypt.compare(cmd.password, record.hashedPassword)
 
-  return toDomain(record)
+    if (!isValid) return
+
+    return toDomain(record)
+  }
 }

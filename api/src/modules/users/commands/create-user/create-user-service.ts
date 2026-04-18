@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs"
 import { eq } from "drizzle-orm"
+import type { NodePgDatabase } from "drizzle-orm/node-postgres"
 
-import { db } from "#db/drizzle/drizzle-client.ts"
 import { users } from "#db/drizzle/schemas.ts"
 import { SALT } from "#env.ts"
 import { toDomain } from "#modules/users/database/user-model.ts"
@@ -14,28 +14,32 @@ type CreateUserCommand = {
   lastName: string
 }
 
-export async function createUser(cmd: CreateUserCommand): Promise<User | undefined> {
-  const userExists = await db
-    .select({ exists: users.id })
-    .from(users)
-    .where(eq(users.username, cmd.username))
-    .limit(1)
-    .then((r) => Boolean(r[0]))
+export class SignUpService {
+  constructor(private readonly db: NodePgDatabase) {}
 
-  if (userExists) return
+  async execute(cmd: CreateUserCommand): Promise<User | undefined> {
+    const userExists = await this.db
+      .select({ exists: users.id })
+      .from(users)
+      .where(eq(users.username, cmd.username))
+      .limit(1)
+      .then((r) => Boolean(r[0]))
 
-  const hashedPassword = await bcrypt.hash(cmd.password, SALT)
+    if (userExists) return
 
-  const record = await db
-    .insert(users)
-    .values({
-      username: cmd.username,
-      hashedPassword,
-      firstName: cmd.firstName,
-      lastName: cmd.lastName,
-    })
-    .returning()
-    .then((r) => r[0]!)
+    const hashedPassword = await bcrypt.hash(cmd.password, SALT)
 
-  return toDomain(record)
+    const record = await this.db
+      .insert(users)
+      .values({
+        username: cmd.username,
+        hashedPassword,
+        firstName: cmd.firstName,
+        lastName: cmd.lastName,
+      })
+      .returning()
+      .then((r) => r[0]!)
+
+    return toDomain(record)
+  }
 }

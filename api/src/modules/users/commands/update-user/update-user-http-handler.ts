@@ -1,8 +1,11 @@
 import type { RequestHandler } from "express"
 import { z } from "zod"
 
-import { updateUser } from "./update-user-service.ts"
+import { db } from "#db/drizzle/drizzle-client.ts"
 
+import { UpdateUserService } from "./update-user-service.ts"
+
+const updateUser = new UpdateUserService(db)
 const updateUserRequestSchema = z.object({
   username: z.string().trim().nonempty(),
   firstName: z.string().trim().nonempty(),
@@ -24,7 +27,7 @@ export const updateUserHandler: RequestHandler = async (req, res) => {
     return res.status(400).json({ message: "Invalid request body", details: result.error.issues })
   }
 
-  const user = await updateUser({ id, ...result.data })
+  const user = await updateUser.execute({ id, ...result.data })
 
   if (!user) {
     return res.status(409).json({ message: "Username is already taken" })

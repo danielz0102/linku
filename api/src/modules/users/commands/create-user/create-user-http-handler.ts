@@ -1,8 +1,11 @@
 import type { RequestHandler } from "express"
 import { z } from "zod"
 
-import { createUser } from "./create-user-service.ts"
+import { db } from "#db/drizzle/drizzle-client.ts"
 
+import { SignUpService } from "./create-user-service.ts"
+
+const signUp = new SignUpService(db)
 const createUserRequestSchema = z.object({
   username: z.string().trim().nonempty(),
   firstName: z.string().trim().nonempty(),
@@ -21,7 +24,7 @@ export const createUserHandler: RequestHandler = async (req, res) => {
     return res.status(400).json({ message: "Invalid request body", details: result.error.issues })
   }
 
-  const user = await createUser(result.data)
+  const user = await signUp.execute(result.data)
 
   if (!user) {
     return res.status(409).json({ message: "User is already registered" })

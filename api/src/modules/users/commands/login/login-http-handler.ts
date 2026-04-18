@@ -1,8 +1,11 @@
 import type { RequestHandler } from "express"
 import { z } from "zod"
 
-import { login } from "./login-service.ts"
+import { db } from "#db/drizzle/drizzle-client.ts"
 
+import { LoginService } from "./login-service.ts"
+
+const login = new LoginService(db)
 const loginRequestSchema = z.object({
   username: z.string().trim().nonempty(),
   password: z.string().trim().nonempty(),
@@ -15,7 +18,7 @@ export const loginHandler: RequestHandler = async (req, res) => {
     return res.status(400).json({ message: "Invalid request body", details: result.error.issues })
   }
 
-  const user = await login(result.data)
+  const user = await login.execute(result.data)
 
   if (!user) {
     return res.sendStatus(401)

@@ -1,17 +1,14 @@
 import { randomUUID } from "node:crypto"
 
-import { sql } from "drizzle-orm"
-
-import { db } from "~/db/drizzle/drizzle-client.ts"
 import { users } from "~/db/drizzle/schemas.ts"
-import { updateUser } from "~/modules/users/commands/update-user/update-user-service.ts"
+import { UpdateUserService } from "~/modules/users/commands/update-user/update-user-service.ts"
+
+import { it as base } from "../helpers/db-context.ts"
+
+const it = base.extend("updateUser", ({ db }) => new UpdateUserService(db))
 
 describe("Update User Service", () => {
-  afterAll(async () => {
-    await db.execute(sql`TRUNCATE TABLE users`)
-  })
-
-  it("returns updated user data", async () => {
+  it("returns updated user data", async ({ db, updateUser }) => {
     const user = await db
       .insert(users)
       .values({
@@ -30,7 +27,7 @@ describe("Update User Service", () => {
       bio: "Updated bio",
     }
 
-    const updatedUser = await updateUser({
+    const updatedUser = await updateUser.execute({
       id: user.id,
       ...newUserData,
     })
@@ -38,7 +35,7 @@ describe("Update User Service", () => {
     expect(updatedUser).toMatchObject(newUserData)
   })
 
-  it("returns nothing if username is not unique", async () => {
+  it("returns nothing if username is not unique", async ({ db, updateUser }) => {
     const username = `user-${randomUUID()}`
     const anotherUsername = `user-${randomUUID()}`
     const [_, userId] = await Promise.all([
@@ -60,7 +57,7 @@ describe("Update User Service", () => {
         .then((r) => r[0]!.id),
     ])
 
-    const updatedUser = await updateUser({
+    const updatedUser = await updateUser.execute({
       id: userId,
       username: anotherUsername,
       firstName: "New",
@@ -72,7 +69,7 @@ describe("Update User Service", () => {
     expect(updatedUser).toBeUndefined()
   })
 
-  it("update user if username is not changed", async () => {
+  it("update user if username is not changed", async ({ db, updateUser }) => {
     const user = await db
       .insert(users)
       .values({
@@ -84,7 +81,7 @@ describe("Update User Service", () => {
       .returning()
       .then((r) => r[0]!)
 
-    const updatedUser = await updateUser({
+    const updatedUser = await updateUser.execute({
       id: user.id,
       username: user.username,
       firstName: "Jane",
