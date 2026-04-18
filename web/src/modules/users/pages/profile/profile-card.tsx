@@ -28,7 +28,7 @@ export function ProfileCard({
             {bio ? bio : <span className="italic">No bio available</span>}
           </p>
         </div>
-        {children}
+        <div className="mt-4 self-start md:ml-auto md:self-end">{children}</div>
       </div>
     </section>
   )
@@ -36,7 +36,7 @@ export function ProfileCard({
 
 ProfileCard.EditButton = ({ onClick }: { onClick: () => void }) => {
   return (
-    <button className="button ml-auto self-end rounded-xl" onClick={onClick}>
+    <button className="button rounded-xl" onClick={onClick}>
       Edit Profile
     </button>
   )
