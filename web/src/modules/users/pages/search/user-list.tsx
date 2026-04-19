@@ -4,18 +4,12 @@ import type { User } from "~/modules/users/domain/user"
 import { ProfileAvatar } from "~/shared/components/profile-avatar"
 
 type UserListProps = {
-  id?: string
   users: User[]
 }
 
-export function UserList({ id, users }: UserListProps) {
+export function UserList({ users }: UserListProps) {
   return (
-    <ul
-      id={id}
-      className="bg-surface border-border divide-border max-h-96 overflow-hidden overflow-y-auto rounded-2xl border shadow-sm"
-    >
-      {users.length === 0 && <li className="text-muted p-4">No users found.</li>}
-
+    <ul className="bg-surface border-border divide-border max-h-96 overflow-hidden overflow-y-auto rounded-2xl border shadow-sm">
       {users.map((user) => {
         const fullName = `${user.firstName} ${user.lastName}`
 
