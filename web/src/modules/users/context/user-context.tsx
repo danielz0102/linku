@@ -32,11 +32,11 @@ export function useUser() {
 }
 
 export function useAuthenticatedUser() {
-  const { user } = useUser()
+  const { user, setUser } = useUser()
 
   if (!user) {
     throw new Error("User is not authenticated")
   }
 
-  return user
+  return { user, setUser }
 }

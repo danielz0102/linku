@@ -3,7 +3,7 @@ import { useRef } from "react"
 import { api } from "~/shared/api/api"
 import { Dialog } from "~/shared/components/dialog"
 
-import { useAuthenticatedUser, useUser } from "../../context/user-context"
+import { useAuthenticatedUser } from "../../context/user-context"
 import { ProfileAvatar } from "./profile-avatar"
 import { ProfileCard } from "./profile-card"
 import { UpdateProfilePictureForm } from "./update-profile-picture-form"
@@ -11,10 +11,9 @@ import { UpdateUserForm } from "./update-user-form"
 import { uploadImage } from "./upload-image"
 
 export default function ProfilePage() {
-  const user = useAuthenticatedUser()
+  const { user, setUser } = useAuthenticatedUser()
   const editProfileDlgRef = useRef<HTMLDialogElement>(null)
   const updateProfilePictureDlgRef = useRef<HTMLDialogElement>(null)
-  const { setUser } = useUser()
 
   return (
     <main className="flex size-full items-center justify-center">
