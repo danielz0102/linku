@@ -16,7 +16,7 @@ export function UserList({ users }: UserListProps) {
         return (
           <li key={user.id}>
             <Link
-              to={`/users/${user.username}`}
+              to={`/profile/${user.username}`}
               className="flex size-full items-center gap-3 px-4 py-3 hover:bg-blue-100"
             >
               <ProfileAvatar
