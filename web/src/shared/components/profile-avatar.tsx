@@ -1,19 +1,27 @@
 import { IconEdit } from "@tabler/icons-react"
 import { useState } from "react"
+import { twMerge } from "tailwind-merge"
 
 type ProfileAvatarProps = React.PropsWithChildren<{
-  avatarUrl?: string
   firstName: string
   lastName: string
+  avatarUrl?: string
+  className?: string
 }>
 
-export function ProfileAvatar({ avatarUrl, firstName, lastName, children }: ProfileAvatarProps) {
+export function ProfileAvatar({
+  avatarUrl,
+  firstName,
+  lastName,
+  className,
+  children,
+}: ProfileAvatarProps) {
   const [hasImageError, setHasImageError] = useState(false)
   const initials = getInitials(firstName, lastName)
   const showFallback = !avatarUrl || hasImageError
 
   return (
-    <div className="relative size-28 shrink-0">
+    <div className={twMerge("relative size-28", className)}>
       <div className="bg-primary/10 text-primary size-full overflow-hidden rounded-full text-3xl font-bold">
         {showFallback ? (
           <span className="grid size-full place-content-center">{initials}</span>

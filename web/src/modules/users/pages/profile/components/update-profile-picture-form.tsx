@@ -2,9 +2,9 @@ import { useForm } from "react-hook-form"
 
 import { FormButton } from "~/shared/components/form-button"
 import { FormField } from "~/shared/components/form-field"
+import { ProfileAvatar } from "~/shared/components/profile-avatar"
 
 import { validateImageFile } from "../validate-image"
-import { ProfileAvatar } from "./profile-avatar"
 
 type UpdateProfilePictureFormProps = {
   currentImageUrl?: string
