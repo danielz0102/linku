@@ -1,27 +1,15 @@
-import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 
 import { api } from "~/shared/api/api"
 import { useDebounce } from "~/shared/hooks/use-debounce"
 
+import type { User } from "../../domain/user"
 import { SearchBox } from "./search-box"
 import { UserList } from "./user-list"
 
 export default function SearchPage() {
-  const [query, setQuery] = useState("")
+  const [users, setUsers] = useState<User[]>([])
   const debounce = useDebounce(300)
-
-  const { data } = useQuery({
-    queryKey: ["users", "search", query],
-    queryFn: () => {
-      if (query.trim() === "") {
-        return []
-      }
-
-      return api.users.search({ query })
-    },
-    initialData: [],
-  })
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 p-6">
@@ -33,14 +21,24 @@ export default function SearchPage() {
       <section className="space-y-4">
         <SearchBox
           placeholder="Search users by name or username"
-          onChange={(q) => debounce(() => setQuery(q))}
+          onChange={(q) =>
+            debounce(async () => {
+              if (q.trim() === "") {
+                setUsers([])
+                return
+              }
+
+              const results = await api.users.search({ query: q })
+              setUsers(results)
+            })
+          }
         />
 
         <div role="status" className="sr-only">
-          {data.length} users
+          {users.length} users
         </div>
 
-        <UserList users={data} />
+        <UserList users={users} />
       </section>
     </main>
   )
