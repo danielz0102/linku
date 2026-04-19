@@ -13,17 +13,19 @@ export function ProfileAvatar({ avatarUrl, firstName, lastName, children }: Prof
   const showFallback = !avatarUrl || hasImageError
 
   return (
-    <div className="bg-primary/10 text-primary relative size-28 shrink-0 rounded-full text-3xl font-bold">
-      {showFallback ? (
-        <span className="grid size-full place-content-center">{initials}</span>
-      ) : (
-        <img
-          src={avatarUrl}
-          alt=""
-          className="size-full object-cover"
-          onError={() => setHasImageError(true)}
-        />
-      )}
+    <div className="relative size-28 shrink-0">
+      <div className="bg-primary/10 text-primary size-full overflow-hidden rounded-full text-3xl font-bold">
+        {showFallback ? (
+          <span className="grid size-full place-content-center">{initials}</span>
+        ) : (
+          <img
+            src={avatarUrl}
+            alt=""
+            className="size-full object-cover"
+            onError={() => setHasImageError(true)}
+          />
+        )}
+      </div>
       {children}
     </div>
   )
@@ -32,7 +34,7 @@ export function ProfileAvatar({ avatarUrl, firstName, lastName, children }: Prof
 ProfileAvatar.EditButton = ({ onClick }: { onClick: () => void }) => {
   return (
     <button
-      className="bg-primary hover:bg-primary/80 text-background absolute right-0 bottom-1 grid size-8 cursor-pointer place-content-center rounded-full"
+      className="bg-primary text-background absolute right-0 bottom-1 z-10 grid size-8 cursor-pointer place-content-center rounded-full border hover:bg-blue-600"
       onClick={onClick}
     >
       <IconEdit size={18} />
