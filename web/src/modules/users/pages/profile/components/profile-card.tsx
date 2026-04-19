@@ -19,7 +19,7 @@ export function ProfileCard({
       <div className="flex flex-col items-center gap-4 md:flex-row md:items-start">
         {Avatar}
         <div className="space-y-1 text-center md:text-left">
-          <h2 className="text-2xl font-bold">{username}</h2>
+          <h2 className="font-bold">@{username}</h2>
           <p className="text-muted max-w-prose">
             {bio ? bio : <span className="italic">No bio available</span>}
           </p>
