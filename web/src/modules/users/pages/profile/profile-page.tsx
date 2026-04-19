@@ -4,10 +4,10 @@ import { api } from "~/shared/api/api"
 import { Dialog } from "~/shared/components/dialog"
 
 import { useAuthenticatedUser } from "../../context/user-context"
-import { ProfileAvatar } from "./profile-avatar"
-import { ProfileCard } from "./profile-card"
-import { UpdateProfilePictureForm } from "./update-profile-picture-form"
-import { UpdateUserForm } from "./update-user-form"
+import { ProfileAvatar } from "./components/profile-avatar"
+import { ProfileCard } from "./components/profile-card"
+import { UpdateProfilePictureForm } from "./components/update-profile-picture-form"
+import { UpdateUserForm } from "./components/update-user-form"
 import { uploadImage } from "./upload-image"
 
 export default function ProfilePage() {

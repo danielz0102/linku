@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form"
 
 import { FormField } from "~/shared/components/form-field"
 
+import { validateImageFile } from "../validate-image"
 import { ProfileAvatar } from "./profile-avatar"
-import { validateImageFile } from "./validate-image"
 
 type UpdateProfilePictureFormProps = {
   currentImageUrl?: string
