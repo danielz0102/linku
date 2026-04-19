@@ -1,6 +1,7 @@
 import { IconAlertTriangle } from "@tabler/icons-react"
 import { useForm } from "react-hook-form"
 
+import { FormButton } from "~/shared/components/form-button"
 import { FormField } from "~/shared/components/form-field"
 
 interface LoginFormProps {
@@ -69,9 +70,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         )}
       </FormField>
 
-      <button type="submit" className="button mt-4 w-full">
-        Login
-      </button>
+      <FormButton className="mt-4">Login</FormButton>
     </form>
   )
 }

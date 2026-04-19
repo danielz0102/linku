@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form"
 
+import { FormButton } from "~/shared/components/form-button"
 import { FormField } from "~/shared/components/form-field"
 
 type SignUpFormProps = {
@@ -114,9 +115,7 @@ export function SignUpForm({ onSubmit }: SignUpFormProps) {
         )}
       </FormField>
 
-      <button type="submit" className="button w-full">
-        Sign up
-      </button>
+      <FormButton>Sign up</FormButton>
     </form>
   )
 }

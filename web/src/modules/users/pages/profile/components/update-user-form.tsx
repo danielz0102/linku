@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form"
 
+import { FormButton } from "~/shared/components/form-button"
 import { FormField } from "~/shared/components/form-field"
 
 type UpdateUserFormProps = {
@@ -78,9 +79,7 @@ export function UpdateUserForm({ initialData, onSubmit }: UpdateUserFormProps) {
         )}
       </FormField>
 
-      <button type="submit" className="button mt-4 w-full">
-        Update Profile
-      </button>
+      <FormButton className="mt-4">Update Profile</FormButton>
     </form>
   )
 }

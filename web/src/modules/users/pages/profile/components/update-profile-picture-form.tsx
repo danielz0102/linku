@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form"
 
+import { FormButton } from "~/shared/components/form-button"
 import { FormField } from "~/shared/components/form-field"
 
 import { validateImageFile } from "../validate-image"
@@ -77,9 +78,7 @@ export function UpdateProfilePictureForm({
         )}
       </FormField>
 
-      <button type="submit" className="button w-full" disabled={isSubmitting}>
-        {isSubmitting ? "Uploading..." : "Update Picture"}
-      </button>
+      <FormButton loading={isSubmitting}>Update Picture</FormButton>
     </form>
   )
 }
