@@ -7,6 +7,7 @@ const LoginPage = lazy(() => import("~/modules/users/pages/login/login-page"))
 const SignUpPage = lazy(() => import("~/modules/users/pages/sign-up/sign-up-page"))
 const HomePage = lazy(() => import("~/modules/users/pages/home/home-page"))
 const ProfilePage = lazy(() => import("~/modules/users/pages/profile/profile-page"))
+const SearchPage = lazy(() => import("~/modules/users/pages/search/search-page"))
 
 export function Router() {
   return (
@@ -22,6 +23,7 @@ export function Router() {
           }
         >
           <Route index element={<HomePage />} />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Route>
       </Routes>

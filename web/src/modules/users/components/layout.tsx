@@ -1,4 +1,4 @@
-import { IconHome, IconLogout, IconMenu2, IconUserCircle } from "@tabler/icons-react"
+import { IconHome, IconLogout, IconMenu2, IconSearch, IconUserCircle } from "@tabler/icons-react"
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router"
 
@@ -23,6 +23,9 @@ export function Layout({ children }: LayoutProps) {
         </Sidebar.Link>
         <Sidebar.Link Icon={IconUserCircle} to="/profile" current={pathname === "/profile"}>
           Profile
+        </Sidebar.Link>
+        <Sidebar.Link Icon={IconSearch} to="/search" current={pathname === "/search"}>
+          Search
         </Sidebar.Link>
         <Sidebar.Button
           Icon={IconLogout}
