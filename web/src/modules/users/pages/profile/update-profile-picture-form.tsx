@@ -3,9 +3,7 @@ import { useForm } from "react-hook-form"
 import { FormField } from "~/shared/components/form-field"
 
 import { ProfileAvatar } from "./profile-avatar"
-
-const MAX_FILE_SIZE = 5 * 1024 * 1024
-const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"]
+import { validateImageFile } from "./validate-image"
 
 type UpdateProfilePictureFormProps = {
   currentImageUrl?: string
@@ -84,14 +82,4 @@ export function UpdateProfilePictureForm({
       </button>
     </form>
   )
-}
-
-function validateImageFile(file: File): string | undefined {
-  if (!ACCEPTED_TYPES.includes(file.type)) {
-    return "Only JPG, JPEG, PNG, and WEBP images are allowed"
-  }
-
-  if (file.size > MAX_FILE_SIZE) {
-    return "Image size must be 5MB or less"
-  }
 }

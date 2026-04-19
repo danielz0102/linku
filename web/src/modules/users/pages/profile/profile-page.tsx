@@ -6,11 +6,14 @@ import { Dialog } from "~/shared/components/dialog"
 import { useAuthenticatedUser, useUser } from "../../context/user-context"
 import { ProfileAvatar } from "./profile-avatar"
 import { ProfileCard } from "./profile-card"
+import { UpdateProfilePictureForm } from "./update-profile-picture-form"
 import { UpdateUserForm } from "./update-user-form"
+import { uploadImage } from "./upload-image"
 
 export default function ProfilePage() {
   const user = useAuthenticatedUser()
-  const dlgRef = useRef<HTMLDialogElement>(null)
+  const editProfileDlgRef = useRef<HTMLDialogElement>(null)
+  const updateProfilePictureDlgRef = useRef<HTMLDialogElement>(null)
   const { setUser } = useUser()
 
   return (
@@ -28,18 +31,22 @@ export default function ProfilePage() {
             lastName={user.lastName}
             avatarUrl={user.profilePictureUrl ?? undefined}
           >
-            <ProfileAvatar.EditButton onClick={() => {}} />
+            <ProfileAvatar.EditButton
+              onClick={() => {
+                updateProfilePictureDlgRef.current?.showModal()
+              }}
+            />
           </ProfileAvatar>
         }
       >
         <ProfileCard.EditButton
           onClick={() => {
-            dlgRef.current?.showModal()
+            editProfileDlgRef.current?.showModal()
           }}
         />
       </ProfileCard>
 
-      <Dialog ref={dlgRef}>
+      <Dialog ref={editProfileDlgRef}>
         <h2 className="title">Edit Profile</h2>
         <UpdateUserForm
           initialData={{
@@ -59,8 +66,31 @@ export default function ProfilePage() {
             }
 
             setUser(updatedUser)
-            dlgRef.current?.close()
+            editProfileDlgRef.current?.close()
             return true
+          }}
+        />
+      </Dialog>
+
+      <Dialog ref={updateProfilePictureDlgRef}>
+        <h2 className="title">Update Profile Picture</h2>
+        <UpdateProfilePictureForm
+          currentImageUrl={user.profilePictureUrl ?? undefined}
+          firstName={user.firstName}
+          lastName={user.lastName}
+          onSubmit={async (file) => {
+            const { url } = await uploadImage(file)
+            const updatedUser = await api.users.updateUser({
+              ...user,
+              profilePictureUrl: url,
+            })
+
+            if (!updatedUser) {
+              throw new Error("Failed to update user with new profile picture")
+            }
+
+            setUser(updatedUser)
+            updateProfilePictureDlgRef.current?.close()
           }}
         />
       </Dialog>
