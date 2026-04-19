@@ -55,7 +55,7 @@ export default function ProfilePage() {
             bio: user.bio,
           }}
           onSubmit={async (data) => {
-            const updatedUser = await api.users.updateUser({
+            const updatedUser = await api.users.update({
               ...data,
               profilePictureUrl: user.profilePictureUrl ?? null,
             })
@@ -79,7 +79,7 @@ export default function ProfilePage() {
           lastName={user.lastName}
           onSubmit={async (file) => {
             const { url } = await uploadImage(file)
-            const updatedUser = await api.users.updateUser({
+            const updatedUser = await api.users.update({
               ...user,
               profilePictureUrl: url,
             })

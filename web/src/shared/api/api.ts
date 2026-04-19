@@ -7,5 +7,13 @@ import { updateUser } from "./actions/update-user"
 import { whoami } from "./actions/whoami"
 
 export const api = {
-  users: { whoami, login, signUp, logOut, updateUser, getCloudinarySignature, search: searchUsers },
+  users: {
+    whoami,
+    login,
+    signUp,
+    logOut,
+    update: updateUser,
+    getCloudinarySignature,
+    search: searchUsers,
+  },
 }
