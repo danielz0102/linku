@@ -1,12 +1,16 @@
+import { API_URL } from "~/env"
+
 import type { UserResponse } from "../user-response"
 
 export async function getUser(username: string): Promise<UserResponse> {
-  return {
-    id: "123",
-    username,
-    firstName: "John",
-    lastName: "Doe",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    profilePictureUrl: null,
+  const res = await fetch(`${API_URL}/users/${username}`, {
+    method: "GET",
+    credentials: "include",
+  })
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch user", { cause: res })
   }
+
+  return res.json()
 }

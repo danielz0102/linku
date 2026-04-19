@@ -1,0 +1,42 @@
+import { eq } from "drizzle-orm"
+import type { RequestHandler } from "express"
+import { z } from "zod"
+
+import { db } from "#db/drizzle/drizzle-client.ts"
+import { users } from "#db/drizzle/schemas.ts"
+
+export const usernameSchema = z.string().trim().nonempty()
+
+export const searchUserByUsernameHandler: RequestHandler = async (req, res) => {
+  const { userId } = req.session
+
+  if (!userId) {
+    return res.sendStatus(401)
+  }
+
+  const { success, data: username, error } = usernameSchema.safeParse(req.params["username"])
+
+  if (!success) {
+    return res.status(400).json({ message: "Invalid username", details: error.issues })
+  }
+
+  const foundUser = await db
+    .select({
+      id: users.id,
+      username: users.username,
+      firstName: users.firstName,
+      lastName: users.lastName,
+      profilePictureUrl: users.profilePictureUrl,
+      bio: users.bio,
+    })
+    .from(users)
+    .where(eq(users.username, username))
+    .limit(1)
+    .then((r) => r[0])
+
+  if (!foundUser) {
+    return res.sendStatus(404)
+  }
+
+  return res.json(foundUser)
+}
