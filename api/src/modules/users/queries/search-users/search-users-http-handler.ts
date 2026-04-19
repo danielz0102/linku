@@ -1,4 +1,4 @@
-import { ilike, or } from "drizzle-orm"
+import { and, eq, ilike, not, or } from "drizzle-orm"
 import type { RequestHandler } from "express"
 import { z } from "zod"
 
@@ -12,7 +12,9 @@ const searchUsersQuerySchema = z.object({
 })
 
 export const searchUsersHandler: RequestHandler = async (req, res) => {
-  if (!req.session.userId) {
+  const { userId } = req.session
+
+  if (!userId) {
     return res.sendStatus(401)
   }
 
@@ -37,10 +39,13 @@ export const searchUsersHandler: RequestHandler = async (req, res) => {
     })
     .from(users)
     .where(
-      or(
-        ilike(users.username, pattern),
-        ilike(users.firstName, pattern),
-        ilike(users.lastName, pattern)
+      and(
+        or(
+          ilike(users.username, pattern),
+          ilike(users.firstName, pattern),
+          ilike(users.lastName, pattern)
+        ),
+        not(eq(users.id, userId))
       )
     )
     .limit(limit)
