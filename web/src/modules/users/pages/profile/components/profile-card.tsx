@@ -30,10 +30,14 @@ export function ProfileCard({
   )
 }
 
-ProfileCard.EditButton = ({ onClick }: { onClick: () => void }) => {
+type ActionProps = React.PropsWithChildren<{
+  onClick: () => void
+}>
+
+ProfileCard.Action = ({ onClick, children }: ActionProps) => {
   return (
     <button className="button rounded-xl" onClick={onClick}>
-      Edit Profile
+      {children}
     </button>
   )
 }

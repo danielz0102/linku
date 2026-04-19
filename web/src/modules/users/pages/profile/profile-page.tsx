@@ -38,11 +38,13 @@ export default function ProfilePage() {
           </ProfileAvatar>
         }
       >
-        <ProfileCard.EditButton
+        <ProfileCard.Action
           onClick={() => {
             editProfileDlgRef.current?.showModal()
           }}
-        />
+        >
+          Edit Profile
+        </ProfileCard.Action>
       </ProfileCard>
 
       <Dialog ref={editProfileDlgRef}>
