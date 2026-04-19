@@ -2,8 +2,8 @@ import { IconHome, IconLogout, IconMenu2, IconUserCircle } from "@tabler/icons-r
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router"
 
+import { Sidebar } from "~/modules/users/components/sidebar"
 import { api } from "~/shared/api/api"
-import { Sidebar } from "~/shared/components/sidebar"
 
 import { useUser } from "../context/user-context"
 
