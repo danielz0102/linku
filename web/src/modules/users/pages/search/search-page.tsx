@@ -18,7 +18,7 @@ export default function SearchPage() {
         return []
       }
 
-      return api.users.search(query)
+      return api.users.search({ query })
     },
     initialData: [],
   })
