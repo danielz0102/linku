@@ -27,12 +27,7 @@ export default function PublicProfilePage() {
         <p className="text-muted animate-pulse">Loading...</p>
       ) : (
         <ProfileCard
-          data={{
-            username: user.username,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            bio: user.bio,
-          }}
+          user={user}
           Avatar={
             <ProfileAvatar
               firstName={user.firstName}

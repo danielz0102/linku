@@ -1,8 +1,7 @@
 import { API_URL } from "~/env"
+import { UserEntity } from "~/modules/users/domain/user-entity"
 
-import type { User } from "../../../domain/user"
-
-export async function getUser(username: string): Promise<User> {
+export async function getUser(username: string): Promise<UserEntity> {
   const res = await fetch(`${API_URL}/users/${username}`, {
     method: "GET",
     credentials: "include",
@@ -12,5 +11,6 @@ export async function getUser(username: string): Promise<User> {
     throw new Error("Failed to fetch user", { cause: res })
   }
 
-  return res.json()
+  const data = await res.json()
+  return new UserEntity(data)
 }

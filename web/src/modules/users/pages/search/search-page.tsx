@@ -2,13 +2,13 @@ import { useState } from "react"
 
 import { useDebounce } from "~/shared/hooks/use-debounce"
 
-import type { User } from "../../domain/user"
+import type { UserEntity } from "../../domain/user-entity"
 import { SearchBox } from "./search-box"
 import { searchUsers } from "./search-users"
 import { UserList } from "./user-list"
 
 export default function SearchPage() {
-  const [users, setUsers] = useState<User[]>([])
+  const [users, setUsers] = useState<UserEntity[]>([])
   const debounce = useDebounce(300)
 
   return (

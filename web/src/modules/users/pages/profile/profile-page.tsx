@@ -18,12 +18,7 @@ export default function ProfilePage() {
   return (
     <main className="flex size-full items-center justify-center">
       <ProfileCard
-        data={{
-          username: user.username,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          bio: user.bio,
-        }}
+        user={user}
         Avatar={
           <ProfileAvatar
             firstName={user.firstName}
@@ -82,7 +77,7 @@ export default function ProfilePage() {
           onSubmit={async (file) => {
             const { url } = await uploadImage(file)
             const updatedUser = await updateUser({
-              ...user,
+              ...user.data,
               profilePictureUrl: url,
             })
 

@@ -1,11 +1,11 @@
 import { API_URL } from "~/env"
 
-import type { User } from "../../domain/user"
+import { UserEntity } from "../../domain/user-entity"
 
 export async function login(data: {
   username: string
   password: string
-}): Promise<User | undefined> {
+}): Promise<UserEntity | undefined> {
   const res = await fetch(`${API_URL}/session`, {
     credentials: "include",
     method: "POST",
@@ -23,5 +23,6 @@ export async function login(data: {
     throw new Error("Failed to login")
   }
 
-  return res.json()
+  const userData = await res.json()
+  return new UserEntity(userData)
 }

@@ -1,18 +1,13 @@
+import type { UserEntity } from "~/modules/users/domain/user-entity"
+
 type ProfileCardProps = React.PropsWithChildren<{
-  data: {
-    username: string
-    firstName: string
-    lastName: string
-    bio: string | null
-  }
+  user: UserEntity
   Avatar: React.ReactNode
 }>
 
-export function ProfileCard({
-  data: { username, firstName, lastName, bio },
-  Avatar,
-  children,
-}: ProfileCardProps) {
+export function ProfileCard({ user, Avatar, children }: ProfileCardProps) {
+  const { firstName, lastName, username, bio } = user.data
+
   return (
     <section className="bg-surface shadow-foreground/10 w-full max-w-2xl space-y-4 rounded-xl p-6 shadow">
       <h1 className="title text-center md:text-left">{`${firstName} ${lastName}`}</h1>

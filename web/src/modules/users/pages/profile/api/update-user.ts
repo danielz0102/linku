@@ -1,5 +1,5 @@
 import { API_URL } from "~/env"
-import type { User } from "~/modules/users/domain/user"
+import { UserEntity } from "~/modules/users/domain/user-entity"
 
 type UpdateUserPayload = {
   firstName: string
@@ -9,14 +9,14 @@ type UpdateUserPayload = {
   bio: string | null
 }
 
-export async function updateUser(data: UpdateUserPayload): Promise<User | undefined> {
+export async function updateUser(payload: UpdateUserPayload): Promise<UserEntity | undefined> {
   const res = await fetch(`${API_URL}/users/me`, {
     credentials: "include",
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(payload),
   })
 
   if (!res.ok) {
@@ -27,5 +27,6 @@ export async function updateUser(data: UpdateUserPayload): Promise<User | undefi
     throw new Error("Failed to update user")
   }
 
-  return res.json()
+  const data = await res.json()
+  return new UserEntity(data)
 }

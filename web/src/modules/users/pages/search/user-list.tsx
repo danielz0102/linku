@@ -1,10 +1,11 @@
 import { Link } from "react-router"
 
-import type { User } from "~/modules/users/domain/user"
 import { ProfileAvatar } from "~/shared/components/profile-avatar"
 
+import type { UserEntity } from "../../domain/user-entity"
+
 type UserListProps = {
-  users: User[]
+  users: UserEntity[]
 }
 
 export function UserList({ users }: UserListProps) {

@@ -1,13 +1,13 @@
 import { API_URL } from "~/env"
 
-import type { User } from "../../domain/user"
+import { UserEntity } from "../../domain/user-entity"
 
 export async function signUp(data: {
   firstName: string
   lastName: string
   username: string
   password: string
-}): Promise<User | undefined> {
+}): Promise<UserEntity | undefined> {
   const res = await fetch(`${API_URL}/users`, {
     credentials: "include",
     method: "POST",
@@ -25,5 +25,6 @@ export async function signUp(data: {
     throw new Error("Failed to create user")
   }
 
-  return res.json()
+  const userData = await res.json()
+  return new UserEntity(userData)
 }
