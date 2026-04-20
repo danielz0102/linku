@@ -1,27 +1,34 @@
+import { ProfileAvatar } from "~/shared/components/profile-avatar"
+
+import type { Chat } from "../../domain/chat"
+
 type ChatCardProps = {
-  imgUrl: string
-  name: string
-  lastMessage: string
-  time: Date
-  isRead?: boolean
+  chat: Chat
 }
 
-export function ChatCard({ imgUrl, name, lastMessage, time, isRead = false }: ChatCardProps) {
+export function ChatCard({ chat }: ChatCardProps) {
   return (
-    <article className="flex gap-4 p-3">
-      <img src={imgUrl} alt="" className="size-12 rounded-full object-cover" />
+    <article className="flex gap-4 truncate overflow-clip p-3">
+      <ProfileAvatar
+        initials={chat.initials}
+        avatarUrl={chat.imageUrl}
+        className="size-12 text-xs"
+      />
+
       <div className="flex flex-1 flex-col">
-        <h3 className="font-medium">{name}</h3>
-        <p className="text-muted text-sm">{lastMessage}</p>
+        <h3 className="font-medium">{chat.name}</h3>
+        <p
+          className="text-muted text-sm data-attachment:italic"
+          data-attachment={chat.lastMessage.isAttachment || undefined}
+        >
+          {chat.lastMessage.preview}
+        </p>
       </div>
       <div className="flex gap-2">
-        <time className="text-muted text-xs" dateTime={time.toISOString()}>
-          {new Intl.DateTimeFormat("en-US", {
-            hour: "numeric",
-            minute: "numeric",
-          }).format(time)}
+        <time className="text-muted text-xs" dateTime={chat.time.toISOString()}>
+          {chat.time.format()}
         </time>
-        {!isRead && <span className="bg-primary mt-1 size-2 rounded-full" />}
+        {!chat.lastMessage.isRead && <span className="bg-primary mt-1 size-2 rounded-full" />}
       </div>
     </article>
   )
