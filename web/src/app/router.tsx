@@ -9,6 +9,7 @@ const HomePage = lazy(() => import("~/modules/chats/pages/home/home-page"))
 const ProfilePage = lazy(() => import("~/modules/users/pages/profile/profile-page"))
 const PublicProfilePage = lazy(() => import("~/modules/users/pages/profile/public-profile-page"))
 const SearchPage = lazy(() => import("~/modules/users/pages/search/search-page"))
+const NotFoundPage = lazy(() => import("~/app/pages/not-found-page"))
 
 export function Router() {
   return (
@@ -28,6 +29,7 @@ export function Router() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/profile/:username" element={<PublicProfilePage />} />
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   )
