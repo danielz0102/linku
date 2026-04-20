@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router"
 
 import { useUser } from "../../context/user-context"
+import { login } from "./login"
 import { LoginForm } from "./login-form"
-import { login } from "./login-service"
 
 export default function LoginPage() {
   const navigate = useNavigate()

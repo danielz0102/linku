@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router"
 import { Sidebar } from "~/modules/users/layout/sidebar"
 
 import { useUser } from "../context/user-context"
-import { logOut } from "./log-out-service"
+import { logOut } from "./log-out"
 
 export type LayoutProps = React.PropsWithChildren
 

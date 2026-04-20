@@ -1,7 +1,7 @@
 import { createContext, use, useState } from "react"
 
 import type { User } from "../domain/user"
-import { whoami } from "./whoami-service"
+import { whoami } from "./whoami"
 
 type UserContextValue =
   | {

@@ -7,7 +7,7 @@ import { useAuthenticatedUser } from "../../context/user-context"
 import { ProfileCard } from "./components/profile-card"
 import { UpdateProfilePictureForm } from "./components/update-profile-picture-form"
 import { UpdateUserForm } from "./components/update-user-form"
-import { updateUser } from "./update-user-service"
+import { updateUser } from "./update-user"
 import { uploadImage } from "./upload-image"
 
 export default function ProfilePage() {

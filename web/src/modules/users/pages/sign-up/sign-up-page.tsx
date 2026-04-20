@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router"
 
 import { useUser } from "../../context/user-context"
+import { signUp } from "./sign-up"
 import { SignUpForm } from "./sign-up-form"
-import { signUp } from "./sign-up-service"
 
 export default function SignUpPage() {
   const navigate = useNavigate()
