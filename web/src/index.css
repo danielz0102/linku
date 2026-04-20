@@ -37,7 +37,7 @@ dialog {
 }
 
 @utility button {
-  @apply bg-primary text-background hover:bg-primary/90 flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 font-semibold;
+  @apply bg-primary text-background hover:bg-primary/90 flex cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2 font-semibold;
 }
 
 @utility link {
