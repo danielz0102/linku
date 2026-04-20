@@ -1,13 +1,13 @@
 import { API_URL } from "~/env"
 
-import type { UserResponse } from "../user-response"
+import type { User } from "../../domain/user"
 
 export async function signUp(data: {
   firstName: string
   lastName: string
   username: string
   password: string
-}): Promise<UserResponse | undefined> {
+}): Promise<User | undefined> {
   const res = await fetch(`${API_URL}/users`, {
     credentials: "include",
     method: "POST",

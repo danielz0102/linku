@@ -1,9 +1,8 @@
 import { Link, useNavigate } from "react-router"
 
-import { api } from "~/shared/api/api"
-
 import { useUser } from "../../context/user-context"
 import { SignUpForm } from "./sign-up-form"
+import { signUp } from "./sign-up-service"
 
 export default function SignUpPage() {
   const navigate = useNavigate()
@@ -15,7 +14,7 @@ export default function SignUpPage() {
         <h1 className="title text-center">Create your account</h1>
         <SignUpForm
           onSubmit={async (data) => {
-            const user = await api.users.signUp({
+            const user = await signUp({
               firstName: data.firstName,
               lastName: data.lastName,
               username: data.username,
