@@ -18,6 +18,10 @@ export default function HomePage() {
     >
       {isLoading && <p className="text-muted animate-pulse">Loading chats...</p>}
 
+      {chats.length === 0 && !isLoading && (
+        <p className="text-muted m-auto">No chats yet. Start a new conversation!</p>
+      )}
+
       {chats.map((chat) => (
         <Link
           key={chat.id}
