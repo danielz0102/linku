@@ -1,7 +1,7 @@
 import { lazy } from "react"
 import { BrowserRouter, Route, Routes, Navigate, Outlet } from "react-router"
 
-import { ProtectedLayout } from "~/modules/users/components/protected-layout"
+import { ProtectedLayout } from "~/modules/users/layout/protected-layout"
 
 const LoginPage = lazy(() => import("~/modules/users/pages/login/login-page"))
 const SignUpPage = lazy(() => import("~/modules/users/pages/sign-up/sign-up-page"))

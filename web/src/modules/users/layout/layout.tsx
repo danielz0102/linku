@@ -2,7 +2,7 @@ import { IconHome, IconLogout, IconMenu2, IconSearch, IconUserCircle } from "@ta
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router"
 
-import { Sidebar } from "~/modules/users/components/sidebar"
+import { Sidebar } from "~/modules/users/layout/sidebar"
 import { api } from "~/shared/api/api"
 
 import { useUser } from "../context/user-context"
