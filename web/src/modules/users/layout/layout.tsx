@@ -3,9 +3,9 @@ import { useState } from "react"
 import { useLocation, useNavigate } from "react-router"
 
 import { Sidebar } from "~/modules/users/layout/sidebar"
-import { api } from "~/shared/api/api"
 
 import { useUser } from "../context/user-context"
+import { logOut } from "./log-out-service"
 
 export type LayoutProps = React.PropsWithChildren
 
@@ -30,7 +30,7 @@ export function Layout({ children }: LayoutProps) {
         <Sidebar.Button
           Icon={IconLogout}
           onClick={async () => {
-            await api.users.logOut()
+            await logOut()
             setUser(undefined)
             await navigate("/log-in")
           }}
