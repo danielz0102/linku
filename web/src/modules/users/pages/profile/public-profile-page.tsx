@@ -14,7 +14,7 @@ export default function PublicProfilePage() {
     throw new Error("Username is required")
   }
 
-  const { data: user } = useQuery({
+  const { data: user, isLoading } = useQuery({
     queryKey: ["profile", username],
     queryFn: async () => {
       return getUser(username)
@@ -23,9 +23,18 @@ export default function PublicProfilePage() {
 
   return (
     <main className="flex size-full items-center justify-center">
-      {!user ? (
-        <p className="text-muted animate-pulse">Loading...</p>
-      ) : (
+      {isLoading && <p className="text-muted animate-pulse">Loading...</p>}
+
+      {!user && !isLoading && (
+        <div className="space-y-1 text-center">
+          <h1 className="title">It seems this user doesn't exist.</h1>
+          <Link to="/search" className="link underline">
+            Search for friends
+          </Link>
+        </div>
+      )}
+
+      {user && (
         <ProfileCard
           user={user}
           Avatar={
