@@ -13,13 +13,17 @@ export default function HomePage() {
 
   return (
     <main
-      className="flex flex-col overflow-y-auto data-loading:size-full data-loading:items-center data-loading:justify-center"
+      className="flex size-full flex-col overflow-y-auto data-loading:items-center data-loading:justify-center"
       data-loading={isLoading || undefined}
     >
       {isLoading && <p className="text-muted animate-pulse">Loading chats...</p>}
 
       {chats.map((chat) => (
-        <Link key={chat.id} to={`/chat/${chat.id}`} className="hover:bg-hover max-w-lg rounded">
+        <Link
+          key={chat.id}
+          to={`/chat/${chat.id}`}
+          className="hover:bg-hover max-w-xs rounded md:max-w-lg"
+        >
           <ChatCard chat={chat} />
         </Link>
       ))}

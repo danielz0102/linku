@@ -12,23 +12,26 @@ export function ChatCard({ chat }: ChatCardProps) {
       <ProfileAvatar
         initials={chat.initials}
         avatarUrl={chat.imageUrl}
-        className="size-12 text-xs"
+        className="size-12 shrink-0 text-xs"
       />
 
       <div className="flex flex-1 flex-col">
-        <h3 className="font-medium">{chat.name}</h3>
+        <div className="flex justify-between">
+          <h3 className="font-medium">{chat.name}</h3>
+          <div className="flex gap-2">
+            <time className="text-muted text-xs" dateTime={chat.time.toISOString()}>
+              {chat.time.format()}
+            </time>
+            {!chat.lastMessage.isRead && <span className="bg-primary mt-1 size-2 rounded-full" />}
+          </div>
+        </div>
+
         <p
           className="text-muted text-sm data-attachment:italic"
           data-attachment={chat.lastMessage.isAttachment || undefined}
         >
           {chat.lastMessage.preview}
         </p>
-      </div>
-      <div className="flex gap-2">
-        <time className="text-muted text-xs" dateTime={chat.time.toISOString()}>
-          {chat.time.format()}
-        </time>
-        {!chat.lastMessage.isRead && <span className="bg-primary mt-1 size-2 rounded-full" />}
       </div>
     </article>
   )
