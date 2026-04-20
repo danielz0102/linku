@@ -1,6 +1,6 @@
 import { API_URL } from "~/env"
 
-import type { UserResponse } from "../user-response"
+import type { User } from "../../domain/user"
 
 export async function searchUsers({
   query,
@@ -10,7 +10,7 @@ export async function searchUsers({
   query: string
   page?: number
   limit?: number
-}): Promise<UserResponse[]> {
+}): Promise<User[]> {
   const params = new URLSearchParams({ query })
 
   if (page) {

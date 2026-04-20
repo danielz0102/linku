@@ -1,10 +1,10 @@
 import { useState } from "react"
 
-import { api } from "~/shared/api/api"
 import { useDebounce } from "~/shared/hooks/use-debounce"
 
 import type { User } from "../../domain/user"
 import { SearchBox } from "./search-box"
+import { searchUsers } from "./search-users"
 import { UserList } from "./user-list"
 
 export default function SearchPage() {
@@ -28,7 +28,7 @@ export default function SearchPage() {
                 return
               }
 
-              const results = await api.users.search({ query: q })
+              const results = await searchUsers({ query: q })
               setUsers(results)
             })
           }
