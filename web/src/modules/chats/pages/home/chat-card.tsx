@@ -18,7 +18,7 @@ export function ChatCard({ chat }: ChatCardProps) {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex justify-between">
-          <h3 className="truncate font-medium">{chat.name}</h3>
+          <h2 className="truncate font-medium">{chat.name}</h2>
           <div className="flex gap-2">
             <time
               className="text-muted text-xs whitespace-nowrap"

@@ -13,6 +13,8 @@ export default function HomePage() {
 
   return (
     <main className="flex size-full flex-col gap-2 overflow-y-auto">
+      <h1 className="title p-3">My Chats</h1>
+
       {isLoading && <p className="text-muted m-auto animate-pulse">Loading chats...</p>}
 
       {chats.length === 0 && !isLoading && (
@@ -20,7 +22,7 @@ export default function HomePage() {
       )}
 
       {chats.map((chat) => (
-        <Link key={chat.id} to={`/chat/${chat.id}`} className="hover:bg-hover rounded md:max-w-lg">
+        <Link key={chat.id} to={`/chat/${chat.id}`} className="hover:bg-hover rounded md:w-lg">
           <ChatCard chat={chat} />
         </Link>
       ))}
