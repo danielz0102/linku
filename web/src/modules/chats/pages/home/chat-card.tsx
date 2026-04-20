@@ -8,18 +8,21 @@ type ChatCardProps = {
 
 export function ChatCard({ chat }: ChatCardProps) {
   return (
-    <article className="flex gap-4 truncate overflow-clip p-3">
+    <article className="flex gap-4 p-3">
       <ProfileAvatar
         initials={chat.initials}
         avatarUrl={chat.imageUrl}
         className="size-12 shrink-0 text-xs"
       />
 
-      <div className="flex flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex justify-between">
-          <h3 className="font-medium">{chat.name}</h3>
+          <h3 className="truncate font-medium">{chat.name}</h3>
           <div className="flex gap-2">
-            <time className="text-muted text-xs" dateTime={chat.time.toISOString()}>
+            <time
+              className="text-muted text-xs whitespace-nowrap"
+              dateTime={chat.time.toISOString()}
+            >
               {chat.time.format()}
             </time>
             {!chat.lastMessage.isRead && <span className="bg-primary mt-1 size-2 rounded-full" />}
@@ -27,7 +30,7 @@ export function ChatCard({ chat }: ChatCardProps) {
         </div>
 
         <p
-          className="text-muted text-sm data-attachment:italic"
+          className="text-muted truncate text-sm data-attachment:italic"
           data-attachment={chat.lastMessage.isAttachment || undefined}
         >
           {chat.lastMessage.preview}

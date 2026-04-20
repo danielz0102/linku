@@ -18,7 +18,7 @@ export async function getChats(): Promise<Chat[]> {
       id: "2",
       sender: ChatMember.create({
         id: "2",
-        name: "Emma Wilson",
+        name: "ThisIsA VeryLongNameToTestTruncation",
         profilePictureUrl: "https://cataas.com/cat",
       }),
       lastMessage: Message.create({
