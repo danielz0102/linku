@@ -39,7 +39,7 @@ export function Layout({ children }: LayoutProps) {
         </Sidebar.Button>
       </Sidebar>
 
-      <div className="bg-background flex flex-1 flex-col gap-4 p-4">
+      <div className="bg-background flex min-w-0 flex-1 flex-col gap-4 p-4">
         <button className="md:hidden" onClick={() => setIsSidebarOpen(true)}>
           <IconMenu2 strokeWidth={1.5} aria-label="Open menu" size={16} />
         </button>

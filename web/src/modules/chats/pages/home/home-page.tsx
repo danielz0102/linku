@@ -23,11 +23,7 @@ export default function HomePage() {
       )}
 
       {chats.map((chat) => (
-        <Link
-          key={chat.id}
-          to={`/chat/${chat.id}`}
-          className="hover:bg-hover max-w-xs rounded md:max-w-lg"
-        >
+        <Link key={chat.id} to={`/chat/${chat.id}`} className="hover:bg-hover rounded md:max-w-lg">
           <ChatCard chat={chat} />
         </Link>
       ))}
