@@ -4,7 +4,7 @@ import { ChatCard } from "./chat-card"
 
 export default function HomePage() {
   return (
-    <main className="flex flex-col">
+    <main className="flex flex-col overflow-y-auto">
       <Link to="/chat/1" className="hover:bg-hover max-w-lg rounded">
         <ChatCard
           imgUrl="https://cataas.com/cat"
