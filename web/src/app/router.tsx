@@ -5,7 +5,7 @@ import { ProtectedLayout } from "~/modules/users/layout/protected-layout"
 
 const LoginPage = lazy(() => import("~/modules/users/pages/login/login-page"))
 const SignUpPage = lazy(() => import("~/modules/users/pages/sign-up/sign-up-page"))
-const HomePage = lazy(() => import("~/modules/users/pages/home/home-page"))
+const HomePage = lazy(() => import("~/modules/chats/pages/home/home-page"))
 const ProfilePage = lazy(() => import("~/modules/users/pages/profile/profile-page"))
 const PublicProfilePage = lazy(() => import("~/modules/users/pages/profile/public-profile-page"))
 const SearchPage = lazy(() => import("~/modules/users/pages/search/search-page"))
