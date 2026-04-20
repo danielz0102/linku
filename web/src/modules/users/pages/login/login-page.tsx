@@ -1,9 +1,8 @@
 import { Link, useNavigate } from "react-router"
 
-import { api } from "~/shared/api/api"
-
 import { useUser } from "../../context/user-context"
 import { LoginForm } from "./login-form"
+import { login } from "./login-service"
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -15,7 +14,7 @@ export default function LoginPage() {
         <h1 className="title text-center">Welcome back!</h1>
         <LoginForm
           onSubmit={async (data) => {
-            const user = await api.users.login(data)
+            const user = await login(data)
 
             if (!user) {
               return false
