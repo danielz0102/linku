@@ -8,6 +8,13 @@
       "when": 1776492258090,
       "tag": "0000_white_tyrannus",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1776664572459,
+      "tag": "0001_quiet_rafael_vega",
+      "breakpoints": true
     }
   ]
 }
