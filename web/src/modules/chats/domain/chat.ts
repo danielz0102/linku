@@ -30,4 +30,8 @@ export class Chat {
   get name(): string {
     return this.#peer.name
   }
+
+  get member(): ChatMember {
+    return this.#peer
+  }
 }

@@ -6,7 +6,12 @@ export async function getChats(): Promise<Chat[]> {
   return [
     Chat.create({
       id: "1",
-      peer: ChatMember.create({ id: "1", name: "John Doe", profilePictureUrl: null }),
+      peer: ChatMember.create({
+        id: "1",
+        username: "john.doe",
+        name: "John Doe",
+        profilePictureUrl: null,
+      }),
       lastMessage: Message.create({
         id: "1",
         senderId: "1",
@@ -19,6 +24,7 @@ export async function getChats(): Promise<Chat[]> {
       id: "2",
       peer: ChatMember.create({
         id: "2",
+        username: "averylongusername",
         name: "ThisIsA VeryLongNameToTestTruncation",
         profilePictureUrl: "https://cataas.com/cat",
       }),
@@ -34,6 +40,7 @@ export async function getChats(): Promise<Chat[]> {
       id: "3",
       peer: ChatMember.create({
         id: "3",
+        username: "liam.brown",
         name: "Liam Brown",
         profilePictureUrl: "https://cataas.com/cat",
       }),
@@ -49,6 +56,7 @@ export async function getChats(): Promise<Chat[]> {
       id: "4",
       peer: ChatMember.create({
         id: "4",
+        username: "olivia.martinez",
         name: "Olivia Martinez",
         profilePictureUrl: null,
       }),
@@ -64,6 +72,7 @@ export async function getChats(): Promise<Chat[]> {
       id: "5",
       peer: ChatMember.create({
         id: "5",
+        username: "noah.davis",
         name: "Noah Davis",
         profilePictureUrl: null,
       }),
@@ -80,6 +89,7 @@ export async function getChats(): Promise<Chat[]> {
       id: "6",
       peer: ChatMember.create({
         id: "6",
+        username: "sophia.lee",
         name: "Sophia Lee",
         profilePictureUrl: "https://cataas.com/cat",
       }),
