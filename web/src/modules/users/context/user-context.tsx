@@ -1,8 +1,7 @@
 import { createContext, use, useState } from "react"
 
-import { api } from "~/shared/api/api"
-
 import type { User } from "../domain/user"
+import { whoami } from "./whoami-service"
 
 type UserContextValue =
   | {
@@ -13,7 +12,7 @@ type UserContextValue =
 
 const UserContext = createContext<UserContextValue>(undefined)
 
-const me = await api.users.whoami()
+const me = await whoami()
 
 export function UserProvider({ children }: React.PropsWithChildren) {
   const [user, setUser] = useState<User | undefined>(me)

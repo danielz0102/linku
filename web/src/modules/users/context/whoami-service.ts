@@ -1,8 +1,8 @@
 import { API_URL } from "~/env"
 
-import type { UserResponse } from "../user-response"
+import type { User } from "../domain/user"
 
-export async function whoami(): Promise<UserResponse | undefined> {
+export async function whoami(): Promise<User | undefined> {
   const response = await fetch(`${API_URL}/users/me`, {
     credentials: "include",
   })
