@@ -1,6 +1,5 @@
 import { useRef } from "react"
 
-import { api } from "~/shared/api/api"
 import { Dialog } from "~/shared/components/dialog"
 import { ProfileAvatar } from "~/shared/components/profile-avatar"
 
@@ -8,6 +7,7 @@ import { useAuthenticatedUser } from "../../context/user-context"
 import { ProfileCard } from "./components/profile-card"
 import { UpdateProfilePictureForm } from "./components/update-profile-picture-form"
 import { UpdateUserForm } from "./components/update-user-form"
+import { updateUser } from "./update-user-service"
 import { uploadImage } from "./upload-image"
 
 export default function ProfilePage() {
@@ -57,7 +57,7 @@ export default function ProfilePage() {
             bio: user.bio,
           }}
           onSubmit={async (data) => {
-            const updatedUser = await api.users.update({
+            const updatedUser = await updateUser({
               ...data,
               profilePictureUrl: user.profilePictureUrl ?? null,
             })
@@ -81,7 +81,7 @@ export default function ProfilePage() {
           lastName={user.lastName}
           onSubmit={async (file) => {
             const { url } = await uploadImage(file)
-            const updatedUser = await api.users.update({
+            const updatedUser = await updateUser({
               ...user,
               profilePictureUrl: url,
             })

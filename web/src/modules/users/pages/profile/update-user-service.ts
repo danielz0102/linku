@@ -1,6 +1,6 @@
 import { API_URL } from "~/env"
 
-import type { UserResponse } from "../user-response"
+import type { User } from "../../domain/user"
 
 type UpdateUserPayload = {
   firstName: string
@@ -10,7 +10,7 @@ type UpdateUserPayload = {
   bio: string | null
 }
 
-export async function updateUser(data: UpdateUserPayload): Promise<UserResponse | undefined> {
+export async function updateUser(data: UpdateUserPayload): Promise<User | undefined> {
   const res = await fetch(`${API_URL}/users/me`, {
     credentials: "include",
     method: "PUT",
