@@ -12,11 +12,8 @@ export default function HomePage() {
   })
 
   return (
-    <main
-      className="flex size-full flex-col gap-2 overflow-y-auto data-loading:items-center data-loading:justify-center"
-      data-loading={isLoading || undefined}
-    >
-      {isLoading && <p className="text-muted animate-pulse">Loading chats...</p>}
+    <main className="flex size-full flex-col gap-2 overflow-y-auto">
+      {isLoading && <p className="text-muted m-auto animate-pulse">Loading chats...</p>}
 
       {chats.length === 0 && !isLoading && (
         <p className="text-muted m-auto">No chats yet. Start a new conversation!</p>
