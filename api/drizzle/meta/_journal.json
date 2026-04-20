@@ -15,6 +15,13 @@
       "when": 1776664572459,
       "tag": "0001_quiet_rafael_vega",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1776724343547,
+      "tag": "0002_lovely_impossible_man",
+      "breakpoints": true
     }
   ]
 }

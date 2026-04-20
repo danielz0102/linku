@@ -1,4 +1,14 @@
-import { pgTable, uuid, varchar, text, timestamp, primaryKey, index } from "drizzle-orm/pg-core"
+import { sql } from "drizzle-orm"
+import {
+  pgTable,
+  uuid,
+  varchar,
+  text,
+  timestamp,
+  primaryKey,
+  index,
+  check,
+} from "drizzle-orm/pg-core"
 
 export const users = pgTable("users", {
   id: uuid().primaryKey().defaultRandom(),
@@ -43,6 +53,10 @@ export const messages = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
+    check(
+      "messages_content_or_attachment_check",
+      sql`${table.content} IS NOT NULL OR ${table.attachmentUrl} IS NOT NULL`
+    ),
     index("messages_sender_id_idx").on(table.senderId),
     index("messages_chat_id_idx").on(table.chatId),
   ]
