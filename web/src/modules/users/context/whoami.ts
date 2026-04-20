@@ -1,8 +1,8 @@
 import { API_URL } from "~/env"
 
-import { UserEntity } from "../domain/user-entity"
+import { User } from "../domain/user"
 
-export async function whoami(): Promise<UserEntity | undefined> {
+export async function whoami(): Promise<User | undefined> {
   const response = await fetch(`${API_URL}/users/me`, {
     credentials: "include",
   })
@@ -12,5 +12,5 @@ export async function whoami(): Promise<UserEntity | undefined> {
   }
 
   const data = await response.json()
-  return new UserEntity(data)
+  return new User(data)
 }

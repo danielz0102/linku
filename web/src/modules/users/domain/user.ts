@@ -7,7 +7,7 @@ export type UserData = {
   bio: string | null
 }
 
-export class UserEntity {
+export class User {
   readonly id: string
   readonly username: string
   readonly firstName: string

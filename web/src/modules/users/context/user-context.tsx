@@ -1,12 +1,12 @@
 import { createContext, use, useState } from "react"
 
-import type { UserEntity } from "../domain/user-entity"
+import type { User } from "../domain/user"
 import { whoami } from "./whoami"
 
 type UserContextValue =
   | {
-      user: UserEntity | undefined
-      setUser: React.Dispatch<React.SetStateAction<UserEntity | undefined>>
+      user: User | undefined
+      setUser: React.Dispatch<React.SetStateAction<User | undefined>>
     }
   | undefined
 
@@ -15,7 +15,7 @@ const UserContext = createContext<UserContextValue>(undefined)
 const me = await whoami()
 
 export function UserProvider({ children }: React.PropsWithChildren) {
-  const [user, setUser] = useState<UserEntity | undefined>(me)
+  const [user, setUser] = useState<User | undefined>(me)
 
   return <UserContext value={{ user, setUser }}>{children}</UserContext>
 }

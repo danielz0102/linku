@@ -1,13 +1,13 @@
 import { API_URL } from "~/env"
 
-import { UserEntity } from "../../domain/user-entity"
+import { User } from "../../domain/user"
 
 export async function signUp(data: {
   firstName: string
   lastName: string
   username: string
   password: string
-}): Promise<UserEntity | undefined> {
+}): Promise<User | undefined> {
   const res = await fetch(`${API_URL}/users`, {
     credentials: "include",
     method: "POST",
@@ -26,5 +26,5 @@ export async function signUp(data: {
   }
 
   const userData = await res.json()
-  return new UserEntity(userData)
+  return new User(userData)
 }

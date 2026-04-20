@@ -1,6 +1,6 @@
 import { API_URL } from "~/env"
 
-import { type UserData, UserEntity } from "../../domain/user-entity"
+import { type UserData, User } from "../../domain/user"
 
 export async function searchUsers({
   query,
@@ -10,7 +10,7 @@ export async function searchUsers({
   query: string
   page?: number
   limit?: number
-}): Promise<UserEntity[]> {
+}): Promise<User[]> {
   const params = new URLSearchParams({ query })
 
   if (page) {
@@ -31,5 +31,5 @@ export async function searchUsers({
   }
 
   const data = (await response.json()) as UserData[]
-  return data.map((d) => new UserEntity(d))
+  return data.map((d) => new User(d))
 }

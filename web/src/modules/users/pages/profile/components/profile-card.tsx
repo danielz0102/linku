@@ -1,7 +1,7 @@
-import type { UserEntity } from "~/modules/users/domain/user-entity"
+import type { User } from "~/modules/users/domain/user"
 
 type ProfileCardProps = React.PropsWithChildren<{
-  user: UserEntity
+  user: User
   Avatar: React.ReactNode
 }>
 
