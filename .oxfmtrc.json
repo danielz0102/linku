@@ -4,5 +4,5 @@
   "trailingComma": "es5",
   "sortImports": true,
   "sortTailwindcss": true,
-  "ignorePatterns": []
+  "ignorePatterns": ["**/drizzle/meta/**"]
 }
