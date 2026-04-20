@@ -6,17 +6,29 @@ type ProfileAvatarProps = React.PropsWithChildren<{
   initials: string
   avatarUrl?: string
   className?: string
+  size?: "sm" | "lg"
 }>
 
-export function ProfileAvatar({ avatarUrl, initials, className, children }: ProfileAvatarProps) {
+export function ProfileAvatar({
+  avatarUrl,
+  initials,
+  className,
+  size = "lg",
+  children,
+}: ProfileAvatarProps) {
   const [hasImageError, setHasImageError] = useState(false)
   const showFallback = !avatarUrl || hasImageError
 
   return (
-    <div className={twMerge("relative size-28", className)}>
+    <div
+      className={twMerge("relative size-28 data-[size=sm]:size-12 group", className)}
+      data-size={size}
+    >
       <div className="bg-primary/10 text-primary size-full overflow-hidden rounded-full text-3xl font-bold">
         {showFallback ? (
-          <span className="grid size-full place-content-center">{initials}</span>
+          <span className="grid size-full place-content-center group-data-[size=sm]:text-sm">
+            {initials}
+          </span>
         ) : (
           <img
             src={avatarUrl}

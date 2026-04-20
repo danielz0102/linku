@@ -12,7 +12,8 @@ export function ChatCard({ chat }: ChatCardProps) {
       <ProfileAvatar
         initials={chat.initials}
         avatarUrl={chat.imageUrl}
-        className="size-12 shrink-0 text-xs"
+        className="shrink-0 text-xs"
+        size="sm"
       />
 
       <div className="flex min-w-0 flex-1 flex-col">
