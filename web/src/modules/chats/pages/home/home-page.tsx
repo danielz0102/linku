@@ -18,7 +18,12 @@ export default function HomePage() {
       {isLoading && <p className="text-muted m-auto animate-pulse">Loading chats...</p>}
 
       {chats.length === 0 && !isLoading && (
-        <p className="text-muted m-auto">No chats yet. Start a new conversation!</p>
+        <div className="m-auto space-y-1 text-center">
+          <h1 className="title">No chats yet.</h1>
+          <Link to="/search" className="link underline">
+            Search friends to start a conversation.
+          </Link>
+        </div>
       )}
 
       {chats.map((chat) => (
