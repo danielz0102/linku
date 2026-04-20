@@ -1,6 +1,6 @@
 import { API_URL } from "~/env"
 
-import type { User } from "../../domain/user"
+import type { User } from "../../../domain/user"
 
 export async function getUser(username: string): Promise<User> {
   const res = await fetch(`${API_URL}/users/${username}`, {

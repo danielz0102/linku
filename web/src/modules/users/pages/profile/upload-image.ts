@@ -1,4 +1,4 @@
-import { getCloudinarySignature } from "./get-cloudinary-signature"
+import { getCloudinarySignature } from "./api/get-cloudinary-signature"
 
 export async function uploadImage(file: File): Promise<{ url: string }> {
   const signature = await getCloudinarySignature()

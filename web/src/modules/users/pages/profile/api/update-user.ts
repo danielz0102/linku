@@ -1,6 +1,5 @@
 import { API_URL } from "~/env"
-
-import type { User } from "../../domain/user"
+import type { User } from "~/modules/users/domain/user"
 
 type UpdateUserPayload = {
   firstName: string

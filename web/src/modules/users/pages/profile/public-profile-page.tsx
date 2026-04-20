@@ -4,8 +4,8 @@ import { Link, useParams } from "react-router"
 
 import { ProfileAvatar } from "~/shared/components/profile-avatar"
 
+import { getUser } from "./api/get-user"
 import { ProfileCard } from "./components/profile-card"
-import { getUser } from "./get-user"
 
 export default function PublicProfilePage() {
   const { username } = useParams()

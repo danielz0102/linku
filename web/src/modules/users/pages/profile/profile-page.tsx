@@ -4,10 +4,10 @@ import { Dialog } from "~/shared/components/dialog"
 import { ProfileAvatar } from "~/shared/components/profile-avatar"
 
 import { useAuthenticatedUser } from "../../context/user-context"
+import { updateUser } from "./api/update-user"
 import { ProfileCard } from "./components/profile-card"
 import { UpdateProfilePictureForm } from "./components/update-profile-picture-form"
 import { UpdateUserForm } from "./components/update-user-form"
-import { updateUser } from "./update-user"
 import { uploadImage } from "./upload-image"
 
 export default function ProfilePage() {
