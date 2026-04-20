@@ -3,21 +3,13 @@ import { useState } from "react"
 import { twMerge } from "tailwind-merge"
 
 type ProfileAvatarProps = React.PropsWithChildren<{
-  firstName: string
-  lastName: string
+  initials: string
   avatarUrl?: string
   className?: string
 }>
 
-export function ProfileAvatar({
-  avatarUrl,
-  firstName,
-  lastName,
-  className,
-  children,
-}: ProfileAvatarProps) {
+export function ProfileAvatar({ avatarUrl, initials, className, children }: ProfileAvatarProps) {
   const [hasImageError, setHasImageError] = useState(false)
-  const initials = getInitials(firstName, lastName)
   const showFallback = !avatarUrl || hasImageError
 
   return (
@@ -48,8 +40,4 @@ ProfileAvatar.EditButton = ({ onClick }: { onClick: () => void }) => {
       <IconEdit size={18} />
     </button>
   )
-}
-
-function getInitials(firstName: string, lastName: string) {
-  return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase()
 }

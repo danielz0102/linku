@@ -20,11 +20,7 @@ export default function ProfilePage() {
       <ProfileCard
         user={user}
         Avatar={
-          <ProfileAvatar
-            firstName={user.firstName}
-            lastName={user.lastName}
-            avatarUrl={user.profilePictureUrl ?? undefined}
-          >
+          <ProfileAvatar initials={user.initials} avatarUrl={user.profilePictureUrl ?? undefined}>
             <ProfileAvatar.EditButton
               onClick={() => {
                 updateProfilePictureDlgRef.current?.showModal()
@@ -72,8 +68,7 @@ export default function ProfilePage() {
         <h2 className="title">Update Profile Picture</h2>
         <UpdateProfilePictureForm
           currentImageUrl={user.profilePictureUrl ?? undefined}
-          firstName={user.firstName}
-          lastName={user.lastName}
+          initials={user.initials}
           onSubmit={async (file) => {
             const { url } = await uploadImage(file)
             const updatedUser = await updateUser({

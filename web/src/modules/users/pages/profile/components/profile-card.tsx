@@ -6,17 +6,15 @@ type ProfileCardProps = React.PropsWithChildren<{
 }>
 
 export function ProfileCard({ user, Avatar, children }: ProfileCardProps) {
-  const { firstName, lastName, username, bio } = user.data
-
   return (
     <section className="bg-surface shadow-foreground/10 w-full max-w-2xl space-y-4 rounded-xl p-6 shadow">
-      <h1 className="title text-center md:text-left">{`${firstName} ${lastName}`}</h1>
+      <h1 className="title text-center md:text-left">{user.fullname}</h1>
       <div className="flex flex-col items-center gap-4 md:flex-row md:items-start">
         {Avatar}
         <div className="space-y-1 text-center md:text-left">
-          <h2 className="font-bold">@{username}</h2>
+          <h2 className="font-bold">{user.displayUsername}</h2>
           <p className="text-muted max-w-prose">
-            {bio ? bio : <span className="italic">No bio available</span>}
+            {user.bio ? user.bio : <span className="italic">No bio available</span>}
           </p>
         </div>
         <div className="mt-4 self-start md:ml-auto md:self-end">{children}</div>

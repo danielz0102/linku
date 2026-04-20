@@ -34,4 +34,18 @@ export class User {
       bio: this.bio,
     }
   }
+
+  get fullname(): string {
+    return `${this.firstName} ${this.lastName}`
+  }
+
+  get initials(): string {
+    const firstInitial = this.firstName.charAt(0).toUpperCase()
+    const lastInitial = this.lastName.charAt(0).toUpperCase()
+    return `${firstInitial}${lastInitial}`
+  }
+
+  get displayUsername(): string {
+    return `@${this.username}`
+  }
 }

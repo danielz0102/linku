@@ -8,8 +8,7 @@ import { validateImageFile } from "../validate-image"
 
 type UpdateProfilePictureFormProps = {
   currentImageUrl?: string
-  firstName: string
-  lastName: string
+  initials: string
   onSubmit: (file: File) => Promise<void>
 }
 
@@ -19,8 +18,7 @@ type UpdateProfilePictureInputs = {
 
 export function UpdateProfilePictureForm({
   currentImageUrl,
-  firstName,
-  lastName,
+  initials,
   onSubmit,
 }: UpdateProfilePictureFormProps) {
   const {
@@ -47,7 +45,7 @@ export function UpdateProfilePictureForm({
       })}
     >
       <div className="grid place-items-center">
-        <ProfileAvatar firstName={firstName} lastName={lastName} avatarUrl={pictureUrl} />
+        <ProfileAvatar initials={initials} avatarUrl={pictureUrl} />
       </div>
 
       <FormField label="Profile Picture" error={errors.profilePicture?.message}>

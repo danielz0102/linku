@@ -30,8 +30,7 @@ export default function PublicProfilePage() {
           user={user}
           Avatar={
             <ProfileAvatar
-              firstName={user.firstName}
-              lastName={user.lastName}
+              initials={user.initials}
               avatarUrl={user.profilePictureUrl ?? undefined}
             />
           }
