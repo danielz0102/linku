@@ -1,4 +1,3 @@
-import { getCloudinarySignature } from "./actions/get-cloudinary-signature"
 import { getUser } from "./actions/get-user"
 import { logOut } from "./actions/log-out"
 import { searchUsers } from "./actions/search-users"
@@ -10,7 +9,6 @@ export const api = {
     whoami,
     logOut,
     update: updateUser,
-    getCloudinarySignature,
     search: searchUsers,
     get: getUser,
   },

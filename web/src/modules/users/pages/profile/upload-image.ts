@@ -1,7 +1,7 @@
-import { api } from "~/shared/api/api"
+import { getCloudinarySignature } from "./get-cloudinary-signature"
 
 export async function uploadImage(file: File): Promise<{ url: string }> {
-  const signature = await api.users.getCloudinarySignature()
+  const signature = await getCloudinarySignature()
   const formData = new FormData()
 
   formData.append("file", file)
