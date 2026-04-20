@@ -1,5 +1,6 @@
+import { IconSendFilled } from "@tabler/icons-react"
 import { useQuery } from "@tanstack/react-query"
-import { useParams } from "react-router"
+import { Link, useParams } from "react-router"
 
 import { api } from "~/shared/api/api"
 import { ProfileAvatar } from "~/shared/components/profile-avatar"
@@ -39,7 +40,12 @@ export default function PublicProfilePage() {
               avatarUrl={user.profilePictureUrl ?? undefined}
             />
           }
-        />
+        >
+          <Link to={`/chat/${user.username}`} className="button rounded-xl">
+            Send a message
+            <IconSendFilled />
+          </Link>
+        </ProfileCard>
       )}
     </main>
   )
