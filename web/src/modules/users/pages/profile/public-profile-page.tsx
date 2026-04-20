@@ -2,10 +2,10 @@ import { IconSendFilled } from "@tabler/icons-react"
 import { useQuery } from "@tanstack/react-query"
 import { Link, useParams } from "react-router"
 
-import { api } from "~/shared/api/api"
 import { ProfileAvatar } from "~/shared/components/profile-avatar"
 
 import { ProfileCard } from "./components/profile-card"
+import { getUser } from "./get-user"
 
 export default function PublicProfilePage() {
   const { username } = useParams()
@@ -17,7 +17,7 @@ export default function PublicProfilePage() {
   const { data: user } = useQuery({
     queryKey: ["profile", username],
     queryFn: async () => {
-      return api.users.get(username)
+      return getUser(username)
     },
   })
 
