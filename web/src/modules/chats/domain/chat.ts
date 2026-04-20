@@ -4,30 +4,30 @@ import type { Message } from "./message"
 
 export class Chat {
   readonly id: string
-  #sender: ChatMember
+  #peer: ChatMember
   readonly lastMessage: Message
   readonly time: ChatDate
 
-  private constructor(id: string, sender: ChatMember, lastMessage: Message) {
+  private constructor(id: string, peer: ChatMember, lastMessage: Message) {
     this.id = id
-    this.#sender = sender
+    this.#peer = peer
     this.lastMessage = lastMessage
     this.time = new ChatDate(lastMessage.createdAt)
   }
 
-  static create(data: { id: string; sender: ChatMember; lastMessage: Message }) {
-    return new Chat(data.id, data.sender, data.lastMessage)
+  static create(data: { id: string; peer: ChatMember; lastMessage: Message }) {
+    return new Chat(data.id, data.peer, data.lastMessage)
   }
 
   get initials(): string {
-    return this.#sender.initials
+    return this.#peer.initials
   }
 
   get imageUrl(): string | undefined {
-    return this.#sender.profilePictureUrl ?? undefined
+    return this.#peer.profilePictureUrl ?? undefined
   }
 
   get name(): string {
-    return this.#sender.name
+    return this.#peer.name
   }
 }
