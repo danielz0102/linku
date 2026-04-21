@@ -37,7 +37,16 @@ export default function ChatPage() {
         {isEmpty && <p className="text-muted m-auto">No messages yet. Say hi 👋</p>}
 
         {peer &&
-          messages.reverse().map((m) => <MessageBubble key={m.id} message={m} peerId={peer.id} />)}
+          messages
+            .reverse()
+            .map((m) => (
+              <MessageBubble
+                key={m.id}
+                text={m.content ?? undefined}
+                attachmentUrl={m.attachmentUrl?.href}
+                isLeft={m.senderId === peer.id}
+              />
+            ))}
       </div>
 
       <div className="flex items-center justify-center *:w-full *:max-w-3xl">

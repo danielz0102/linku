@@ -1,31 +1,27 @@
-import type { Message as MessageEntity } from "~/modules/chats/domain/message"
-
 type MessageProps = {
-  message: MessageEntity
-  peerId: string
+  text?: string
+  attachmentUrl?: string
+  isLeft?: boolean
 }
 
-export function MessageBubble({ message, peerId }: MessageProps) {
-  const isPeerMessage = message.senderId === peerId
-  const canRenderAttachment = message.attachmentUrl && message.attachmentUrl.protocol === "https:"
-
+export function MessageBubble({ text, attachmentUrl, isLeft = true }: MessageProps) {
   return (
     <article
       className={`flex max-w-[50%] flex-col gap-2 rounded-2xl p-3 wrap-break-word ${
-        isPeerMessage
+        isLeft
           ? "self-start rounded-bl-sm bg-blue-100"
           : "self-end rounded-br-sm bg-blue-300 text-black"
       }`}
     >
-      {canRenderAttachment && (
+      {attachmentUrl && (
         <img
-          src={message.attachmentUrl.href}
+          src={attachmentUrl}
           alt="Attachment preview"
           className="max-h-80 w-full rounded-lg object-cover"
           loading="lazy"
         />
       )}
-      {message.content && <p>{message.content}</p>}
+      {text && <p>{text}</p>}
     </article>
   )
 }
