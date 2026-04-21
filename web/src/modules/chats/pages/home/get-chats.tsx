@@ -47,7 +47,8 @@ export async function getChats(): Promise<Chat[]> {
       lastMessage: Message.create({
         id: "3",
         senderId: "3",
-        content: new URL("https://example.com/attachment.pdf"),
+        content: null,
+        attachmentUrl: new URL("https://example.com/attachment.jpg"),
         createdAt: new Date(Date.now() - 1000 * 60 * 25),
         isRead: false,
       }),
@@ -96,7 +97,8 @@ export async function getChats(): Promise<Chat[]> {
       lastMessage: Message.create({
         id: "6",
         senderId: "6",
-        content: new URL("https://example.com/image.png"),
+        content: "Check out this cat!",
+        attachmentUrl: new URL("https://cataas.com/cat"),
         createdAt: new Date(Date.now() - 1000 * 60 * 60 * 8),
         isRead: true,
       }),

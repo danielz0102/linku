@@ -52,7 +52,8 @@ export async function getChat(username: string): Promise<ChatData | null> {
       Message.create({
         id: "m-3",
         senderId: peer.id,
-        content: new URL("https://example.com/shared-image.png"),
+        content: null,
+        attachmentUrl: new URL("https://example.com/shared-image.png"),
         createdAt: new Date(Date.now() - 1000 * 60 * 2),
         isRead: false,
       }),

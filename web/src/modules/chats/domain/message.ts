@@ -1,43 +1,54 @@
 export class Message {
   readonly id: string
   readonly senderId: string
-  readonly content: string | URL
+  readonly content: string | null
+  readonly attachmentUrl?: URL
   readonly createdAt: Date
   readonly isRead: boolean
 
   private constructor(
     id: string,
     senderId: string,
-    content: string | URL,
+    content: string | null,
     createdAt: Date,
-    isRead: boolean
+    isRead: boolean,
+    attachmentUrl?: URL
   ) {
     this.id = id
     this.senderId = senderId
     this.content = content
     this.createdAt = createdAt
     this.isRead = isRead
+    this.attachmentUrl = attachmentUrl
   }
 
   static create(data: {
     id: string
     senderId: string
-    content: string | URL
+    content: string | null
     createdAt: Date
     isRead: boolean
+    attachmentUrl?: URL
   }) {
-    return new Message(data.id, data.senderId, data.content, data.createdAt, data.isRead)
+    if (!data.content && !data.attachmentUrl) {
+      throw new Error("Message must have either content or an attachment")
+    }
+
+    return new Message(
+      data.id,
+      data.senderId,
+      data.content,
+      data.createdAt,
+      data.isRead,
+      data.attachmentUrl
+    )
   }
 
   get preview(): string {
-    if (this.content instanceof URL) {
-      return "Attachment"
+    if (this.content) {
+      return this.content
     }
 
-    return this.content
-  }
-
-  get isAttachment(): boolean {
-    return this.content instanceof URL
+    return "Attachment"
   }
 }

@@ -32,7 +32,7 @@ export function ChatCard({ chat }: ChatCardProps) {
 
         <p
           className="text-muted truncate text-sm data-attachment:italic"
-          data-attachment={chat.lastMessage.isAttachment || undefined}
+          data-attachment={chat.lastMessage.content === null || undefined}
         >
           {chat.lastMessage.preview}
         </p>
