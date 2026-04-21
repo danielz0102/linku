@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { Navigate, useParams } from "react-router"
 
 import { ChatHeader } from "./components/chat-header"
-import { Message } from "./components/message"
+import { MessageBubble } from "./components/message-bubble"
 import { MessageForm } from "./components/message-form"
 import { getChat } from "./get-chat"
 
@@ -36,7 +36,8 @@ export default function ChatPage() {
         {isLoading && <p className="text-muted m-auto animate-pulse">Loading chat...</p>}
         {isEmpty && <p className="text-muted m-auto">No messages yet. Say hi 👋</p>}
 
-        {peer && messages.reverse().map((m) => <Message key={m.id} message={m} peerId={peer.id} />)}
+        {peer &&
+          messages.reverse().map((m) => <MessageBubble key={m.id} message={m} peerId={peer.id} />)}
       </div>
 
       <div className="flex items-center justify-center *:w-full *:max-w-3xl">

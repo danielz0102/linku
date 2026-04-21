@@ -5,7 +5,7 @@ type MessageProps = {
   peerId: string
 }
 
-export function Message({ message, peerId }: MessageProps) {
+export function MessageBubble({ message, peerId }: MessageProps) {
   const isPeerMessage = message.senderId === peerId
   const canRenderAttachment = message.attachmentUrl && message.attachmentUrl.protocol === "https:"
 
