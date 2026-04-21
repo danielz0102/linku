@@ -15,11 +15,7 @@ const existingUsernames = new Set([
   "sophia.lee",
 ])
 
-export async function getChat(username: string): Promise<ChatData | null> {
-  if (!existingUsernames.has(username)) {
-    return null
-  }
-
+export async function getChat(username: string): Promise<ChatData> {
   const peer = ChatMember.create({
     id: `${username}-id`,
     username,
@@ -29,6 +25,10 @@ export async function getChat(username: string): Promise<ChatData | null> {
       .join(" "),
     profilePictureUrl: "https://cataas.com/cat",
   })
+
+  if (!existingUsernames.has(username)) {
+    return { peer, messages: [] }
+  }
 
   const currentUserId = "current-user"
 
