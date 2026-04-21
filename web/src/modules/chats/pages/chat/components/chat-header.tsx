@@ -9,7 +9,7 @@ type ChatHeaderProps = {
 
 export function ChatHeader({ member }: ChatHeaderProps) {
   return (
-    <header className="bg-background flex items-center gap-3 p-3">
+    <header className="bg-background flex items-center gap-3 pb-3 pl-3">
       <Link to={`/profile/${member.username}`} aria-label={`View ${member.name} profile`}>
         <ProfileAvatar
           initials={member.initials}
