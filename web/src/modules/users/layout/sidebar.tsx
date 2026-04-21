@@ -10,7 +10,7 @@ type SidebarProps = React.PropsWithChildren<{
 export function Sidebar({ onClose, children, open = false }: SidebarProps) {
   return (
     <nav
-      className="bg-sidebar absolute top-0 left-0 z-10 hidden h-svh w-full flex-col p-4 data-open:flex md:static md:block md:max-w-xs"
+      className="bg-sidebar absolute top-0 left-0 z-50 hidden h-svh w-full flex-col p-4 data-open:flex md:static md:block md:max-w-xs"
       data-open={open || undefined}
     >
       <ul className="flex flex-col gap-1 font-medium" onClickCapture={onClose}>

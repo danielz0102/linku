@@ -3,6 +3,7 @@ import { Navigate, useParams } from "react-router"
 
 import { ChatHeader } from "./chat-header"
 import { getChat } from "./get-chat"
+import { MessageForm } from "./message-form"
 
 export default function ChatPage() {
   const { username } = useParams()
@@ -25,6 +26,21 @@ export default function ChatPage() {
       {chat && <ChatHeader member={chat.peer} />}
 
       {isLoading && <p className="text-muted m-auto animate-pulse">Loading chat...</p>}
+
+      <div className="flex-1"></div>
+
+      <div className="flex items-center justify-center *:w-full *:max-w-3xl">
+        {chat && (
+          <MessageForm
+            onSend={(message) => {
+              console.log("Send message:", message)
+            }}
+            onAttachClick={(context) => {
+              console.log({ context })
+            }}
+          />
+        )}
+      </div>
     </main>
   )
 }
