@@ -31,12 +31,12 @@ export default function ChatPage() {
       {peer && <ChatHeader member={peer} />}
 
       <div
-        className={`flex flex-1 flex-col gap-2 overflow-y-auto p-4 ${(isLoading || isEmpty) && "grid place-items-center"}`}
+        className={`flex flex-1 flex-col-reverse gap-2 overflow-y-auto p-4 ${(isLoading || isEmpty) && "grid place-items-center"}`}
       >
         {isLoading && <p className="text-muted m-auto animate-pulse">Loading chat...</p>}
         {isEmpty && <p className="text-muted m-auto">No messages yet. Say hi 👋</p>}
 
-        {peer && messages.map((m) => <Message key={m.id} message={m} peerId={peer.id} />)}
+        {peer && messages.reverse().map((m) => <Message key={m.id} message={m} peerId={peer.id} />)}
       </div>
 
       <div className="flex items-center justify-center *:w-full *:max-w-3xl">
