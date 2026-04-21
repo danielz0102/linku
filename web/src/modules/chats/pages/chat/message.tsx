@@ -11,7 +11,7 @@ export function Message({ message, peerId }: MessageProps) {
 
   return (
     <article
-      className={`flex max-w-[85%] flex-col gap-2 rounded-2xl p-3 break-words ${
+      className={`flex max-w-[85%] flex-col gap-2 rounded-2xl p-3 wrap-break-word ${
         isPeerMessage
           ? "bg-surface self-start rounded-bl-sm"
           : "bg-primary/10 self-end rounded-br-sm"
