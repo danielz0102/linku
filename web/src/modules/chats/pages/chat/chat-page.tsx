@@ -17,20 +17,26 @@ export default function ChatPage() {
     queryFn: () => getChat(username),
   })
 
-  if (!isLoading && !chat) {
+  if (!isLoading && !chat?.peer) {
     return <Navigate to="/404" replace />
   }
 
+  const isEmpty = !isLoading && chat?.messages.length === 0
+
   return (
     <main className="flex size-full flex-col overflow-y-auto">
-      {chat && <ChatHeader member={chat.peer} />}
+      {chat?.peer && <ChatHeader member={chat.peer} />}
 
-      {isLoading && <p className="text-muted m-auto animate-pulse">Loading chat...</p>}
-
-      <div className="flex-1"></div>
+      <div
+        className="flex-1 data-empty:grid data-empty:place-items-center"
+        data-empty={isLoading || isEmpty || undefined}
+      >
+        {isLoading && <p className="text-muted m-auto animate-pulse">Loading chat...</p>}
+        {isEmpty && <p className="text-muted m-auto">No messages yet. Say hi 👋</p>}
+      </div>
 
       <div className="flex items-center justify-center *:w-full *:max-w-3xl">
-        {chat && (
+        {!isLoading && (
           <MessageForm
             onSubmit={(data) => {
               console.log({ data })

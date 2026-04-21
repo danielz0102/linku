@@ -2,7 +2,7 @@ import { ChatMember } from "~/modules/chats/domain/chat-member"
 import { Message } from "~/modules/chats/domain/message"
 
 type ChatData = {
-  peer: ChatMember
+  peer?: ChatMember
   messages: Message[]
 }
 
@@ -16,6 +16,10 @@ const existingUsernames = new Set([
 ])
 
 export async function getChat(username: string): Promise<ChatData> {
+  if (!existingUsernames.has(username)) {
+    return { peer: undefined, messages: [] }
+  }
+
   const peer = ChatMember.create({
     id: `${username}-id`,
     username,
@@ -25,10 +29,6 @@ export async function getChat(username: string): Promise<ChatData> {
       .join(" "),
     profilePictureUrl: "https://cataas.com/cat",
   })
-
-  if (!existingUsernames.has(username)) {
-    return { peer, messages: [] }
-  }
 
   const currentUserId = "current-user"
 
