@@ -23,6 +23,7 @@ export default function ChatPage() {
   }
 
   const isEmpty = !isLoading && chat?.messages.length === 0
+  const peerId = chat?.peer?.id
 
   return (
     <main className="flex size-full flex-col overflow-y-auto">
@@ -34,10 +35,10 @@ export default function ChatPage() {
       >
         {isLoading && <p className="text-muted m-auto animate-pulse">Loading chat...</p>}
         {isEmpty && <p className="text-muted m-auto">No messages yet. Say hi 👋</p>}
-        {!isLoading && chat?.peer && !isEmpty && (
+        {!isLoading && peerId && !isEmpty && (
           <div className="flex min-h-full flex-col-reverse gap-2 p-4">
             {[...chat.messages].reverse().map((message) => (
-              <Message key={message.id} message={message} peerId={chat.peer!.id} />
+              <Message key={message.id} message={message} peerId={peerId} />
             ))}
           </div>
         )}

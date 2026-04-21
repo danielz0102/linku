@@ -20,7 +20,7 @@ export function Message({ message, peerId }: MessageProps) {
       {message.attachmentUrl && (
         <img
           src={message.attachmentUrl.toString()}
-          alt="Message attachment"
+          alt="Shared attachment"
           className="max-h-80 w-full rounded-lg object-cover"
           loading="lazy"
         />
