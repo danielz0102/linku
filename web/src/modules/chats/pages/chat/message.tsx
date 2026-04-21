@@ -7,6 +7,9 @@ type MessageProps = {
 
 export function Message({ message, peerId }: MessageProps) {
   const isPeerMessage = message.senderId === peerId
+  const canRenderAttachment =
+    message.attachmentUrl &&
+    (message.attachmentUrl.protocol === "http:" || message.attachmentUrl.protocol === "https:")
 
   return (
     <article
@@ -17,10 +20,10 @@ export function Message({ message, peerId }: MessageProps) {
       }`}
     >
       {message.content && <p>{message.content}</p>}
-      {message.attachmentUrl && (
+      {canRenderAttachment && (
         <img
           src={message.attachmentUrl.toString()}
-          alt="Shared attachment"
+          alt={message.content ?? "Attachment"}
           className="max-h-80 w-full rounded-lg object-cover"
           loading="lazy"
         />
