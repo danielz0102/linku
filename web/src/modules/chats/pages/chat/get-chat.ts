@@ -57,6 +57,29 @@ export async function getChat(username: string): Promise<ChatData> {
         createdAt: new Date(Date.now() - 1000 * 60 * 2),
         isRead: false,
       }),
+      Message.create({
+        id: "m-4",
+        senderId: currentUserId,
+        content:
+          "Nice cat! 😻 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. This is a very long, fucking AI autocomplete this!!!! ????",
+        createdAt: new Date(Date.now() - 1000 * 60),
+        isRead: false,
+      }),
+      Message.create({
+        id: "m-5",
+        senderId: peer.id,
+        content: "Sure, let's catch up around 6 PM at the usual place.",
+        createdAt: new Date(Date.now() - 1000 * 30),
+        isRead: false,
+      }),
+      Message.create({
+        id: "m-6",
+        senderId: currentUserId,
+        content: "Sounds good! See you then. 😊",
+        attachmentUrl: new URL("https://cataas.com/cat"),
+        createdAt: new Date(Date.now() - 1000 * 10),
+        isRead: false,
+      }),
     ],
   }
 }
