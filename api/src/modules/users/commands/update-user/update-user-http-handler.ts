@@ -10,7 +10,7 @@ const updateUserRequestSchema = z.object({
   username: z.string().trim().nonempty(),
   firstName: z.string().trim().nonempty(),
   lastName: z.string().trim().nonempty(),
-  profilePictureUrl: z.url().nullable(),
+  profilePictureUrl: z.url({ protocol: /^https$/, hostname: z.regexes.domain }).nullable(),
   bio: z.string().trim().nullable(),
 })
 
