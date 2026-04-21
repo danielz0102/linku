@@ -1,3 +1,4 @@
+import { useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { Navigate, useParams } from "react-router"
 
@@ -23,11 +24,12 @@ export default function ChatPage() {
   }
 
   const isEmpty = !isLoading && chat?.messages.length === 0
-  const peerId = chat?.peer?.id
+  const peer = chat?.peer
+  const orderedMessages = useMemo(() => [...(chat?.messages ?? [])].reverse(), [chat?.messages])
 
   return (
     <main className="flex size-full flex-col overflow-y-auto">
-      {chat?.peer && <ChatHeader member={chat.peer} />}
+      {peer && <ChatHeader member={peer} />}
 
       <div
         className="flex-1 overflow-y-auto data-empty:grid data-empty:place-items-center"
@@ -35,10 +37,10 @@ export default function ChatPage() {
       >
         {isLoading && <p className="text-muted m-auto animate-pulse">Loading chat...</p>}
         {isEmpty && <p className="text-muted m-auto">No messages yet. Say hi 👋</p>}
-        {!isLoading && peerId && !isEmpty && (
+        {!isLoading && peer && !isEmpty && (
           <div className="flex min-h-full flex-col-reverse gap-2 p-4">
-            {[...chat.messages].reverse().map((message) => (
-              <Message key={message.id} message={message} peerId={peerId} />
+            {orderedMessages.map((message) => (
+              <Message key={message.id} message={message} peerId={peer.id} />
             ))}
           </div>
         )}
