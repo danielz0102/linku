@@ -24,7 +24,7 @@ export function MessageForm({ onSubmit }: MessageFormProps) {
         onSubmit({ file, message: trimmedContent })
         e.currentTarget.reset()
       }}
-      className="text-foreground flex items-center gap-2 rounded-3xl border border-blue-300 bg-blue-100 px-4 py-2"
+      className="text-foreground flex items-center gap-2 rounded-3xl border border-blue-200 bg-blue-100 px-4 py-2"
     >
       <button
         type="button"
