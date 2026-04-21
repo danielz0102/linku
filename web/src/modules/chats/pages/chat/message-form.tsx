@@ -3,11 +3,10 @@ import { IconPhoto } from "@tabler/icons-react"
 import { useRef } from "react"
 
 type MessageFormProps = {
-  onSend: (message: string) => void
-  onAttachClick: (context: { file: File; message: string }) => void
+  onSubmit: (data: { file?: File; message?: string }) => void
 }
 
-export function MessageForm({ onSend, onAttachClick }: MessageFormProps) {
+export function MessageForm({ onSubmit }: MessageFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const textRef = useRef<HTMLTextAreaElement>(null)
 
@@ -16,13 +15,13 @@ export function MessageForm({ onSend, onAttachClick }: MessageFormProps) {
       onSubmit={(e) => {
         e.preventDefault()
         const trimmedContent = textRef.current?.value.trim()
-        console.log("Submitting message:", { trimmedContent })
+        const file = fileInputRef.current?.files?.[0]
 
-        if (!trimmedContent) {
+        if (!trimmedContent && !file) {
           return
         }
 
-        onSend(trimmedContent)
+        onSubmit({ file, message: trimmedContent })
         e.currentTarget.reset()
       }}
       className="text-foreground flex items-center gap-2 rounded-3xl border border-blue-300 bg-blue-100 px-4 py-2"
@@ -48,8 +47,7 @@ export function MessageForm({ onSend, onAttachClick }: MessageFormProps) {
             return
           }
 
-          onAttachClick({ file, message: textRef.current?.value || "" })
-          e.currentTarget.form?.reset()
+          e.currentTarget.form?.requestSubmit()
         }}
       />
 

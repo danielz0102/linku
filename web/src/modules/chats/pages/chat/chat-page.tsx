@@ -32,11 +32,8 @@ export default function ChatPage() {
       <div className="flex items-center justify-center *:w-full *:max-w-3xl">
         {chat && (
           <MessageForm
-            onSend={(message) => {
-              console.log("Send message:", message)
-            }}
-            onAttachClick={(context) => {
-              console.log({ context })
+            onSubmit={(data) => {
+              console.log({ data })
             }}
           />
         )}
