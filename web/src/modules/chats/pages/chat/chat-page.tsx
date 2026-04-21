@@ -32,11 +32,11 @@ export default function ChatPage() {
       {peer && <ChatHeader member={peer} />}
 
       <div
-        className="flex-1 overflow-y-auto data-empty:grid data-empty:place-items-center"
-        data-empty={isLoading || isEmpty || undefined}
+        className={`flex-1 overflow-y-auto ${(isLoading || isEmpty) && "grid place-items-center"}`}
       >
         {isLoading && <p className="text-muted m-auto animate-pulse">Loading chat...</p>}
         {isEmpty && <p className="text-muted m-auto">No messages yet. Say hi 👋</p>}
+
         {!isLoading && peer && !isEmpty && (
           <div className="flex min-h-full flex-col-reverse gap-2 p-4">
             {orderedMessages.map((message) => (
