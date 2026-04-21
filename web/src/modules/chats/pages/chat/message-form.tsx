@@ -16,6 +16,7 @@ export function MessageForm({ onSend, onAttachClick }: MessageFormProps) {
       onSubmit={(e) => {
         e.preventDefault()
         const trimmedContent = textRef.current?.value.trim()
+        console.log("Submitting message:", { trimmedContent })
 
         if (!trimmedContent) {
           return
@@ -56,6 +57,22 @@ export function MessageForm({ onSend, onAttachClick }: MessageFormProps) {
         ref={textRef}
         placeholder="Type a message"
         name="message"
+        onKeyDown={(e) => {
+          if (e.key !== "Enter") {
+            return
+          }
+
+          if (e.nativeEvent.isComposing) {
+            return
+          }
+
+          if (e.shiftKey) {
+            return
+          }
+
+          e.preventDefault()
+          e.currentTarget.form?.requestSubmit()
+        }}
         className="field-sizing-content max-h-50 flex-1 resize-none outline-none"
         cols={5}
       />
