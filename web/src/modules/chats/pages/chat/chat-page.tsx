@@ -1,11 +1,11 @@
-import { useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
+import { useMemo } from "react"
 import { Navigate, useParams } from "react-router"
 
-import { ChatHeader } from "./chat-header"
+import { ChatHeader } from "./components/chat-header"
+import { Message } from "./components/message"
+import { MessageForm } from "./components/message-form"
 import { getChat } from "./get-chat"
-import { Message } from "./message"
-import { MessageForm } from "./message-form"
 
 export default function ChatPage() {
   const { username } = useParams()
