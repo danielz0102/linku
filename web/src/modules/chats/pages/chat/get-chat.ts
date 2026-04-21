@@ -53,7 +53,7 @@ export async function getChat(username: string): Promise<ChatData> {
         id: "m-3",
         senderId: peer.id,
         content: null,
-        attachmentUrl: new URL("https://example.com/shared-image.png"),
+        attachmentUrl: new URL("https://cataas.com/cat"),
         createdAt: new Date(Date.now() - 1000 * 60 * 2),
         isRead: false,
       }),
