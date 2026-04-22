@@ -1,15 +1,20 @@
 import { twMerge } from "tailwind-merge"
 
-import { MessageBubble, type MessageBubbleProps } from "./message-bubble"
+import type { Message } from "~/modules/chats/domain/message"
+
+import { MessageBubble } from "./message-bubble"
 
 type MessageListProps = {
-  messages?: MessageBubbleProps & { id: string }[]
+  data?: {
+    peerId: string
+    messages: Message[]
+  }
   className?: string
 }
 
-export function MessageList({ messages, className }: MessageListProps) {
-  const isLoading = messages === undefined
-  const isEmpty = messages?.length === 0
+export function MessageList({ data, className }: MessageListProps) {
+  const isLoading = data === undefined
+  const isEmpty = data?.messages.length === 0
 
   return (
     <div
@@ -24,8 +29,13 @@ export function MessageList({ messages, className }: MessageListProps) {
         {isEmpty && "No messages yet. Say hi 👋"}
       </p>
 
-      {messages?.toReversed().map((m) => (
-        <MessageBubble key={m.id} {...m} />
+      {data?.messages.toReversed().map((m) => (
+        <MessageBubble
+          key={m.id}
+          text={m.content ?? undefined}
+          attachmentUrl={m.attachmentUrl?.href}
+          isLeft={m.senderId === data?.peerId}
+        />
       ))}
     </div>
   )

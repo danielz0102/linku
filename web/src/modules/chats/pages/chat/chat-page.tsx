@@ -23,20 +23,21 @@ export default function ChatPage() {
   }
 
   const peer = chat?.peer
-  const messages = peer
-    ? chat?.messages?.map((m) => ({
-        id: m.id,
-        text: m.content ?? undefined,
-        attachmentUrl: m.attachmentUrl?.href,
-        isLeft: m.senderId === peer.id,
-      }))
-    : undefined
+  const data = (() => {
+    if (!chat) return
+    if (!chat.peer) return
+
+    return {
+      peerId: chat.peer.id,
+      messages: chat.messages,
+    }
+  })()
 
   return (
     <main className="flex size-full flex-col overflow-y-auto">
       {peer && <ChatHeader member={peer} />}
 
-      <MessageList messages={messages} className="flex-1" />
+      <MessageList data={data} className="flex-1" />
 
       <div className="flex items-center justify-center *:w-full *:max-w-3xl">
         {!isLoading && (
