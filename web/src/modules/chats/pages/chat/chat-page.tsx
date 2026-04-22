@@ -22,8 +22,7 @@ export default function ChatPage() {
     return <Navigate to="/404" replace />
   }
 
-  const peer = chat?.peer
-  const data = (() => {
+  const getMessageListData = () => {
     if (!chat) return
     if (!chat.peer) return
 
@@ -31,13 +30,13 @@ export default function ChatPage() {
       peerId: chat.peer.id,
       messages: chat.messages,
     }
-  })()
+  }
 
   return (
     <main className="flex size-full flex-col overflow-y-auto">
-      {peer && <ChatHeader member={peer} />}
+      {chat?.peer && <ChatHeader member={chat.peer} />}
 
-      <MessageList data={data} className="flex-1" />
+      <MessageList data={getMessageListData()} className="flex-1" />
 
       <div className="flex items-center justify-center *:w-full *:max-w-3xl">
         {!isLoading && (
