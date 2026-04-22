@@ -23,11 +23,14 @@ export default function ChatPage() {
   }
 
   const peer = chat?.peer
-  const messages = chat?.messages?.map((message) => ({
-    text: message.content ?? undefined,
-    attachmentUrl: message.attachmentUrl?.href,
-    isLeft: message.senderId === peer?.id,
-  }))
+  const messages = peer
+    ? chat?.messages?.map((message) => ({
+      id: message.id,
+      text: message.content ?? undefined,
+      attachmentUrl: message.attachmentUrl?.href,
+      isLeft: message.senderId === peer.id,
+    }))
+    : undefined
 
   return (
     <main className="flex size-full flex-col overflow-y-auto">

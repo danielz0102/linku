@@ -19,12 +19,16 @@ export function MessageList({ messages, className }: MessageListProps) {
         className,
       )}
     >
-      {isLoading && <p className="text-muted m-auto animate-pulse">Loading chat...</p>}
-      {isEmpty && <p className="text-muted m-auto">No messages yet. Say hi 👋</p>}
+      {isLoading && (
+        <p className="text-muted m-auto animate-pulse" role="status" aria-live="polite">
+          Loading chat...
+        </p>
+      )}
+      {isEmpty && <p className="text-muted m-auto" role="status">No messages yet. Say hi 👋</p>}
 
       {messages
         ?.toReversed()
-        .map((message, index) => <MessageBubble key={index} {...message} />)}
+        .map((message, index) => <MessageBubble key={message.id ?? index} {...message} />)}
     </div>
   )
 }
