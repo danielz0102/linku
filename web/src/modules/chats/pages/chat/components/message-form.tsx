@@ -2,25 +2,12 @@ import { IconSend } from "@tabler/icons-react"
 import { IconPhoto } from "@tabler/icons-react"
 import { useRef } from "react"
 
-type MessageFormProps = React.PropsWithChildren<{
+type MessageFormProps = {
   initialMessage?: string
   onSubmit: (data: { file?: File; message?: string }) => void
-}>
+}
 
-export function MessageForm({ onSubmit, children, initialMessage }: MessageFormProps) {
-  const isShiftEnter = (e: React.KeyboardEvent) => {
-    return e.key === "Enter" && e.shiftKey && !e.nativeEvent.isComposing
-  }
-
-  const getMessageData = (formData: FormData) => {
-    const message = formData.get("message")
-    const fileData = formData.get("file")
-
-    const trimmed = typeof message === "string" ? message.trim() : undefined
-    const file = fileData instanceof File ? fileData : undefined
-    return { trimmed, file }
-  }
-
+export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
   return (
     <form
       onSubmit={(e) => {
@@ -37,7 +24,7 @@ export function MessageForm({ onSubmit, children, initialMessage }: MessageFormP
       }}
       className="text-foreground flex items-center gap-2 rounded-3xl border border-blue-200 bg-blue-100 px-4 py-2"
     >
-      {children}
+      <AttachmentButton />
 
       <textarea
         placeholder="Type a message"
@@ -65,7 +52,20 @@ export function MessageForm({ onSubmit, children, initialMessage }: MessageFormP
   )
 }
 
-MessageForm.AttachmentButton = () => {
+function isShiftEnter(e: React.KeyboardEvent) {
+  return e.key === "Enter" && e.shiftKey && !e.nativeEvent.isComposing
+}
+
+function getMessageData(formData: FormData) {
+  const message = formData.get("message")
+  const fileData = formData.get("file")
+
+  const trimmed = typeof message === "string" ? message.trim() : undefined
+  const file = fileData instanceof File ? fileData : undefined
+  return { trimmed, file }
+}
+
+function AttachmentButton() {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   return (
