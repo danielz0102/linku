@@ -1,20 +1,13 @@
+import { Children } from "react"
 import { twMerge } from "tailwind-merge"
 
-import type { Message } from "~/modules/chats/domain/message"
-
-import { MessageBubble } from "./message-bubble"
-
-type MessageListProps = {
-  data?: {
-    peerId: string
-    messages: Message[]
-  }
+type MessageListProps = React.PropsWithChildren<{
   className?: string
-}
+}>
 
-export function MessageList({ data, className }: MessageListProps) {
-  const isLoading = data === undefined
-  const isEmpty = data?.messages.length === 0
+export function MessageList({ className, children }: MessageListProps) {
+  const isLoading = children === undefined
+  const isEmpty = children && Children.toArray(children).length === 0
 
   return (
     <div
@@ -29,14 +22,7 @@ export function MessageList({ data, className }: MessageListProps) {
         {isEmpty && "No messages yet. Say hi 👋"}
       </p>
 
-      {data?.messages.toReversed().map((m) => (
-        <MessageBubble
-          key={m.id}
-          text={m.content ?? undefined}
-          attachmentUrl={m.attachmentUrl?.href}
-          isLeft={m.senderId === data?.peerId}
-        />
-      ))}
+      {Children.toArray(children).toReversed()}
     </div>
   )
 }
