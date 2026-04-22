@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query"
 import { Navigate, useParams } from "react-router"
 
 import { ChatHeader } from "./components/chat-header"
-import { MessageList } from "./components/message-list"
 import { MessageForm } from "./components/message-form"
+import { MessageList } from "./components/message-list"
 import { getChat } from "./get-chat"
 
 export default function ChatPage() {
@@ -24,19 +24,19 @@ export default function ChatPage() {
 
   const peer = chat?.peer
   const messages = peer
-    ? chat?.messages?.map((message) => ({
-      id: message.id,
-      text: message.content ?? undefined,
-      attachmentUrl: message.attachmentUrl?.href,
-      isLeft: message.senderId === peer.id,
-    }))
+    ? chat?.messages?.map((m) => ({
+        id: m.id,
+        text: m.content ?? undefined,
+        attachmentUrl: m.attachmentUrl?.href,
+        isLeft: m.senderId === peer.id,
+      }))
     : undefined
 
   return (
     <main className="flex size-full flex-col overflow-y-auto">
       {peer && <ChatHeader member={peer} />}
 
-      <MessageList messages={isLoading ? undefined : messages} className="flex-1" />
+      <MessageList messages={messages} className="flex-1" />
 
       <div className="flex items-center justify-center *:w-full *:max-w-3xl">
         {!isLoading && (

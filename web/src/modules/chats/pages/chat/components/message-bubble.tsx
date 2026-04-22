@@ -1,5 +1,4 @@
 export type MessageBubbleProps = {
-  id?: string
   text?: string
   attachmentUrl?: string
   isLeft?: boolean
