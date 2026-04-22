@@ -8,16 +8,25 @@ type MessageFormProps = React.PropsWithChildren<{
 }>
 
 export function MessageForm({ onSubmit, children, initialMessage }: MessageFormProps) {
+  const isShiftEnter = (e: React.KeyboardEvent) => {
+    return e.key === "Enter" && e.shiftKey && !e.nativeEvent.isComposing
+  }
+
+  const getMessageData = (formData: FormData) => {
+    const message = formData.get("message")
+    const fileData = formData.get("file")
+
+    const trimmed = typeof message === "string" ? message.trim() : undefined
+    const file = fileData instanceof File ? fileData : undefined
+    return { trimmed, file }
+  }
+
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
-        const message = formData.get("message")
-        const fileData = formData.get("file")
-
-        const trimmed = typeof message === "string" ? message.trim() : undefined
-        const file = fileData instanceof File ? fileData : undefined
+        const { trimmed, file } = getMessageData(formData)
 
         if (!trimmed && !file) {
           return
@@ -34,15 +43,7 @@ export function MessageForm({ onSubmit, children, initialMessage }: MessageFormP
         placeholder="Type a message"
         name="message"
         onKeyDown={(e) => {
-          if (e.key !== "Enter") {
-            return
-          }
-
-          if (e.nativeEvent.isComposing) {
-            return
-          }
-
-          if (e.shiftKey) {
+          if (!isShiftEnter(e)) {
             return
           }
 
