@@ -1,10 +1,10 @@
-type MessageProps = {
+export type MessageBubbleProps = {
   text?: string
   attachmentUrl?: string
   isLeft?: boolean
 }
 
-export function MessageBubble({ text, attachmentUrl, isLeft = true }: MessageProps) {
+export function MessageBubble({ text, attachmentUrl, isLeft = true }: MessageBubbleProps) {
   return (
     <article
       className={`flex max-w-[50%] flex-col gap-2 rounded-2xl p-3 wrap-break-word ${
