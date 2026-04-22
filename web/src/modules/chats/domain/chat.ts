@@ -6,13 +6,11 @@ export class Chat {
   readonly id: string
   #peer: ChatMember
   readonly lastMessage: Message
-  readonly time: ChatDate
 
   private constructor(id: string, peer: ChatMember, lastMessage: Message) {
     this.id = id
     this.#peer = peer
     this.lastMessage = lastMessage
-    this.time = new ChatDate(lastMessage.createdAt)
   }
 
   static create(data: { id: string; peer: ChatMember; lastMessage: Message }) {
@@ -33,5 +31,9 @@ export class Chat {
 
   get member(): ChatMember {
     return this.#peer
+  }
+
+  get time(): ChatDate {
+    return new ChatDate(this.lastMessage.createdAt)
   }
 }
