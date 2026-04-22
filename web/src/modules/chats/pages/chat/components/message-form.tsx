@@ -1,6 +1,8 @@
 import { IconSend } from "@tabler/icons-react"
 import { IconPhoto } from "@tabler/icons-react"
-import { useRef } from "react"
+import { useRef, useState } from "react"
+
+import { validateImageFile } from "../validate-image-file"
 
 type MessageFormProps = {
   initialMessage?: string
@@ -67,16 +69,26 @@ function getMessageData(formData: FormData) {
 
 function AttachmentButton() {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const errorPopoverRef = useRef<HTMLDialogElement>(null)
+  const [error, setError] = useState<string>()
 
   return (
-    <>
+    <div className="relative self-end">
       <button
         type="button"
-        className="cursor-pointer self-end transition-transform hover:scale-115"
+        className="cursor-pointer transition-transform hover:scale-115"
         onClick={() => fileInputRef.current?.click()}
       >
         <IconPhoto strokeWidth={1.5} aria-label="Attach an image" />
       </button>
+
+      <dialog
+        ref={errorPopoverRef}
+        popover="auto"
+        className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 translate-y-1 rounded-md bg-red-200 px-3 py-2 text-sm text-red-900 opacity-0 shadow-sm transition-all duration-150 [transition-behavior:allow-discrete] [&:popover-open]:translate-y-0 [&:popover-open]:opacity-100"
+      >
+        {error}
+      </dialog>
 
       <input
         ref={fileInputRef}
@@ -92,9 +104,19 @@ function AttachmentButton() {
             return
           }
 
+          const validation = validateImageFile(file)
+
+          if (!validation.isValid) {
+            setError(validation.error)
+            e.currentTarget.value = ""
+            errorPopoverRef.current?.showPopover()
+            return
+          }
+
+          errorPopoverRef.current?.hidePopover()
           e.currentTarget.form?.requestSubmit()
         }}
       />
-    </>
+    </div>
   )
 }
