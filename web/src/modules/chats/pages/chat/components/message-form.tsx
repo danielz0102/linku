@@ -40,7 +40,7 @@ export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
       }}
       className="text-foreground flex items-center gap-2 rounded-3xl border border-blue-200 bg-blue-100 px-4 py-2"
     >
-      <AttachmentButton />
+      <AttachmentButton className="self-end" />
 
       <label htmlFor={messageId} className="sr-only">
         Message

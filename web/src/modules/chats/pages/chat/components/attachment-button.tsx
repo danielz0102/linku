@@ -1,5 +1,6 @@
 import { IconPhoto } from "@tabler/icons-react"
 import { useRef, useState } from "react"
+import { twMerge } from "tailwind-merge"
 
 import { Dialog } from "~/shared/components/dialog"
 
@@ -20,13 +21,13 @@ type ImageData =
       error?: never
     }
 
-export function AttachmentButton() {
+export function AttachmentButton({ className }: { className?: string }) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const dlgRef = useRef<HTMLDialogElement>(null)
   const [imageData, setImageData] = useState<ImageData>({})
 
   return (
-    <div className="attachment-button">
+    <div className={twMerge("attachment-button", className)}>
       <label
         className="grid cursor-pointer content-center transition-transform hover:scale-115"
         aria-label="Attach an image"
