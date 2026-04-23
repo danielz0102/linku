@@ -64,9 +64,11 @@ export function AttachmentButton({ className }: { className?: string }) {
         {imageData.error}
       </ErrorTooltip>
 
-      {imageData.file && (
-        <PreviewImageButton file={imageData.file} onClick={() => dlgRef.current?.showModal()} />
-      )}
+      <div role="status">
+        {imageData.file && (
+          <PreviewImageButton file={imageData.file} onClick={() => dlgRef.current?.showModal()} />
+        )}
+      </div>
 
       {imageData.file && <ImagePreviewModal ref={dlgRef} file={imageData.file} />}
     </div>
