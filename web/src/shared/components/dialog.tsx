@@ -15,6 +15,7 @@ export function Dialog({ ref, children }: DialogProps) {
           className="absolute top-4 right-4 cursor-pointer transition-transform duration-300 hover:rotate-90"
           onClick={() => ref.current?.close()}
           aria-label="Close"
+          type="button"
         >
           <IconX size={16} aria-hidden />
         </button>

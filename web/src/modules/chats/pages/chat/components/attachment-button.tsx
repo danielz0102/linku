@@ -1,5 +1,6 @@
 import { IconPhoto } from "@tabler/icons-react"
 import { useRef, useState } from "react"
+import { createPortal } from "react-dom"
 import { twMerge } from "tailwind-merge"
 
 import { Dialog } from "~/shared/components/dialog"
@@ -67,13 +68,16 @@ export function AttachmentButton({ className }: { className?: string }) {
         <PreviewImageButton file={imageData.file} onClick={() => dlgRef.current?.showModal()} />
       )}
 
-      <Dialog ref={dlgRef}>
-        <img
-          src={imageData.file ? URL.createObjectURL(imageData.file) : undefined}
-          alt="Preview"
-          className="max-h-[80dvh] max-w-[90vw] rounded object-contain"
-        />
-      </Dialog>
+      {createPortal(
+        <Dialog ref={dlgRef}>
+          <img
+            src={imageData.file ? URL.createObjectURL(imageData.file) : undefined}
+            alt="Preview"
+            className="max-h-[80dvh] max-w-[90vw] rounded object-contain"
+          />
+        </Dialog>,
+        document.body
+      )}
     </div>
   )
 }
