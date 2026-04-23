@@ -8,12 +8,8 @@ type MessageFormProps = {
   onSubmit: (data: { file?: File; message?: string }) => void
 }
 
-const isShiftEnter = (e: React.KeyboardEvent) => {
-  return e.key === "Enter" && e.shiftKey && !e.nativeEvent.isComposing
-}
-
 const isEnter = (e: React.KeyboardEvent) => {
-  return e.key === "Enter" && !e.nativeEvent.isComposing
+  return e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing
 }
 
 const getMessageData = (formData: FormData) => {
@@ -54,10 +50,6 @@ export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
         placeholder="Type a message"
         name="message"
         onKeyDown={(e) => {
-          if (isShiftEnter(e)) {
-            return
-          }
-
           if (isEnter(e)) {
             e.preventDefault()
             e.currentTarget.form?.requestSubmit()
