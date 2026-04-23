@@ -60,7 +60,7 @@ export function AttachmentButton({ className }: { className?: string }) {
       </label>
 
       <div
-        role="status"
+        role="alert"
         className="image-error on-top min-w-[20ch] rounded bg-red-300 px-1 py-1 text-center text-sm text-red-950 md:px-2"
         data-show={Boolean(imageData.error)}
         onAnimationEnd={() =>
