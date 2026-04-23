@@ -78,10 +78,11 @@ export function AttachmentButton({ className }: { className?: string }) {
           className="on-top cursor-pointer transition-transform hover:-translate-y-1"
           type="button"
           onClick={() => dlgRef.current?.showModal()}
+          aria-label="Open image preview"
         >
           <img
             src={URL.createObjectURL(imageData.file)}
-            alt="Open preview"
+            alt=""
             className="max-h-32 rounded object-contain"
           />
         </button>
