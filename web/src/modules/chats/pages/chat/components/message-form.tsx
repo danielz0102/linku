@@ -1,6 +1,10 @@
 import { IconSend } from "@tabler/icons-react"
 import { IconPhoto } from "@tabler/icons-react"
-import { useRef } from "react"
+import { useRef, useState } from "react"
+
+import { validateImageFile } from "../validate-image-file"
+
+import "./attachment-button.css"
 
 type MessageFormProps = {
   initialMessage?: string
@@ -67,12 +71,13 @@ function getMessageData(formData: FormData) {
 
 function AttachmentButton() {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [error, setError] = useState<string | null>(null)
 
   return (
-    <>
+    <div className="attachment-button">
       <button
         type="button"
-        className="cursor-pointer self-end transition-transform hover:scale-115"
+        className="grid cursor-pointer content-center transition-transform hover:scale-115"
         onClick={() => fileInputRef.current?.click()}
       >
         <IconPhoto strokeWidth={1.5} aria-label="Attach an image" />
@@ -89,12 +94,30 @@ function AttachmentButton() {
           const file = e.currentTarget.files?.[0]
 
           if (!file) {
+            setError(null)
             return
           }
 
+          const { isValid, error } = validateImageFile(file)
+
+          if (!isValid) {
+            setError(error)
+            return
+          }
+
+          setError(null)
           e.currentTarget.form?.requestSubmit()
         }}
       />
-    </>
+
+      <div
+        role="status"
+        className="image-error min-w-[20ch] rounded bg-red-300 px-1 py-1 text-center text-sm text-red-950 md:px-2"
+        data-show={Boolean(error)}
+        onAnimationEnd={() => setError(null)}
+      >
+        {error}
+      </div>
+    </div>
   )
 }

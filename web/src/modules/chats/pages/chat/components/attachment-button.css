@@ -1,0 +1,37 @@
+@scope (.attachment-button) {
+  button {
+    anchor-name: --attachment-button;
+  }
+
+  .image-error {
+    --fade-duration: 0.5s;
+
+    position: fixed;
+    position-anchor: --attachment-button;
+    position-area: top center;
+    margin-bottom: 1rem;
+    display: none;
+
+    &[data-show="true"] {
+      display: block;
+      opacity: 1;
+
+      transition-property: opacity;
+      transition-duration: var(--fade-duration);
+      transition-behavior: discrete;
+      animation: var(--fade-duration) fade-out 3s forwards;
+
+      @starting-style {
+        & {
+          opacity: 0;
+        }
+      }
+    }
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
