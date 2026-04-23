@@ -8,15 +8,6 @@ type MessageFormProps = {
   onSubmit: (data: { file?: File; message?: string }) => void
 }
 
-const getMessageData = (formData: FormData) => {
-  const message = formData.get("message")
-  const fileData = formData.get("file")
-
-  const trimmed = typeof message === "string" ? message.trim() : undefined
-  const file = fileData instanceof File ? fileData : undefined
-  return { message: trimmed, file }
-}
-
 export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
   return (
     <form
@@ -48,12 +39,17 @@ export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
   )
 }
 
-type MessageTextAreaProps = {
-  defaultValue?: string
+function getMessageData(formData: FormData) {
+  const message = formData.get("message")
+  const fileData = formData.get("file")
+
+  const trimmed = typeof message === "string" ? message.trim() : undefined
+  const file = fileData instanceof File ? fileData : undefined
+  return { message: trimmed, file }
 }
 
-const isEnter = (e: React.KeyboardEvent) => {
-  return e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing
+type MessageTextAreaProps = {
+  defaultValue?: string
 }
 
 function MessageTextArea({ defaultValue }: MessageTextAreaProps) {
@@ -80,4 +76,8 @@ function MessageTextArea({ defaultValue }: MessageTextAreaProps) {
       />
     </>
   )
+}
+
+function isEnter(e: React.KeyboardEvent) {
+  return e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing
 }
