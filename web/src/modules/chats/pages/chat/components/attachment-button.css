@@ -1,5 +1,5 @@
 @scope (.attachment-button) {
-  button {
+  label {
     anchor-name: --attachment-button;
   }
 
