@@ -58,8 +58,8 @@ export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
           e.currentTarget.form?.requestSubmit()
         }}
         className="field-sizing-content max-h-50 flex-1 resize-none outline-none"
-        cols={5}
         defaultValue={initialMessage}
+        required
       />
 
       <button
