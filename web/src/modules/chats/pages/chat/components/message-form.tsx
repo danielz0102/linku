@@ -8,57 +8,34 @@ type MessageFormProps = {
   onSubmit: (data: { file?: File; message?: string }) => void
 }
 
-const isEnter = (e: React.KeyboardEvent) => {
-  return e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing
-}
-
 const getMessageData = (formData: FormData) => {
   const message = formData.get("message")
   const fileData = formData.get("file")
 
   const trimmed = typeof message === "string" ? message.trim() : undefined
   const file = fileData instanceof File ? fileData : undefined
-  return { trimmed, file }
+  return { message: trimmed, file }
 }
 
 export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
-  const messageId = useId()
-
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
-        const { trimmed, file } = getMessageData(formData)
+        const { message, file } = getMessageData(formData)
 
-        if (!trimmed && !file) {
+        if (!message && !file) {
           return
         }
 
-        onSubmit({ file, message: trimmed })
+        onSubmit({ file, message })
         e.currentTarget.reset()
       }}
       className="text-foreground flex items-center gap-2 rounded-3xl border border-blue-200 bg-blue-100 px-4 py-2"
     >
       <AttachmentButton className="self-end" />
-
-      <label htmlFor={messageId} className="sr-only">
-        Message
-      </label>
-      <textarea
-        id={messageId}
-        placeholder="Type a message"
-        name="message"
-        onKeyDown={(e) => {
-          if (isEnter(e)) {
-            e.preventDefault()
-            e.currentTarget.form?.requestSubmit()
-          }
-        }}
-        className="field-sizing-content max-h-50 flex-1 resize-none outline-none"
-        defaultValue={initialMessage}
-        required
-      />
+      <MessageTextArea defaultValue={initialMessage} />
 
       <button
         type="submit"
@@ -68,5 +45,39 @@ export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
         <IconSend strokeWidth={1.5} aria-hidden />
       </button>
     </form>
+  )
+}
+
+type MessageTextAreaProps = {
+  defaultValue?: string
+}
+
+const isEnter = (e: React.KeyboardEvent) => {
+  return e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing
+}
+
+function MessageTextArea({ defaultValue }: MessageTextAreaProps) {
+  const id = useId()
+
+  return (
+    <>
+      <label htmlFor={id} className="sr-only">
+        Message
+      </label>
+      <textarea
+        id={id}
+        placeholder="Type a message"
+        name="message"
+        onKeyDown={(e) => {
+          if (isEnter(e)) {
+            e.preventDefault()
+            e.currentTarget.form?.requestSubmit()
+          }
+        }}
+        className="field-sizing-content max-h-50 flex-1 resize-none outline-none"
+        defaultValue={defaultValue}
+        required
+      />
+    </>
   )
 }
