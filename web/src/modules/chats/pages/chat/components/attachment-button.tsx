@@ -27,8 +27,11 @@ export function AttachmentButton() {
 
   return (
     <div className="attachment-button">
-      <label className="grid cursor-pointer content-center transition-transform hover:scale-115">
-        <IconPhoto strokeWidth={1.5} aria-label="Attach an image" />
+      <label
+        className="grid cursor-pointer content-center transition-transform hover:scale-115"
+        aria-label="Attach an image"
+      >
+        <IconPhoto strokeWidth={1.5} aria-hidden />
         <input
           ref={fileInputRef}
           name="file"

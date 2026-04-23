@@ -71,8 +71,9 @@ export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
       <button
         type="submit"
         className="cursor-pointer self-end transition-transform hover:scale-115"
+        aria-label="Send message"
       >
-        <IconSend strokeWidth={1.5} aria-label="Send message" />
+        <IconSend strokeWidth={1.5} aria-hidden />
       </button>
     </form>
   )
