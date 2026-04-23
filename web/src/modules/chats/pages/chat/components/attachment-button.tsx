@@ -59,11 +59,9 @@ export function AttachmentButton({ className }: { className?: string }) {
         />
       </label>
 
-      <ImageErrorAlert
-        onAnimationEnd={() => setImageData(({ file }) => ({ file, error: undefined }))}
-      >
+      <ErrorTooltip onAnimationEnd={() => setImageData(({ file }) => ({ file, error: undefined }))}>
         {imageData.error}
-      </ImageErrorAlert>
+      </ErrorTooltip>
 
       {imageData.file && (
         <PreviewImageButton file={imageData.file} onClick={() => dlgRef.current?.showModal()} />
@@ -84,7 +82,7 @@ type ImageErrorAlertProps = React.PropsWithChildren<{
   onAnimationEnd?: () => void
 }>
 
-function ImageErrorAlert({ onAnimationEnd, children }: ImageErrorAlertProps) {
+function ErrorTooltip({ onAnimationEnd, children }: ImageErrorAlertProps) {
   return (
     <div
       role="alert"
