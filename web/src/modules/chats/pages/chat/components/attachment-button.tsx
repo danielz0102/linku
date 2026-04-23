@@ -29,11 +29,12 @@ export function AttachmentButton({ className }: { className?: string }) {
 
   return (
     <div className={twMerge("attachment-button", className)}>
-      <label
-        className="grid cursor-pointer content-center transition-transform hover:scale-115"
-        aria-label="Attach an image"
-      >
-        <IconPhoto strokeWidth={1.5} aria-hidden />
+      <label className="group grid cursor-pointer content-center" aria-label="Attach an image">
+        <IconPhoto
+          strokeWidth={1.5}
+          aria-hidden
+          className="transition-transform group-hover:scale-115"
+        />
         <input
           ref={fileInputRef}
           name="file"
