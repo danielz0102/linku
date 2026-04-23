@@ -7,6 +7,19 @@ type MessageFormProps = {
   onSubmit: (data: { file?: File; message?: string }) => void
 }
 
+const isShiftEnter = (e: React.KeyboardEvent) => {
+  return e.key === "Enter" && e.shiftKey && !e.nativeEvent.isComposing
+}
+
+const getMessageData = (formData: FormData) => {
+  const message = formData.get("message")
+  const fileData = formData.get("file")
+
+  const trimmed = typeof message === "string" ? message.trim() : undefined
+  const file = fileData instanceof File ? fileData : undefined
+  return { trimmed, file }
+}
+
 export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
   return (
     <form
@@ -50,17 +63,4 @@ export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
       </button>
     </form>
   )
-}
-
-function isShiftEnter(e: React.KeyboardEvent) {
-  return e.key === "Enter" && e.shiftKey && !e.nativeEvent.isComposing
-}
-
-function getMessageData(formData: FormData) {
-  const message = formData.get("message")
-  const fileData = formData.get("file")
-
-  const trimmed = typeof message === "string" ? message.trim() : undefined
-  const file = fileData instanceof File ? fileData : undefined
-  return { trimmed, file }
 }
