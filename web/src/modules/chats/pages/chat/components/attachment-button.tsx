@@ -1,13 +1,29 @@
 import { IconPhoto } from "@tabler/icons-react"
 import { useRef, useState } from "react"
 
-import { validateImageFile } from "../validate-image-file"
+import { Dialog } from "~/shared/components/dialog"
 
 import "./attachment-button.css"
+import { validateImageFile } from "../validate-image-file"
+
+type ImageData =
+  | {
+      file: File
+      error?: never
+    }
+  | {
+      file?: never
+      error: string
+    }
+  | {
+      file?: never
+      error?: never
+    }
 
 export function AttachmentButton() {
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [error, setError] = useState<string | null>(null)
+  const dlgRef = useRef<HTMLDialogElement>(null)
+  const [imageData, setImageData] = useState<ImageData>({})
 
   return (
     <div className="attachment-button">
@@ -29,30 +45,56 @@ export function AttachmentButton() {
           const file = e.currentTarget.files?.[0]
 
           if (!file) {
-            setError(null)
+            setImageData({})
             return
           }
 
           const { isValid, error } = validateImageFile(file)
 
           if (!isValid) {
-            setError(error)
+            setImageData({ error })
             return
           }
 
-          setError(null)
-          e.currentTarget.form?.requestSubmit()
+          setImageData({ file })
         }}
       />
 
       <div
         role="status"
-        className="image-error min-w-[20ch] rounded bg-red-300 px-1 py-1 text-center text-sm text-red-950 md:px-2"
-        data-show={Boolean(error)}
-        onAnimationEnd={() => setError(null)}
+        className="image-error on-top min-w-[20ch] rounded bg-red-300 px-1 py-1 text-center text-sm text-red-950 md:px-2"
+        data-show={Boolean(imageData.error)}
+        onAnimationEnd={() =>
+          setImageData((prev) => ({
+            file: prev.file,
+            error: undefined,
+          }))
+        }
       >
-        {error}
+        {imageData.error}
       </div>
+
+      {imageData.file && (
+        <button
+          className="on-top cursor-pointer transition-transform hover:-translate-y-1"
+          type="button"
+          onClick={() => dlgRef.current?.showModal()}
+        >
+          <img
+            src={URL.createObjectURL(imageData.file)}
+            alt="Open preview"
+            className="max-h-32 rounded object-contain"
+          />
+        </button>
+      )}
+
+      <Dialog ref={dlgRef}>
+        <img
+          src={imageData.file ? URL.createObjectURL(imageData.file) : undefined}
+          alt="Preview"
+          className="max-h-[80dvh] max-w-[90vw] rounded object-contain"
+        />
+      </Dialog>
     </div>
   )
 }

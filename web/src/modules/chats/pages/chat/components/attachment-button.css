@@ -3,13 +3,16 @@
     anchor-name: --attachment-button;
   }
 
-  .image-error {
-    --fade-duration: 0.5s;
-
+  .on-top {
     position: fixed;
     position-anchor: --attachment-button;
     position-area: top center;
     margin-bottom: 1rem;
+  }
+
+  .image-error {
+    --fade-duration: 0.5s;
+
     display: none;
 
     &[data-show="true"] {
