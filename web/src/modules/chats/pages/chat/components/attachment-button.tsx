@@ -27,38 +27,33 @@ export function AttachmentButton() {
 
   return (
     <div className="attachment-button">
-      <button
-        type="button"
-        className="grid cursor-pointer content-center transition-transform hover:scale-115"
-        onClick={() => fileInputRef.current?.click()}
-      >
+      <label className="grid cursor-pointer content-center transition-transform hover:scale-115">
         <IconPhoto strokeWidth={1.5} aria-label="Attach an image" />
-      </button>
+        <input
+          ref={fileInputRef}
+          name="file"
+          type="file"
+          accept="image/*"
+          className="sr-only"
+          onChange={(e) => {
+            const file = e.currentTarget.files?.[0]
 
-      <input
-        ref={fileInputRef}
-        name="file"
-        type="file"
-        accept="image/*"
-        hidden
-        onChange={(e) => {
-          const file = e.currentTarget.files?.[0]
+            if (!file) {
+              setImageData({})
+              return
+            }
 
-          if (!file) {
-            setImageData({})
-            return
-          }
+            const { isValid, error } = validateImageFile(file)
 
-          const { isValid, error } = validateImageFile(file)
+            if (!isValid) {
+              setImageData({ error })
+              return
+            }
 
-          if (!isValid) {
-            setImageData({ error })
-            return
-          }
-
-          setImageData({ file })
-        }}
-      />
+            setImageData({ file })
+          }}
+        />
+      </label>
 
       <div
         role="status"
