@@ -1,4 +1,5 @@
 import { IconSend } from "@tabler/icons-react"
+import { useId } from "react"
 
 import { AttachmentButton } from "./attachment-button"
 
@@ -21,6 +22,8 @@ const getMessageData = (formData: FormData) => {
 }
 
 export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
+  const messageId = useId()
+
   return (
     <form
       onSubmit={(e) => {
@@ -39,7 +42,11 @@ export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
     >
       <AttachmentButton />
 
+      <label htmlFor={messageId} className="sr-only">
+        Message
+      </label>
       <textarea
+        id={messageId}
         placeholder="Type a message"
         name="message"
         onKeyDown={(e) => {
