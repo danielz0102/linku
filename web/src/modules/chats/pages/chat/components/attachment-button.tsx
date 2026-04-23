@@ -68,16 +68,7 @@ export function AttachmentButton({ className }: { className?: string }) {
         <PreviewImageButton file={imageData.file} onClick={() => dlgRef.current?.showModal()} />
       )}
 
-      {createPortal(
-        <Dialog ref={dlgRef}>
-          <img
-            src={imageData.file ? URL.createObjectURL(imageData.file) : undefined}
-            alt="Preview"
-            className="max-h-[80dvh] max-w-[90vw] rounded object-contain"
-          />
-        </Dialog>,
-        document.body
-      )}
+      {imageData.file && <ImagePreviewModal ref={dlgRef} file={imageData.file} />}
     </div>
   )
 }
@@ -114,5 +105,23 @@ function PreviewImageButton({ file, onClick }: PreviewImageButtonProps) {
     >
       <img src={URL.createObjectURL(file)} alt="" className="max-h-32 rounded object-contain" />
     </button>
+  )
+}
+
+type ImagePreviewModalProps = {
+  ref: React.RefObject<HTMLDialogElement | null>
+  file: File
+}
+
+function ImagePreviewModal({ file, ref }: ImagePreviewModalProps) {
+  return createPortal(
+    <Dialog ref={ref}>
+      <img
+        src={URL.createObjectURL(file)}
+        alt="Preview"
+        className="max-h-[80dvh] max-w-[90vw] rounded object-contain"
+      />
+    </Dialog>,
+    document.body
   )
 }
