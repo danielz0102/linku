@@ -59,19 +59,11 @@ export function AttachmentButton({ className }: { className?: string }) {
         />
       </label>
 
-      <div
-        role="alert"
-        className="image-error on-top min-w-[20ch] rounded bg-red-300 px-1 py-1 text-center text-sm text-red-950 md:px-2"
-        data-show={Boolean(imageData.error)}
-        onAnimationEnd={() =>
-          setImageData((prev) => ({
-            file: prev.file,
-            error: undefined,
-          }))
-        }
+      <ImageErrorAlert
+        onAnimationEnd={() => setImageData(({ file }) => ({ file, error: undefined }))}
       >
         {imageData.error}
-      </div>
+      </ImageErrorAlert>
 
       {imageData.file && (
         <button
@@ -95,6 +87,23 @@ export function AttachmentButton({ className }: { className?: string }) {
           className="max-h-[80dvh] max-w-[90vw] rounded object-contain"
         />
       </Dialog>
+    </div>
+  )
+}
+
+type ImageErrorAlertProps = React.PropsWithChildren<{
+  onAnimationEnd?: () => void
+}>
+
+function ImageErrorAlert({ onAnimationEnd, children }: ImageErrorAlertProps) {
+  return (
+    <div
+      role="alert"
+      className="image-error on-top min-w-[20ch] rounded bg-red-300 px-1 py-1 text-center text-sm text-red-950 md:px-2"
+      data-show={Boolean(children)}
+      onAnimationEnd={onAnimationEnd}
+    >
+      {children}
     </div>
   )
 }
