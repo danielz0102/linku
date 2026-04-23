@@ -1,5 +1,5 @@
 import { IconSend } from "@tabler/icons-react"
-import { useId, useRef, useState } from "react"
+import { useEffect, useId, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 
 import { Dialog } from "~/shared/components/dialog"
@@ -43,7 +43,27 @@ const getMessageData = (formData: FormData) => {
 export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
   const messageId = useId()
   const dlgRef = useRef<HTMLDialogElement>(null)
+  const [isMounted, setIsMounted] = useState(false)
   const [imageData, setImageData] = useState<ImageData>({})
+  const [previewUrl, setPreviewUrl] = useState<string>()
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!imageData.file) {
+      setPreviewUrl(undefined)
+      return
+    }
+
+    const objectUrl = URL.createObjectURL(imageData.file)
+    setPreviewUrl(objectUrl)
+
+    return () => {
+      URL.revokeObjectURL(objectUrl)
+    }
+  }, [imageData.file])
 
   return (
     <form
@@ -89,16 +109,13 @@ export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
         className="image-error on-top min-w-[20ch] rounded bg-red-300 px-1 py-1 text-center text-sm text-red-950 md:px-2"
         data-show={Boolean(imageData.error)}
         onAnimationEnd={() =>
-          setImageData((prev) => ({
-            file: prev.file,
-            error: undefined,
-          }))
+          setImageData((prev) => (prev.file ? { file: prev.file } : {}))
         }
       >
         {imageData.error}
       </div>
 
-      {imageData.file && (
+      {imageData.file && previewUrl && (
         <button
           className="on-top cursor-pointer transition-transform hover:-translate-y-1"
           type="button"
@@ -106,19 +123,19 @@ export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
           aria-label="Open image preview"
         >
           <img
-            src={URL.createObjectURL(imageData.file)}
+            src={previewUrl}
             alt=""
             className="max-h-32 rounded object-contain"
           />
         </button>
       )}
 
-      {typeof document !== "undefined" &&
+      {isMounted &&
         createPortal(
           <Dialog ref={dlgRef}>
             <img
-              src={imageData.file ? URL.createObjectURL(imageData.file) : undefined}
-              alt="Preview"
+              src={previewUrl}
+              alt={imageData.file?.name ?? "Attachment preview"}
               className="max-h-[80dvh] max-w-[90vw] rounded object-contain"
             />
           </Dialog>,
