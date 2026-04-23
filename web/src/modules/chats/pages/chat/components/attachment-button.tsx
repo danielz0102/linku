@@ -66,18 +66,7 @@ export function AttachmentButton({ className }: { className?: string }) {
       </ImageErrorAlert>
 
       {imageData.file && (
-        <button
-          className="on-top cursor-pointer transition-transform hover:-translate-y-1"
-          type="button"
-          onClick={() => dlgRef.current?.showModal()}
-          aria-label="Open image preview"
-        >
-          <img
-            src={URL.createObjectURL(imageData.file)}
-            alt=""
-            className="max-h-32 rounded object-contain"
-          />
-        </button>
+        <PreviewImageButton file={imageData.file} onClick={() => dlgRef.current?.showModal()} />
       )}
 
       <Dialog ref={dlgRef}>
@@ -105,5 +94,23 @@ function ImageErrorAlert({ onAnimationEnd, children }: ImageErrorAlertProps) {
     >
       {children}
     </div>
+  )
+}
+
+type PreviewImageButtonProps = {
+  file: File
+  onClick: () => void
+}
+
+function PreviewImageButton({ file, onClick }: PreviewImageButtonProps) {
+  return (
+    <button
+      className="on-top cursor-pointer transition-transform hover:-translate-y-1"
+      type="button"
+      onClick={onClick}
+      aria-label="Open image preview"
+    >
+      <img src={URL.createObjectURL(file)} alt="" className="max-h-32 rounded object-contain" />
+    </button>
   )
 }
