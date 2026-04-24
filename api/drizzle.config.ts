@@ -8,9 +8,12 @@ import { defineConfig } from "drizzle-kit"
 // This is not possible with the native `process.loadEnvFile`, so `dotenv` package is used instead
 dotenv.config({ path: env["ENV_PATH"] ?? ".env", override: true })
 
+const dbUrl = env["DB_URL"]
+console.log("Database URL:", dbUrl)
+
 export default defineConfig({
   out: "./drizzle",
   schema: "./src/db/drizzle/schemas.ts",
   dialect: "postgresql",
-  dbCredentials: { url: process.env.DB_URL! },
+  dbCredentials: { url: dbUrl! },
 })
