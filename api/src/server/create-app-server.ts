@@ -6,7 +6,7 @@ import { corsMiddleware } from "./middlewares/cors-middleware.ts"
 import { sessionMiddleware } from "./middlewares/session-middleware.ts"
 import { appRouter } from "./routers/app-router.ts"
 
-export const createAppServer = async () => {
+export function createAppServer() {
   const app = express()
   const server = createServer(app)
 

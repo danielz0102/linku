@@ -4,7 +4,7 @@ import { Server } from "socket.io"
 
 import { CLIENT_ORIGIN } from "#env.ts"
 
-export function createWsServer(httpServer: HTTPServer) {
+export function initWsServer(httpServer: HTTPServer) {
   const io = new Server(httpServer, {
     cors: {
       origin: CLIENT_ORIGIN,
@@ -12,5 +12,7 @@ export function createWsServer(httpServer: HTTPServer) {
     },
   })
 
-  return io
+  io.on("connection", (socket) => {
+    console.log("A user connected", socket.id)
+  })
 }
