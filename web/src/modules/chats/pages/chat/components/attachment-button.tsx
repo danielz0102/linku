@@ -1,5 +1,5 @@
 import { IconPhoto } from "@tabler/icons-react"
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
 import type { UseFormRegisterReturn } from "react-hook-form"
 
@@ -47,10 +47,19 @@ type PreviewImageButtonProps = {
 
 AttachmentButton.PreviewImageButton = ({ file }: PreviewImageButtonProps) => {
   const dlgRef = useRef<HTMLDialogElement>(null)
+  const url = file ? URL.createObjectURL(file) : undefined
+
+  useEffect(() => {
+    return () => {
+      if (url) {
+        URL.revokeObjectURL(url)
+      }
+    }
+  }, [url])
 
   return (
     <div role="status">
-      {file && (
+      {url && (
         <>
           <button
             className="on-top cursor-pointer transition-transform hover:-translate-y-1"
@@ -58,16 +67,12 @@ AttachmentButton.PreviewImageButton = ({ file }: PreviewImageButtonProps) => {
             onClick={() => dlgRef.current?.showModal()}
             aria-label="Open image preview"
           >
-            <img
-              src={URL.createObjectURL(file)}
-              alt=""
-              className="max-h-32 rounded object-contain"
-            />
+            <img src={url} alt="" className="max-h-32 rounded object-contain" />
           </button>
           {createPortal(
             <Dialog ref={dlgRef}>
               <img
-                src={URL.createObjectURL(file)}
+                src={url}
                 alt="Preview"
                 className="max-h-[80dvh] max-w-[90vw] rounded object-contain"
               />
