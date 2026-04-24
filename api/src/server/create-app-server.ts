@@ -1,3 +1,5 @@
+import { createServer } from "node:http"
+
 import express from "express"
 
 import { redisClient } from "#db/redis/redis-client.ts"
@@ -8,6 +10,7 @@ import { appRouter } from "./routers/app-router.ts"
 
 export const createAppServer = async () => {
   const app = express()
+  const server = createServer(app)
 
   app.use(express.json())
   app.set("trust proxy", 1)
@@ -19,5 +22,5 @@ export const createAppServer = async () => {
 
   app.use(appRouter)
 
-  return app
+  return server
 }
