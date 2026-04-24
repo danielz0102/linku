@@ -20,6 +20,8 @@ export function MessageForm({ onSubmit }: MessageFormProps) {
   // A default value cannot be set for file inputs to override the undefined value
   // Using a key to force remount renders a new file input with a fresh FileList
   const [attachmentKey, setAttachmentKey] = useState(0)
+  const [errorTrigger, setErrorTrigger] = useState(Symbol())
+
   const {
     register,
     handleSubmit,
@@ -42,10 +44,11 @@ export function MessageForm({ onSubmit }: MessageFormProps) {
       <AttachmentButton
         key={attachmentKey}
         {...register("files", {
+          onChange: () => setErrorTrigger(Symbol()),
           validate: (files) => {
             const file = files?.[0]
 
-            if (!file) return true
+            if (!file) return
 
             if (!file.type.startsWith("image/")) {
               return "Only image files are allowed"
@@ -58,7 +61,9 @@ export function MessageForm({ onSubmit }: MessageFormProps) {
         })}
         className="self-end"
       >
-        <AttachmentButton.ErrorTooltip>{errors.files?.message}</AttachmentButton.ErrorTooltip>
+        <AttachmentButton.ErrorTooltip trigger={errorTrigger}>
+          {errors.files?.message}
+        </AttachmentButton.ErrorTooltip>
         <AttachmentButton.PreviewImageButton file={selectedFile} />
       </AttachmentButton>
 

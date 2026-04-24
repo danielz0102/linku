@@ -1,5 +1,5 @@
 import { IconPhoto } from "@tabler/icons-react"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import type { UseFormRegisterReturn } from "react-hook-form"
 
@@ -29,12 +29,24 @@ export function AttachmentButton({ className, children, ...rest }: AttachmentBut
   )
 }
 
-AttachmentButton.ErrorTooltip = ({ children }: React.PropsWithChildren) => {
+type ErrorTooltipProps = {
+  trigger: symbol
+  children?: string
+}
+
+AttachmentButton.ErrorTooltip = ({ trigger, children }: ErrorTooltipProps) => {
+  const [isVisible, setIsVisible] = useState(Boolean(children))
+
+  useEffect(() => {
+    setIsVisible(Boolean(children))
+  }, [trigger, children])
+
   return (
     <div
       role="alert"
       className="image-error on-top min-w-[20ch] rounded bg-red-300 px-1 py-1 text-center text-sm text-red-950 md:px-2"
-      data-show={Boolean(children)}
+      data-show={isVisible}
+      onAnimationEnd={() => setIsVisible(false)}
     >
       {children}
     </div>
