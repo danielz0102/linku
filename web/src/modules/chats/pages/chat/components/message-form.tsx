@@ -1,32 +1,68 @@
 import { IconSend } from "@tabler/icons-react"
-import { useId } from "react"
+import { useId, useState } from "react"
+import { useForm, type UseFormRegisterReturn } from "react-hook-form"
 
 import { AttachmentButton } from "./attachment-button"
 
+import "./attachment-button.css"
+
+type MessageFormInputs = {
+  message: string
+  files?: FileList
+}
+
 type MessageFormProps = {
-  initialMessage?: string
   onSubmit: (data: { file?: File; message?: string }) => void
 }
 
-export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
+export function MessageForm({ onSubmit }: MessageFormProps) {
+  // File inputs values are always undefined after calling reset() on submit
+  // A default value cannot be set for file inputs to override the undefined value
+  // Using a key to force remount renders a new file input with a fresh FileList
+  const [attachmentKey, setAttachmentKey] = useState(0)
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    watch,
+  } = useForm<MessageFormInputs>({ mode: "onChange" })
+
+  const selectedFile = watch("files")?.[0]
+
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        const formData = new FormData(e.currentTarget)
-        const { message, file } = getMessageData(formData)
-
-        if (!message && !file) {
-          return
-        }
-
-        onSubmit({ file, message })
-        e.currentTarget.reset()
-      }}
+      onSubmit={handleSubmit((data) => {
+        onSubmit({ file: data.files?.[0], message: data.message || undefined })
+        reset()
+        setAttachmentKey((v) => v + 1)
+      })}
       className="text-foreground flex items-center gap-2 rounded-3xl border border-blue-200 bg-blue-100 px-4 py-2"
     >
-      <AttachmentButton className="self-end" />
-      <MessageTextArea defaultValue={initialMessage} />
+      <AttachmentButton
+        key={attachmentKey}
+        {...register("files", {
+          validate: (files) => {
+            const file = files?.[0]
+
+            if (!file) return true
+
+            if (!file.type.startsWith("image/")) {
+              return "Only image files are allowed"
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+              return "File size must be less than 5MB"
+            }
+          },
+        })}
+        className="self-end"
+      >
+        <AttachmentButton.ErrorTooltip>{errors.files?.message}</AttachmentButton.ErrorTooltip>
+        <AttachmentButton.PreviewImageButton file={selectedFile} />
+      </AttachmentButton>
+
+      <MessageTextArea {...register("message", { setValueAs: (v) => v.trim() })} />
 
       <button
         type="submit"
@@ -39,20 +75,7 @@ export function MessageForm({ onSubmit, initialMessage }: MessageFormProps) {
   )
 }
 
-function getMessageData(formData: FormData) {
-  const message = formData.get("message")
-  const fileData = formData.get("file")
-
-  const trimmed = typeof message === "string" ? message.trim() : undefined
-  const file = fileData instanceof File ? fileData : undefined
-  return { message: trimmed, file }
-}
-
-type MessageTextAreaProps = {
-  defaultValue?: string
-}
-
-function MessageTextArea({ defaultValue }: MessageTextAreaProps) {
+function MessageTextArea(props: UseFormRegisterReturn) {
   const id = useId()
 
   return (
@@ -63,21 +86,9 @@ function MessageTextArea({ defaultValue }: MessageTextAreaProps) {
       <textarea
         id={id}
         placeholder="Type a message"
-        name="message"
-        onKeyDown={(e) => {
-          if (isEnter(e)) {
-            e.preventDefault()
-            e.currentTarget.form?.requestSubmit()
-          }
-        }}
         className="field-sizing-content max-h-50 flex-1 resize-none outline-none"
-        defaultValue={defaultValue}
-        required
+        {...props}
       />
     </>
   )
-}
-
-function isEnter(e: React.KeyboardEvent) {
-  return e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing
 }

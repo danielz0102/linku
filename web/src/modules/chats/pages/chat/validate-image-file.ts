@@ -1,4 +1,4 @@
-const ALLOWED_IMAGE_MIME_TYPES = new Set([
+export const ALLOWED_IMAGE_MIME_TYPES = new Set([
   "image/jpeg",
   "image/png",
   "image/webp",
@@ -6,7 +6,7 @@ const ALLOWED_IMAGE_MIME_TYPES = new Set([
   "image/avif",
 ])
 
-const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024
+export const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024
 
 type ImageValidationResult =
   | {
@@ -15,21 +15,21 @@ type ImageValidationResult =
     }
   | {
       isValid: false
-      error: string
+      error: "INVALID_TYPE" | "FILE_TOO_LARGE"
     }
 
 export function validateImageFile(file: File): ImageValidationResult {
   if (!ALLOWED_IMAGE_MIME_TYPES.has(file.type)) {
     return {
       isValid: false,
-      error: "File must be a JPEG, PNG, WebP, GIF, or AVIF image",
+      error: "INVALID_TYPE",
     }
   }
 
   if (file.size > MAX_IMAGE_SIZE_BYTES) {
     return {
       isValid: false,
-      error: "File cannot be larger than 5MB",
+      error: "FILE_TOO_LARGE",
     }
   }
 
