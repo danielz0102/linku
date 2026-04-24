@@ -15,4 +15,4 @@ createRoot(document.getElementById("root")!).render(
   </StrictMode>
 )
 
-io(SOCKET_URL)
+io(SOCKET_URL, { withCredentials: true })
