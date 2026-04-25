@@ -12,9 +12,9 @@ type Chat = {
   lastMessage: Message
 }
 
-export async function getChats(userId: string): Promise<Chat[]> {
-  const latestMessages = db.$with("latest_messages").as(
-    db
+export async function getChats(userId: string, queryDb: typeof db = db): Promise<Chat[]> {
+  const latestMessages = queryDb.$with("latest_messages").as(
+    queryDb
       .selectDistinctOn([messages.chatId], {
         chatId: messages.chatId,
         id: messages.id,
@@ -31,7 +31,7 @@ export async function getChats(userId: string): Promise<Chat[]> {
   const peerMember = alias(chatMembers, "peer_member")
   const peerUser = alias(users, "peer_user")
 
-  const rows = await db
+  const rows = await queryDb
     .with(latestMessages)
     .select({
       chatId: selfMember.chatId,
