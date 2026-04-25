@@ -1,8 +1,8 @@
-export class ChatDate {
+export class MessageDate {
   #date: Date
 
-  constructor(date: Date) {
-    this.#date = date
+  constructor(date: string) {
+    this.#date = new Date(date)
   }
 
   toISOString() {

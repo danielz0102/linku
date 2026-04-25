@@ -1,16 +1,18 @@
+import { MessageDate } from "./message-date"
+
 export class Message {
   readonly id: string
   readonly senderId: string
   readonly content: string | null
   readonly attachmentUrl?: URL
-  readonly createdAt: Date
+  readonly createdAt: MessageDate
   readonly isRead: boolean
 
   private constructor(
     id: string,
     senderId: string,
     content: string | null,
-    createdAt: Date,
+    createdAt: MessageDate,
     isRead: boolean,
     attachmentUrl?: URL
   ) {
@@ -38,7 +40,7 @@ export class Message {
       data.id,
       data.senderId,
       data.content,
-      new Date(data.createdAt),
+      new MessageDate(data.createdAt),
       data.isRead,
       data.attachmentUrl ? new URL(data.attachmentUrl) : undefined
     )

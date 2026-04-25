@@ -1,6 +1,6 @@
-import { ChatDate } from "./chat-date"
 import type { ChatMember } from "./chat-member"
 import type { Message } from "./message"
+import { MessageDate } from "./message-date"
 
 export class Chat {
   readonly id: string
@@ -33,7 +33,7 @@ export class Chat {
     return this.#peer
   }
 
-  get time(): ChatDate {
-    return new ChatDate(this.lastMessage.createdAt)
+  get time(): MessageDate {
+    return this.lastMessage.createdAt
   }
 }
