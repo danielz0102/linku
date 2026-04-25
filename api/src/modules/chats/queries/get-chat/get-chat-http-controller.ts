@@ -6,7 +6,7 @@ import { getChat } from "./get-chat-query-handler.ts"
 const getChatRequestSchema = z.object({
   peerId: z.uuid(),
   page_size: z.coerce.number().int().min(1).default(20),
-  cursor: z.coerce.date().nullable(),
+  cursor: z.coerce.date().optional(),
 })
 
 export const getChatHttpController: RequestHandler = async (req, res) => {
