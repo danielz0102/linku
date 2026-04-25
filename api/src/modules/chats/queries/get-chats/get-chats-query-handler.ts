@@ -3,27 +3,13 @@ import { alias } from "drizzle-orm/pg-core"
 
 import { db } from "#db/drizzle/drizzle-client.ts"
 import { chatMembers, messageReads, messages, users } from "#db/drizzle/schemas.ts"
+import type { ChatMember } from "#modules/chats/domain/chat-member.ts"
+import type { Message } from "#modules/chats/domain/message.ts"
 
 type Chat = {
   id: string
   peer: ChatMember
   lastMessage: Message
-}
-
-type ChatMember = {
-  id: string
-  username: string
-  name: string
-  profilePictureUrl: string | null
-}
-
-type Message = {
-  id: string
-  senderId: string
-  content: string | null
-  attachmentUrl: string | null
-  createdAt: string
-  isRead: boolean
 }
 
 export async function getChats(userId: string): Promise<Chat[]> {
