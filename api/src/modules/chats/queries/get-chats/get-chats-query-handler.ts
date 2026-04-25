@@ -1,0 +1,95 @@
+import { and, desc, eq, ne, sql } from "drizzle-orm"
+import { alias } from "drizzle-orm/pg-core"
+
+import { db } from "#db/drizzle/drizzle-client.ts"
+import { chatMembers, messageReads, messages, users } from "#db/drizzle/schemas.ts"
+
+type Chat = {
+  id: string
+  peer: ChatMember
+  lastMessage: Message
+}
+
+type ChatMember = {
+  id: string
+  username: string
+  name: string
+  profilePictureUrl: string | null
+}
+
+type Message = {
+  id: string
+  senderId: string
+  content: string | null
+  attachmentUrl: string | null
+  createdAt: string
+  isRead: boolean
+}
+
+export async function getChats(userId: string): Promise<Chat[]> {
+  const latestMessages = db.$with("latest_messages").as(
+    db
+      .selectDistinctOn([messages.chatId], {
+        chatId: messages.chatId,
+        id: messages.id,
+        senderId: messages.senderId,
+        content: messages.content,
+        attachmentUrl: messages.attachmentUrl,
+        createdAt: messages.createdAt,
+      })
+      .from(messages)
+      .orderBy(messages.chatId, desc(messages.createdAt))
+  )
+
+  const selfMember = chatMembers
+  const peerMember = alias(chatMembers, "peer_member")
+  const peerUser = alias(users, "peer_user")
+
+  const rows = await db
+    .with(latestMessages)
+    .select({
+      chatId: selfMember.chatId,
+      peerId: peerUser.id,
+      peerUsername: peerUser.username,
+      peerFirstName: peerUser.firstName,
+      peerLastName: peerUser.lastName,
+      peerProfilePictureUrl: peerUser.profilePictureUrl,
+      messageId: latestMessages.id,
+      messageSenderId: latestMessages.senderId,
+      messageContent: latestMessages.content,
+      messageAttachmentUrl: latestMessages.attachmentUrl,
+      messageCreatedAt: latestMessages.createdAt,
+      messageIsRead: sql<boolean>`${messageReads.messageId} IS NOT NULL`,
+    })
+    .from(selfMember)
+    .innerJoin(
+      peerMember,
+      and(eq(peerMember.chatId, selfMember.chatId), ne(peerMember.userId, userId))
+    )
+    .innerJoin(peerUser, eq(peerUser.id, peerMember.userId))
+    .innerJoin(latestMessages, eq(latestMessages.chatId, selfMember.chatId))
+    .leftJoin(
+      messageReads,
+      and(eq(messageReads.messageId, latestMessages.id), eq(messageReads.userId, userId))
+    )
+    .where(eq(selfMember.userId, userId))
+    .orderBy(desc(latestMessages.createdAt))
+
+  return rows.map((row) => ({
+    id: row.chatId,
+    peer: {
+      id: row.peerId,
+      username: row.peerUsername,
+      name: `${row.peerFirstName} ${row.peerLastName}`,
+      profilePictureUrl: row.peerProfilePictureUrl,
+    },
+    lastMessage: {
+      id: row.messageId,
+      senderId: row.messageSenderId,
+      content: row.messageContent,
+      attachmentUrl: row.messageAttachmentUrl,
+      createdAt: row.messageCreatedAt.toISOString(),
+      isRead: row.messageIsRead,
+    },
+  }))
+}
