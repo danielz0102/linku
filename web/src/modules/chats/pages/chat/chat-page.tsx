@@ -8,15 +8,17 @@ import { MessageList } from "./components/message-list"
 import { getChat } from "./get-chat"
 
 export default function ChatPage() {
-  const { username } = useParams()
+  console.log("Rendering ChatPage")
+  const { peerId } = useParams()
 
-  if (!username) {
-    throw new Error("Chat username is required")
+  if (!peerId) {
+    throw new Error("Chat peer ID is required")
   }
 
   const { data: chat, isLoading } = useQuery({
-    queryKey: ["chat", username],
-    queryFn: () => getChat(username),
+    queryKey: ["chat", peerId],
+    queryFn: () => getChat(peerId),
+    throwOnError: true,
   })
 
   if (!isLoading && chat === null) {

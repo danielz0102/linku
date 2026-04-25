@@ -26,7 +26,7 @@ export function Router() {
           }
         >
           <Route index element={<HomePage />} />
-          <Route path="/chat/:username" element={<ChatPage />} />
+          <Route path="/chat/:peerId" element={<ChatPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/profile/:username" element={<PublicProfilePage />} />
