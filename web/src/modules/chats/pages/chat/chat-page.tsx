@@ -8,7 +8,6 @@ import { MessageList } from "./components/message-list"
 import { getChat } from "./get-chat"
 
 export default function ChatPage() {
-  console.log("Rendering ChatPage")
   const { peerId } = useParams()
 
   if (!peerId) {

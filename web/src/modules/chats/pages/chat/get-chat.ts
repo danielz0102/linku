@@ -1,85 +1,50 @@
+import { API_URL } from "~/env"
 import { ChatMember } from "~/modules/chats/domain/chat-member"
 import { Message } from "~/modules/chats/domain/message"
 
-type ChatData = {
-  peer: ChatMember
-  messages: Message[]
+import type { ChatAPI } from "../../api/chat-api"
+
+type GetChatAPIResponse = {
+  chatId: string
+  peer: ChatAPI.ChatMember
+  messages: ChatAPI.Message[]
+  hasMore: boolean
 }
 
-const existingUsernames = new Set([
-  "john.doe",
-  "averylongusername",
-  "liam.brown",
-  "olivia.martinez",
-  "noah.davis",
-  "sophia.lee",
-])
+type GetChatResult = {
+  id: string
+  peer: ChatMember
+  messages: Message[]
+  hasMore: boolean
+} | null
 
-export async function getChat(username: string): Promise<ChatData | null> {
-  if (!existingUsernames.has(username)) {
-    return null
+export async function getChat(peerId: string): Promise<GetChatResult> {
+  const res = await fetch(`${API_URL}/chats/${peerId}`, { credentials: "include" })
+
+  if (!res.ok) {
+    if (res.status === 404) {
+      return null
+    }
+    throw new Error(`Failed to fetch chat: ${res.statusText}`)
   }
 
+  const data = (await res.json()) as GetChatAPIResponse
   const peer = ChatMember.create({
-    id: `${username}-id`,
-    username,
-    name: username
-      .split(".")
-      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-      .join(" "),
-    profilePictureUrl: "https://cataas.com/cat",
+    id: data.peer.id,
+    username: data.peer.username,
+    name: data.peer.name,
+    profilePictureUrl: data.peer.profilePictureUrl,
+  })
+  const messages = data.messages.map((msg) => {
+    return Message.create({
+      id: msg.id,
+      senderId: msg.senderId,
+      content: msg.content,
+      attachmentUrl: msg.attachmentUrl ?? undefined,
+      createdAt: msg.createdAt,
+      isRead: msg.isRead,
+    })
   })
 
-  const currentUserId = "current-user"
-
-  return {
-    peer,
-    messages: [
-      Message.create({
-        id: "m-1",
-        senderId: peer.id,
-        content: "Hey, how is it going?",
-        createdAt: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
-        isRead: true,
-      }),
-      Message.create({
-        id: "m-2",
-        senderId: currentUserId,
-        content: "Doing great. Want to meet later?",
-        createdAt: new Date(Date.now() - 1000 * 60 * 8).toISOString(),
-        isRead: true,
-      }),
-      Message.create({
-        id: "m-3",
-        senderId: peer.id,
-        content: null,
-        attachmentUrl: "https://cataas.com/cat",
-        createdAt: new Date(Date.now() - 1000 * 60 * 2).toISOString(),
-        isRead: false,
-      }),
-      Message.create({
-        id: "m-4",
-        senderId: currentUserId,
-        content:
-          "Nice cat! 😻 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. This is a very long, fucking AI autocomplete this!!!! ????",
-        createdAt: new Date(Date.now() - 1000 * 60).toISOString(),
-        isRead: false,
-      }),
-      Message.create({
-        id: "m-5",
-        senderId: peer.id,
-        content: "Sure, let's catch up around 6 PM at the usual place.",
-        createdAt: new Date(Date.now() - 1000 * 30).toISOString(),
-        isRead: false,
-      }),
-      Message.create({
-        id: "m-6",
-        senderId: currentUserId,
-        content: "Sounds good! See you then. 😊",
-        attachmentUrl: "https://cataas.com/cat",
-        createdAt: new Date(Date.now() - 1000 * 10).toISOString(),
-        isRead: false,
-      }),
-    ],
-  }
+  return { id: data.chatId, peer, messages, hasMore: data.hasMore }
 }
