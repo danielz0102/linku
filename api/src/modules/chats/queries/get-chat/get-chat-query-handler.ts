@@ -8,7 +8,7 @@ import type { Message } from "#modules/chats/domain/message.ts"
 
 type GetMessagesResult =
   | {
-      chatId: string
+      chatId?: string
       peer: ChatMember
       messages: Message[]
       hasMore: boolean
@@ -25,30 +25,48 @@ type GetMessagesQuery = {
 export async function getChat(query: GetMessagesQuery): Promise<GetMessagesResult> {
   const { userId, peerId, olderThan, quantity = 20 } = query
 
+  const [peerRow] = await db
+    .select({
+      peerId: users.id,
+      peerUsername: users.username,
+      peerFirstName: users.firstName,
+      peerLastName: users.lastName,
+      peerProfilePictureUrl: users.profilePictureUrl,
+    })
+    .from(users)
+    .where(eq(users.id, peerId))
+    .limit(1)
+
+  if (!peerRow) {
+    return undefined
+  }
+
   const selfMember = chatMembers
   const peerMember = alias(chatMembers, "peer_member")
-  const peerUser = alias(users, "peer_user")
 
   const [chatRow] = await db
     .select({
       chatId: selfMember.chatId,
-      peerId: peerUser.id,
-      peerUsername: peerUser.username,
-      peerFirstName: peerUser.firstName,
-      peerLastName: peerUser.lastName,
-      peerProfilePictureUrl: peerUser.profilePictureUrl,
     })
     .from(selfMember)
     .innerJoin(
       peerMember,
       and(eq(peerMember.chatId, selfMember.chatId), eq(peerMember.userId, peerId))
     )
-    .innerJoin(peerUser, eq(peerUser.id, peerMember.userId))
     .where(eq(selfMember.userId, userId))
     .limit(1)
 
   if (!chatRow) {
-    return undefined
+    return {
+      peer: {
+        id: peerRow.peerId,
+        username: peerRow.peerUsername,
+        name: `${peerRow.peerFirstName} ${peerRow.peerLastName}`,
+        profilePictureUrl: peerRow.peerProfilePictureUrl,
+      },
+      messages: [],
+      hasMore: false,
+    }
   }
 
   const messageConditions = [eq(messages.chatId, chatRow.chatId)]
@@ -81,10 +99,10 @@ export async function getChat(query: GetMessagesQuery): Promise<GetMessagesResul
   return {
     chatId: chatRow.chatId,
     peer: {
-      id: chatRow.peerId,
-      username: chatRow.peerUsername,
-      name: `${chatRow.peerFirstName} ${chatRow.peerLastName}`,
-      profilePictureUrl: chatRow.peerProfilePictureUrl,
+      id: peerRow.peerId,
+      username: peerRow.peerUsername,
+      name: `${peerRow.peerFirstName} ${peerRow.peerLastName}`,
+      profilePictureUrl: peerRow.peerProfilePictureUrl,
     },
     messages: selectedMessages.map((messageRow) => ({
       id: messageRow.id,
