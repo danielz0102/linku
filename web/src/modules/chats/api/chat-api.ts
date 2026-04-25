@@ -1,10 +1,4 @@
-export namespace GetChatsAPI {
-  export type Chat = {
-    id: string
-    peer: ChatMember
-    lastMessage: Message
-  }
-
+export namespace ChatAPI {
   export type ChatMember = {
     id: string
     username: string

@@ -1,9 +1,15 @@
 import { API_URL } from "~/env"
 
+import type { ChatAPI } from "../../api/chat-api"
 import { Chat } from "../../domain/chat"
 import { ChatMember } from "../../domain/chat-member"
 import { Message } from "../../domain/message"
-import type { GetChatsAPI } from "./get-chats-api-types"
+
+type GetChatsResponse = {
+  id: string
+  peer: ChatAPI.ChatMember
+  lastMessage: ChatAPI.Message
+}[]
 
 export async function getChats(): Promise<Chat[]> {
   const res = await fetch(`${API_URL}/chats`, { credentials: "include" })
@@ -12,7 +18,7 @@ export async function getChats(): Promise<Chat[]> {
     throw new Error("Failed to fetch chats")
   }
 
-  const chatsData = (await res.json()) as GetChatsAPI.Chat[]
+  const chatsData = (await res.json()) as GetChatsResponse
   const chats = chatsData.map((chat) => {
     return Chat.create({
       id: chat.id,
