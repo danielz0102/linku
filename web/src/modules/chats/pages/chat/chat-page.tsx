@@ -19,7 +19,7 @@ export default function ChatPage() {
     queryFn: () => getChat(username),
   })
 
-  if (!isLoading && !chat?.peer) {
+  if (!isLoading && chat === null) {
     return <Navigate to="/404" replace />
   }
 

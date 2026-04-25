@@ -2,7 +2,7 @@ import { ChatMember } from "~/modules/chats/domain/chat-member"
 import { Message } from "~/modules/chats/domain/message"
 
 type ChatData = {
-  peer?: ChatMember
+  peer: ChatMember
   messages: Message[]
 }
 
@@ -15,9 +15,9 @@ const existingUsernames = new Set([
   "sophia.lee",
 ])
 
-export async function getChat(username: string): Promise<ChatData> {
+export async function getChat(username: string): Promise<ChatData | null> {
   if (!existingUsernames.has(username)) {
-    return { peer: undefined, messages: [] }
+    return null
   }
 
   const peer = ChatMember.create({
