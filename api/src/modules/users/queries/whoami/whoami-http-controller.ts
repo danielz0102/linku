@@ -4,7 +4,7 @@ import type { RequestHandler } from "express"
 import { db } from "#db/drizzle/drizzle-client.ts"
 import { users } from "#db/drizzle/schemas.ts"
 
-export const whoamiHandler: RequestHandler = async (req, res) => {
+export const whoamiController: RequestHandler = async (req, res) => {
   const id = req.session.userId
 
   if (!id) {

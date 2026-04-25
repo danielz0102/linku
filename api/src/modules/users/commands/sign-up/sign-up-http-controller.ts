@@ -17,7 +17,7 @@ const signUpRequestSchema = z.object({
     .regex(/^(?=.*[^a-zA-Z0-9])/, "Password must contain at least one special character"),
 })
 
-export const signUpHandler: RequestHandler = async (req, res) => {
+export const signUpController: RequestHandler = async (req, res) => {
   const result = signUpRequestSchema.safeParse(req.body)
 
   if (!result.success) {

@@ -11,7 +11,7 @@ const searchUsersQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(10),
 })
 
-export const searchUsersHandler: RequestHandler = async (req, res) => {
+export const searchUsersController: RequestHandler = async (req, res) => {
   const { userId } = req.session
 
   if (!userId) {

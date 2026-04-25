@@ -14,7 +14,7 @@ const updateUserRequestSchema = z.object({
   bio: z.string().trim().nullable(),
 })
 
-export const updateUserHandler: RequestHandler = async (req, res) => {
+export const updateUserController: RequestHandler = async (req, res) => {
   const id = req.session.userId
 
   if (!id) {

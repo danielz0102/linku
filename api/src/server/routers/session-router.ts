@@ -1,9 +1,9 @@
 import { Router } from "express"
 
-import { loginHandler } from "#modules/users/commands/login/login-http-handler.ts"
-import { logoutHandler } from "#modules/users/commands/logout.ts/logout-http-handler.ts"
+import { loginController } from "#modules/users/commands/login/login-http-controller.ts"
+import { logoutController } from "#modules/users/commands/logout.ts/logout-http-controller.ts"
 
 export const sessionRouter = Router()
 
-sessionRouter.post("/", loginHandler)
-sessionRouter.delete("/", logoutHandler)
+sessionRouter.post("/", loginController)
+sessionRouter.delete("/", logoutController)

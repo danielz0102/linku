@@ -4,7 +4,7 @@ import { CLOUDINARY_API_KEY, CLOUDINARY_NAME, CLOUDINARY_SECRET } from "#env.ts"
 
 import { cloudinary, CloudinaryFolders } from "./cloudinary-client.ts"
 
-export const createCloudinarySignatureHandler: RequestHandler = async (req, res) => {
+export const createCloudinarySignatureController: RequestHandler = async (req, res) => {
   const { userId } = req.session
 
   if (!userId) {

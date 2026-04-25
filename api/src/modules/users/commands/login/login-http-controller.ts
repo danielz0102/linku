@@ -11,7 +11,7 @@ const loginRequestSchema = z.object({
   password: z.string().trim().nonempty(),
 })
 
-export const loginHandler: RequestHandler = async (req, res) => {
+export const loginController: RequestHandler = async (req, res) => {
   const result = loginRequestSchema.safeParse(req.body)
 
   if (!result.success) {

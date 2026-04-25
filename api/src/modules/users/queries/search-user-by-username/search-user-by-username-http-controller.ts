@@ -7,7 +7,7 @@ import { users } from "#db/drizzle/schemas.ts"
 
 export const usernameSchema = z.string().trim().nonempty()
 
-export const searchUserByUsernameHandler: RequestHandler = async (req, res) => {
+export const searchUserByUsernameController: RequestHandler = async (req, res) => {
   const { userId } = req.session
 
   if (!userId) {
