@@ -26,10 +26,8 @@ export async function getChats(): Promise<Chat[]> {
         id: chat.lastMessage.id,
         senderId: chat.lastMessage.senderId,
         content: chat.lastMessage.content,
-        attachmentUrl: chat.lastMessage.attachmentUrl
-          ? new URL(chat.lastMessage.attachmentUrl)
-          : undefined,
-        createdAt: new Date(chat.lastMessage.createdAt),
+        attachmentUrl: chat.lastMessage.attachmentUrl ?? undefined,
+        createdAt: chat.lastMessage.createdAt,
         isRead: chat.lastMessage.isRead,
       }),
     })

@@ -26,9 +26,9 @@ export class Message {
     id: string
     senderId: string
     content: string | null
-    createdAt: Date
+    createdAt: string
     isRead: boolean
-    attachmentUrl?: URL
+    attachmentUrl?: string
   }) {
     if (!data.content && !data.attachmentUrl) {
       throw new Error("Message must have either content or an attachment")
@@ -38,9 +38,9 @@ export class Message {
       data.id,
       data.senderId,
       data.content,
-      data.createdAt,
+      new Date(data.createdAt),
       data.isRead,
-      data.attachmentUrl
+      data.attachmentUrl ? new URL(data.attachmentUrl) : undefined
     )
   }
 
