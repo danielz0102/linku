@@ -3,9 +3,9 @@ import { z } from "zod"
 
 import { db } from "#db/drizzle/drizzle-client.ts"
 
-import { SignUpService } from "./sign-up-service.ts"
+import { SignUpCommandHandler } from "./sign-up-command-handler.ts"
 
-const signUp = new SignUpService(db)
+const signUp = new SignUpCommandHandler(db)
 const signUpRequestSchema = z.object({
   username: z.string().trim().nonempty(),
   firstName: z.string().trim().nonempty(),

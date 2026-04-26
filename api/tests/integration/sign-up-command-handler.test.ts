@@ -1,13 +1,13 @@
 import { randomUUID } from "node:crypto"
 
 import { users } from "#db/drizzle/schemas.ts"
-import { SignUpService } from "#modules/users/commands/sign-up/sign-up-service.ts"
+import { SignUpCommandHandler } from "#modules/users/commands/sign-up/sign-up-command-handler.ts"
 
 import { it as base } from "../helpers/db-context.ts"
 
-const it = base.extend("signUp", ({ db }) => new SignUpService(db))
+const it = base.extend("signUp", ({ db }) => new SignUpCommandHandler(db))
 
-describe("Create User Service", () => {
+describe("Sign Up Command Handler", () => {
   it("returns created user data", async ({ signUp }) => {
     const username = `user-${randomUUID()}`
 

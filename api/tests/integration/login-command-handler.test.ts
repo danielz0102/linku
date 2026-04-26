@@ -3,14 +3,14 @@ import { randomUUID } from "node:crypto"
 import bcrypt from "bcryptjs"
 
 import { users } from "#db/drizzle/schemas.ts"
-import { LoginService } from "#modules/users/commands/login/login-service.ts"
+import { LoginCommandHandler } from "#modules/users/commands/login/login-command-handler.ts"
 import { toDomain } from "#modules/users/database/user-model.ts"
 
 import { it as base } from "../helpers/db-context.ts"
 
-const it = base.extend("login", ({ db }) => new LoginService(db))
+const it = base.extend("login", ({ db }) => new LoginCommandHandler(db))
 
-describe("Login Service", () => {
+describe("Login Command Handler", () => {
   it("returns user data", async ({ db, login }) => {
     const password = "pass1234"
     const registeredUser = await db

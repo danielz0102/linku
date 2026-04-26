@@ -11,7 +11,7 @@ type LoginCommand = {
   password: string
 }
 
-export class LoginService {
+export class LoginCommandHandler {
   constructor(private readonly db: NodePgDatabase) {}
 
   async execute(cmd: LoginCommand): Promise<User | undefined> {

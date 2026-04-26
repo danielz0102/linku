@@ -3,9 +3,9 @@ import { z } from "zod"
 
 import { db } from "#db/drizzle/drizzle-client.ts"
 
-import { UpdateUserService } from "./update-user-service.ts"
+import { UpdateUserCommandHandler } from "./update-user-command-handler.ts"
 
-const updateUser = new UpdateUserService(db)
+const updateUser = new UpdateUserCommandHandler(db)
 const updateUserRequestSchema = z.object({
   username: z.string().trim().nonempty(),
   firstName: z.string().trim().nonempty(),

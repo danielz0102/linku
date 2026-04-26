@@ -14,7 +14,7 @@ type UpdateUserCommand = {
   bio: string | null
 }
 
-export class UpdateUserService {
+export class UpdateUserCommandHandler {
   constructor(private readonly db: NodePgDatabase) {}
 
   async execute(cmd: UpdateUserCommand): Promise<User | undefined> {

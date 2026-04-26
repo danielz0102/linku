@@ -3,9 +3,9 @@ import { z } from "zod"
 
 import { db } from "#db/drizzle/drizzle-client.ts"
 
-import { LoginService } from "./login-service.ts"
+import { LoginCommandHandler } from "./login-command-handler.ts"
 
-const login = new LoginService(db)
+const login = new LoginCommandHandler(db)
 const loginRequestSchema = z.object({
   username: z.string().trim().nonempty(),
   password: z.string().trim().nonempty(),

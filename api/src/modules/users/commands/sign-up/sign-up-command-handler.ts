@@ -14,7 +14,7 @@ type CreateUserCommand = {
   lastName: string
 }
 
-export class SignUpService {
+export class SignUpCommandHandler {
   constructor(private readonly db: NodePgDatabase) {}
 
   async execute(cmd: CreateUserCommand): Promise<User | undefined> {
