@@ -1,7 +1,11 @@
 import type { RequestHandler } from "express"
 import { z } from "zod"
 
-import { getChat } from "./get-chat-query-handler.ts"
+import { db } from "#db/drizzle/drizzle-client.ts"
+
+import { GetChatQueryHandler } from "./get-chat-query-handler.ts"
+
+const getChat = new GetChatQueryHandler(db)
 
 const getChatRequestSchema = z.object({
   peerId: z.uuid(),
@@ -28,7 +32,7 @@ export const getChatHttpController: RequestHandler = async (req, res) => {
 
   const { peerId, cursor, page_size } = data
 
-  const chat = await getChat({
+  const chat = await getChat.execute({
     userId,
     peerId,
     olderThan: cursor ?? undefined,
