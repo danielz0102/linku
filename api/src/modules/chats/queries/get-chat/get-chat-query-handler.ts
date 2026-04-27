@@ -28,38 +28,15 @@ export class GetChatQueryHandler {
   async execute(query: GetMessagesQuery): Promise<GetMessagesResult> {
     const { userId, peerId, olderThan, quantity = 20 } = query
 
-    const [peerRow] = await this.db
-      .select({
-        peerId: users.id,
-        peerUsername: users.username,
-        peerFirstName: users.firstName,
-        peerLastName: users.lastName,
-        peerProfilePictureUrl: users.profilePictureUrl,
-      })
-      .from(users)
-      .where(eq(users.id, peerId))
-      .limit(1)
+    const peerRow = await this.getChatMember(peerId)
 
     if (!peerRow) {
       return undefined
     }
 
-    const selfMember = chatMembers
-    const peerMember = alias(chatMembers, "peer_member")
+    const chatId = await this.getChatId(userId, peerId)
 
-    const [chatRow] = await this.db
-      .select({
-        chatId: selfMember.chatId,
-      })
-      .from(selfMember)
-      .innerJoin(
-        peerMember,
-        and(eq(peerMember.chatId, selfMember.chatId), eq(peerMember.userId, peerId))
-      )
-      .where(eq(selfMember.userId, userId))
-      .limit(1)
-
-    if (!chatRow) {
+    if (!chatId) {
       return {
         peer: {
           id: peerRow.peerId,
@@ -72,7 +49,7 @@ export class GetChatQueryHandler {
       }
     }
 
-    const messageConditions = [eq(messages.chatId, chatRow.chatId)]
+    const messageConditions = [eq(messages.chatId, chatId)]
 
     if (olderThan) {
       messageConditions.push(lt(messages.createdAt, olderThan))
@@ -100,7 +77,7 @@ export class GetChatQueryHandler {
     const selectedMessages = hasMore ? messageRows.slice(0, quantity) : messageRows
 
     return {
-      chatId: chatRow.chatId,
+      chatId,
       peer: {
         id: peerRow.peerId,
         username: peerRow.peerUsername,
@@ -117,5 +94,36 @@ export class GetChatQueryHandler {
       })),
       hasMore,
     }
+  }
+
+  private async getChatMember(userId: string) {
+    return this.db
+      .select({
+        peerId: users.id,
+        peerUsername: users.username,
+        peerFirstName: users.firstName,
+        peerLastName: users.lastName,
+        peerProfilePictureUrl: users.profilePictureUrl,
+      })
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1)
+      .then(([r]) => r)
+  }
+
+  private async getChatId(userId: string, peerId: string): Promise<string | undefined> {
+    const selfMember = chatMembers
+    const peerMember = alias(chatMembers, "peer_member")
+
+    return this.db
+      .select({ chatId: selfMember.chatId })
+      .from(selfMember)
+      .innerJoin(
+        peerMember,
+        and(eq(peerMember.chatId, selfMember.chatId), eq(peerMember.userId, peerId))
+      )
+      .where(eq(selfMember.userId, userId))
+      .limit(1)
+      .then(([r]) => r?.chatId)
   }
 }
