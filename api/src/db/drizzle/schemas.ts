@@ -59,6 +59,7 @@ export const messages = pgTable(
     ),
     index("messages_sender_id_idx").on(table.senderId),
     index("messages_chat_id_idx").on(table.chatId),
+    index("messages_created_at_idx").on(table.createdAt),
   ]
 )
 
