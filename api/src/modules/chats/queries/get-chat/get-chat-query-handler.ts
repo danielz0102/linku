@@ -49,12 +49,6 @@ export class GetChatQueryHandler {
       }
     }
 
-    const messageConditions = [eq(messages.chatId, chatId)]
-
-    if (olderThan) {
-      messageConditions.push(lt(messages.createdAt, olderThan))
-    }
-
     const messageRows = await this.db
       .select({
         id: messages.id,
@@ -69,7 +63,9 @@ export class GetChatQueryHandler {
         messageReads,
         and(eq(messageReads.messageId, messages.id), eq(messageReads.userId, userId))
       )
-      .where(and(...messageConditions))
+      .where(
+        and(eq(messages.chatId, chatId), olderThan ? lt(messages.createdAt, olderThan) : undefined)
+      )
       .orderBy(desc(messages.createdAt))
       .limit(quantity + 1)
 
