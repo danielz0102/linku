@@ -1,10 +1,10 @@
 import type { Server as HTTPServer } from "node:http"
 
-import type { Request } from "express"
 import { Server } from "socket.io"
 
 import { CLIENT_ORIGIN } from "#env.ts"
 
+import { authMiddleware } from "./middlewares/auth-socket-middleware.ts"
 import { sessionMiddleware } from "./middlewares/session-middleware.ts"
 import type {
   ClientToServerEvents,
@@ -21,17 +21,7 @@ export function initWSServer(httpServer: HTTPServer) {
   })
 
   io.engine.use(sessionMiddleware)
-
-  io.use((socket, next) => {
-    const request = socket.request as Request
-
-    if (request.session?.userId) {
-      socket.data.userId = request.session.userId
-      return next()
-    }
-
-    next(new Error("Unauthorized"))
-  })
+  io.use(authMiddleware)
 
   io.on("connection", (socket) => {
     socket.on("join_chat", async ({ peerId }) => {
