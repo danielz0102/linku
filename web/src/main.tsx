@@ -11,5 +11,3 @@ createRoot(document.getElementById("root")!).render(
     <App />
   </StrictMode>
 )
-
-// io(SOCKET_URL, { withCredentials: true })

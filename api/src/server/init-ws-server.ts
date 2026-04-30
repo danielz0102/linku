@@ -6,9 +6,14 @@ import { Server } from "socket.io"
 import { CLIENT_ORIGIN } from "#env.ts"
 
 import { sessionMiddleware } from "./middlewares/session-middleware.ts"
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+  SocketData,
+} from "./socket-io-server-types.ts"
 
-export function initWsServer(httpServer: HTTPServer) {
-  const io = new Server(httpServer, {
+export function initWSServer(httpServer: HTTPServer) {
+  const io = new Server<ClientToServerEvents, ServerToClientEvents, {}, SocketData>(httpServer, {
     cors: {
       origin: CLIENT_ORIGIN,
       credentials: true,
@@ -16,10 +21,12 @@ export function initWsServer(httpServer: HTTPServer) {
   })
 
   io.engine.use(sessionMiddleware)
+
   io.use((socket, next) => {
     const request = socket.request as Request
 
     if (request.session?.userId) {
+      socket.data.userId = request.session.userId
       return next()
     }
 
@@ -27,6 +34,13 @@ export function initWsServer(httpServer: HTTPServer) {
   })
 
   io.on("connection", (socket) => {
-    console.log("A user connected", socket.id)
+    socket.on("join_chat", async ({ peerId }) => {
+      const roomId = computeChatRoomId(socket.data.userId, peerId)
+      await socket.join(roomId)
+    })
   })
+}
+
+function computeChatRoomId(userId1: string, userId2: string) {
+  return [userId1, userId2].sort().join("_")
 }
