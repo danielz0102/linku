@@ -28,20 +28,20 @@ export class GetChatQueryHandler {
   async execute(query: GetMessagesQuery): Promise<GetMessagesResult> {
     const { userId, peerId, olderThan, quantity = 20 } = query
 
-    const peerRow = await this.getChatMember(peerId)
+    const peerInfo = await this.getPeerAndChatId(userId, peerId)
 
-    if (!peerRow) {
+    if (!peerInfo) {
       return undefined
     }
 
-    const chatId = await this.getChatId(userId, peerId)
+    const { chatId, ...peerRow } = peerInfo
 
     if (!chatId) {
       return {
         peer: {
           id: peerRow.peerId,
           username: peerRow.peerUsername,
-          name: `${peerRow.peerFirstName} ${peerRow.peerLastName}`,
+          name: peerRow.peerName,
           profilePictureUrl: peerRow.peerProfilePictureUrl,
         },
         messages: [],
@@ -81,7 +81,7 @@ export class GetChatQueryHandler {
       peer: {
         id: peerRow.peerId,
         username: peerRow.peerUsername,
-        name: `${peerRow.peerFirstName} ${peerRow.peerLastName}`,
+        name: peerRow.peerName,
         profilePictureUrl: peerRow.peerProfilePictureUrl,
       },
       messages: selectedMessages.map((messageRow) => ({
@@ -96,27 +96,12 @@ export class GetChatQueryHandler {
     }
   }
 
-  private async getChatMember(userId: string) {
-    return this.db
-      .select({
-        peerId: users.id,
-        peerUsername: users.username,
-        peerFirstName: users.firstName,
-        peerLastName: users.lastName,
-        peerProfilePictureUrl: users.profilePictureUrl,
-      })
-      .from(users)
-      .where(eq(users.id, userId))
-      .limit(1)
-      .then(([r]) => r)
-  }
-
-  private async getChatId(userId: string, peerId: string): Promise<string | undefined> {
-    const selfMember = chatMembers
+  private async getPeerAndChatId(userId: string, peerId: string) {
+    const selfMember = alias(chatMembers, "self_member")
     const peerMember = alias(chatMembers, "peer_member")
 
-    return this.db
-      .select({ chatId: selfMember.chatId })
+    const sharedChat = this.db
+      .select({ chatId: selfMember.chatId, peerId: peerMember.userId })
       .from(selfMember)
       .innerJoin(
         peerMember,
@@ -124,6 +109,20 @@ export class GetChatQueryHandler {
       )
       .where(eq(selfMember.userId, userId))
       .limit(1)
-      .then(([r]) => r?.chatId)
+      .as("shared_chat")
+
+    return this.db
+      .select({
+        peerId: users.id,
+        peerUsername: users.username,
+        peerName: sql<string>`${users.firstName} || ' ' || ${users.lastName}`,
+        peerProfilePictureUrl: users.profilePictureUrl,
+        chatId: sharedChat.chatId,
+      })
+      .from(users)
+      .leftJoin(sharedChat, eq(sharedChat.peerId, users.id))
+      .where(eq(users.id, peerId))
+      .limit(1)
+      .then(([r]) => r)
   }
 }
