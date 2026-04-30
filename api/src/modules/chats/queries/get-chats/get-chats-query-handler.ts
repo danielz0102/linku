@@ -16,19 +16,18 @@ export class GetChatsQueryHandler {
   constructor(private db: NodePgDatabase) {}
 
   async execute(userId: string): Promise<Chat[]> {
-    const latestMessages = this.db.$with("latest_messages").as(
-      this.db
-        .selectDistinctOn([messages.chatId], {
-          chatId: messages.chatId,
-          id: messages.id,
-          senderId: messages.senderId,
-          content: messages.content,
-          attachmentUrl: messages.attachmentUrl,
-          createdAt: messages.createdAt,
-        })
-        .from(messages)
-        .orderBy(messages.chatId, desc(messages.createdAt))
-    )
+    const latestMessages = this.db
+      .selectDistinctOn([messages.chatId], {
+        chatId: messages.chatId,
+        id: messages.id,
+        senderId: messages.senderId,
+        content: messages.content,
+        attachmentUrl: messages.attachmentUrl,
+        createdAt: messages.createdAt,
+      })
+      .from(messages)
+      .orderBy(messages.chatId, desc(messages.createdAt))
+      .as("latest_messages")
 
     const selfMember = chatMembers
     const peerMember = alias(chatMembers, "peer_member")
