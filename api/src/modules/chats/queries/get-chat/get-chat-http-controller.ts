@@ -35,7 +35,7 @@ export const getChatHttpController: RequestHandler = async (req, res) => {
   const chat = await getChat.execute({
     userId,
     peerId,
-    olderThan: cursor ?? undefined,
+    olderThan: cursor,
     quantity: page_size,
   })
 
