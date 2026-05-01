@@ -1,4 +1,4 @@
-export type UserData = {
+export type UserProps = {
   id: string
   username: string
   firstName: string
@@ -15,7 +15,7 @@ export class User {
   readonly profilePictureUrl: string | null
   readonly bio: string | null
 
-  constructor(data: UserData) {
+  constructor(data: UserProps) {
     this.id = data.id
     this.username = data.username
     this.firstName = data.firstName

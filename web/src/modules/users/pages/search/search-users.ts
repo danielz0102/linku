@@ -1,6 +1,6 @@
 import { API_URL } from "~/env"
 
-import { type UserData, User } from "../../domain/user"
+import { type UserProps, User } from "../../domain/user"
 
 export async function searchUsers({
   query,
@@ -30,6 +30,6 @@ export async function searchUsers({
     throw new Error("Failed to search users", { cause: response })
   }
 
-  const data = (await response.json()) as UserData[]
+  const data = (await response.json()) as UserProps[]
   return data.map((d) => new User(d))
 }
