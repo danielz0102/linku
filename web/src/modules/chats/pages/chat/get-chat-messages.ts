@@ -1,6 +1,6 @@
-import type { MessageData } from "../../domain/message"
+import type { Message } from "../../domain/message"
 
-export async function getMessages(peerUsername: string): Promise<MessageData[]> {
+export async function getMessages(peerUsername: string): Promise<Message[]> {
   void peerUsername
   return []
 }

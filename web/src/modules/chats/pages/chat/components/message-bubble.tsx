@@ -1,6 +1,6 @@
 export type MessageBubbleProps = {
-  text?: string
-  attachmentUrl?: string
+  text?: string | null
+  attachmentUrl?: string | null
   belongsToUser?: boolean
 }
 

@@ -1,8 +1,8 @@
 import type { ChatMember } from "../../domain/chat-member"
-import type { MessageData } from "../../domain/message"
+import type { Message } from "../../domain/message"
 
 type ChatCardData = {
-  lastMessage: MessageData
+  lastMessage: Message
   peer: ChatMember
 }
 

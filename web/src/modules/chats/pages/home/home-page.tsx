@@ -32,14 +32,7 @@ export default function HomePage() {
           to={`/chat/${chat.peer.username}`}
           className="hover:bg-hover rounded md:w-lg"
         >
-          <ChatCard
-            user={chat.peer}
-            data={{
-              date: chat.lastMessage.createdAt,
-              isRead: chat.lastMessage.isRead,
-              text: chat.lastMessage.text,
-            }}
-          />
+          <ChatCard user={chat.peer} message={chat.lastMessage} />
         </Link>
       ))}
     </main>

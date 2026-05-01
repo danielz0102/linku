@@ -1,18 +1,14 @@
 import { ProfileAvatar } from "~/shared/components/profile-avatar"
 
 import { type ChatMember } from "../../domain/chat-member"
-import { formatMessageDate } from "../../domain/message"
+import { type Message } from "../../domain/message"
 
 type ChatCardProps = {
   user: ChatMember
-  data: {
-    date: Date
-    isRead?: boolean
-    text?: string
-  }
+  message: Message
 }
 
-export function ChatCard({ user, data: { date, text, isRead = false } }: ChatCardProps) {
+export function ChatCard({ user, message }: ChatCardProps) {
   return (
     <article className="flex gap-4 p-3">
       <ProfileAvatar
@@ -26,18 +22,21 @@ export function ChatCard({ user, data: { date, text, isRead = false } }: ChatCar
         <div className="flex justify-between">
           <h2 className="truncate font-medium">{user.fullname}</h2>
           <div className="flex gap-2">
-            <time className="text-muted text-xs whitespace-nowrap" dateTime={date.toISOString()}>
-              {formatMessageDate(date)}
+            <time
+              className="text-muted text-xs whitespace-nowrap"
+              dateTime={message.sentAt.toISOString()}
+            >
+              {message.sentAt.format()}
             </time>
-            {!isRead && <span className="bg-primary mt-1 size-2 rounded-full" />}
+            {!message.isRead && <span className="bg-primary mt-1 size-2 rounded-full" />}
           </div>
         </div>
 
         <p
           className="text-muted truncate text-sm data-is-attachment:italic"
-          data-is-attachment={text === undefined || undefined}
+          data-is-attachment={message.isOnlyAttachment || undefined}
         >
-          {text || "Attachment"}
+          {message.text || "Attachment"}
         </p>
       </div>
     </article>

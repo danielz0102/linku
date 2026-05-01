@@ -1,33 +1,40 @@
-export type MessageData = {
+import { MessageDate } from "./message-date"
+
+export type MessageProps = {
   id: string
   senderId: string
   isRead: boolean
-  createdAt: Date
-} & MessageContent
+  createdAt: Date | string
+  text?: string
+  attachmentURL?: string
+}
 
-type MessageContent =
-  | {
-      type: "text-only"
-      text: string
-      attachmentUrl?: never
-    }
-  | {
-      type: "attachment-only"
-      text?: never
-      attachmentUrl: string
-    }
-  | {
-      type: "text-and-attachment"
-      text: string
-      attachmentUrl: string
+export class Message {
+  private constructor(
+    readonly id: string,
+    readonly senderId: string,
+    readonly isRead: boolean,
+    readonly sentAt: MessageDate,
+    readonly text: string | null,
+    readonly attachmentUrl: string | null
+  ) {}
+
+  static create(data: MessageProps): Message {
+    if (!data.text && !data.attachmentURL) {
+      throw new Error("A message must have either text or an attachment")
     }
 
-export function formatMessageDate(date: Date): string {
-  const { locale, timeZone } = Intl.DateTimeFormat().resolvedOptions()
+    return new Message(
+      data.id,
+      data.senderId,
+      data.isRead,
+      new MessageDate(data.createdAt),
+      data.text ?? null,
+      data.attachmentURL ?? null
+    )
+  }
 
-  return new Intl.DateTimeFormat(locale, {
-    timeZone,
-    hour: "numeric",
-    minute: "numeric",
-  }).format(date)
+  get isOnlyAttachment(): boolean {
+    return this.attachmentUrl !== null && this.text === null
+  }
 }
