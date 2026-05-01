@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { Navigate, useParams } from "react-router"
 
+import { useAuthenticatedUser } from "~/modules/users/context/user-context"
+
 import { ChatHeader } from "./components/chat-header"
 import { MessageBubble } from "./components/message-bubble"
 import { MessageForm } from "./components/message-form"
@@ -10,6 +12,7 @@ import { getChat } from "./get-chat"
 import { socket } from "./socket"
 
 export default function ChatPage() {
+  const { user } = useAuthenticatedUser()
   const { peerId } = useParams()
 
   if (!peerId) {
@@ -40,7 +43,7 @@ export default function ChatPage() {
             key={m.id}
             text={m.content ?? undefined}
             attachmentUrl={m.attachmentUrl?.href}
-            isLeft={m.senderId === chat.peer?.id}
+            belongsToUser={m.senderId === user.id}
           />
         ))}
       </MessageList>

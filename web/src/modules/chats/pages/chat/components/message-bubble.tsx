@@ -1,16 +1,16 @@
 export type MessageBubbleProps = {
   text?: string
   attachmentUrl?: string
-  isLeft?: boolean
+  belongsToUser?: boolean
 }
 
-export function MessageBubble({ text, attachmentUrl, isLeft = true }: MessageBubbleProps) {
+export function MessageBubble({ text, attachmentUrl, belongsToUser = true }: MessageBubbleProps) {
   return (
     <article
       className={`flex max-w-[50%] flex-col gap-2 rounded-2xl p-3 wrap-break-word ${
-        isLeft
-          ? "self-start rounded-bl-sm bg-blue-100"
-          : "self-end rounded-br-sm bg-blue-300 text-black"
+        belongsToUser
+          ? "self-end rounded-br-sm bg-blue-300 text-black"
+          : "self-start rounded-bl-sm bg-blue-100"
       }`}
     >
       {attachmentUrl && (
