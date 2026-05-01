@@ -28,13 +28,13 @@ export class GetChatQueryHandler {
   async execute(query: GetMessagesQuery): Promise<GetMessagesResult> {
     const { userId, peerId, olderThan, quantity = 20 } = query
 
-    const peerInfo = await this.getPeerAndChatId(userId, peerId)
+    const peerData = await this.getPeerData(userId, peerId)
 
-    if (!peerInfo) {
+    if (!peerData) {
       return undefined
     }
 
-    const { chatId, ...peerRow } = peerInfo
+    const { chatId, ...peerRow } = peerData
 
     if (!chatId) {
       return {
@@ -92,7 +92,7 @@ export class GetChatQueryHandler {
     }
   }
 
-  private async getPeerAndChatId(userId: string, peerId: string) {
+  private async getPeerData(userId: string, peerId: string) {
     const selfMember = alias(chatMembers, "self_member")
     const peerMember = alias(chatMembers, "peer_member")
 
