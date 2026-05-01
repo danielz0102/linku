@@ -1,4 +1,3 @@
-import { useQueries } from "@tanstack/react-query"
 import { Navigate, useParams } from "react-router"
 
 import { useAuthenticatedUser } from "~/modules/users/context/user-context"
@@ -8,9 +7,8 @@ import { ChatHeader } from "./components/chat-header"
 import { MessageBubble } from "./components/message-bubble"
 import { MessageForm } from "./components/message-form"
 import { MessageList } from "./components/message-list"
-import { getChatMember } from "./get-chat-member"
-import { getMessages } from "./get-chat-messages"
 import { useChatEvents } from "./hooks/use-chat-events"
+import { useChatQueries } from "./hooks/use-chat-queries"
 
 export default function ChatPage() {
   const { username } = useParams()
@@ -23,20 +21,7 @@ export default function ChatPage() {
 
   useChatEvents(username)
 
-  const [messages, peer] = useQueries({
-    queries: [
-      {
-        queryKey: ["messages", username],
-        queryFn: () => getMessages(username),
-        throwOnError: true,
-      },
-      {
-        queryKey: ["chat-member", username],
-        queryFn: () => getChatMember(username),
-        throwOnError: true,
-      },
-    ],
-  })
+  const [messages, peer] = useChatQueries(username)
 
   if (peer.data === null) {
     return <Navigate to="/404" replace />
