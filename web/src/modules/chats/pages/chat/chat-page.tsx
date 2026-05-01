@@ -1,5 +1,4 @@
 import { useQueries } from "@tanstack/react-query"
-import { useEffect } from "react"
 import { Navigate, useParams } from "react-router"
 
 import { useAuthenticatedUser } from "~/modules/users/context/user-context"
@@ -11,15 +10,18 @@ import { MessageForm } from "./components/message-form"
 import { MessageList } from "./components/message-list"
 import { getChatMember } from "./get-chat-member"
 import { getMessages } from "./get-chat-messages"
-import { socket } from "./socket"
+import { useChatEvents } from "./hooks/use-chat-events"
 
 export default function ChatPage() {
-  const { user } = useAuthenticatedUser()
   const { username } = useParams()
 
   if (!username) {
     throw new Error("Chat peer ID is required")
   }
+
+  const { user } = useAuthenticatedUser()
+
+  useChatEvents(username)
 
   const [messages, peer] = useQueries({
     queries: [
@@ -35,10 +37,6 @@ export default function ChatPage() {
       },
     ],
   })
-
-  useEffect(() => {
-    socket.emit("join_chat", { peerUsername: username })
-  }, [username])
 
   if (peer.data === null) {
     return <Navigate to="/404" replace />

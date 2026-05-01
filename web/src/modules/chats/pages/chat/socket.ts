@@ -8,6 +8,6 @@ interface ClientToServerEvents {
 
 interface ServerToClientEvents {}
 
-export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(SOCKET_URL, {
-  withCredentials: true,
-})
+export function createSocket(): Socket<ServerToClientEvents, ClientToServerEvents> {
+  return io(SOCKET_URL, { withCredentials: true })
+}
