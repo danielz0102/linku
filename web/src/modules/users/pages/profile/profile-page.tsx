@@ -72,7 +72,10 @@ export default function ProfilePage() {
           onSubmit={async (file) => {
             const { url } = await uploadImage(file)
             const updatedUser = await updateUser({
-              ...user.data,
+              username: user.username,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              bio: user.bio,
               profilePictureUrl: url,
             })
 

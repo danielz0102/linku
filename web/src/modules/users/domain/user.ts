@@ -24,17 +24,6 @@ export class User {
     this.bio = data.bio
   }
 
-  get data(): Readonly<UserData> {
-    return {
-      id: this.id,
-      username: this.username,
-      firstName: this.firstName,
-      lastName: this.lastName,
-      profilePictureUrl: this.profilePictureUrl,
-      bio: this.bio,
-    }
-  }
-
   get fullname(): string {
     return `${this.firstName} ${this.lastName}`
   }
