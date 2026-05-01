@@ -39,7 +39,8 @@ export class GetChatsQueryHandler {
         chatId: selfMember.chatId,
         peerId: peerUser.id,
         peerUsername: peerUser.username,
-        peerName: sql<string>`${peerUser.firstName} || ' ' || ${peerUser.lastName}`,
+        peerFirstName: peerUser.firstName,
+        peerLastName: peerUser.lastName,
         peerProfilePictureUrl: peerUser.profilePictureUrl,
         messageId: latestMessages.id,
         messageSenderId: latestMessages.senderId,
@@ -67,7 +68,8 @@ export class GetChatsQueryHandler {
       peer: {
         id: row.peerId,
         username: row.peerUsername,
-        name: row.peerName,
+        firstName: row.peerFirstName,
+        lastName: row.peerLastName,
         profilePictureUrl: row.peerProfilePictureUrl,
       },
       lastMessage: {

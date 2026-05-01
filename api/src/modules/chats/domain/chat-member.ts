@@ -1,6 +1,7 @@
 export type ChatMember = {
   id: string
   username: string
-  name: string
+  firstName: string
+  lastName: string
   profilePictureUrl: string | null
 }

@@ -2,12 +2,12 @@ import { useQuery } from "@tanstack/react-query"
 import { Link } from "react-router"
 
 import { ChatCard } from "./chat-card"
-import { getChatCardsData } from "./get-chat-cards-data"
+import { getChats } from "./get-chats"
 
 export default function HomePage() {
   const chats = useQuery({
     queryKey: ["chats"],
-    queryFn: getChatCardsData,
+    queryFn: getChats,
     initialData: [],
   })
 

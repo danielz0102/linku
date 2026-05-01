@@ -5,8 +5,8 @@ export type MessageProps = {
   senderId: string
   isRead: boolean
   createdAt: Date | string
-  text?: string
-  attachmentURL?: string
+  text?: string | null
+  attachmentURL?: string | null
 }
 
 export class Message {
