@@ -86,3 +86,13 @@ export function getMessagePreview(message: MessageData): string {
 
   return "Attachment"
 }
+
+export function formatMessageDate(date: Date): string {
+  const { locale, timeZone } = Intl.DateTimeFormat().resolvedOptions()
+
+  return new Intl.DateTimeFormat(locale, {
+    timeZone,
+    hour: "numeric",
+    minute: "numeric",
+  }).format(date)
+}

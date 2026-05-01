@@ -1,6 +1,6 @@
 import { API_URL } from "~/env"
 
-import type { ChatMemberData } from "../../domain/chat-member"
+import type { ChatMemberData } from "../domain/chat-member"
 
 type APIResponse = {
   id: string
@@ -11,8 +11,8 @@ type APIResponse = {
   bio: string | null
 }
 
-export async function getChatMember(id: string): Promise<ChatMemberData | null> {
-  const res = await fetch(`${API_URL}/users/${id}`, { credentials: "include" })
+export async function getChatMember(username: string): Promise<ChatMemberData | null> {
+  const res = await fetch(`${API_URL}/users/${username}`, { credentials: "include" })
 
   if (!res.ok) {
     if (res.status === 404) {

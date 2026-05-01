@@ -37,3 +37,8 @@ export class Chat {
     return this.lastMessage.createdAt
   }
 }
+
+export type ChatData = {
+  id: string
+  peerId: string
+}

@@ -1,40 +1,44 @@
 import { ProfileAvatar } from "~/shared/components/profile-avatar"
 
-import type { Chat } from "../../domain/chat"
+import { getInitials } from "../../domain/chat-member"
+import { formatMessageDate } from "../../domain/message"
 
 type ChatCardProps = {
-  chat: Chat
+  data: {
+    avatarUrl?: string
+    name: string
+    date: Date
+    isRead?: boolean
+    text?: string
+  }
 }
 
-export function ChatCard({ chat }: ChatCardProps) {
+export function ChatCard({ data: { avatarUrl, name, date, text, isRead = false } }: ChatCardProps) {
   return (
     <article className="flex gap-4 p-3">
       <ProfileAvatar
-        initials={chat.initials}
-        avatarUrl={chat.imageUrl}
+        initials={getInitials(name)}
+        avatarUrl={avatarUrl}
         className="shrink-0 text-xs"
         size="sm"
       />
 
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex justify-between">
-          <h2 className="truncate font-medium">{chat.name}</h2>
+          <h2 className="truncate font-medium">{name}</h2>
           <div className="flex gap-2">
-            <time
-              className="text-muted text-xs whitespace-nowrap"
-              dateTime={chat.time.toISOString()}
-            >
-              {chat.time.format()}
+            <time className="text-muted text-xs whitespace-nowrap" dateTime={date.toISOString()}>
+              {formatMessageDate(date)}
             </time>
-            {!chat.lastMessage.isRead && <span className="bg-primary mt-1 size-2 rounded-full" />}
+            {!isRead && <span className="bg-primary mt-1 size-2 rounded-full" />}
           </div>
         </div>
 
         <p
-          className="text-muted truncate text-sm data-attachment:italic"
-          data-attachment={chat.lastMessage.content === null || undefined}
+          className="text-muted truncate text-sm data-is-attachment:italic"
+          data-is-attachment={text === undefined || undefined}
         >
-          {chat.lastMessage.preview}
+          {text || "Attachment"}
         </p>
       </div>
     </article>
