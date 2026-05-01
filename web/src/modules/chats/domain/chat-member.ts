@@ -1,12 +1,37 @@
-export type ChatMemberData = {
+export type ChatMemberProps = {
   id: string
   username: string
-  name: string
-  profilePicURL: string | null
+  firstName: string
+  lastName: string
+  profilePicURL?: string | null
 }
 
-export function getInitials(fullname: string): string {
-  const names = fullname.split(" ")
-  const initials = names.map((n) => n[0]).join("")
-  return initials.toUpperCase()
+export class ChatMember {
+  private constructor(
+    readonly id: string,
+    readonly username: string,
+    readonly firstName: string,
+    private lastName: string,
+    readonly profilePicURL: string | null
+  ) {}
+
+  static create(props: ChatMemberProps): ChatMember {
+    return new ChatMember(
+      props.id,
+      props.username,
+      props.firstName,
+      props.lastName,
+      props.profilePicURL ?? null
+    )
+  }
+
+  get initials(): string {
+    const firstInitial = this.firstName.charAt(0).toUpperCase()
+    const lastInitial = this.lastName.charAt(0).toUpperCase()
+    return `${firstInitial}${lastInitial}`
+  }
+
+  get fullname(): string {
+    return `${this.firstName} ${this.lastName}`
+  }
 }

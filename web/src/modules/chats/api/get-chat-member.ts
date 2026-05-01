@@ -1,6 +1,6 @@
 import { API_URL } from "~/env"
 
-import type { ChatMemberData } from "../domain/chat-member"
+import { ChatMember } from "../domain/chat-member"
 
 type APIResponse = {
   id: string
@@ -11,7 +11,7 @@ type APIResponse = {
   bio: string | null
 }
 
-export async function getChatMember(username: string): Promise<ChatMemberData | null> {
+export async function getChatMember(username: string): Promise<ChatMember | null> {
   const res = await fetch(`${API_URL}/users/${username}`, { credentials: "include" })
 
   if (!res.ok) {
@@ -24,10 +24,11 @@ export async function getChatMember(username: string): Promise<ChatMemberData | 
 
   const data = (await res.json()) as APIResponse
 
-  return {
+  return ChatMember.create({
     id: data.id,
     username: data.username,
-    name: `${data.firstName} ${data.lastName}`,
+    firstName: data.firstName,
+    lastName: data.lastName,
     profilePicURL: data.profilePictureUrl,
-  }
+  })
 }

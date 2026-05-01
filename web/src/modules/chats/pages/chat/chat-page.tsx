@@ -2,7 +2,6 @@ import { Navigate, useParams } from "react-router"
 
 import { useAuthenticatedUser } from "~/modules/users/context/user-context"
 
-import { getInitials } from "../../domain/chat-member"
 import { ChatHeader } from "./components/chat-header"
 import { MessageBubble } from "./components/message-bubble"
 import { MessageForm } from "./components/message-form"
@@ -29,14 +28,7 @@ export default function ChatPage() {
 
   return (
     <main className="flex size-full flex-col overflow-y-auto">
-      {peer.data && (
-        <ChatHeader
-          username={peer.data.username}
-          name={peer.data.name}
-          initials={getInitials(peer.data.name)}
-          avatarUrl={peer.data.profilePicURL ?? undefined}
-        />
-      )}
+      {peer.data && <ChatHeader user={peer.data} />}
 
       <MessageList className="flex-1">
         {messages.data?.map((m) => (

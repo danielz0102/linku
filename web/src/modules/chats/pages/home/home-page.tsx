@@ -33,11 +33,10 @@ export default function HomePage() {
           className="hover:bg-hover rounded md:w-lg"
         >
           <ChatCard
+            user={chat.peer}
             data={{
-              name: chat.peer.name,
               date: chat.lastMessage.createdAt,
               isRead: chat.lastMessage.isRead,
-              avatarUrl: chat.peer.profilePicURL ?? undefined,
               text: chat.lastMessage.text,
             }}
           />

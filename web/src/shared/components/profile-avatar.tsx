@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge"
 
 type ProfileAvatarProps = React.PropsWithChildren<{
   initials: string
-  avatarUrl?: string
+  avatarUrl?: string | null
   className?: string
   size?: "sm" | "lg"
 }>
