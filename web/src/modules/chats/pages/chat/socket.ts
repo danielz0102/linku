@@ -3,7 +3,7 @@ import io, { type Socket } from "socket.io-client"
 import { SOCKET_URL } from "~/env"
 
 interface ClientToServerEvents {
-  join_chat: (data: { peerId: string }) => void
+  join_chat: (data: { peerUsername: string }) => void
 }
 
 interface ServerToClientEvents {}

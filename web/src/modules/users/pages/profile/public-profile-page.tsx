@@ -44,7 +44,7 @@ export default function PublicProfilePage() {
             />
           }
         >
-          <Link to={`/chat/${user.id}`} className="button rounded-xl">
+          <Link to={`/chat/${user.username}`} className="button rounded-xl">
             Send a message
             <IconSendFilled />
           </Link>

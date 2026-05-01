@@ -54,3 +54,35 @@ export class Message {
     return "Attachment"
   }
 }
+
+export type MessageData = {
+  id: string
+  senderId: string
+  isRead: boolean
+  createdAt: Date
+} & MessageContent
+
+type MessageContent =
+  | {
+      type: "text-only"
+      text: string
+      attachmentUrl?: never
+    }
+  | {
+      type: "attachment-only"
+      text?: never
+      attachmentUrl: string
+    }
+  | {
+      type: "text-and-attachment"
+      text: string
+      attachmentUrl: string
+    }
+
+export function getMessagePreview(message: MessageData): string {
+  if (message.text) {
+    return message.text
+  }
+
+  return "Attachment"
+}

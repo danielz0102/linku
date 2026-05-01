@@ -1,55 +1,73 @@
-import { useQuery } from "@tanstack/react-query"
+import { useQueries } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { Navigate, useParams } from "react-router"
 
 import { useAuthenticatedUser } from "~/modules/users/context/user-context"
 
+import { getInitials } from "../../domain/chat-member"
 import { ChatHeader } from "./components/chat-header"
 import { MessageBubble } from "./components/message-bubble"
 import { MessageForm } from "./components/message-form"
 import { MessageList } from "./components/message-list"
-import { getChat } from "./get-chat"
+import { getChatMember } from "./get-chat-member"
+import { getMessages } from "./get-chat-messages"
 import { socket } from "./socket"
 
 export default function ChatPage() {
   const { user } = useAuthenticatedUser()
-  const { peerId } = useParams()
+  const { username } = useParams()
 
-  if (!peerId) {
+  if (!username) {
     throw new Error("Chat peer ID is required")
   }
 
-  const { data: chat, isLoading } = useQuery({
-    queryKey: ["chat", peerId],
-    queryFn: () => getChat(peerId),
-    throwOnError: true,
+  const [messages, peer] = useQueries({
+    queries: [
+      {
+        queryKey: ["messages", username],
+        queryFn: () => getMessages(username),
+        throwOnError: true,
+      },
+      {
+        queryKey: ["chat-member", username],
+        queryFn: () => getChatMember(username),
+        throwOnError: true,
+      },
+    ],
   })
 
   useEffect(() => {
-    socket.emit("join_chat", { peerId })
-  }, [peerId])
+    socket.emit("join_chat", { peerUsername: username })
+  }, [username])
 
-  if (!isLoading && chat === null) {
+  if (peer.data === null) {
     return <Navigate to="/404" replace />
   }
 
   return (
     <main className="flex size-full flex-col overflow-y-auto">
-      {chat?.peer && <ChatHeader member={chat.peer} />}
+      {peer.data && (
+        <ChatHeader
+          username={peer.data.username}
+          name={peer.data.name}
+          initials={getInitials(peer.data.name)}
+          avatarUrl={peer.data.profilePicURL ?? undefined}
+        />
+      )}
 
       <MessageList className="flex-1">
-        {chat?.messages.map((m) => (
+        {messages.data?.map((m) => (
           <MessageBubble
             key={m.id}
-            text={m.content ?? undefined}
-            attachmentUrl={m.attachmentUrl?.href}
+            text={m.text}
+            attachmentUrl={m.attachmentUrl}
             belongsToUser={m.senderId === user.id}
           />
         ))}
       </MessageList>
 
       <div className="flex items-center justify-center *:w-full *:max-w-3xl">
-        {!isLoading && (
+        {!messages.isLoading && (
           <MessageForm
             onSubmit={(data) => {
               console.log({ data })
