@@ -1,6 +1,5 @@
 import { IconPhoto } from "@tabler/icons-react"
 import { useEffect, useRef, useState } from "react"
-import { createPortal } from "react-dom"
 import type { UseFormRegisterReturn } from "react-hook-form"
 
 import { Dialog } from "~/shared/components/dialog"
@@ -81,16 +80,14 @@ AttachmentButton.PreviewImageButton = ({ file }: PreviewImageButtonProps) => {
           >
             <img src={url} alt="" className="max-h-32 rounded object-contain" />
           </button>
-          {createPortal(
-            <Dialog ref={dlgRef}>
-              <img
-                src={url}
-                alt="Preview"
-                className="max-h-[80dvh] max-w-[90vw] rounded object-contain"
-              />
-            </Dialog>,
-            document.body
-          )}
+          <Dialog ref={dlgRef}>
+            <img
+              src={url}
+              alt="Preview"
+              className="max-h-[80dvh] max-w-[90vw] rounded object-contain"
+            />
+          </Dialog>
+          ,
         </>
       )}
     </div>
