@@ -32,6 +32,32 @@ export default function ChatPage() {
 
   const allMessages = [initialMessages.data ?? [], entryMessages].flat()
 
+  const handleSubmit: React.ComponentProps<typeof MessageForm>["onSubmit"] = async (data) => {
+    const newMessage = Message.create({
+      id: crypto.randomUUID(),
+      text: data.message,
+      attachmentURL: data.file ? URL.createObjectURL(data.file) : undefined,
+      senderId: user.id,
+      createdAt: new Date(),
+      isRead: true,
+    })
+
+    setEntryMessages((prev) => [...prev, newMessage])
+
+    if (data.file) {
+      const attachmentSignature = await getAttachmentUploadSignature(newMessage.id)
+      const { url } = await uploadFile(data.file, attachmentSignature)
+
+      sendMessage({
+        id: newMessage.id,
+        text: data.message,
+        attachmentURL: url,
+      })
+    } else {
+      sendMessage({ id: newMessage.id, text: data.message })
+    }
+  }
+
   return (
     <main className="flex size-full flex-col overflow-y-auto">
       {peer.data && <ChatHeader user={peer.data} />}
@@ -48,35 +74,7 @@ export default function ChatPage() {
       </MessageList>
 
       <div className="flex items-center justify-center *:w-full *:max-w-3xl">
-        {!initialMessages.isLoading && (
-          <MessageForm
-            onSubmit={async (data) => {
-              const newMessage = Message.create({
-                id: crypto.randomUUID(),
-                text: data.message,
-                attachmentURL: data.file ? URL.createObjectURL(data.file) : undefined,
-                senderId: user.id,
-                createdAt: new Date(),
-                isRead: true,
-              })
-
-              setEntryMessages((prev) => [...prev, newMessage])
-
-              if (data.file) {
-                const attachmentSignature = await getAttachmentUploadSignature(newMessage.id)
-                const { url } = await uploadFile(data.file, attachmentSignature)
-
-                sendMessage({
-                  id: newMessage.id,
-                  text: data.message,
-                  attachmentURL: url,
-                })
-              }
-
-              sendMessage({ id: newMessage.id, text: data.message })
-            }}
-          />
-        )}
+        {!initialMessages.isLoading && <MessageForm onSubmit={handleSubmit} />}
       </div>
     </main>
   )
