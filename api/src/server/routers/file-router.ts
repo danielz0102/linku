@@ -1,7 +1,7 @@
 import { Router } from "express"
 
-import { createSignatureHTTPController } from "#modules/files/commands/create-signature-http-controller.ts"
+import { signProfilePictureUploadHTTPController } from "#modules/files/commands/sign-profile-picture-upload-http-controller.ts"
 
 export const fileRouter = Router()
 
-fileRouter.post("/sign", createSignatureHTTPController)
+fileRouter.post("/uploads/profile-picture", signProfilePictureUploadHTTPController)
