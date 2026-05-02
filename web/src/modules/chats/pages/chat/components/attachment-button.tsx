@@ -87,7 +87,6 @@ AttachmentButton.PreviewImageButton = ({ file }: PreviewImageButtonProps) => {
               className="max-h-[80dvh] max-w-[90vw] rounded object-contain"
             />
           </Dialog>
-          ,
         </>
       )}
     </div>

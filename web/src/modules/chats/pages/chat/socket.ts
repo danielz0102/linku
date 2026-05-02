@@ -4,6 +4,7 @@ import { SOCKET_URL } from "~/env"
 
 interface ClientToServerEvents {
   join_chat: (data: { peerUsername: string }) => void
+  send_message: (message: { text?: string; attachmentURL?: string }) => void
 }
 
 interface ServerToClientEvents {}

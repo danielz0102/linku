@@ -3,10 +3,10 @@ import { twMerge } from "tailwind-merge"
 
 type MessageListProps = React.PropsWithChildren<{
   className?: string
+  isLoading?: boolean
 }>
 
-export function MessageList({ className, children }: MessageListProps) {
-  const isLoading = children === undefined
+export function MessageList({ className, isLoading = false, children }: MessageListProps) {
   const isEmpty = children && Children.toArray(children).length === 0
 
   return (

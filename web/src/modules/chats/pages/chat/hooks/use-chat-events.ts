@@ -13,5 +13,9 @@ export function useChatEvents(peerUsername: string) {
     }
   }, [])
 
-  return {}
+  const sendMessage = (message: { text?: string; attachmentURL?: string }) => {
+    socket.emit("send_message", message)
+  }
+
+  return { sendMessage }
 }
