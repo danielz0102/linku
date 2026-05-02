@@ -5,11 +5,11 @@ import { useAuthenticatedUser } from "~/modules/users/context/user-context"
 import { uploadFile } from "~/shared/upload-file"
 
 import { Message } from "../../domain/message"
+import { getAttachmentUploadSignature } from "./api/get-attachment-upload-signature"
 import { ChatHeader } from "./components/chat-header"
 import { MessageBubble } from "./components/message-bubble"
 import { MessageForm } from "./components/message-form"
 import { MessageList } from "./components/message-list"
-import { getAttachmentUploadSignature } from "./get-attachment-upload-signature"
 import { useChatEvents } from "./hooks/use-chat-events"
 import { useChatQueries } from "./hooks/use-chat-queries"
 

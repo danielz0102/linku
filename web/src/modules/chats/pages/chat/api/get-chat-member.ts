@@ -1,6 +1,6 @@
 import { API_URL } from "~/env"
 
-import { ChatMember } from "../../domain/chat-member"
+import { ChatMember } from "../../../domain/chat-member"
 
 type APIResponse = {
   id: string

@@ -1,6 +1,6 @@
 import { API_URL } from "~/env"
 
-import { Message } from "../../domain/message"
+import { Message } from "../../../domain/message"
 
 type GetMessagesQuery = {
   peerUsername: string

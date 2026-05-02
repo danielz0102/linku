@@ -1,7 +1,7 @@
 import { useQueries } from "@tanstack/react-query"
 
-import { getChatMember } from "../get-chat-member"
-import { getMessages } from "../get-chat-messages"
+import { getChatMember } from "../api/get-chat-member"
+import { getMessages } from "../api/get-chat-messages"
 
 export function useChatQueries(peerUsername: string) {
   return useQueries({
