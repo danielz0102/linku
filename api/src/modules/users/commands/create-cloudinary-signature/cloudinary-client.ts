@@ -10,7 +10,7 @@ cloudinary.v2.config({
 })
 
 export const CloudinaryFolders = {
-  PROFIILE_PICTURES: "linku/profile-pictures",
+  PROFILE_PICTURES: "linku/profile-pictures",
 }
 
 const cloudinaryClient = cloudinary.v2

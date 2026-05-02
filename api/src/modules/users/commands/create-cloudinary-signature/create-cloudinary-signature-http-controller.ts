@@ -14,7 +14,7 @@ export const createCloudinarySignatureController: RequestHandler = async (req, r
   const timestamp = Math.floor(Date.now() / 1000)
   const signature = cloudinary.utils.api_sign_request(
     {
-      folder: CloudinaryFolders.PROFIILE_PICTURES,
+      folder: CloudinaryFolders.PROFILE_PICTURES,
       public_id: userId,
       timestamp,
     },
@@ -26,7 +26,7 @@ export const createCloudinarySignatureController: RequestHandler = async (req, r
     timestamp,
     cloudName: CLOUDINARY_NAME,
     api_key: CLOUDINARY_API_KEY,
-    folder: CloudinaryFolders.PROFIILE_PICTURES,
+    folder: CloudinaryFolders.PROFILE_PICTURES,
     public_id: userId,
   })
 }
