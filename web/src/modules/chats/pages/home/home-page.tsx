@@ -8,7 +8,6 @@ export default function HomePage() {
   const chats = useQuery({
     queryKey: ["chats"],
     queryFn: getChats,
-    initialData: [],
   })
 
   return (
@@ -17,7 +16,7 @@ export default function HomePage() {
 
       {chats.isLoading && <p className="text-muted m-auto animate-pulse">Loading chats...</p>}
 
-      {chats.data.length === 0 && !chats.isLoading && (
+      {chats.data?.length === 0 && !chats.isLoading && (
         <div className="m-auto space-y-1 text-center">
           <h1 className="title">No chats yet.</h1>
           <Link to="/search" className="link underline">
@@ -26,7 +25,7 @@ export default function HomePage() {
         </div>
       )}
 
-      {chats.data.map((chat) => (
+      {chats.data?.map((chat) => (
         <Link
           key={chat.peer.id}
           to={`/chat/${chat.peer.username}`}
