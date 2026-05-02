@@ -3,6 +3,7 @@ import { createServer } from "node:http"
 import express from "express"
 
 import { corsMiddleware } from "./middlewares/cors-middleware.ts"
+import { enrichMiddleware } from "./middlewares/enrich-middleware.ts"
 import { notFoundMiddleware } from "./middlewares/not-found-middleware.ts"
 import { sessionMiddleware } from "./middlewares/session-middleware.ts"
 import { unexpectedErrorMiddleware } from "./middlewares/unexpected-error-middleware.ts"
@@ -13,6 +14,7 @@ export function createAppServer() {
   const server = createServer(app)
 
   app.use(express.json())
+  app.use(enrichMiddleware)
   app.set("trust proxy", 1)
 
   app.use(corsMiddleware)

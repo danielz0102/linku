@@ -24,7 +24,7 @@ export const updateUserController: RequestHandler = async (req, res) => {
   const result = updateUserRequestSchema.safeParse(req.body)
 
   if (!result.success) {
-    return res.status(400).json({ message: "Invalid request body", details: result.error.issues })
+    return res.sendValidationError(result.error.issues)
   }
 
   const user = await updateUser.execute({ id, ...result.data })

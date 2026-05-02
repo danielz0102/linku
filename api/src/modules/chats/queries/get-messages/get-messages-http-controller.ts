@@ -27,7 +27,7 @@ export const getMessagesHttpController: RequestHandler = async (req, res) => {
   })
 
   if (!success) {
-    return res.status(400).json({ message: "Invalid request", details: error.issues })
+    return res.sendValidationError(error.issues)
   }
 
   const { peerUsername, cursor, page_size } = data

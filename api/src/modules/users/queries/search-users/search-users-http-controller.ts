@@ -21,7 +21,7 @@ export const searchUsersController: RequestHandler = async (req, res) => {
   const result = searchUsersQuerySchema.safeParse(req.query)
 
   if (!result.success) {
-    return res.status(400).json({ message: "Invalid query params", details: result.error.issues })
+    return res.sendValidationError(result.error.issues)
   }
 
   const { query, page, limit } = result.data

@@ -18,7 +18,7 @@ export const signAttachmentUploadHTTPController: RequestHandler = async (req, re
   const result = signAttachmentUploadRequestSchema.safeParse(req.body)
 
   if (!result.success) {
-    return res.status(400).json({ message: "Invalid request body", details: result.error.issues })
+    return res.sendValidationError(result.error.issues)
   }
 
   const { messageId } = result.data

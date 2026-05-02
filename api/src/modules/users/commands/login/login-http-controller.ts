@@ -15,7 +15,7 @@ export const loginController: RequestHandler = async (req, res) => {
   const result = loginRequestSchema.safeParse(req.body)
 
   if (!result.success) {
-    return res.status(400).json({ message: "Invalid request body", details: result.error.issues })
+    return res.sendValidationError(result.error.issues)
   }
 
   const user = await login.execute(result.data)

@@ -17,7 +17,7 @@ export const searchUserByUsernameController: RequestHandler = async (req, res) =
   const { success, data: username, error } = usernameSchema.safeParse(req.params["username"])
 
   if (!success) {
-    return res.status(400).json({ message: "Invalid username", details: error.issues })
+    return res.sendValidationError(error.issues)
   }
 
   const foundUser = await db
