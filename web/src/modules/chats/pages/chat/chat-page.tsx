@@ -2,12 +2,14 @@ import { useState } from "react"
 import { Navigate, useParams } from "react-router"
 
 import { useAuthenticatedUser } from "~/modules/users/context/user-context"
+import { uploadFile } from "~/shared/upload-file"
 
 import { Message } from "../../domain/message"
 import { ChatHeader } from "./components/chat-header"
 import { MessageBubble } from "./components/message-bubble"
 import { MessageForm } from "./components/message-form"
 import { MessageList } from "./components/message-list"
+import { getAttachmentUploadSignature } from "./get-attachment-upload-signature"
 import { useChatEvents } from "./hooks/use-chat-events"
 import { useChatQueries } from "./hooks/use-chat-queries"
 
@@ -48,7 +50,7 @@ export default function ChatPage() {
       <div className="flex items-center justify-center *:w-full *:max-w-3xl">
         {!initialMessages.isLoading && (
           <MessageForm
-            onSubmit={(data) => {
+            onSubmit={async (data) => {
               const newMessage = Message.create({
                 id: crypto.randomUUID(),
                 text: data.message,
@@ -59,9 +61,19 @@ export default function ChatPage() {
               })
 
               setEntryMessages((prev) => [...prev, newMessage])
-              //TODO: if has an attachment, upload to cloudinary and get the URL
-              //then send the message with the attachment URL
-              void sendMessage
+
+              if (data.file) {
+                const attachmentSignature = await getAttachmentUploadSignature(newMessage.id)
+                const { url } = await uploadFile(data.file, attachmentSignature)
+
+                sendMessage({
+                  id: newMessage.id,
+                  text: data.message,
+                  attachmentURL: url,
+                })
+              }
+
+              sendMessage({ id: newMessage.id, text: data.message })
             }}
           />
         )}
