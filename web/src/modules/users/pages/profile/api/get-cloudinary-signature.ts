@@ -1,15 +1,7 @@
 import { API_URL } from "~/env"
+import type { UploadSignature } from "~/shared/upload-file"
 
-type GetCloudinarySignatureResponse = {
-  signature: string
-  timestamp: number
-  cloudName: string
-  api_key: string
-  folder: string
-  public_id: string
-}
-
-export async function getCloudinarySignature(): Promise<GetCloudinarySignatureResponse> {
+export async function getProfilePictureUploadSignature(): Promise<UploadSignature> {
   const res = await fetch(`${API_URL}/files/uploads/profile-picture`, {
     method: "POST",
     credentials: "include",

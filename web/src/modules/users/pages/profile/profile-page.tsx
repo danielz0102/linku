@@ -2,13 +2,14 @@ import { useRef } from "react"
 
 import { Dialog } from "~/shared/components/dialog"
 import { ProfileAvatar } from "~/shared/components/profile-avatar"
+import { uploadFile } from "~/shared/upload-file"
 
 import { useAuthenticatedUser } from "../../context/user-context"
+import { getProfilePictureUploadSignature } from "./api/get-cloudinary-signature"
 import { updateUser } from "./api/update-user"
 import { ProfileCard } from "./components/profile-card"
 import { UpdateProfilePictureForm } from "./components/update-profile-picture-form"
 import { UpdateUserForm } from "./components/update-user-form"
-import { uploadImage } from "./upload-image"
 
 export default function ProfilePage() {
   const { user, setUser } = useAuthenticatedUser()
@@ -70,7 +71,9 @@ export default function ProfilePage() {
           currentImageUrl={user.profilePictureUrl ?? undefined}
           initials={user.initials}
           onSubmit={async (file) => {
-            const { url } = await uploadImage(file)
+            const uploadSignature = await getProfilePictureUploadSignature()
+            const { url } = await uploadFile(file, uploadSignature)
+
             const updatedUser = await updateUser({
               username: user.username,
               firstName: user.firstName,
