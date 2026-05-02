@@ -3,17 +3,17 @@ import { z } from "zod"
 
 import { db } from "#db/drizzle/drizzle-client.ts"
 
-import { GetChatQueryHandler } from "./get-chat-query-handler.ts"
+import { GetMessagesQueryHandler } from "./get-messages-query-handler.ts"
 
-const getChat = new GetChatQueryHandler(db)
+const getChat = new GetMessagesQueryHandler(db)
 
 const getChatRequestSchema = z.object({
-  peerId: z.uuid(),
+  peerUsername: z.string().nonempty(),
   page_size: z.coerce.number().int().min(1).default(20),
   cursor: z.coerce.date().optional(),
 })
 
-export const getChatHttpController: RequestHandler = async (req, res) => {
+export const getMessagesHttpController: RequestHandler = async (req, res) => {
   const { userId } = req.session
 
   if (!userId) {
@@ -21,7 +21,7 @@ export const getChatHttpController: RequestHandler = async (req, res) => {
   }
 
   const { success, data, error } = getChatRequestSchema.safeParse({
-    peerId: req.params["peerId"],
+    peerUsername: req.params["peerUsername"],
     page_size: req.query["page_size"],
     cursor: req.query["cursor"],
   })
@@ -30,18 +30,14 @@ export const getChatHttpController: RequestHandler = async (req, res) => {
     return res.status(400).json({ message: "Invalid request", details: error.issues })
   }
 
-  const { peerId, cursor, page_size } = data
+  const { peerUsername, cursor, page_size } = data
 
   const chat = await getChat.execute({
     userId,
-    peerId,
+    peerUsername,
     olderThan: cursor,
     quantity: page_size,
   })
-
-  if (!chat) {
-    return res.status(404).json({ message: "Peer not found" })
-  }
 
   res.json(chat)
 }
