@@ -9,10 +9,6 @@ cloudinary.v2.config({
   secure: true,
 })
 
-export const CloudinaryFolders = {
-  PROFILE_PICTURES: "linku/profile-pictures",
-}
-
 const cloudinaryClient = cloudinary.v2
 
 export { cloudinaryClient as cloudinary }
