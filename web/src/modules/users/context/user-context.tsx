@@ -31,11 +31,11 @@ export function useUser() {
 }
 
 export function useAuthenticatedUser() {
-  const value = useUser()
+  const { user, setUser } = useUser()
 
-  if (!value.user) {
+  if (!user) {
     throw new Error("User is not authenticated")
   }
 
-  return value
+  return { user, setUser }
 }
