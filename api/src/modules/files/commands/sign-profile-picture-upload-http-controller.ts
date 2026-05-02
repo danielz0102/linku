@@ -13,10 +13,11 @@ export const signProfilePictureUploadHTTPController: RequestHandler = async (req
   }
 
   const timestamp = Math.floor(Date.now() / 1000)
+  const public_id = `user-${userId}`
   const signature = cloudinary.utils.api_sign_request(
     {
       folder,
-      public_id: userId,
+      public_id,
       timestamp,
     },
     CLOUDINARY_SECRET
@@ -28,6 +29,6 @@ export const signProfilePictureUploadHTTPController: RequestHandler = async (req
     cloudName: CLOUDINARY_NAME,
     api_key: CLOUDINARY_API_KEY,
     folder: folder,
-    public_id: userId,
+    public_id,
   })
 }
