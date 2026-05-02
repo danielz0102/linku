@@ -10,9 +10,11 @@ type GetCloudinarySignatureResponse = {
 }
 
 export async function getCloudinarySignature(): Promise<GetCloudinarySignatureResponse> {
-  const res = await fetch(`${API_URL}/users/cloudinary-signature`, {
+  const res = await fetch(`${API_URL}/files/sign`, {
     method: "POST",
     credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ type: "profile-picture" }),
   })
 
   if (!res.ok) {
