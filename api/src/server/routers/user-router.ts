@@ -1,6 +1,7 @@
 import { Router } from "express"
 
 import { signUpController } from "#modules/users/commands/sign-up/sign-up-http-controller.ts"
+import { updateProfilePictureController } from "#modules/users/commands/update-profile-picture/update-profile-picture-http-controller.ts"
 import { updateUserController } from "#modules/users/commands/update-user/update-user-http-controller.ts"
 import { searchUserByUsernameController } from "#modules/users/queries/search-user-by-username/search-user-by-username-http-controller.ts"
 import { searchUsersController } from "#modules/users/queries/search-users/search-users-http-controller.ts"
@@ -13,3 +14,4 @@ userRouter.get("/", searchUsersController)
 userRouter.get("/me", whoamiController)
 userRouter.get("/:username", searchUserByUsernameController)
 userRouter.put("/me", updateUserController)
+userRouter.put("/me/profile-picture", updateProfilePictureController)
