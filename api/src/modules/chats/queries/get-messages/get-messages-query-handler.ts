@@ -46,7 +46,7 @@ export class GetMessagesQueryHandler {
         id: messages.id,
         chatId: messages.chatId,
         senderId: messages.senderId,
-        content: messages.content,
+        content: messages.text,
         attachmentUrl: messages.attachmentUrl,
         createdAt: messages.createdAt,
         isRead: sql<boolean>`${messageReads.readAt} IS NOT NULL`,

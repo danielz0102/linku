@@ -21,7 +21,7 @@ export class GetChatsQueryHandler {
         chatId: messages.chatId,
         id: messages.id,
         senderId: messages.senderId,
-        content: messages.content,
+        content: messages.text,
         attachmentUrl: messages.attachmentUrl,
         createdAt: messages.createdAt,
       })

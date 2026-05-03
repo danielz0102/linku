@@ -48,14 +48,14 @@ export const messages = pgTable(
     senderId: uuid("sender_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    content: text("content"),
+    text: text(),
     attachmentUrl: text("attachment_url"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
     check(
       "messages_content_or_attachment_check",
-      sql`${table.content} IS NOT NULL OR ${table.attachmentUrl} IS NOT NULL`
+      sql`${table.text} IS NOT NULL OR ${table.attachmentUrl} IS NOT NULL`
     ),
     index("messages_sender_id_idx").on(table.senderId),
     index("messages_chat_id_idx").on(table.chatId),
