@@ -12,7 +12,7 @@ type GetMessagesQuery = {
   quantity?: number
 }
 
-type GetMessagesResult = {
+type MessagesData = {
   chatId?: string
   messages: Message[]
   hasMore: boolean
@@ -21,7 +21,7 @@ type GetMessagesResult = {
 export class GetMessagesQueryHandler {
   constructor(private db: NodePgDatabase) {}
 
-  async execute(query: GetMessagesQuery): Promise<GetMessagesResult> {
+  async execute(query: GetMessagesQuery): Promise<MessagesData> {
     const { userId, peerUsername, olderThan, quantity = 20 } = query
 
     const peerUser = await this.db

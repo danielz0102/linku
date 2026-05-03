@@ -5,7 +5,7 @@ import { db } from "#db/drizzle/drizzle-client.ts"
 
 import { GetMessagesQueryHandler } from "./get-messages-query-handler.ts"
 
-const getChat = new GetMessagesQueryHandler(db)
+const getMessages = new GetMessagesQueryHandler(db)
 
 const getChatRequestSchema = z.object({
   peerUsername: z.string().nonempty(),
@@ -32,12 +32,12 @@ export const getMessagesHttpController: RequestHandler = async (req, res) => {
 
   const { peerUsername, cursor, page_size } = data
 
-  const chat = await getChat.execute({
+  const messages = await getMessages.execute({
     userId,
     peerUsername,
     olderThan: cursor,
     quantity: page_size,
   })
 
-  res.json(chat)
+  res.json(messages)
 }
