@@ -1,4 +1,4 @@
-export type Message = {
+export type MessageData = {
   id: string
   senderId: string
   text: string | null

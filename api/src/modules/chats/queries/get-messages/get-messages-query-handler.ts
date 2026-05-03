@@ -3,7 +3,7 @@ import type { NodePgDatabase } from "drizzle-orm/node-postgres"
 import { alias } from "drizzle-orm/pg-core"
 
 import { chatMembers, messageReads, messages, users } from "#db/drizzle/schemas.ts"
-import type { Message } from "#modules/chats/domain/message.ts"
+import type { MessageData } from "#modules/chats/dtos/message-data.ts"
 
 type GetMessagesQuery = {
   userId: string
@@ -14,7 +14,7 @@ type GetMessagesQuery = {
 
 type MessagesData = {
   chatId?: string
-  messages: Message[]
+  messages: MessageData[]
   hasMore: boolean
 }
 

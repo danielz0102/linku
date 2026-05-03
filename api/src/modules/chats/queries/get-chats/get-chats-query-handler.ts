@@ -3,19 +3,26 @@ import type { NodePgDatabase } from "drizzle-orm/node-postgres"
 import { alias } from "drizzle-orm/pg-core"
 
 import { chatMembers, messageReads, messages, users } from "#db/drizzle/schemas.ts"
-import type { ChatMember } from "#modules/chats/domain/chat-member.ts"
-import type { Message } from "#modules/chats/domain/message.ts"
+import type { MessageData } from "#modules/chats/dtos/message-data.ts"
 
-type Chat = {
+type ChatMemberData = {
   id: string
-  peer: ChatMember
-  lastMessage: Message
+  username: string
+  firstName: string
+  lastName: string
+  profilePictureUrl: string | null
+}
+
+type ChatData = {
+  id: string
+  peer: ChatMemberData
+  lastMessage: MessageData
 }
 
 export class GetChatsQueryHandler {
   constructor(private db: NodePgDatabase) {}
 
-  async execute(userId: string): Promise<Chat[]> {
+  async execute(userId: string): Promise<ChatData[]> {
     const latestMessages = this.db
       .selectDistinctOn([messages.chatId], {
         chatId: messages.chatId,
