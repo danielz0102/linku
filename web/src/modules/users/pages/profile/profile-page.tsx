@@ -5,7 +5,9 @@ import { ProfileAvatar } from "~/shared/components/profile-avatar"
 import { uploadFile } from "~/shared/upload-file"
 
 import { useAuthenticatedUser } from "../../context/user-context"
+import { User } from "../../domain/user"
 import { getProfilePictureUploadSignature } from "./api/get-cloudinary-signature"
+import { updateProfilePicture } from "./api/update-profile-picture"
 import { updateUser } from "./api/update-user"
 import { ProfileCard } from "./components/profile-card"
 import { UpdateProfilePictureForm } from "./components/update-profile-picture-form"
@@ -35,19 +37,18 @@ export default function ProfilePage() {
 
   const handlePictureSubmit: (file: File) => Promise<void> = async (file) => {
     const uploadSignature = await getProfilePictureUploadSignature()
-    const { url } = await uploadFile(file, uploadSignature)
+    const { url, public_id } = await uploadFile(file, uploadSignature)
 
-    const updatedUser = await updateUser({
+    await updateProfilePicture({ publicId: public_id, publicUrl: url })
+
+    const updatedUser = new User({
+      id: user.id,
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
-      bio: user.bio,
       profilePictureUrl: url,
+      bio: user.bio,
     })
-
-    if (!updatedUser) {
-      throw new Error("Failed to update user with new profile picture")
-    }
 
     setUser(updatedUser)
     updateProfilePictureDlgRef.current?.close()

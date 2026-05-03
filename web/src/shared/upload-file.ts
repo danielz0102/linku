@@ -7,7 +7,14 @@ export type UploadSignature = {
   public_id: string
 }
 
-export async function uploadFile(file: File, signature: UploadSignature): Promise<{ url: string }> {
+type CloudinaryResponse = {
+  secure_url: string
+  public_id: string
+}
+
+type UploadData = { url: string; public_id: string }
+
+export async function uploadFile(file: File, signature: UploadSignature): Promise<UploadData> {
   const formData = new FormData()
 
   formData.append("file", file)
@@ -28,11 +35,7 @@ export async function uploadFile(file: File, signature: UploadSignature): Promis
     })
   }
 
-  const data = (await res.json()) as { secure_url?: string }
+  const data = (await res.json()) as CloudinaryResponse
 
-  if (!data.secure_url) {
-    throw new Error("Uploaded image URL is missing", { cause: data })
-  }
-
-  return { url: data.secure_url }
+  return { url: data.secure_url, public_id: data.public_id }
 }
