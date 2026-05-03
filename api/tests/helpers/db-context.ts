@@ -1,5 +1,6 @@
+import { readFile } from "node:fs/promises"
+
 import { drizzle } from "drizzle-orm/node-postgres"
-import { migrate } from "drizzle-orm/node-postgres/migrator"
 import { Pool } from "pg"
 import { test as base } from "vitest"
 
@@ -16,7 +17,8 @@ export const it = base.extend("db", { scope: "file" }, async ({}, { onCleanup })
   await pool.query(`CREATE SCHEMA IF NOT EXISTS "${schemaName}"`)
   const db = drizzle(pool)
 
-  await migrate(db, { migrationsFolder: "./drizzle", migrationsSchema: schemaName })
+  const sql = await readFile(new URL("../../db/linku.sql", import.meta.url), "utf-8")
+  await db.execute(sql)
 
   onCleanup(async () => {
     await pool.end()

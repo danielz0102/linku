@@ -1,1 +1,0 @@
-ALTER TABLE "messages" ADD CONSTRAINT "messages_content_or_attachment_check" CHECK ("messages"."content" IS NOT NULL OR "messages"."attachment_url" IS NOT NULL);

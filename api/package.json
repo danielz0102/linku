@@ -19,7 +19,8 @@
     "format": "oxfmt",
     "test": "vitest run",
     "test:watch": "vitest",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "db:export": "drizzle-kit export | tail -n +2 > ./db/linku.sql"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
