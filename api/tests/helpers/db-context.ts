@@ -17,7 +17,6 @@ export const it = base.extend("db", { scope: "file" }, async ({}, { onCleanup })
   await migrate(db, { migrationsFolder: "./drizzle", migrationsSchema: schemaName })
 
   onCleanup(async () => {
-    await pool.query(`DROP SCHEMA IF EXISTS "${schemaName}" CASCADE`)
     await pool.end()
   })
 
