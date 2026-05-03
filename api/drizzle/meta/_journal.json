@@ -43,6 +43,13 @@
       "when": 1777839228247,
       "tag": "0005_careful_bromley",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1777843474239,
+      "tag": "0006_nifty_the_twelve",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "files" ADD CONSTRAINT "files_public_id_unique" UNIQUE("public_id");
