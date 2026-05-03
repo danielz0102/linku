@@ -21,10 +21,7 @@ export default function ProfilePage() {
   const handleProfileUpdate: React.ComponentProps<typeof UpdateUserForm>["onSubmit"] = async (
     data
   ) => {
-    const updatedUser = await updateUser({
-      ...data,
-      profilePictureUrl: user.profilePictureUrl ?? null,
-    })
+    const updatedUser = await updateUser(data)
 
     if (!updatedUser) {
       return false

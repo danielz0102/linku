@@ -10,7 +10,6 @@ type UpdateUserCommand = {
   username: string
   firstName: string
   lastName: string
-  profilePictureUrl: string | null
   bio: string | null
 }
 
@@ -28,13 +27,7 @@ export class UpdateUserCommandHandler {
 
     const record = await this.db
       .update(users)
-      .set({
-        username: cmd.username,
-        firstName: cmd.firstName,
-        lastName: cmd.lastName,
-        profilePictureUrl: cmd.profilePictureUrl,
-        bio: cmd.bio,
-      })
+      .set(cmd)
       .where(eq(users.id, cmd.id))
       .returning()
       .then((r) => r[0]!)
