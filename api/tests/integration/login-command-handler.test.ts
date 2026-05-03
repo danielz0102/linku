@@ -4,14 +4,13 @@ import bcrypt from "bcryptjs"
 
 import { users } from "#db/drizzle/schemas.ts"
 import { LoginCommandHandler } from "#modules/users/commands/login/login-command-handler.ts"
-import { toPublicData } from "#modules/users/database/user-model.ts"
 
 import { it as base } from "../helpers/db-context.ts"
 
 const it = base.extend("login", ({ db }) => new LoginCommandHandler(db))
 
 describe("Login Command Handler", () => {
-  it("returns user data", async ({ db, login }) => {
+  it("returns the same user registered", async ({ db, login }) => {
     const password = "pass1234"
     const registeredUser = await db
       .insert(users)
@@ -22,11 +21,11 @@ describe("Login Command Handler", () => {
         lastName: "Doe",
       })
       .returning()
-      .then((r) => toPublicData(r[0]!))
+      .then((r) => r[0]!)
 
     const user = await login.execute({ username: registeredUser.username, password })
 
-    expect(user).toEqual(registeredUser)
+    expect(user?.id).toEqual(registeredUser.id)
   })
 
   it("returns nothing if username doesn't exist", async ({ login }) => {

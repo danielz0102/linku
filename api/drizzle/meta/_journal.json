@@ -50,6 +50,13 @@
       "when": 1777843474239,
       "tag": "0006_nifty_the_twelve",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1777849148310,
+      "tag": "0007_superb_prima",
+      "breakpoints": true
     }
   ]
 }

@@ -2,7 +2,8 @@ import { and, desc, eq, ne, sql } from "drizzle-orm"
 import type { NodePgDatabase } from "drizzle-orm/node-postgres"
 import { alias } from "drizzle-orm/pg-core"
 
-import { chatMembers, messageReads, messages, users } from "#db/drizzle/schemas.ts"
+import { chatMembers, messageReads, messages } from "#db/drizzle/schemas.ts"
+import { usersView } from "#db/drizzle/views.ts"
 import type { MessageData } from "#modules/chats/dtos/message-data.ts"
 
 type ChatMemberData = {
@@ -38,7 +39,7 @@ export class GetChatsQueryHandler {
 
     const selfMember = chatMembers
     const peerMember = alias(chatMembers, "peer_member")
-    const peerUser = alias(users, "peer_user")
+    const peerUser = alias(usersView, "peer_user")
 
     const rows = await this.db
       .with(latestMessages)

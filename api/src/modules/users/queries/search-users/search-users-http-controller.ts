@@ -3,7 +3,7 @@ import type { RequestHandler } from "express"
 import { z } from "zod"
 
 import { db } from "#db/drizzle/drizzle-client.ts"
-import { users } from "#db/drizzle/schemas.ts"
+import { usersView } from "#db/drizzle/views.ts"
 
 const searchUsersQuerySchema = z.object({
   query: z.string().trim().nonempty(),
@@ -29,23 +29,16 @@ export const searchUsersController: RequestHandler = async (req, res) => {
   const pattern = `%${query}%`
 
   const foundUsers = await db
-    .select({
-      id: users.id,
-      username: users.username,
-      firstName: users.firstName,
-      lastName: users.lastName,
-      profilePictureUrl: users.profilePictureUrl,
-      bio: users.bio,
-    })
-    .from(users)
+    .select()
+    .from(usersView)
     .where(
       and(
         or(
-          ilike(users.username, pattern),
-          ilike(users.firstName, pattern),
-          ilike(users.lastName, pattern)
+          ilike(usersView.username, pattern),
+          ilike(usersView.firstName, pattern),
+          ilike(usersView.lastName, pattern)
         ),
-        not(eq(users.id, userId))
+        not(eq(usersView.id, userId))
       )
     )
     .limit(limit)

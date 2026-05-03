@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm"
 import type { RequestHandler } from "express"
 
 import { db } from "#db/drizzle/drizzle-client.ts"
-import { users } from "#db/drizzle/schemas.ts"
+import { usersView } from "#db/drizzle/views.ts"
 
 export const whoamiController: RequestHandler = async (req, res) => {
   const id = req.session.userId
@@ -13,8 +13,8 @@ export const whoamiController: RequestHandler = async (req, res) => {
 
   const user = await db
     .select()
-    .from(users)
-    .where(eq(users.id, id))
+    .from(usersView)
+    .where(eq(usersView.id, id))
     .limit(1)
     .then((res) => res[0]!)
 

@@ -2,7 +2,7 @@ import { and, eq, not } from "drizzle-orm"
 import type { NodePgDatabase } from "drizzle-orm/node-postgres"
 
 import { users } from "#db/drizzle/schemas.ts"
-import { toPublicData } from "#modules/users/database/user-model.ts"
+import { usersView } from "#db/drizzle/views.ts"
 import type { UserData } from "#modules/users/dtos/user-data.ts"
 
 type UpdateUserCommand = {
@@ -25,13 +25,14 @@ export class UpdateUserCommandHandler {
 
     if (!isUnique) return
 
-    const record = await this.db
-      .update(users)
-      .set(cmd)
-      .where(eq(users.id, cmd.id))
-      .returning()
+    await this.db.update(users).set(cmd).where(eq(users.id, cmd.id))
+
+    const user = await this.db
+      .select()
+      .from(usersView)
+      .where(eq(usersView.id, cmd.id))
       .then((r) => r[0]!)
 
-    return toPublicData(record)
+    return user
   }
 }

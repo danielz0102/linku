@@ -3,7 +3,7 @@ import type { RequestHandler } from "express"
 import { z } from "zod"
 
 import { db } from "#db/drizzle/drizzle-client.ts"
-import { users } from "#db/drizzle/schemas.ts"
+import { usersView } from "#db/drizzle/views.ts"
 
 export const usernameSchema = z.string().trim().nonempty()
 
@@ -21,16 +21,9 @@ export const searchUserByUsernameController: RequestHandler = async (req, res) =
   }
 
   const foundUser = await db
-    .select({
-      id: users.id,
-      username: users.username,
-      firstName: users.firstName,
-      lastName: users.lastName,
-      profilePictureUrl: users.profilePictureUrl,
-      bio: users.bio,
-    })
-    .from(users)
-    .where(eq(users.username, username))
+    .select()
+    .from(usersView)
+    .where(eq(usersView.username, username))
     .limit(1)
     .then((r) => r[0])
 

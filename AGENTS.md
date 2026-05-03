@@ -16,12 +16,3 @@ This is a monorepo with the following packages:
 
 - `web`: The frontend web app
 - `api`: The backend API
-
-## Code Guidelines
-
-- Write the simplest code that works.
-- Keep codebase modular and organized.
-
----
-
-_If you've read this document, say "AGENTS.md read"_

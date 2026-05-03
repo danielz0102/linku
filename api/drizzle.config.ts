@@ -14,7 +14,7 @@ console.log("Database URL:", dbUrl)
 
 export default defineConfig({
   out: "./drizzle",
-  schema: "./src/db/drizzle/schemas.ts",
+  schema: ["./src/db/drizzle/schemas.ts", "./src/db/drizzle/views.ts"],
   dialect: "postgresql",
   dbCredentials: { url: dbUrl! },
 })

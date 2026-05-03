@@ -23,7 +23,6 @@ describe("Update User Command Handler", () => {
       username: `updated-${randomUUID()}`,
       firstName: "Jane",
       lastName: "Smith",
-      profilePictureUrl: "https://example.com/avatar.png",
       bio: "Updated bio",
     }
 
@@ -62,7 +61,6 @@ describe("Update User Command Handler", () => {
       username: anotherUsername,
       firstName: "New",
       lastName: "Name",
-      profilePictureUrl: null,
       bio: null,
     })
 
@@ -86,7 +84,6 @@ describe("Update User Command Handler", () => {
       username: user.username,
       firstName: "Jane",
       lastName: "Smith",
-      profilePictureUrl: "https://example.com/avatar.png",
       bio: "Updated bio",
     })
 

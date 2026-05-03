@@ -3,8 +3,8 @@ import { eq } from "drizzle-orm"
 import type { NodePgDatabase } from "drizzle-orm/node-postgres"
 
 import { users } from "#db/drizzle/schemas.ts"
+import { usersView } from "#db/drizzle/views.ts"
 import { SALT } from "#env.ts"
-import { toPublicData } from "#modules/users/database/user-model.ts"
 import type { UserData } from "#modules/users/dtos/user-data.ts"
 
 type CreateUserCommand = {
@@ -29,17 +29,20 @@ export class SignUpCommandHandler {
 
     const hashedPassword = await bcrypt.hash(cmd.password, SALT)
 
-    const record = await this.db
-      .insert(users)
-      .values({
-        username: cmd.username,
-        hashedPassword,
-        firstName: cmd.firstName,
-        lastName: cmd.lastName,
-      })
-      .returning()
+    await this.db.insert(users).values({
+      username: cmd.username,
+      hashedPassword,
+      firstName: cmd.firstName,
+      lastName: cmd.lastName,
+    })
+
+    const user = await this.db
+      .select()
+      .from(usersView)
+      .where(eq(usersView.username, cmd.username))
+      .limit(1)
       .then((r) => r[0]!)
 
-    return toPublicData(record)
+    return user
   }
 }

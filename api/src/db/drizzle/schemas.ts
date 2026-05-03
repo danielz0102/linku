@@ -1,13 +1,13 @@
 import { sql } from "drizzle-orm"
 import {
+  check,
+  index,
   pgTable,
-  uuid,
-  varchar,
+  primaryKey,
   text,
   timestamp,
-  primaryKey,
-  index,
-  check,
+  uuid,
+  varchar,
 } from "drizzle-orm/pg-core"
 
 export const users = pgTable("users", {
@@ -16,7 +16,6 @@ export const users = pgTable("users", {
   lastName: varchar("last_name", { length: 255 }).notNull(),
   username: varchar("username", { length: 255 }).notNull().unique(),
   hashedPassword: text("hashed_password").notNull(),
-  profilePictureUrl: text("profile_picture_url"),
   profilePictureId: uuid("profile_picture_id").references(() => files.id, { onDelete: "set null" }),
   bio: text(),
 })

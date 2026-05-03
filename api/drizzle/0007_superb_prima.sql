@@ -1,0 +1,2 @@
+ALTER TABLE "users" DROP COLUMN "profile_picture_url";--> statement-breakpoint
+CREATE VIEW "users_view" AS (select "users"."id", "users"."first_name", "users"."last_name", "users"."username", "files"."public_url", "users"."bio" from "users" left join "files" on "files"."id" = "users"."profile_picture_id");
