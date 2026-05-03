@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs"
 
 import { users } from "#db/drizzle/schemas.ts"
 import { LoginCommandHandler } from "#modules/users/commands/login/login-command-handler.ts"
-import { toDomain } from "#modules/users/database/user-model.ts"
+import { toPublicData } from "#modules/users/database/user-model.ts"
 
 import { it as base } from "../helpers/db-context.ts"
 
@@ -22,7 +22,7 @@ describe("Login Command Handler", () => {
         lastName: "Doe",
       })
       .returning()
-      .then((r) => toDomain(r[0]!))
+      .then((r) => toPublicData(r[0]!))
 
     const user = await login.execute({ username: registeredUser.username, password })
 

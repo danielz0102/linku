@@ -2,8 +2,8 @@ import { and, eq, not } from "drizzle-orm"
 import type { NodePgDatabase } from "drizzle-orm/node-postgres"
 
 import { users } from "#db/drizzle/schemas.ts"
-import { toDomain } from "#modules/users/database/user-model.ts"
-import type { User } from "#modules/users/domain/user.ts"
+import { toPublicData } from "#modules/users/database/user-model.ts"
+import type { UserData } from "#modules/users/dtos/user-data.ts"
 
 type UpdateUserCommand = {
   id: string
@@ -17,7 +17,7 @@ type UpdateUserCommand = {
 export class UpdateUserCommandHandler {
   constructor(private readonly db: NodePgDatabase) {}
 
-  async execute(cmd: UpdateUserCommand): Promise<User | undefined> {
+  async execute(cmd: UpdateUserCommand): Promise<UserData | undefined> {
     const isUnique = await this.db
       .select({ id: users.id })
       .from(users)
@@ -39,6 +39,6 @@ export class UpdateUserCommandHandler {
       .returning()
       .then((r) => r[0]!)
 
-    return toDomain(record)
+    return toPublicData(record)
   }
 }

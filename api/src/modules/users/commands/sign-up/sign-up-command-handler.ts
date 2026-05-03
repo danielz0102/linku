@@ -4,8 +4,8 @@ import type { NodePgDatabase } from "drizzle-orm/node-postgres"
 
 import { users } from "#db/drizzle/schemas.ts"
 import { SALT } from "#env.ts"
-import { toDomain } from "#modules/users/database/user-model.ts"
-import type { User } from "#modules/users/domain/user.ts"
+import { toPublicData } from "#modules/users/database/user-model.ts"
+import type { UserData } from "#modules/users/dtos/user-data.ts"
 
 type CreateUserCommand = {
   username: string
@@ -17,7 +17,7 @@ type CreateUserCommand = {
 export class SignUpCommandHandler {
   constructor(private readonly db: NodePgDatabase) {}
 
-  async execute(cmd: CreateUserCommand): Promise<User | undefined> {
+  async execute(cmd: CreateUserCommand): Promise<UserData | undefined> {
     const userExists = await this.db
       .select({ exists: users.id })
       .from(users)
@@ -40,6 +40,6 @@ export class SignUpCommandHandler {
       .returning()
       .then((r) => r[0]!)
 
-    return toDomain(record)
+    return toPublicData(record)
   }
 }

@@ -3,8 +3,8 @@ import { eq } from "drizzle-orm"
 import type { NodePgDatabase } from "drizzle-orm/node-postgres"
 
 import { users } from "#db/drizzle/schemas.ts"
-import { toDomain } from "#modules/users/database/user-model.ts"
-import type { User } from "#modules/users/domain/user.ts"
+import { toPublicData } from "#modules/users/database/user-model.ts"
+import type { UserData } from "#modules/users/dtos/user-data.ts"
 
 type LoginCommand = {
   username: string
@@ -14,7 +14,7 @@ type LoginCommand = {
 export class LoginCommandHandler {
   constructor(private readonly db: NodePgDatabase) {}
 
-  async execute(cmd: LoginCommand): Promise<User | undefined> {
+  async execute(cmd: LoginCommand): Promise<UserData | undefined> {
     const record = await this.db
       .select()
       .from(users)
@@ -28,6 +28,6 @@ export class LoginCommandHandler {
 
     if (!isValid) return
 
-    return toDomain(record)
+    return toPublicData(record)
   }
 }
