@@ -13,7 +13,7 @@ type APIResponse = {
   messages: {
     id: string
     senderId: string
-    content: string | null
+    text: string | null
     attachmentUrl: string | null
     createdAt: string
     isRead: boolean
@@ -46,7 +46,7 @@ export async function getMessages({
     return Message.create({
       id: msg.id,
       senderId: msg.senderId,
-      text: msg.content,
+      text: msg.text,
       attachmentURL: msg.attachmentUrl,
       createdAt: msg.createdAt,
       isRead: msg.isRead,

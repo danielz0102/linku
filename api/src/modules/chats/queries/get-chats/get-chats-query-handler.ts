@@ -21,7 +21,7 @@ export class GetChatsQueryHandler {
         chatId: messages.chatId,
         id: messages.id,
         senderId: messages.senderId,
-        content: messages.text,
+        text: messages.text,
         attachmentUrl: messages.attachmentUrl,
         createdAt: messages.createdAt,
       })
@@ -44,7 +44,7 @@ export class GetChatsQueryHandler {
         peerProfilePictureUrl: peerUser.profilePictureUrl,
         messageId: latestMessages.id,
         messageSenderId: latestMessages.senderId,
-        messageContent: latestMessages.content,
+        messageText: latestMessages.text,
         messageAttachmentUrl: latestMessages.attachmentUrl,
         messageCreatedAt: latestMessages.createdAt,
         messageIsRead: sql<boolean>`${messageReads.messageId} IS NOT NULL`,
@@ -75,7 +75,7 @@ export class GetChatsQueryHandler {
       lastMessage: {
         id: row.messageId,
         senderId: row.messageSenderId,
-        content: row.messageContent,
+        text: row.messageText,
         attachmentUrl: row.messageAttachmentUrl,
         createdAt: row.messageCreatedAt.toISOString(),
         isRead: row.messageIsRead,
