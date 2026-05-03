@@ -17,6 +17,7 @@ export const users = pgTable("users", {
   username: varchar("username", { length: 255 }).notNull().unique(),
   hashedPassword: text("hashed_password").notNull(),
   profilePictureUrl: text("profile_picture_url"),
+  profilePictureId: uuid("profile_picture_id").references(() => files.id, { onDelete: "set null" }),
   bio: text(),
 })
 
@@ -50,6 +51,7 @@ export const messages = pgTable(
       .references(() => users.id, { onDelete: "cascade" }),
     text: text(),
     attachmentUrl: text("attachment_url"),
+    attachmentId: uuid("attachment_id").references(() => files.id, { onDelete: "set null" }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
@@ -76,3 +78,9 @@ export const messageReads = pgTable(
   },
   (table) => [primaryKey({ columns: [table.messageId, table.userId] })]
 )
+
+export const files = pgTable("files", {
+  id: uuid().primaryKey().defaultRandom(),
+  public_url: text("public_url"),
+  public_id: text("public_id"),
+})

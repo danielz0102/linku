@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { env } from "node:process"
 
 import dotenv from "dotenv"
