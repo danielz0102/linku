@@ -16,6 +16,43 @@ export default function ProfilePage() {
   const editProfileDlgRef = useRef<HTMLDialogElement>(null)
   const updateProfilePictureDlgRef = useRef<HTMLDialogElement>(null)
 
+  const handleProfileUpdate: React.ComponentProps<typeof UpdateUserForm>["onSubmit"] = async (
+    data
+  ) => {
+    const updatedUser = await updateUser({
+      ...data,
+      profilePictureUrl: user.profilePictureUrl ?? null,
+    })
+
+    if (!updatedUser) {
+      return false
+    }
+
+    setUser(updatedUser)
+    editProfileDlgRef.current?.close()
+    return true
+  }
+
+  const handlePictureSubmit: (file: File) => Promise<void> = async (file) => {
+    const uploadSignature = await getProfilePictureUploadSignature()
+    const { url } = await uploadFile(file, uploadSignature)
+
+    const updatedUser = await updateUser({
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      bio: user.bio,
+      profilePictureUrl: url,
+    })
+
+    if (!updatedUser) {
+      throw new Error("Failed to update user with new profile picture")
+    }
+
+    setUser(updatedUser)
+    updateProfilePictureDlgRef.current?.close()
+  }
+
   return (
     <main className="flex size-full items-center justify-center">
       <ProfileCard
@@ -48,20 +85,7 @@ export default function ProfilePage() {
             username: user.username,
             bio: user.bio,
           }}
-          onSubmit={async (data) => {
-            const updatedUser = await updateUser({
-              ...data,
-              profilePictureUrl: user.profilePictureUrl ?? null,
-            })
-
-            if (!updatedUser) {
-              return false
-            }
-
-            setUser(updatedUser)
-            editProfileDlgRef.current?.close()
-            return true
-          }}
+          onSubmit={handleProfileUpdate}
         />
       </Dialog>
 
@@ -70,25 +94,7 @@ export default function ProfilePage() {
         <UpdateProfilePictureForm
           currentImageUrl={user.profilePictureUrl ?? undefined}
           initials={user.initials}
-          onSubmit={async (file) => {
-            const uploadSignature = await getProfilePictureUploadSignature()
-            const { url } = await uploadFile(file, uploadSignature)
-
-            const updatedUser = await updateUser({
-              username: user.username,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              bio: user.bio,
-              profilePictureUrl: url,
-            })
-
-            if (!updatedUser) {
-              throw new Error("Failed to update user with new profile picture")
-            }
-
-            setUser(updatedUser)
-            updateProfilePictureDlgRef.current?.close()
-          }}
+          onSubmit={handlePictureSubmit}
         />
       </Dialog>
     </main>
