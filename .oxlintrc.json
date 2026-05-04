@@ -11,7 +11,10 @@
   "overrides": [
     {
       "files": ["**/*.test.*"],
-      "plugins": ["vitest"]
+      "plugins": ["vitest"],
+      "rules": {
+        "no-empty-pattern": "off"
+      }
     },
     {
       "files": ["**/*.tsx"],

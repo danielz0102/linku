@@ -1,11 +1,12 @@
 import { randomUUID } from "node:crypto"
 
+import { eq } from "drizzle-orm"
+
+import { db } from "#db/drizzle/drizzle-client.ts"
 import { users } from "#db/drizzle/schemas.ts"
 import { SignUpCommandHandler } from "#modules/users/commands/sign-up/sign-up-command-handler.ts"
 
-import { it as base } from "../helpers/db-context.ts"
-
-const it = base.extend("signUp", ({ db }) => new SignUpCommandHandler(db))
+const it = test.extend("signUp", () => new SignUpCommandHandler(db))
 
 describe("Sign Up Command Handler", () => {
   it("returns created user data", async ({ signUp }) => {
@@ -19,9 +20,13 @@ describe("Sign Up Command Handler", () => {
     })
 
     expect(user).toBeDefined()
+
+    onTestFinished(async () => {
+      await db.delete(users).where(eq(users.username, username))
+    })
   })
 
-  it("returns nothing if the username already exists", async ({ signUp, db }) => {
+  it("returns nothing if the username already exists", async ({ signUp }) => {
     const username = `user-${randomUUID()}`
     await db
       .insert(users)
@@ -35,5 +40,9 @@ describe("Sign Up Command Handler", () => {
     })
 
     expect(user).toBeUndefined()
+
+    onTestFinished(async () => {
+      await db.delete(users).where(eq(users.username, username))
+    })
   })
 })

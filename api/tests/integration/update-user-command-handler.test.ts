@@ -1,14 +1,13 @@
 import { randomUUID } from "node:crypto"
 
+import { db } from "#db/drizzle/drizzle-client.ts"
 import { users } from "#db/drizzle/schemas.ts"
 import { UpdateUserCommandHandler } from "#modules/users/commands/update-user/update-user-command-handler.ts"
 
-import { it as base } from "../helpers/db-context.ts"
-
-const it = base.extend("updateUser", ({ db }) => new UpdateUserCommandHandler(db))
+const it = test.extend("updateUser", () => new UpdateUserCommandHandler(db))
 
 describe("Update User Command Handler", () => {
-  it("returns updated user data", async ({ db, updateUser }) => {
+  it("returns updated user data", async ({ updateUser }) => {
     const user = await db
       .insert(users)
       .values({
@@ -34,7 +33,7 @@ describe("Update User Command Handler", () => {
     expect(updatedUser).toMatchObject(newUserData)
   })
 
-  it("returns nothing if username is not unique", async ({ db, updateUser }) => {
+  it("returns nothing if username is not unique", async ({ updateUser }) => {
     const username = `user-${randomUUID()}`
     const anotherUsername = `user-${randomUUID()}`
     const [_, userId] = await Promise.all([
@@ -67,7 +66,7 @@ describe("Update User Command Handler", () => {
     expect(updatedUser).toBeUndefined()
   })
 
-  it("update user if username is not changed", async ({ db, updateUser }) => {
+  it("update user if username is not changed", async ({ updateUser }) => {
     const user = await db
       .insert(users)
       .values({
