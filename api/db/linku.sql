@@ -28,10 +28,9 @@ CREATE TABLE "messages" (
 	"chat_id" uuid NOT NULL,
 	"sender_id" uuid NOT NULL,
 	"text" text,
-	"attachment_url" text,
 	"attachment_id" uuid,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "messages_content_or_attachment_check" CHECK ("messages"."text" IS NOT NULL OR "messages"."attachment_url" IS NOT NULL)
+	CONSTRAINT "messages_content_or_attachment_check" CHECK ("messages"."text" IS NOT NULL OR "messages"."attachment_id" IS NOT NULL)
 );
 
 CREATE TABLE "users" (

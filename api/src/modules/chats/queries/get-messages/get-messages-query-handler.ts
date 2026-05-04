@@ -2,7 +2,8 @@ import { and, desc, eq, lt, sql } from "drizzle-orm"
 import type { NodePgDatabase } from "drizzle-orm/node-postgres"
 import { alias } from "drizzle-orm/pg-core"
 
-import { chatMembers, messageReads, messages, users } from "#db/drizzle/schemas.ts"
+import { chatMembers, messageReads, users } from "#db/drizzle/schemas.ts"
+import { messagesView } from "#db/drizzle/views.ts"
 import type { MessageData } from "#modules/chats/dtos/message-data.ts"
 
 type GetMessagesQuery = {
@@ -43,23 +44,23 @@ export class GetMessagesQueryHandler {
 
     const data = await this.db
       .select({
-        id: messages.id,
-        chatId: messages.chatId,
-        senderId: messages.senderId,
-        text: messages.text,
-        attachmentUrl: messages.attachmentUrl,
-        createdAt: messages.createdAt,
+        id: messagesView.id,
+        chatId: messagesView.chatId,
+        senderId: messagesView.senderId,
+        text: messagesView.text,
+        attachmentUrl: messagesView.attachmentUrl,
+        createdAt: messagesView.createdAt,
         isRead: sql<boolean>`${messageReads.readAt} IS NOT NULL`,
       })
-      .from(messages)
-      .innerJoin(self, and(eq(self.chatId, messages.chatId), eq(self.userId, userId)))
-      .innerJoin(peer, and(eq(peer.chatId, messages.chatId), eq(peer.userId, peerUser.id)))
+      .from(messagesView)
+      .innerJoin(self, and(eq(self.chatId, messagesView.chatId), eq(self.userId, userId)))
+      .innerJoin(peer, and(eq(peer.chatId, messagesView.chatId), eq(peer.userId, peerUser.id)))
       .leftJoin(
         messageReads,
-        and(eq(messageReads.messageId, messages.id), eq(messageReads.userId, userId))
+        and(eq(messageReads.messageId, messagesView.id), eq(messageReads.userId, userId))
       )
-      .where(olderThan ? lt(messages.createdAt, olderThan) : undefined)
-      .orderBy(desc(messages.createdAt))
+      .where(olderThan ? lt(messagesView.createdAt, olderThan) : undefined)
+      .orderBy(desc(messagesView.createdAt))
       .limit(quantity + 1)
 
     const hasMore = data.length > quantity

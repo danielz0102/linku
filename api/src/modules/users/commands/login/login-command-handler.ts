@@ -21,7 +21,7 @@ export class LoginCommandHandler {
         hashedPassword: users.hashedPassword,
         firstName: users.firstName,
         lastName: users.lastName,
-        profilePictureUrl: files.public_url,
+        profilePictureUrl: files.publicUrl,
         bio: users.bio,
       })
       .from(users)

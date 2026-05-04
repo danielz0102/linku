@@ -21,7 +21,7 @@ export class UpdateProfilePictureCommandHandler {
           .insert(files)
           .values({
             public_id: cmd.publicId,
-            public_url: cmd.publicUrl,
+            publicUrl: cmd.publicUrl,
           })
           .returning({ id: files.id })
           .then((rows) => rows[0]!)
@@ -38,7 +38,7 @@ export class UpdateProfilePictureCommandHandler {
         .update(files)
         .set({
           public_id: cmd.publicId,
-          public_url: cmd.publicUrl,
+          publicUrl: cmd.publicUrl,
         })
         .where(eq(files.id, user.profilePictureId))
     })

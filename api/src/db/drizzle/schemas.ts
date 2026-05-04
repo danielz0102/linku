@@ -49,14 +49,13 @@ export const messages = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     text: text(),
-    attachmentUrl: text("attachment_url"),
     attachmentId: uuid("attachment_id").references(() => files.id, { onDelete: "set null" }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
     check(
       "messages_content_or_attachment_check",
-      sql`${table.text} IS NOT NULL OR ${table.attachmentUrl} IS NOT NULL`
+      sql`${table.text} IS NOT NULL OR ${table.attachmentId} IS NOT NULL`
     ),
     index("messages_sender_id_idx").on(table.senderId),
     index("messages_chat_id_idx").on(table.chatId),
@@ -80,6 +79,6 @@ export const messageReads = pgTable(
 
 export const files = pgTable("files", {
   id: uuid().primaryKey().defaultRandom(),
-  public_id: text("public_id").unique(),
-  public_url: text("public_url"),
+  publicId: text("public_id").unique(),
+  publicUrl: text("public_url"),
 })

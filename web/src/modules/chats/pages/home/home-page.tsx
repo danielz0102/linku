@@ -8,6 +8,7 @@ export default function HomePage() {
   const chats = useQuery({
     queryKey: ["chats"],
     queryFn: getChats,
+    throwOnError: true,
   })
 
   return (

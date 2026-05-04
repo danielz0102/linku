@@ -2,8 +2,8 @@ import { and, desc, eq, ne, sql } from "drizzle-orm"
 import type { NodePgDatabase } from "drizzle-orm/node-postgres"
 import { alias } from "drizzle-orm/pg-core"
 
-import { chatMembers, messageReads, messages } from "#db/drizzle/schemas.ts"
-import { usersView } from "#db/drizzle/views.ts"
+import { chatMembers, messageReads } from "#db/drizzle/schemas.ts"
+import { messagesView, usersView } from "#db/drizzle/views.ts"
 import type { MessageData } from "#modules/chats/dtos/message-data.ts"
 
 type ChatMemberData = {
@@ -25,31 +25,30 @@ export class GetChatsQueryHandler {
 
   async execute(userId: string): Promise<ChatData[]> {
     const latestMessages = this.db
-      .selectDistinctOn([messages.chatId], {
-        chatId: messages.chatId,
-        id: messages.id,
-        senderId: messages.senderId,
-        text: messages.text,
-        attachmentUrl: messages.attachmentUrl,
-        createdAt: messages.createdAt,
+      .selectDistinctOn([messagesView.chatId], {
+        id: messagesView.id,
+        chatId: messagesView.chatId,
+        senderId: messagesView.senderId,
+        text: messagesView.text,
+        attachmentUrl: messagesView.attachmentUrl,
+        createdAt: messagesView.createdAt,
       })
-      .from(messages)
-      .orderBy(messages.chatId, desc(messages.createdAt))
+      .from(messagesView)
+      .orderBy(messagesView.chatId, desc(messagesView.createdAt))
       .as("latest_messages")
 
     const selfMember = chatMembers
     const peerMember = alias(chatMembers, "peer_member")
-    const peerUser = alias(usersView, "peer_user")
 
     const rows = await this.db
       .with(latestMessages)
       .select({
         chatId: selfMember.chatId,
-        peerId: peerUser.id,
-        peerUsername: peerUser.username,
-        peerFirstName: peerUser.firstName,
-        peerLastName: peerUser.lastName,
-        peerProfilePictureUrl: peerUser.profilePictureUrl,
+        peerId: usersView.id,
+        peerUsername: usersView.username,
+        peerFirstName: usersView.firstName,
+        peerLastName: usersView.lastName,
+        peerProfilePictureUrl: usersView.profilePictureUrl,
         messageId: latestMessages.id,
         messageSenderId: latestMessages.senderId,
         messageText: latestMessages.text,
@@ -62,7 +61,7 @@ export class GetChatsQueryHandler {
         peerMember,
         and(eq(peerMember.chatId, selfMember.chatId), ne(peerMember.userId, userId))
       )
-      .innerJoin(peerUser, eq(peerUser.id, peerMember.userId))
+      .innerJoin(usersView, eq(usersView.id, peerMember.userId))
       .innerJoin(latestMessages, eq(latestMessages.chatId, selfMember.chatId))
       .leftJoin(
         messageReads,
