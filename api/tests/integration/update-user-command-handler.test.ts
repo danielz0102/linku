@@ -1,5 +1,7 @@
 import { randomUUID } from "node:crypto"
 
+import { eq } from "drizzle-orm"
+
 import { db } from "#db/drizzle/drizzle-client.ts"
 import { users } from "#db/drizzle/schemas.ts"
 import { UpdateUserCommandHandler } from "#modules/users/commands/update-user/update-user-command-handler.ts"
@@ -31,6 +33,10 @@ describe("Update User Command Handler", () => {
     })
 
     expect(updatedUser).toMatchObject(newUserData)
+
+    onTestFinished(async () => {
+      await db.delete(users).where(eq(users.id, user.id))
+    })
   })
 
   it("returns nothing if username is not unique", async () => {
@@ -64,6 +70,11 @@ describe("Update User Command Handler", () => {
     })
 
     expect(updatedUser).toBeUndefined()
+
+    onTestFinished(async () => {
+      await db.delete(users).where(eq(users.username, anotherUsername))
+      await db.delete(users).where(eq(users.id, userId))
+    })
   })
 
   it("update user if username is not changed", async () => {
@@ -87,5 +98,9 @@ describe("Update User Command Handler", () => {
     })
 
     expect(updatedUser).not.toBeUndefined()
+
+    onTestFinished(async () => {
+      await db.delete(users).where(eq(users.id, user.id))
+    })
   })
 })

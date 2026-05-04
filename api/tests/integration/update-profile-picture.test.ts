@@ -12,6 +12,7 @@ describe("Update Profile Picture Command Handler", () => {
   const updatePicture = new UpdateProfilePictureCommandHandler(db)
 
   it("updates the profile picture of a user", async () => {
+    const newProfilePictureUrl = "https://example.com/new-profile-picture.jpg"
     const userId = await db
       .insert(users)
       .values({
@@ -24,7 +25,6 @@ describe("Update Profile Picture Command Handler", () => {
       .returning({ id: users.id })
       .then((r) => r[0]!.id)
 
-    const newProfilePictureUrl = "https://example.com/new-profile-picture.jpg"
     await updatePicture.execute({
       userId,
       publicId: `user-${userId}`,
