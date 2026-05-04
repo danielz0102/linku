@@ -4,10 +4,10 @@ import { db } from "#db/drizzle/drizzle-client.ts"
 import { users } from "#db/drizzle/schemas.ts"
 import { UpdateUserCommandHandler } from "#modules/users/commands/update-user/update-user-command-handler.ts"
 
-const it = test.extend("updateUser", () => new UpdateUserCommandHandler(db))
-
 describe("Update User Command Handler", () => {
-  it("returns updated user data", async ({ updateUser }) => {
+  const updateUser = new UpdateUserCommandHandler(db)
+
+  it("returns updated user data", async () => {
     const user = await db
       .insert(users)
       .values({
@@ -33,7 +33,7 @@ describe("Update User Command Handler", () => {
     expect(updatedUser).toMatchObject(newUserData)
   })
 
-  it("returns nothing if username is not unique", async ({ updateUser }) => {
+  it("returns nothing if username is not unique", async () => {
     const username = `user-${randomUUID()}`
     const anotherUsername = `user-${randomUUID()}`
     const [_, userId] = await Promise.all([
@@ -66,7 +66,7 @@ describe("Update User Command Handler", () => {
     expect(updatedUser).toBeUndefined()
   })
 
-  it("update user if username is not changed", async ({ updateUser }) => {
+  it("update user if username is not changed", async () => {
     const user = await db
       .insert(users)
       .values({

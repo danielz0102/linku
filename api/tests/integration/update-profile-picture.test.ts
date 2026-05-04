@@ -8,10 +8,10 @@ import { files, users } from "#db/drizzle/schemas.ts"
 import { usersView } from "#db/drizzle/views.ts"
 import { UpdateProfilePictureCommandHandler } from "#modules/users/commands/update-profile-picture/update-profile-picture-command-handler.ts"
 
-const it = test.extend("updatePicture", () => new UpdateProfilePictureCommandHandler(db))
-
 describe("Update Profile Picture Command Handler", () => {
-  it("updates the profile picture of a user", async ({ updatePicture }) => {
+  const updatePicture = new UpdateProfilePictureCommandHandler(db)
+
+  it("updates the profile picture of a user", async () => {
     const userId = await db
       .insert(users)
       .values({
@@ -47,7 +47,7 @@ describe("Update Profile Picture Command Handler", () => {
     })
   })
 
-  it("throws if the user does not exist", async ({ updatePicture }) => {
+  it("throws if the user does not exist", async () => {
     const nonExistentUserId = randomUUID()
 
     await expect(() =>

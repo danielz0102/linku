@@ -6,10 +6,10 @@ import { db } from "#db/drizzle/drizzle-client.ts"
 import { users } from "#db/drizzle/schemas.ts"
 import { SignUpCommandHandler } from "#modules/users/commands/sign-up/sign-up-command-handler.ts"
 
-const it = test.extend("signUp", () => new SignUpCommandHandler(db))
-
 describe("Sign Up Command Handler", () => {
-  it("returns created user data", async ({ signUp }) => {
+  const signUp = new SignUpCommandHandler(db)
+
+  it("returns created user data", async () => {
     const username = `user-${randomUUID()}`
 
     const user = await signUp.execute({
@@ -26,7 +26,7 @@ describe("Sign Up Command Handler", () => {
     })
   })
 
-  it("returns nothing if the username already exists", async ({ signUp }) => {
+  it("returns nothing if the username already exists", async () => {
     const username = `user-${randomUUID()}`
     await db
       .insert(users)
