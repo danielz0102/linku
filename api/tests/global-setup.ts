@@ -2,7 +2,7 @@ import { Pool } from "pg"
 
 import { DB_URL } from "#env.ts"
 
-export default async () => {
+export async function teardown() {
   const pool = new Pool({ connectionString: DB_URL })
 
   await pool.query(`
