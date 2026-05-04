@@ -7,8 +7,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "~": "./src",
-      "~tests": "./tests",
+      "~": "./tests",
     },
   },
   ssr: { resolve: { conditions: ["source"] } },

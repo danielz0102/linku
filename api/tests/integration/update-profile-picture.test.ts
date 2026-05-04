@@ -1,29 +1,18 @@
 import { randomUUID } from "crypto"
 
-import bcrypt from "bcryptjs"
 import { eq } from "drizzle-orm"
 
 import { db } from "#db/drizzle/drizzle-client.ts"
-import { files, users } from "#db/drizzle/schemas.ts"
 import { usersView } from "#db/drizzle/views.ts"
 import { UpdateProfilePictureCommandHandler } from "#modules/users/commands/update-profile-picture/update-profile-picture-command-handler.ts"
+import { it } from "~/context/create-user.ts"
 
 describe("Update Profile Picture Command Handler", () => {
   const updatePicture = new UpdateProfilePictureCommandHandler(db)
 
-  it("updates the profile picture of a user", async () => {
+  it("updates the profile picture of a user", async ({ createUser }) => {
     const newProfilePictureUrl = "https://example.com/new-profile-picture.jpg"
-    const userId = await db
-      .insert(users)
-      .values({
-        username: `user-${randomUUID()}`,
-        hashedPassword: await bcrypt.hash("pass1234", 1),
-        firstName: "John",
-        lastName: "Doe",
-        profilePictureId: null,
-      })
-      .returning({ id: users.id })
-      .then((r) => r[0]!.id)
+    const { id: userId } = await createUser()
 
     await updatePicture.execute({
       userId,
@@ -38,13 +27,6 @@ describe("Update Profile Picture Command Handler", () => {
       .then((r) => r[0]!)
 
     expect(user.profilePictureUrl).toEqual(newProfilePictureUrl)
-
-    onTestFinished(async () => {
-      await Promise.all([
-        db.delete(users).where(eq(users.id, userId)),
-        db.delete(files).where(eq(files.publicUrl, newProfilePictureUrl)),
-      ])
-    })
   })
 
   it("throws if the user does not exist", async () => {

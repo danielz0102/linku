@@ -10,7 +10,7 @@
   },
   "overrides": [
     {
-      "files": ["**/*.test.*"],
+      "files": ["**/*.test.*", "**/tests/**"],
       "plugins": ["vitest"],
       "rules": {
         "no-empty-pattern": "off"

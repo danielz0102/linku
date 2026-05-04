@@ -1,43 +1,15 @@
 import { randomUUID } from "node:crypto"
 
-import bcrypt from "bcryptjs"
-import { eq } from "drizzle-orm/sql/expressions/conditions"
-
 import { db } from "#db/drizzle/drizzle-client.ts"
-import { users } from "#db/drizzle/schemas.ts"
 import { LoginCommandHandler } from "#modules/users/commands/login/login-command-handler.ts"
-
-const it = test.extend("registerUser", async ({}, { onCleanup }) => {
-  const username = `user-${randomUUID()}`
-
-  onCleanup(async () => {
-    await db.delete(users).where(eq(users.username, username))
-  })
-
-  return async (password: string) => {
-    const hashedPassword = await bcrypt.hash(password, 1)
-
-    const user = await db
-      .insert(users)
-      .values({
-        username,
-        hashedPassword,
-        firstName: "John",
-        lastName: "Doe",
-      })
-      .returning()
-      .then((r) => r[0]!)
-
-    return user
-  }
-})
+import { it } from "~/context/create-user.ts"
 
 describe("Login Command Handler", () => {
   const login = new LoginCommandHandler(db)
 
-  it("returns the same user registered if credentials are valid", async ({ registerUser }) => {
+  it("returns the same user registered if credentials are valid", async ({ createUser }) => {
     const password = "pass1234"
-    const registeredUser = await registerUser(password)
+    const registeredUser = await createUser({ password })
 
     const user = await login.execute({ username: registeredUser.username, password })
 
@@ -53,8 +25,8 @@ describe("Login Command Handler", () => {
     expect(user).toBeUndefined()
   })
 
-  it("returns nothing if password doesn't match", async ({ registerUser }) => {
-    const { username } = await registerUser("correct-password")
+  it("returns nothing if password doesn't match", async ({ createUser }) => {
+    const { username } = await createUser({ password: "correct-password" })
 
     const user = await login.execute({
       username: username,

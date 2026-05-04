@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm"
 import { db } from "#db/drizzle/drizzle-client.ts"
 import { users } from "#db/drizzle/schemas.ts"
 import { SignUpCommandHandler } from "#modules/users/commands/sign-up/sign-up-command-handler.ts"
+import { it } from "~/context/create-user.ts"
 
 describe("Sign Up Command Handler", () => {
   const signUp = new SignUpCommandHandler(db)
@@ -26,11 +27,8 @@ describe("Sign Up Command Handler", () => {
     })
   })
 
-  it("returns nothing if the username already exists", async () => {
-    const username = `user-${randomUUID()}`
-    await db
-      .insert(users)
-      .values({ username, hashedPassword: "hash", firstName: "John", lastName: "Doe" })
+  it("returns nothing if the username already exists", async ({ createUser }) => {
+    const { username } = await createUser({ username: "existing-user" })
 
     const user = await signUp.execute({
       username,
@@ -40,9 +38,5 @@ describe("Sign Up Command Handler", () => {
     })
 
     expect(user).toBeUndefined()
-
-    onTestFinished(async () => {
-      await db.delete(users).where(eq(users.username, username))
-    })
   })
 })
