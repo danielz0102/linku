@@ -2,10 +2,9 @@ import { useState } from "react"
 import { Navigate, useParams } from "react-router"
 
 import { useAuthenticatedUser } from "~/modules/users/context/user-context"
-import { uploadFile } from "~/shared/upload-file"
 
 import { Message } from "../../domain/message"
-import { getAttachmentUploadSignature } from "./api/get-attachment-upload-signature"
+import { uploadAttachment } from "./api/upload-attachment"
 import { ChatHeader } from "./components/chat-header"
 import { MessageBubble } from "./components/message-bubble"
 import { MessageForm } from "./components/message-form"
@@ -45,8 +44,7 @@ export default function ChatPage() {
     setEntryMessages((prev) => [...prev, newMessage])
 
     if (data.file) {
-      const attachmentSignature = await getAttachmentUploadSignature(newMessage.id)
-      const { url } = await uploadFile(data.file, attachmentSignature)
+      const { url } = await uploadAttachment(newMessage.id, data.file)
 
       sendMessage({
         id: newMessage.id,

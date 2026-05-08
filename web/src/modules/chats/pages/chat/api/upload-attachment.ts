@@ -1,7 +1,12 @@
 import { API_URL } from "~/env"
-import type { UploadSignature } from "~/shared/upload-file"
+import { uploadFile, type UploadSignature } from "~/shared/upload-file"
 
-export async function getAttachmentUploadSignature(messageId: string): Promise<UploadSignature> {
+export async function uploadAttachment(messageId: string, file: File) {
+  const signature = await getAttachmentUploadSignature(messageId)
+  return uploadFile(file, signature)
+}
+
+async function getAttachmentUploadSignature(messageId: string): Promise<UploadSignature> {
   const res = await fetch(`${API_URL}/files/uploads/attachment`, {
     method: "POST",
     headers: {
