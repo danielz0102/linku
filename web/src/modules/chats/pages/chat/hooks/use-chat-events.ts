@@ -9,7 +9,9 @@ export function useChatEvents(peerUsername: string) {
     socket.emit("join_chat", { peerUsername })
 
     return () => {
-      socket.disconnect()
+      if (socket.connected) {
+        socket.disconnect()
+      }
     }
   }, [])
 
