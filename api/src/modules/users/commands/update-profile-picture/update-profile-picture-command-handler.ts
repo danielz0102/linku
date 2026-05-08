@@ -20,7 +20,7 @@ export class UpdateProfilePictureCommandHandler {
         const createdFile = await tx
           .insert(files)
           .values({
-            public_id: cmd.publicId,
+            publicId: cmd.publicId,
             publicUrl: cmd.publicUrl,
           })
           .returning({ id: files.id })
@@ -37,7 +37,7 @@ export class UpdateProfilePictureCommandHandler {
       await tx
         .update(files)
         .set({
-          public_id: cmd.publicId,
+          publicId: cmd.publicId,
           publicUrl: cmd.publicUrl,
         })
         .where(eq(files.id, user.profilePictureId))
