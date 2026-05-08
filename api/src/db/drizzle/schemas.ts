@@ -79,6 +79,6 @@ export const messageReads = pgTable(
 
 export const files = pgTable("files", {
   id: uuid().primaryKey().defaultRandom(),
-  publicId: text("public_id").unique(),
-  publicUrl: text("public_url"),
+  publicId: text("public_id").unique().notNull(),
+  publicUrl: text("public_url").notNull(),
 })
