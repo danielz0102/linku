@@ -44,12 +44,12 @@ export default function ChatPage() {
     setEntryMessages((prev) => [...prev, newMessage])
 
     if (data.file) {
-      const { url } = await uploadAttachment(newMessage.id, data.file)
+      const { url, public_id } = await uploadAttachment(newMessage.id, data.file)
 
       sendMessage({
         id: newMessage.id,
         text: data.message,
-        attachmentURL: url,
+        attachment: { url, public_id },
       })
     } else {
       sendMessage({ id: newMessage.id, text: data.message })
