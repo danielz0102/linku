@@ -11,8 +11,13 @@ type MessageFormInputs = {
   files?: FileList
 }
 
+export type MessageFormData = {
+  file?: File
+  message?: string
+}
+
 type MessageFormProps = {
-  onSubmit: (data: { file?: File; message?: string }) => void
+  onSubmit: (data: MessageFormData) => void
 }
 
 export function MessageForm({ onSubmit }: MessageFormProps) {

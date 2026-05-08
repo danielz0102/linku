@@ -7,7 +7,7 @@ import { Message } from "../../domain/message"
 import { uploadAttachment } from "./api/upload-attachment"
 import { ChatHeader } from "./components/chat-header"
 import { MessageBubble } from "./components/message-bubble"
-import { MessageForm } from "./components/message-form"
+import { MessageForm, type MessageFormData } from "./components/message-form"
 import { MessageList } from "./components/message-list"
 import { useChatEvents } from "./hooks/use-chat-events"
 import { useChatQueries } from "./hooks/use-chat-queries"
@@ -31,7 +31,7 @@ export default function ChatPage() {
 
   const allMessages = [initialMessages.data ?? [], entryMessages].flat()
 
-  const handleSubmit: React.ComponentProps<typeof MessageForm>["onSubmit"] = async (data) => {
+  const handleSubmit = async (data: MessageFormData) => {
     const newMessage = Message.create({
       id: crypto.randomUUID(),
       text: data.message,
