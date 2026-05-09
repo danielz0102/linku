@@ -1,7 +1,8 @@
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import type { NodePgDatabase } from "drizzle-orm/node-postgres"
+import { alias } from "drizzle-orm/pg-core"
 
-import { users } from "#db/drizzle/schemas.ts"
+import { chatMembers, users } from "#db/drizzle/schemas.ts"
 import { Message } from "#modules/chats/domain/message.ts"
 import type { MessageData } from "#modules/chats/dtos/message-data.ts"
 import { Result } from "#shared/result.ts"
@@ -45,8 +46,10 @@ export class SendMessageCommandHandler {
       return Result.fail("PEER_NOT_FOUND")
     }
 
+    const chatId = await this.findChatId(sender.id, peer.id)
+
     const message = Message.create({
-      chatId: null,
+      chatId,
       senderId: sender.id,
       text: cmd.text,
       attachmentUrl: cmd.attachment?.url,
@@ -55,7 +58,7 @@ export class SendMessageCommandHandler {
     await this.messages.save({ message, peerId: peer.id, filePublicId: cmd.attachment?.public_id })
 
     if (message.chatId === null) {
-      throw new Error("Chat ID should have been set after saving the message")
+      throw new Error("Message wasn't persisted correctly: missing chatId")
     }
 
     return Result.ok({
@@ -66,6 +69,24 @@ export class SendMessageCommandHandler {
       attachmentUrl: message.attachmentUrl,
       createdAt: message.createdAt.toISOString(),
     })
+  }
+
+  private async findChatId(senderId: string, peerId: string): Promise<string | null> {
+    const selfMember = alias(chatMembers, "self_member")
+    const peerMember = alias(chatMembers, "peer_member")
+
+    const row = await this.db
+      .select({ chatId: selfMember.chatId })
+      .from(selfMember)
+      .innerJoin(
+        peerMember,
+        and(eq(peerMember.chatId, selfMember.chatId), eq(peerMember.userId, peerId))
+      )
+      .where(eq(selfMember.userId, senderId))
+      .limit(1)
+      .then((rows) => rows[0])
+
+    return row ? row.chatId : null
   }
 
   private async getMemberById(userId: string): Promise<UserLookup | null> {

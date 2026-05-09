@@ -1,6 +1,4 @@
-import { and, eq } from "drizzle-orm"
 import type { NodePgDatabase } from "drizzle-orm/node-postgres"
-import { alias } from "drizzle-orm/pg-core"
 
 import { chatMembers, chats, files, messages } from "#db/drizzle/schemas.ts"
 import { Message } from "#modules/chats/domain/message.ts"
@@ -16,8 +14,9 @@ export class MessageRepository {
 
   async save({ message, peerId, filePublicId }: SaveParams): Promise<void> {
     await this.db.transaction(async (tx) => {
-      const chatId = await this.getChatId(tx, message.senderId, peerId)
-      message.chatId = chatId
+      if (!message.chatId) {
+        message.chatId = await this.createChat(tx, message.senderId, peerId)
+      }
 
       let attachmentId: string | null = null
 
@@ -39,38 +38,6 @@ export class MessageRepository {
         attachmentId,
       })
     })
-  }
-
-  private async getChatId(db: NodePgDatabase, senderId: string, peerId: string): Promise<string> {
-    let chatId = await this.findChatId(db, senderId, peerId)
-
-    if (!chatId) {
-      chatId = await this.createChat(db, senderId, peerId)
-    }
-
-    return chatId
-  }
-
-  private async findChatId(
-    db: NodePgDatabase,
-    senderId: string,
-    peerId: string
-  ): Promise<string | null> {
-    const selfMember = alias(chatMembers, "self_member")
-    const peerMember = alias(chatMembers, "peer_member")
-
-    const row = await db
-      .select({ chatId: selfMember.chatId })
-      .from(selfMember)
-      .innerJoin(
-        peerMember,
-        and(eq(peerMember.chatId, selfMember.chatId), eq(peerMember.userId, peerId))
-      )
-      .where(eq(selfMember.userId, senderId))
-      .limit(1)
-      .then((rows) => rows[0])
-
-    return row?.chatId ?? null
   }
 
   private async createChat(db: NodePgDatabase, senderId: string, peerId: string) {
