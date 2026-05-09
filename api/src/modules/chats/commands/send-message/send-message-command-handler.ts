@@ -33,8 +33,8 @@ export class SendMessageCommandHandler {
 
   async execute(cmd: SendMessageCommand): Promise<Result<MessageData, SendMessageError>> {
     const [sender, peer] = await Promise.all([
-      this.getUserById(cmd.senderId),
-      this.getUserByUsername(cmd.peerUsername),
+      this.getMemberById(cmd.senderId),
+      this.getMemberByUsername(cmd.peerUsername),
     ])
 
     if (!sender) {
@@ -68,7 +68,7 @@ export class SendMessageCommandHandler {
     })
   }
 
-  private async getUserById(userId: string): Promise<UserLookup | null> {
+  private async getMemberById(userId: string): Promise<UserLookup | null> {
     const user = await this.db
       .select({ id: users.id })
       .from(users)
@@ -79,7 +79,7 @@ export class SendMessageCommandHandler {
     return user ?? null
   }
 
-  private async getUserByUsername(username: string): Promise<UserLookup | null> {
+  private async getMemberByUsername(username: string): Promise<UserLookup | null> {
     const user = await this.db
       .select({ id: users.id })
       .from(users)
