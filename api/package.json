@@ -19,7 +19,8 @@
     "format": "oxfmt",
     "test": "vitest run",
     "test:watch": "vitest",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "db:push:test": "ENV_PATH=.env.test drizzle-kit push"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
