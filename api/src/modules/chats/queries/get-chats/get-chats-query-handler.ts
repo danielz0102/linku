@@ -6,18 +6,18 @@ import { chatMembers, files, users } from "#db/drizzle/schemas.ts"
 import { messagesView } from "#db/drizzle/views.ts"
 import type { MessageData } from "#modules/chats/dtos/message-data.ts"
 
-type ChatMemberData = {
+type ChatPeerData = {
   id: string
   username: string
   firstName: string
   lastName: string
   profilePictureUrl: string | null
-  lastReadAt: string | null
 }
 
 type ChatData = {
   id: string
-  members: [ChatMemberData, ChatMemberData]
+  peer: ChatPeerData
+  lastReadAt: string | null
   lastMessage: MessageData
 }
 
@@ -40,30 +40,20 @@ export class GetChatsQueryHandler {
 
     const selfMember = alias(chatMembers, "self_member")
     const peerMember = alias(chatMembers, "peer_member")
-    const selfUser = alias(users, "self_user")
     const peerUser = alias(users, "peer_user")
-    const selfFile = alias(files, "self_file")
     const peerFile = alias(files, "peer_file")
 
     const rows = await this.db
       .with(latestMessages)
       .select({
         chatId: selfMember.chatId,
-        self: {
-          id: selfUser.id,
-          username: selfUser.username,
-          firstName: selfUser.firstName,
-          lastName: selfUser.lastName,
-          profilePictureUrl: selfFile.publicUrl,
-          lastReadAt: selfMember.lastReadAt,
-        },
+        lastReadAt: selfMember.lastReadAt,
         peer: {
           id: peerUser.id,
           username: peerUser.username,
           firstName: peerUser.firstName,
           lastName: peerUser.lastName,
           profilePictureUrl: peerFile.publicUrl,
-          lastReadAt: peerMember.lastReadAt,
         },
         message: {
           id: latestMessages.id,
@@ -78,9 +68,7 @@ export class GetChatsQueryHandler {
         peerMember,
         and(eq(peerMember.chatId, selfMember.chatId), ne(peerMember.userId, userId))
       )
-      .innerJoin(selfUser, eq(selfUser.id, selfMember.userId))
       .innerJoin(peerUser, eq(peerUser.id, peerMember.userId))
-      .leftJoin(selfFile, eq(selfFile.id, selfUser.profilePictureId))
       .leftJoin(peerFile, eq(peerFile.id, peerUser.profilePictureId))
       .innerJoin(latestMessages, eq(latestMessages.chatId, selfMember.chatId))
       .where(eq(selfMember.userId, userId))
@@ -88,14 +76,14 @@ export class GetChatsQueryHandler {
 
     return rows.map((row) => ({
       id: row.chatId,
-      members: [row.self, row.peer].map((member) => ({
-        id: member.id,
-        username: member.username,
-        firstName: member.firstName,
-        lastName: member.lastName,
-        profilePictureUrl: member.profilePictureUrl,
-        lastReadAt: member.lastReadAt ? member.lastReadAt.toISOString() : null,
-      })) as [ChatMemberData, ChatMemberData],
+      peer: {
+        id: row.peer.id,
+        username: row.peer.username,
+        firstName: row.peer.firstName,
+        lastName: row.peer.lastName,
+        profilePictureUrl: row.peer.profilePictureUrl,
+      },
+      lastReadAt: row.lastReadAt ? row.lastReadAt.toISOString() : null,
       lastMessage: {
         id: row.message.id,
         senderId: row.message.senderId,

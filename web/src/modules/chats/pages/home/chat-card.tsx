@@ -4,16 +4,12 @@ import { type ChatMember } from "../../domain/chat-member"
 import { type Message } from "../../domain/message"
 
 type ChatCardProps = {
-  self: ChatMember
   peer: ChatMember
   message: Message
+  hasUnreads: boolean
 }
 
-export function ChatCard({ self, peer, message }: ChatCardProps) {
-  const lastReadAt = self.lastReadAt?.getTime() ?? 0
-  const messageSentAt = new Date(message.sentAt.toISOString()).getTime()
-  const hasUnread = message.senderId !== self.id && messageSentAt > lastReadAt
-
+export function ChatCard({ peer, message, hasUnreads }: ChatCardProps) {
   return (
     <article className="flex gap-4 p-3">
       <ProfileAvatar
@@ -33,7 +29,7 @@ export function ChatCard({ self, peer, message }: ChatCardProps) {
             >
               {message.sentAt.format()}
             </time>
-            {hasUnread && <span className="bg-primary mt-1 size-2 rounded-full" />}
+            {hasUnreads && <span className="bg-primary mt-1 size-2 rounded-full" />}
           </div>
         </div>
 
