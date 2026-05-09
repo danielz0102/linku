@@ -4,7 +4,7 @@ import { alias } from "drizzle-orm/pg-core"
 
 import { chatMembers, files, users } from "#db/drizzle/schemas.ts"
 import { messagesView } from "#db/drizzle/views.ts"
-import type { MessageData } from "#modules/chats/dtos/message-data.ts"
+import { assertMessageContent, type MessageData } from "#modules/chats/dtos/message-data.ts"
 
 type ChatPeerData = {
   id: string
@@ -74,23 +74,28 @@ export class GetChatsQueryHandler {
       .where(eq(selfMember.userId, userId))
       .orderBy(desc(latestMessages.createdAt))
 
-    return rows.map((row) => ({
-      id: row.chatId,
-      peer: {
-        id: row.peer.id,
-        username: row.peer.username,
-        firstName: row.peer.firstName,
-        lastName: row.peer.lastName,
-        profilePictureUrl: row.peer.profilePictureUrl,
-      },
-      lastReadAt: row.lastReadAt ? row.lastReadAt.toISOString() : null,
-      lastMessage: {
-        id: row.message.id,
-        senderId: row.message.senderId,
-        text: row.message.text,
-        attachmentUrl: row.message.attachmentUrl,
-        createdAt: row.message.createdAt.toISOString(),
-      },
-    }))
+    return rows.map((row) => {
+      const content = { text: row.message.text, attachmentUrl: row.message.attachmentUrl }
+
+      assertMessageContent(content)
+
+      return {
+        id: row.chatId,
+        peer: {
+          id: row.peer.id,
+          username: row.peer.username,
+          firstName: row.peer.firstName,
+          lastName: row.peer.lastName,
+          profilePictureUrl: row.peer.profilePictureUrl,
+        },
+        lastReadAt: row.lastReadAt ? row.lastReadAt.toISOString() : null,
+        lastMessage: {
+          id: row.message.id,
+          senderId: row.message.senderId,
+          createdAt: row.message.createdAt.toISOString(),
+          ...content,
+        },
+      }
+    })
   }
 }

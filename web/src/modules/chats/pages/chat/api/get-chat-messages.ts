@@ -8,15 +8,25 @@ type GetMessagesQuery = {
   olderThan?: Date
 }
 
+type MessageResponse =
+  | {
+      id: string
+      senderId: string
+      createdAt: string
+      text: string
+      attachmentUrl: string | null
+    }
+  | {
+      id: string
+      senderId: string
+      createdAt: string
+      text: string | null
+      attachmentUrl: string
+    }
+
 type APIResponse = {
   chatId?: string | undefined
-  messages: {
-    id: string
-    senderId: string
-    text: string | null
-    attachmentUrl: string | null
-    createdAt: string
-  }[]
+  messages: MessageResponse[]
   hasMore: boolean
 }
 

@@ -10,6 +10,22 @@ type ChatData = {
   hasUnreads: boolean
 }
 
+type MessageResponse =
+  | {
+      id: string
+      senderId: string
+      createdAt: string
+      text: string
+      attachmentUrl: string | null
+    }
+  | {
+      id: string
+      senderId: string
+      createdAt: string
+      text: string | null
+      attachmentUrl: string
+    }
+
 type APIResponse = {
   id: string
   peer: {
@@ -20,13 +36,7 @@ type APIResponse = {
     profilePictureUrl: string | null
   }
   lastReadAt: string | null
-  lastMessage: {
-    id: string
-    senderId: string
-    text: string | null
-    attachmentUrl: string | null
-    createdAt: string
-  }
+  lastMessage: MessageResponse
 }[]
 
 export async function getChats(): Promise<ChatData[]> {

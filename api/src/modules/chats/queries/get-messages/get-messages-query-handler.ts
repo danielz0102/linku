@@ -4,7 +4,7 @@ import { alias } from "drizzle-orm/pg-core"
 
 import { chatMembers, users } from "#db/drizzle/schemas.ts"
 import { messagesView } from "#db/drizzle/views.ts"
-import type { MessageData } from "#modules/chats/dtos/message-data.ts"
+import { assertMessageContent, type MessageData } from "#modules/chats/dtos/message-data.ts"
 
 type GetMessagesQuery = {
   userId: string
@@ -63,13 +63,18 @@ export class GetMessagesQueryHandler {
 
     return {
       chatId: messagesData[0]?.chatId,
-      messages: messagesData.map((msg) => ({
-        id: msg.id,
-        senderId: msg.senderId,
-        text: msg.text,
-        attachmentUrl: msg.attachmentUrl,
-        createdAt: msg.createdAt.toISOString(),
-      })),
+      messages: messagesData.map((msg) => {
+        const content = { text: msg.text, attachmentUrl: msg.attachmentUrl }
+
+        assertMessageContent(content)
+
+        return {
+          id: msg.id,
+          senderId: msg.senderId,
+          createdAt: msg.createdAt.toISOString(),
+          ...content,
+        }
+      }),
       hasMore,
     }
   }
