@@ -16,7 +16,6 @@ type APIResponse = {
     text: string | null
     attachmentUrl: string | null
     createdAt: string
-    isRead: boolean
   }[]
   hasMore: boolean
 }
@@ -49,7 +48,6 @@ export async function getMessages({
       text: msg.text,
       attachmentURL: msg.attachmentUrl,
       createdAt: msg.createdAt,
-      isRead: msg.isRead,
     })
   })
 }

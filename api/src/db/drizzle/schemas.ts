@@ -34,8 +34,12 @@ export const chatMembers = pgTable(
     userId: uuid("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
+    lastReadAt: timestamp("last_read_at", { withTimezone: true }),
   },
-  (t) => [primaryKey({ columns: [t.chatId, t.userId] })]
+  (t) => [
+    primaryKey({ columns: [t.chatId, t.userId] }),
+    index("chat_members_last_read_at_idx").on(t.lastReadAt),
+  ]
 )
 
 export const messages = pgTable(
@@ -61,20 +65,6 @@ export const messages = pgTable(
     index("messages_chat_id_idx").on(table.chatId),
     index("messages_created_at_idx").on(table.createdAt),
   ]
-)
-
-export const messageReads = pgTable(
-  "message_reads",
-  {
-    messageId: uuid("message_id")
-      .notNull()
-      .references(() => messages.id, { onDelete: "cascade" }),
-    userId: uuid("user_id")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    readAt: timestamp("read_at", { withTimezone: true }).notNull().defaultNow(),
-  },
-  (table) => [primaryKey({ columns: [table.messageId, table.userId] })]
 )
 
 export const files = pgTable("files", {

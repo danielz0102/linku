@@ -4,23 +4,28 @@ import { type ChatMember } from "../../domain/chat-member"
 import { type Message } from "../../domain/message"
 
 type ChatCardProps = {
-  user: ChatMember
+  self: ChatMember
+  peer: ChatMember
   message: Message
 }
 
-export function ChatCard({ user, message }: ChatCardProps) {
+export function ChatCard({ self, peer, message }: ChatCardProps) {
+  const lastReadAt = self.lastReadAt?.getTime() ?? 0
+  const messageSentAt = new Date(message.sentAt.toISOString()).getTime()
+  const hasUnread = message.senderId !== self.id && messageSentAt > lastReadAt
+
   return (
     <article className="flex gap-4 p-3">
       <ProfileAvatar
-        initials={user.initials}
-        avatarUrl={user.profilePicURL}
+        initials={peer.initials}
+        avatarUrl={peer.profilePicURL}
         className="shrink-0 text-xs"
         size="sm"
       />
 
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex justify-between">
-          <h2 className="truncate font-medium">{user.fullname}</h2>
+          <h2 className="truncate font-medium">{peer.fullname}</h2>
           <div className="flex gap-2">
             <time
               className="text-muted text-xs whitespace-nowrap"
@@ -28,7 +33,7 @@ export function ChatCard({ user, message }: ChatCardProps) {
             >
               {message.sentAt.format()}
             </time>
-            {!message.isRead && <span className="bg-primary mt-1 size-2 rounded-full" />}
+            {hasUnread && <span className="bg-primary mt-1 size-2 rounded-full" />}
           </div>
         </div>
 

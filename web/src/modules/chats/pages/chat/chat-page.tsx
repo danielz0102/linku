@@ -38,7 +38,6 @@ export default function ChatPage() {
       attachmentURL: data.file ? URL.createObjectURL(data.file) : undefined,
       senderId: user.id,
       createdAt: new Date(),
-      isRead: true,
     })
 
     setEntryMessages((prev) => [...prev, newMessage])

@@ -4,5 +4,4 @@ export type MessageData = {
   text: string | null
   attachmentUrl: string | null
   createdAt: string
-  isRead: boolean
 }

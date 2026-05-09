@@ -5,26 +5,36 @@ import { Message } from "../../domain/message"
 
 type ChatData = {
   id: string
-  peer: ChatMember
+  members: [ChatMember, ChatMember]
   lastMessage: Message
 }
 
 type APIResponse = {
   id: string
-  peer: {
-    id: string
-    username: string
-    firstName: string
-    lastName: string
-    profilePictureUrl: string | null
-  }
+  members: [
+    {
+      id: string
+      username: string
+      firstName: string
+      lastName: string
+      profilePictureUrl: string | null
+      lastReadAt: string | null
+    },
+    {
+      id: string
+      username: string
+      firstName: string
+      lastName: string
+      profilePictureUrl: string | null
+      lastReadAt: string | null
+    },
+  ]
   lastMessage: {
     id: string
     senderId: string
-    content: string | null
+    text: string | null
     attachmentUrl: string | null
     createdAt: string
-    isRead: boolean
   }
 }[]
 
@@ -39,19 +49,30 @@ export async function getChats(): Promise<ChatData[]> {
 
   return chats.map((chat) => ({
     id: chat.id,
-    peer: ChatMember.create({
-      id: chat.peer.id,
-      username: chat.peer.username,
-      firstName: chat.peer.firstName,
-      lastName: chat.peer.lastName,
-    }),
+    members: [
+      ChatMember.create({
+        id: chat.members[0].id,
+        username: chat.members[0].username,
+        firstName: chat.members[0].firstName,
+        lastName: chat.members[0].lastName,
+        profilePicURL: chat.members[0].profilePictureUrl,
+        lastReadAt: chat.members[0].lastReadAt,
+      }),
+      ChatMember.create({
+        id: chat.members[1].id,
+        username: chat.members[1].username,
+        firstName: chat.members[1].firstName,
+        lastName: chat.members[1].lastName,
+        profilePicURL: chat.members[1].profilePictureUrl,
+        lastReadAt: chat.members[1].lastReadAt,
+      }),
+    ],
     lastMessage: Message.create({
       id: chat.lastMessage.id,
       senderId: chat.lastMessage.senderId,
-      text: chat.lastMessage.content,
+      text: chat.lastMessage.text,
       attachmentURL: chat.lastMessage.attachmentUrl,
       createdAt: chat.lastMessage.createdAt,
-      isRead: chat.lastMessage.isRead,
     }),
   }))
 }

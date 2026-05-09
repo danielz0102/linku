@@ -26,15 +26,19 @@ export default function HomePage() {
         </div>
       )}
 
-      {chats.data?.map((chat) => (
-        <Link
-          key={chat.peer.id}
-          to={`/chat/${chat.peer.username}`}
-          className="hover:bg-hover rounded md:w-lg"
-        >
-          <ChatCard user={chat.peer} message={chat.lastMessage} />
-        </Link>
-      ))}
+      {chats.data?.map((chat) => {
+        const [self, peer] = chat.members
+
+        return (
+          <Link
+            key={peer.id}
+            to={`/chat/${peer.username}`}
+            className="hover:bg-hover rounded md:w-lg"
+          >
+            <ChatCard self={self} peer={peer} message={chat.lastMessage} />
+          </Link>
+        )
+      })}
     </main>
   )
 }

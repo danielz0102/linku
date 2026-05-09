@@ -4,6 +4,7 @@ export type ChatMemberProps = {
   firstName: string
   lastName: string
   profilePicURL?: string | null
+  lastReadAt?: Date | string | null
 }
 
 export class ChatMember {
@@ -12,16 +13,24 @@ export class ChatMember {
     readonly username: string,
     readonly firstName: string,
     private lastName: string,
-    readonly profilePicURL: string | null
+    readonly profilePicURL: string | null,
+    readonly lastReadAt: Date | null
   ) {}
 
   static create(props: ChatMemberProps): ChatMember {
+    const lastReadAt = props.lastReadAt
+      ? props.lastReadAt instanceof Date
+        ? props.lastReadAt
+        : new Date(props.lastReadAt)
+      : null
+
     return new ChatMember(
       props.id,
       props.username,
       props.firstName,
       props.lastName,
-      props.profilePicURL ?? null
+      props.profilePicURL ?? null,
+      lastReadAt
     )
   }
 
