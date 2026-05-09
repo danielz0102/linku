@@ -40,30 +40,20 @@ export class GetChatsQueryHandler {
 
     const selfMember = alias(chatMembers, "self_member")
     const peerMember = alias(chatMembers, "peer_member")
-    const selfUser = alias(users, "self_user")
     const peerUser = alias(users, "peer_user")
-    const selfFile = alias(files, "self_file")
     const peerFile = alias(files, "peer_file")
 
     const rows = await this.db
       .with(latestMessages)
       .select({
         chatId: selfMember.chatId,
-        self: {
-          id: selfUser.id,
-          username: selfUser.username,
-          firstName: selfUser.firstName,
-          lastName: selfUser.lastName,
-          profilePictureUrl: selfFile.publicUrl,
-          lastReadAt: selfMember.lastReadAt,
-        },
+        lastReadAt: selfMember.lastReadAt,
         peer: {
           id: peerUser.id,
           username: peerUser.username,
           firstName: peerUser.firstName,
           lastName: peerUser.lastName,
           profilePictureUrl: peerFile.publicUrl,
-          lastReadAt: peerMember.lastReadAt,
         },
         message: {
           id: latestMessages.id,
@@ -78,9 +68,7 @@ export class GetChatsQueryHandler {
         peerMember,
         and(eq(peerMember.chatId, selfMember.chatId), ne(peerMember.userId, userId))
       )
-      .innerJoin(selfUser, eq(selfUser.id, selfMember.userId))
       .innerJoin(peerUser, eq(peerUser.id, peerMember.userId))
-      .leftJoin(selfFile, eq(selfFile.id, selfUser.profilePictureId))
       .leftJoin(peerFile, eq(peerFile.id, peerUser.profilePictureId))
       .innerJoin(latestMessages, eq(latestMessages.chatId, selfMember.chatId))
       .where(eq(selfMember.userId, userId))
@@ -95,7 +83,7 @@ export class GetChatsQueryHandler {
         lastName: row.peer.lastName,
         profilePictureUrl: row.peer.profilePictureUrl,
       },
-      lastReadAt: row.self.lastReadAt ? row.self.lastReadAt.toISOString() : null,
+      lastReadAt: row.lastReadAt ? row.lastReadAt.toISOString() : null,
       lastMessage: {
         id: row.message.id,
         senderId: row.message.senderId,
