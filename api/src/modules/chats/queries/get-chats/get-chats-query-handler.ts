@@ -88,24 +88,14 @@ export class GetChatsQueryHandler {
 
     return rows.map((row) => ({
       id: row.chatId,
-      members: [
-        {
-          id: row.self.id,
-          username: row.self.username,
-          firstName: row.self.firstName,
-          lastName: row.self.lastName,
-          profilePictureUrl: row.self.profilePictureUrl,
-          lastReadAt: row.self.lastReadAt ? row.self.lastReadAt.toISOString() : null,
-        },
-        {
-          id: row.peer.id,
-          username: row.peer.username,
-          firstName: row.peer.firstName,
-          lastName: row.peer.lastName,
-          profilePictureUrl: row.peer.profilePictureUrl,
-          lastReadAt: row.peer.lastReadAt ? row.peer.lastReadAt.toISOString() : null,
-        },
-      ],
+      members: [row.self, row.peer].map((member) => ({
+        id: member.id,
+        username: member.username,
+        firstName: member.firstName,
+        lastName: member.lastName,
+        profilePictureUrl: member.profilePictureUrl,
+        lastReadAt: member.lastReadAt ? member.lastReadAt.toISOString() : null,
+      })) as [ChatMemberData, ChatMemberData],
       lastMessage: {
         id: row.message.id,
         senderId: row.message.senderId,
