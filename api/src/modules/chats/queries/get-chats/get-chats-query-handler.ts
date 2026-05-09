@@ -6,18 +6,18 @@ import { chatMembers, files, users } from "#db/drizzle/schemas.ts"
 import { messagesView } from "#db/drizzle/views.ts"
 import type { MessageData } from "#modules/chats/dtos/message-data.ts"
 
-type ChatMemberData = {
+type ChatPeerData = {
   id: string
   username: string
   firstName: string
   lastName: string
   profilePictureUrl: string | null
-  lastReadAt: string | null
 }
 
 type ChatData = {
   id: string
-  members: [ChatMemberData, ChatMemberData]
+  peer: ChatPeerData
+  lastReadAt: string | null
   lastMessage: MessageData
 }
 
@@ -88,14 +88,14 @@ export class GetChatsQueryHandler {
 
     return rows.map((row) => ({
       id: row.chatId,
-      members: [row.self, row.peer].map((member) => ({
-        id: member.id,
-        username: member.username,
-        firstName: member.firstName,
-        lastName: member.lastName,
-        profilePictureUrl: member.profilePictureUrl,
-        lastReadAt: member.lastReadAt ? member.lastReadAt.toISOString() : null,
-      })) as [ChatMemberData, ChatMemberData],
+      peer: {
+        id: row.peer.id,
+        username: row.peer.username,
+        firstName: row.peer.firstName,
+        lastName: row.peer.lastName,
+        profilePictureUrl: row.peer.profilePictureUrl,
+      },
+      lastReadAt: row.self.lastReadAt ? row.self.lastReadAt.toISOString() : null,
       lastMessage: {
         id: row.message.id,
         senderId: row.message.senderId,
