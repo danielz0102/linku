@@ -65,6 +65,7 @@ export class GetMessagesQueryHandler {
       chatId: messagesData[0]?.chatId,
       messages: messagesData.map((msg) => ({
         id: msg.id,
+        chatId: msg.chatId,
         senderId: msg.senderId,
         text: msg.text,
         attachmentUrl: msg.attachmentUrl,

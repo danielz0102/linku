@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto"
 import { eq } from "drizzle-orm"
 
 import { db } from "#db/drizzle/drizzle-client.ts"
-import { chats, messages } from "#db/drizzle/schemas.ts"
+import { chats } from "#db/drizzle/schemas.ts"
 import { SendMessageCommandHandler } from "#modules/chats/commands/send-message/send-message-command-handler.ts"
 import { it } from "~/context/create-user.ts"
 
@@ -24,14 +24,8 @@ describe("Send Message Command Handler", () => {
     expect(result.data.senderId).toBe(sender.id)
     expect(result.data.attachmentUrl).toBeNull()
 
-    const chatId = await db
-      .select({ chatId: messages.chatId })
-      .from(messages)
-      .where(eq(messages.id, result.data.id))
-      .then((rows) => rows[0]!.chatId)
-
     onTestFinished(async () => {
-      await db.delete(chats).where(eq(chats.id, chatId))
+      await db.delete(chats).where(eq(chats.id, result.data.chatId))
     })
   })
 

@@ -74,6 +74,7 @@ export class SendMessageCommandHandler {
 
       return {
         id: message.id,
+        chatId: message.chatId,
         senderId: message.senderId,
         text: message.text,
         attachmentUrl: cmd.attachment?.url ?? null,

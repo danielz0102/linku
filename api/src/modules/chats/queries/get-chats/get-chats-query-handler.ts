@@ -86,6 +86,7 @@ export class GetChatsQueryHandler {
       lastReadAt: row.lastReadAt ? row.lastReadAt.toISOString() : null,
       lastMessage: {
         id: row.message.id,
+        chatId: row.chatId,
         senderId: row.message.senderId,
         text: row.message.text,
         attachmentUrl: row.message.attachmentUrl,

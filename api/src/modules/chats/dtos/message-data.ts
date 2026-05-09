@@ -1,5 +1,6 @@
 export type MessageData = {
   id: string
+  chatId: string
   senderId: string
   text: string | null
   attachmentUrl: string | null
