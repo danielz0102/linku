@@ -11,16 +11,18 @@ export type MessageProps = {
 
 export class Message {
   #attachmentUrl: URL | null
+  #chatId: string | null
 
   private constructor(
     readonly id: string,
-    readonly chatId: string | null,
     readonly senderId: string,
     readonly text: string | null,
+    readonly createdAt: Date,
     attachmentUrl: URL | null,
-    readonly createdAt: Date
+    chatId: string | null
   ) {
     this.#attachmentUrl = attachmentUrl
+    this.#chatId = chatId
   }
 
   static create(props: MessageProps) {
@@ -30,15 +32,23 @@ export class Message {
 
     return new Message(
       props.id ?? randomUUID(),
-      props.chatId ?? null,
       props.senderId,
       props.text ?? null,
+      props.createdAt ? new Date(props.createdAt) : new Date(),
       props.attachmentUrl ? new URL(props.attachmentUrl) : null,
-      props.createdAt ? new Date(props.createdAt) : new Date()
+      props.chatId ?? null
     )
   }
 
   get attachmentUrl() {
     return this.#attachmentUrl ? this.#attachmentUrl.href : null
+  }
+
+  get chatId() {
+    return this.#chatId
+  }
+
+  set chatId(value: string | null) {
+    this.#chatId = value
   }
 }

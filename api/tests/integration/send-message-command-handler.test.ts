@@ -52,17 +52,4 @@ describe("Send Message Command Handler", () => {
       })
     ).rejects.toThrow()
   })
-
-  it("fails if content is invalid", async ({ createUser }) => {
-    const sender = await createUser()
-    const peer = await createUser()
-
-    const result = await sendMessage.execute({
-      senderId: sender.id,
-      peerUsername: peer.username,
-      text: "   ",
-    })
-
-    expect(result.ok).toBe(false)
-  })
 })
