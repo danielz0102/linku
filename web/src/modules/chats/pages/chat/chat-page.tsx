@@ -50,7 +50,7 @@ export default function ChatPage() {
         text: data.message,
         attachment: { url, public_id },
       })
-    } else if (newMessage.text !== null) {
+    } else if (newMessage.text) {
       sendMessage({ id: newMessage.id, text: newMessage.text })
     }
   }
