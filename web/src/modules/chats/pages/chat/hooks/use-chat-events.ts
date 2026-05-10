@@ -7,17 +7,7 @@ const socket = createSocket()
 
 export function useChatEvents(peerUsername: string) {
   useEffect(() => {
-    if (!socket.connected) {
-      socket.connect()
-    }
-
     socket.emit("join_chat", { peerUsername })
-
-    return () => {
-      if (socket.connected) {
-        socket.disconnect()
-      }
-    }
   }, [])
 
   const sendMessage = (message: Parameters<SendMessageEvent>[0]) => {

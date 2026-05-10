@@ -29,7 +29,7 @@ export default function ChatPage() {
     return <Navigate to="/404" replace />
   }
 
-  const allMessages = [initialMessages.data ?? [], entryMessages].flat()
+  const allMessages = [entryMessages, initialMessages.data ?? []].flat()
 
   const handleSubmit = async (data: MessageFormData) => {
     const newMessage = Message.createTemporal({
@@ -38,7 +38,7 @@ export default function ChatPage() {
       senderId: user.id,
     })
 
-    setEntryMessages((prev) => [...prev, newMessage])
+    setEntryMessages((prev) => [newMessage, ...prev])
 
     if (data.file) {
       const { url, public_id } = await uploadAttachment(data.file)

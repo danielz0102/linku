@@ -22,7 +22,7 @@ export function MessageList({ className, isLoading = false, children }: MessageL
         {isEmpty && "No messages yet. Say hi 👋"}
       </p>
 
-      {Children.toArray(children).toReversed()}
+      {children}
     </div>
   )
 }
