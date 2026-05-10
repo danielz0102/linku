@@ -1,12 +1,11 @@
+import { randomUUID } from "node:crypto"
+
 import type { RequestHandler } from "express"
-import z from "zod"
 
 import { CLOUDINARY_API_KEY, CLOUDINARY_NAME, CLOUDINARY_SECRET } from "#env.ts"
 import { cloudinary } from "#shared/cloudinary-client.ts"
 
 const folder = "linku/attachments"
-
-export const signAttachmentUploadRequestSchema = z.object({ messageId: z.string().nonempty() })
 
 export const signAttachmentUploadHTTPController: RequestHandler = async (req, res) => {
   const { userId } = req.session
@@ -15,16 +14,8 @@ export const signAttachmentUploadHTTPController: RequestHandler = async (req, re
     return res.sendStatus(401)
   }
 
-  const result = signAttachmentUploadRequestSchema.safeParse(req.body)
-
-  if (!result.success) {
-    return res.sendValidationError(result.error.issues)
-  }
-
-  const { messageId } = result.data
-
   const timestamp = Math.floor(Date.now() / 1000)
-  const public_id = `message-${messageId}`
+  const public_id = `message-${randomUUID()}`
   const signature = cloudinary.utils.api_sign_request(
     {
       folder,

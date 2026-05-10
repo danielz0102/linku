@@ -43,7 +43,7 @@ export default function ChatPage() {
     setEntryMessages((prev) => [...prev, newMessage])
 
     if (data.file) {
-      const { url, public_id } = await uploadAttachment(newMessage.id, data.file)
+      const { url, public_id } = await uploadAttachment(data.file)
 
       sendMessage({
         text: data.message,
