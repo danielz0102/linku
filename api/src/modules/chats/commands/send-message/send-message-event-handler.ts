@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 import { db } from "#db/drizzle/drizzle-client.ts"
-import type { EventHandlerBuilder } from "#server/socket-io-server-types.ts"
+import type { EventHandlerBuilder } from "#shared/socket-io-server-types.ts"
 
 import { SendMessageCommandHandler } from "./send-message-command-handler.ts"
 

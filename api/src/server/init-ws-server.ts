@@ -4,14 +4,14 @@ import { Server } from "socket.io"
 
 import { CLIENT_ORIGIN } from "#env.ts"
 
-import { onConnection } from "./event-handlers/on-connection-handler.ts"
-import { authMiddleware } from "./middlewares/auth-socket-middleware.ts"
-import { sessionMiddleware } from "./middlewares/session-middleware.ts"
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
   SocketData,
-} from "./socket-io-server-types.ts"
+} from "../shared/socket-io-server-types.ts"
+import { onConnection } from "./event-handlers/on-connection-handler.ts"
+import { authMiddleware } from "./middlewares/auth-socket-middleware.ts"
+import { sessionMiddleware } from "./middlewares/session-middleware.ts"
 
 export function initWSServer(httpServer: HTTPServer) {
   const io = new Server<ClientToServerEvents, ServerToClientEvents, {}, SocketData>(httpServer, {

@@ -1,4 +1,4 @@
-import type { EventHandlerBuilder } from "#server/socket-io-server-types.ts"
+import type { EventHandlerBuilder } from "#shared/socket-io-server-types.ts"
 
 export type JoinChatEventHandler = (data: { peerUsername: string }) => void
 

@@ -1,4 +1,4 @@
-import type { AppServer, AppSocket } from "#server/socket-io-server-types.ts"
+import type { AppServer, AppSocket } from "#shared/socket-io-server-types.ts"
 
 import { onJoinChat } from "./join-chat-event-handler.ts"
 
