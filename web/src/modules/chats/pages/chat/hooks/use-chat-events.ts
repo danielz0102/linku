@@ -17,7 +17,15 @@ export function useChatEvents(peerUsername: string, { onNewMessage }: UseChatEve
 
     socket.emit("join_chat", { peerUsername })
     socket.on("new_message", (data) => {
-      onNewMessage(Message.create(data))
+      onNewMessage(
+        Message.create({
+          id: data.id,
+          text: data.text,
+          senderId: data.senderId,
+          attachmentURL: data.attachmentUrl,
+          createdAt: data.createdAt,
+        })
+      )
     })
 
     return () => {
