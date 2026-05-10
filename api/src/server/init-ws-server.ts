@@ -24,5 +24,5 @@ export function initWSServer(httpServer: HTTPServer) {
   io.engine.use(sessionMiddleware)
   io.use(authMiddleware)
 
-  io.on("connection", onConnection)
+  io.on("connection", onConnection(io))
 }
