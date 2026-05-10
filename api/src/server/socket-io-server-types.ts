@@ -1,7 +1,7 @@
 import type { Socket } from "socket.io"
 
 export interface ClientToServerEvents {
-  join_chat: (data: { peerId: string }) => void
+  join_chat: (data: { peerUsername: string }) => void
   send_message: (message: {
     id: string
     text?: string
