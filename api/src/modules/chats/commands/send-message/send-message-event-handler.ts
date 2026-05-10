@@ -57,6 +57,7 @@ export const onSendMessage: EventHandlerBuilder<SendMessageEventHandler> = ({ so
       return cb({ code: "PEER_NOT_FOUND" })
     }
 
+    console.log("roomId", socket.data.chat.roomId)
     socket.to(socket.data.chat.roomId).emit("new_message", result.data)
   }
 }

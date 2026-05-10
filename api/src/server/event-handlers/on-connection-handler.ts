@@ -6,6 +6,6 @@ import { onJoinChat } from "./join-chat-event-handler.ts"
 export const onConnection = (io: AppServer) => async (socket: AppSocket) => {
   const ctx = { socket, io }
 
-  socket.on("join_chat", onJoinChat(ctx))
+  socket.on("join_chat", await onJoinChat(ctx))
   socket.on("send_message", onSendMessage(ctx))
 }

@@ -25,3 +25,4 @@ export type AppServer = Server<ClientToServerEvents, ServerToClientEvents, {}, S
 export type Context = { socket: AppSocket; io: AppServer }
 
 export type EventHandlerBuilder<T> = (ctx: Context) => T
+export type AsyncEventHandlerBuilder<T> = (ctx: Context) => Promise<T>
