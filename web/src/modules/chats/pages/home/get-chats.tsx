@@ -1,5 +1,6 @@
 import { API_URL } from "~/env"
 
+import type { MessageAPIData } from "../../api/message-api-data"
 import { ChatMember } from "../../domain/chat-member"
 import { Message } from "../../domain/message"
 
@@ -20,13 +21,7 @@ type APIResponse = {
     profilePictureUrl: string | null
   }
   lastReadAt: string | null
-  lastMessage: {
-    id: string
-    senderId: string
-    text: string | null
-    attachmentUrl: string | null
-    createdAt: string
-  }
+  lastMessage: MessageAPIData
 }[]
 
 export async function getChats(): Promise<ChatData[]> {

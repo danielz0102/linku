@@ -1,4 +1,5 @@
 import { API_URL } from "~/env"
+import type { MessageAPIData } from "~/modules/chats/api/message-api-data"
 
 import { Message } from "../../../domain/message"
 
@@ -10,13 +11,7 @@ type GetMessagesQuery = {
 
 type APIResponse = {
   chatId?: string | undefined
-  messages: {
-    id: string
-    senderId: string
-    text: string | null
-    attachmentUrl: string | null
-    createdAt: string
-  }[]
+  messages: MessageAPIData[]
   hasMore: boolean
 }
 
