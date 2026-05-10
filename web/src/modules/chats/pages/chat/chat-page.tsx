@@ -57,7 +57,11 @@ export default function ChatPage() {
     <main className="flex size-full flex-col overflow-y-auto">
       {peer.data && <ChatHeader user={peer.data} />}
 
-      <MessageList className="flex-1" isLoading={initialMessages.isLoading}>
+      <MessageList
+        className="flex-1"
+        isLoading={initialMessages.isLoading}
+        onEndReached={() => initialMessages.fetchNextPage()}
+      >
         {messages.map((m) => (
           <MessageBubble
             key={m.id}
