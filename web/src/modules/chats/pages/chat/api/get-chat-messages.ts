@@ -25,7 +25,7 @@ export async function getMessages({
   endpointURL.searchParams.set("page_size", pageSize.toString())
 
   if (olderThan) {
-    endpointURL.searchParams.set("older_than", olderThan.toISOString())
+    endpointURL.searchParams.set("cursor", olderThan.toISOString())
   }
 
   const res = await fetch(endpointURL, { credentials: "include" })
