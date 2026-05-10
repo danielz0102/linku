@@ -58,7 +58,9 @@ export class SendMessageCommandHandler {
     await this.messages.save({ message, peerId: peer.id, filePublicId: cmd.attachment?.public_id })
 
     if (message.chatId === null) {
-      throw new Error("Message wasn't persisted correctly: missing chatId")
+      throw new Error("Chat ID is missing after saving the message", {
+        cause: { messsageId: message.id },
+      })
     }
 
     return Result.ok({
