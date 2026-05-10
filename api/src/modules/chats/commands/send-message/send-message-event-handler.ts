@@ -1,9 +1,23 @@
 import { z } from "zod"
 
 import { db } from "#db/drizzle/drizzle-client.ts"
-import type { EventHandler } from "#server/socket-io-server-types.ts"
+import type { EventHandlerBuilder } from "#server/socket-io-server-types.ts"
 
 import { SendMessageCommandHandler } from "./send-message-command-handler.ts"
+
+type SendMessageError = {
+  error: "PEER_NOT_FOUND" | "INVALID_MESSAGE"
+  details?: unknown
+}
+
+export type SendMessageEventHandler = (
+  message: {
+    id: string
+    text?: string
+    attachment?: { url: string; public_id: string }
+  },
+  callback: (error?: SendMessageError) => void
+) => void
 
 const sendMessageDataSchema = z
   .object({
@@ -22,7 +36,7 @@ const sendMessageDataSchema = z
 
 const sendMessage = new SendMessageCommandHandler(db)
 
-export const onSendMessage: EventHandler<"send_message"> = ({ socket }) => {
+export const onSendMessage: EventHandlerBuilder<SendMessageEventHandler> = ({ socket }) => {
   return async (data, cb) => {
     if (!socket.data.chat) {
       return socket.emit("exception", { message: "You must join a chat before sending messages" })
@@ -44,5 +58,7 @@ export const onSendMessage: EventHandler<"send_message"> = ({ socket }) => {
     if (!result.ok) {
       return cb({ error: "PEER_NOT_FOUND" })
     }
+
+    socket.to(socket.data.chat.roomId).emit("new_message", result.data)
   }
 }
