@@ -32,12 +32,10 @@ export default function ChatPage() {
   const allMessages = [initialMessages.data ?? [], entryMessages].flat()
 
   const handleSubmit = async (data: MessageFormData) => {
-    const newMessage = Message.create({
-      id: crypto.randomUUID(),
+    const newMessage = Message.createTemporal({
       text: data.message,
-      attachmentURL: data.file ? URL.createObjectURL(data.file) : undefined,
+      file: data.file,
       senderId: user.id,
-      createdAt: new Date(),
     })
 
     setEntryMessages((prev) => [...prev, newMessage])

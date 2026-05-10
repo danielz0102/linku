@@ -8,6 +8,12 @@ export type MessageProps = {
   attachmentURL?: string | null
 }
 
+type TemporalMessageProps = {
+  text?: string
+  file?: File
+  senderId: string
+}
+
 export class Message {
   private constructor(
     readonly id: string,
@@ -28,6 +34,20 @@ export class Message {
       new MessageDate(data.createdAt),
       data.text ?? null,
       data.attachmentURL ?? null
+    )
+  }
+
+  static createTemporal({ text, file, senderId }: TemporalMessageProps): Message {
+    if (!text && !file) {
+      throw new Error("A message must have either text or an attachment")
+    }
+
+    return new Message(
+      crypto.randomUUID(),
+      senderId,
+      new MessageDate(new Date()),
+      text ?? null,
+      file ? URL.createObjectURL(file) : null
     )
   }
 
