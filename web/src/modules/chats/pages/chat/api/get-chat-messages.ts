@@ -15,11 +15,16 @@ type APIResponse = {
   hasMore: boolean
 }
 
+type GetMessagesResult = {
+  messages: Message[]
+  nextCursor: Date | null
+}
+
 export async function getMessages({
   peerUsername,
   pageSize = 20,
   olderThan,
-}: GetMessagesQuery): Promise<Message[]> {
+}: GetMessagesQuery): Promise<GetMessagesResult> {
   const endpointURL = new URL(`${API_URL}/chats/${peerUsername}/messages`)
 
   endpointURL.searchParams.set("page_size", pageSize.toString())
@@ -35,8 +40,7 @@ export async function getMessages({
   }
 
   const data = (await res.json()) as APIResponse
-
-  return data.messages.map((msg) => {
+  const messages = data.messages.map((msg) => {
     return Message.create({
       id: msg.id,
       senderId: msg.senderId,
@@ -45,4 +49,8 @@ export async function getMessages({
       createdAt: msg.createdAt,
     })
   })
+  const lastMessage = data.messages.at(-1)
+  const nextCursor = lastMessage ? new Date(lastMessage.createdAt) : null
+
+  return { messages, nextCursor }
 }

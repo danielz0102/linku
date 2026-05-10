@@ -20,8 +20,10 @@ export default function ChatPage() {
   }
 
   const { user } = useAuthenticatedUser()
-  const [initialMessages, peer] = useChatQueries(username)
-  const { messages, addMessage } = useMessages(initialMessages.data)
+  const { messages: initialMessages, peer } = useChatQueries(username)
+  const { messages, addMessage } = useMessages(
+    initialMessages.data?.pages.flatMap((group) => group.messages) ?? []
+  )
   const { sendMessage } = useChatEvents(username, {
     onNewMessage: (msg) => addMessage(msg),
   })
