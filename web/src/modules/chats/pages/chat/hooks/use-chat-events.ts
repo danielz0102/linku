@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 
-import { createSocket, type ClientToServerEvents } from "../socket"
+import type { SendMessageEvent } from "../socket/events"
+import { createSocket } from "../socket/socket"
 
 export function useChatEvents(peerUsername: string) {
   const socket = createSocket()
@@ -15,8 +16,10 @@ export function useChatEvents(peerUsername: string) {
     }
   }, [])
 
-  const sendMessage = (message: Parameters<ClientToServerEvents["send_message"]>[0]) => {
-    socket.emit("send_message", message)
+  const sendMessage = (message: Parameters<SendMessageEvent>[0]) => {
+    socket.emit("send_message", message, (error) => {
+      throw new Error("Failed to send message", { cause: error })
+    })
   }
 
   return { sendMessage }

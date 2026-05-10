@@ -6,7 +6,7 @@ import type { EventHandlerBuilder } from "#shared/socket-io-server-types.ts"
 import { SendMessageCommandHandler } from "./send-message-command-handler.ts"
 
 type SendMessageError = {
-  error: "PEER_NOT_FOUND" | "INVALID_MESSAGE"
+  code: "PEER_NOT_FOUND" | "INVALID_MESSAGE"
   details?: unknown
 }
 
@@ -45,7 +45,7 @@ export const onSendMessage: EventHandlerBuilder<SendMessageEventHandler> = ({ so
     const validation = sendMessageDataSchema.safeParse(data)
 
     if (!validation.success) {
-      return cb({ error: "INVALID_MESSAGE", details: validation.error.issues })
+      return cb({ code: "INVALID_MESSAGE", details: validation.error.issues })
     }
 
     const result = await sendMessage.execute({
@@ -56,7 +56,7 @@ export const onSendMessage: EventHandlerBuilder<SendMessageEventHandler> = ({ so
     })
 
     if (!result.ok) {
-      return cb({ error: "PEER_NOT_FOUND" })
+      return cb({ code: "PEER_NOT_FOUND" })
     }
 
     socket.to(socket.data.chat.roomId).emit("new_message", result.data)
