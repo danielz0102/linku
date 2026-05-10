@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm"
+import { and, eq, or } from "drizzle-orm"
 import type { NodePgDatabase } from "drizzle-orm/node-postgres"
 import { alias } from "drizzle-orm/pg-core"
 
@@ -21,7 +21,7 @@ type SendMessageCommand = {
 
 type SendMessageError = "PEER_NOT_FOUND"
 
-type UserLookup = {
+type MemberLookup = {
   id: string
 }
 
@@ -33,10 +33,7 @@ export class SendMessageCommandHandler {
   }
 
   async execute(cmd: SendMessageCommand): Promise<Result<MessageData, SendMessageError>> {
-    const [sender, peer] = await Promise.all([
-      this.getMemberById(cmd.senderId),
-      this.getMemberByUsername(cmd.peerUsername),
-    ])
+    const { sender, peer } = await this.findMembers(cmd.senderId, cmd.peerUsername)
 
     if (!sender) {
       throw new Error("Sender not found")
@@ -47,7 +44,6 @@ export class SendMessageCommandHandler {
     }
 
     const chatId = await this.findChatId(sender.id, peer.id)
-
     const message = Message.create({
       chatId,
       senderId: sender.id,
@@ -73,6 +69,21 @@ export class SendMessageCommandHandler {
     })
   }
 
+  private async findMembers(
+    senderId: string,
+    peerUsername: string
+  ): Promise<{ sender: MemberLookup | null; peer: MemberLookup | null }> {
+    const rows = await this.db
+      .select()
+      .from(users)
+      .where(or(eq(users.id, senderId), eq(users.username, peerUsername)))
+
+    const sender = rows.find((r) => r.id === senderId) ?? null
+    const peer = rows.find((r) => r.username === peerUsername) ?? null
+
+    return { sender, peer }
+  }
+
   private async findChatId(senderId: string, peerId: string): Promise<string | null> {
     const selfMember = alias(chatMembers, "self_member")
     const peerMember = alias(chatMembers, "peer_member")
@@ -89,27 +100,5 @@ export class SendMessageCommandHandler {
       .then((rows) => rows[0])
 
     return row ? row.chatId : null
-  }
-
-  private async getMemberById(userId: string): Promise<UserLookup | null> {
-    const user = await this.db
-      .select({ id: users.id })
-      .from(users)
-      .where(eq(users.id, userId))
-      .limit(1)
-      .then((rows) => rows[0])
-
-    return user ?? null
-  }
-
-  private async getMemberByUsername(username: string): Promise<UserLookup | null> {
-    const user = await this.db
-      .select({ id: users.id })
-      .from(users)
-      .where(eq(users.username, username))
-      .limit(1)
-      .then((rows) => rows[0])
-
-    return user ?? null
   }
 }
