@@ -1,15 +1,17 @@
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { Navigate, useParams } from "react-router"
 
 import { useAuthenticatedUser } from "~/modules/users/context/user-context"
 
 import { Message } from "../../domain/message"
+import { getChatMember } from "./api/get-chat-member"
+import { getMessages } from "./api/get-chat-messages"
 import { uploadAttachment } from "./api/upload-attachment"
 import { ChatHeader } from "./components/chat-header"
 import { MessageBubble } from "./components/message-bubble"
 import { MessageForm, type MessageFormData } from "./components/message-form"
 import { MessageList } from "./components/message-list"
 import { useChatEvents } from "./hooks/use-chat-events"
-import { useChatQueries } from "./hooks/use-chat-queries"
 import { useMessages } from "./hooks/use-messages"
 
 export default function ChatPage() {
@@ -20,7 +22,23 @@ export default function ChatPage() {
   }
 
   const { user } = useAuthenticatedUser()
-  const { messages: initialMessages, peer } = useChatQueries(username)
+
+  const initialMessages = useInfiniteQuery({
+    queryKey: ["messages", username],
+    initialPageParam: undefined as Date | undefined,
+    queryFn: ({ pageParam }) => {
+      return getMessages({ peerUsername: username, olderThan: pageParam })
+    },
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+  })
+
+  const peer = useQuery({
+    queryKey: ["chat-member", username],
+    queryFn: () => getChatMember(username),
+    throwOnError: true,
+    refetchOnWindowFocus: false,
+  })
+
   const { messages, addMessage } = useMessages(
     initialMessages.data?.pages.flatMap((p) => p.messages) ?? []
   )
