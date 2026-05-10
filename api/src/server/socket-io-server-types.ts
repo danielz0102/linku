@@ -1,37 +1,30 @@
 import type { Server, Socket } from "socket.io"
 
-type SendMessageResponse =
-  | {
-      ok: true
-    }
-  | {
-      ok: false
-      error: "PEER_NOT_FOUND"
-    }
-  | {
-      ok: false
-      error: "VALIDATION_ERROR"
-      details: unknown
-    }
+type SendMessageError = {
+  error: "PEER_NOT_FOUND" | "INVALID_MESSAGE"
+  details?: unknown
+}
 
 export interface ClientToServerEvents {
   join_chat: (data: { peerUsername: string }) => void
   send_message: (
     message: {
       id: string
-      peerUsername: string
       text?: string
       attachment?: { url: string; public_id: string }
     },
-    callback: (response?: SendMessageResponse) => void
+    callback: (error?: SendMessageError) => void
   ) => void
 }
 
-export interface ServerToClientEvents {}
+export interface ServerToClientEvents {
+  new_message: (message: {}) => void
+  exception: (error: { message: string }) => void
+}
 
 export interface SocketData {
   userId: string
-  roomId?: string
+  chat?: { roomId: string; peerUsername: string }
 }
 
 export type AppSocket = Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>
