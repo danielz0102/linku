@@ -12,7 +12,6 @@ type SendMessageError = {
 
 export type SendMessageEventHandler = (
   message: {
-    id: string
     text?: string
     attachment?: { url: string; public_id: string }
   },
@@ -21,7 +20,6 @@ export type SendMessageEventHandler = (
 
 const sendMessageDataSchema = z
   .object({
-    id: z.uuid(),
     text: z.string().nonempty().optional(),
     attachment: z
       .object({

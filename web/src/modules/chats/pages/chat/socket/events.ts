@@ -8,7 +8,6 @@ type SendMessageError = {
 export type JoinChatEvent = (data: { peerUsername: string }) => void
 export type SendMessageEvent = (
   message: {
-    id: string
     text?: string
     attachment?: { url: string; public_id: string }
   },

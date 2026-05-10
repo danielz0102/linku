@@ -46,12 +46,11 @@ export default function ChatPage() {
       const { url, public_id } = await uploadAttachment(newMessage.id, data.file)
 
       sendMessage({
-        id: newMessage.id,
         text: data.message,
         attachment: { url, public_id },
       })
     } else {
-      sendMessage({ id: newMessage.id, text: data.message })
+      sendMessage({ text: data.message })
     }
   }
 
