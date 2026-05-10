@@ -10,11 +10,13 @@ export function useChatQueries(peerUsername: string) {
         queryKey: ["messages", peerUsername],
         queryFn: () => getMessages({ peerUsername }),
         throwOnError: true,
+        refetchOnWindowFocus: false,
       },
       {
         queryKey: ["chat-member", peerUsername],
         queryFn: () => getChatMember(peerUsername),
         throwOnError: true,
+        refetchOnWindowFocus: false,
       },
     ],
   })

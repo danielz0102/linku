@@ -23,7 +23,11 @@ export default function ChatPage() {
   const [entryMessages, setEntryMessages] = useState<Message[]>([])
   const [initialMessages, peer] = useChatQueries(username)
 
-  const { sendMessage } = useChatEvents(username)
+  const { sendMessage } = useChatEvents(username, {
+    onNewMessage: (msg) => {
+      setEntryMessages((prev) => [msg, ...prev])
+    },
+  })
 
   if (peer.data === null) {
     return <Navigate to="/404" replace />
