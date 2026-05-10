@@ -3,10 +3,14 @@ import { useEffect } from "react"
 import type { SendMessageEvent } from "../socket/events"
 import { createSocket } from "../socket/socket"
 
-export function useChatEvents(peerUsername: string) {
-  const socket = createSocket()
+const socket = createSocket()
 
+export function useChatEvents(peerUsername: string) {
   useEffect(() => {
+    if (!socket.connected) {
+      socket.connect()
+    }
+
     socket.emit("join_chat", { peerUsername })
 
     return () => {
