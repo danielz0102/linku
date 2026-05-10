@@ -2,7 +2,7 @@ import { Children, useEffect, useRef } from "react"
 import { twMerge } from "tailwind-merge"
 
 type MessageListProps = React.PropsWithChildren<{
-  onEndReached: () => void
+  onEndReached: (container: HTMLDivElement) => void
   className?: string
   isLoading?: boolean
 }>
@@ -26,7 +26,7 @@ export function MessageList({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
-          onEndReached()
+          onEndReached(container)
         }
       },
       { root: container, threshold: 0.1 }

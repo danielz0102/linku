@@ -60,7 +60,16 @@ export default function ChatPage() {
       <MessageList
         className="flex-1"
         isLoading={initialMessages.isLoading}
-        onEndReached={() => initialMessages.fetchNextPage()}
+        onEndReached={async (container) => {
+          const previousHeight = container.scrollHeight
+
+          await initialMessages.fetchNextPage()
+
+          window.requestAnimationFrame(() => {
+            const newHeight = container.scrollHeight
+            container.scrollTop += newHeight - previousHeight
+          })
+        }}
       >
         {messages.map((m) => (
           <MessageBubble
