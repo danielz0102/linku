@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { Navigate, useParams } from "react-router"
 
 import { useAuthenticatedUser } from "~/modules/users/context/user-context"
@@ -11,6 +10,7 @@ import { MessageForm, type MessageFormData } from "./components/message-form"
 import { MessageList } from "./components/message-list"
 import { useChatEvents } from "./hooks/use-chat-events"
 import { useChatQueries } from "./hooks/use-chat-queries"
+import { useMessages } from "./hooks/use-messages"
 
 export default function ChatPage() {
   const { username } = useParams()
@@ -20,20 +20,15 @@ export default function ChatPage() {
   }
 
   const { user } = useAuthenticatedUser()
-  const [entryMessages, setEntryMessages] = useState<Message[]>([])
   const [initialMessages, peer] = useChatQueries(username)
-
+  const { messages, addMessage } = useMessages(initialMessages.data)
   const { sendMessage } = useChatEvents(username, {
-    onNewMessage: (msg) => {
-      setEntryMessages((prev) => [msg, ...prev])
-    },
+    onNewMessage: (msg) => addMessage(msg),
   })
 
   if (peer.data === null) {
     return <Navigate to="/404" replace />
   }
-
-  const allMessages = [entryMessages, initialMessages.data ?? []].flat()
 
   const handleSubmit = async (data: MessageFormData) => {
     const newMessage = Message.createTemporal({
@@ -42,7 +37,7 @@ export default function ChatPage() {
       senderId: user.id,
     })
 
-    setEntryMessages((prev) => [newMessage, ...prev])
+    addMessage(newMessage)
 
     if (data.file) {
       const { url, public_id } = await uploadAttachment(data.file)
@@ -61,7 +56,7 @@ export default function ChatPage() {
       {peer.data && <ChatHeader user={peer.data} />}
 
       <MessageList className="flex-1" isLoading={initialMessages.isLoading}>
-        {allMessages.map((m) => (
+        {messages.map((m) => (
           <MessageBubble
             key={m.id}
             text={m.text}
