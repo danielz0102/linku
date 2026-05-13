@@ -5,8 +5,8 @@ import { Message } from "../../../domain/message"
 
 type GetMessagesQuery = {
   peerUsername: string
-  pageSize?: number
-  olderThan?: Date
+  limit?: number
+  before?: Date
 }
 
 type APIResponse = {
@@ -17,20 +17,21 @@ type APIResponse = {
 
 type GetMessagesResult = {
   messages: Message[]
-  nextCursor: Date | null
+  previousCursor: Date | null
 }
 
 export async function getMessages({
   peerUsername,
-  pageSize = 20,
-  olderThan,
+  limit = 20,
+  before,
 }: GetMessagesQuery): Promise<GetMessagesResult> {
   const endpointURL = new URL(`${API_URL}/chats/${peerUsername}/messages`)
+  console.log({ before })
 
-  endpointURL.searchParams.set("page_size", pageSize.toString())
+  endpointURL.searchParams.set("limit", limit.toString())
 
-  if (olderThan) {
-    endpointURL.searchParams.set("cursor", olderThan.toISOString())
+  if (before) {
+    endpointURL.searchParams.set("before", before.toISOString())
   }
 
   const res = await fetch(endpointURL, { credentials: "include" })
@@ -49,8 +50,9 @@ export async function getMessages({
       createdAt: msg.createdAt,
     })
   })
-  const lastMessage = data.messages.at(-1)
-  const nextCursor = lastMessage ? new Date(lastMessage.createdAt) : null
 
-  return { messages, nextCursor }
+  const firstMessage = data.messages[0]
+  const previousCursor = firstMessage && data.hasMore ? new Date(firstMessage.createdAt) : null
+
+  return { messages, previousCursor }
 }

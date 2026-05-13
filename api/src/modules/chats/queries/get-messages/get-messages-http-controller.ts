@@ -9,8 +9,8 @@ const getMessages = new GetMessagesQueryHandler(db)
 
 const getChatRequestSchema = z.object({
   peerUsername: z.string().nonempty(),
-  page_size: z.coerce.number().int().min(1).default(20),
-  cursor: z.coerce.date().optional(),
+  limit: z.coerce.number().int().min(1).default(20),
+  before: z.coerce.date().optional(),
 })
 
 export const getMessagesHttpController: RequestHandler = async (req, res) => {
@@ -22,21 +22,21 @@ export const getMessagesHttpController: RequestHandler = async (req, res) => {
 
   const { success, data, error } = getChatRequestSchema.safeParse({
     peerUsername: req.params["peerUsername"],
-    page_size: req.query["page_size"],
-    cursor: req.query["cursor"],
+    limit: req.query["limit"],
+    before: req.query["before"],
   })
 
   if (!success) {
     return res.sendValidationError(error.issues)
   }
 
-  const { peerUsername, cursor, page_size } = data
+  const { peerUsername, before, limit } = data
 
   const messages = await getMessages.execute({
     userId,
     peerUsername,
-    olderThan: cursor,
-    quantity: page_size,
+    before,
+    limit,
   })
 
   res.json(messages)

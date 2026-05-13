@@ -9,8 +9,8 @@ import type { MessageData } from "#modules/chats/dtos/message-data.ts"
 type GetMessagesQuery = {
   userId: string
   peerUsername: string
-  olderThan?: Date
-  quantity?: number
+  before?: Date
+  limit?: number
 }
 
 type MessagesData = {
@@ -23,7 +23,7 @@ export class GetMessagesQueryHandler {
   constructor(private db: NodePgDatabase) {}
 
   async execute(query: GetMessagesQuery): Promise<MessagesData> {
-    const { userId, peerUsername, olderThan, quantity = 20 } = query
+    const { userId, peerUsername, before, limit = 20 } = query
 
     const peerUser = await this.db
       .select({ id: users.id })
@@ -54,16 +54,15 @@ export class GetMessagesQueryHandler {
       .from(messagesView)
       .innerJoin(self, and(eq(self.chatId, messagesView.chatId), eq(self.userId, userId)))
       .innerJoin(peer, and(eq(peer.chatId, messagesView.chatId), eq(peer.userId, peerUser.id)))
-      .where(olderThan ? lt(messagesView.createdAt, olderThan) : undefined)
+      .where(before ? lt(messagesView.createdAt, before) : undefined)
       .orderBy(desc(messagesView.createdAt))
-      .limit(quantity + 1)
+      .limit(limit + 1)
 
-    const hasMore = data.length > quantity
-    const messagesData = data.slice(0, quantity)
+    const selectedMessages = data.slice(0, limit).reverse()
 
     return {
-      chatId: messagesData[0]?.chatId,
-      messages: messagesData.map((msg) => ({
+      chatId: selectedMessages[0]?.chatId,
+      messages: selectedMessages.map((msg) => ({
         id: msg.id,
         chatId: msg.chatId,
         senderId: msg.senderId,
@@ -71,7 +70,7 @@ export class GetMessagesQueryHandler {
         attachmentUrl: msg.attachmentUrl,
         createdAt: msg.createdAt.toISOString(),
       })),
-      hasMore,
+      hasMore: data.length > limit,
     }
   }
 }

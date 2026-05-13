@@ -27,9 +27,11 @@ export default function ChatPage() {
     queryKey: ["messages", username],
     initialPageParam: undefined as Date | undefined,
     queryFn: ({ pageParam }) => {
-      return getMessages({ peerUsername: username, olderThan: pageParam })
+      return getMessages({ peerUsername: username, before: pageParam })
     },
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    getNextPageParam: () => undefined,
+    getPreviousPageParam: (firstPage) => firstPage.previousCursor,
+    refetchOnWindowFocus: false,
   })
 
   const peer = useQuery({
@@ -77,16 +79,11 @@ export default function ChatPage() {
 
       <MessageList
         className="flex-1"
-        isLoading={initialMessages.isLoading}
-        onEndReached={async (container) => {
-          const previousHeight = container.scrollHeight
-
-          await initialMessages.fetchNextPage()
-
-          window.requestAnimationFrame(() => {
-            const newHeight = container.scrollHeight
-            container.scrollTop += newHeight - previousHeight
-          })
+        state={initialMessages.isLoading ? "loading" : messages.length === 0 ? "empty" : "filled"}
+        onEndReached={async () => {
+          if (!initialMessages.isFetching && initialMessages.hasPreviousPage) {
+            await initialMessages.fetchPreviousPage()
+          }
         }}
       >
         {messages.map((m) => (
