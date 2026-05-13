@@ -9,5 +9,5 @@ export function useMessages(initialMessages: Message[] = []) {
     setEntryMessages((prev) => [message, ...prev])
   }
 
-  return { messages: [...entryMessages, ...initialMessages], addMessage }
+  return { messages: [...initialMessages, ...entryMessages], addMessage }
 }

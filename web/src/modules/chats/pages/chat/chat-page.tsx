@@ -29,9 +29,11 @@ export default function ChatPage() {
     queryFn: ({ pageParam }) => {
       return getMessages({ peerUsername: username, before: pageParam })
     },
-    getNextPageParam: () => undefined,
-    getPreviousPageParam: (firstPage) => firstPage.previousCursor,
-    refetchOnWindowFocus: false,
+    getNextPageParam: (lastPage) => lastPage.previousCursor,
+    select: (data) => ({
+      pages: [...data.pages].reverse(),
+      pageParams: [...data.pageParams].reverse(),
+    }),
   })
 
   const peer = useQuery({
@@ -81,8 +83,8 @@ export default function ChatPage() {
         className="flex-1"
         state={initialMessages.isLoading ? "loading" : messages.length === 0 ? "empty" : "filled"}
         onEndReached={async () => {
-          if (!initialMessages.isFetching && initialMessages.hasPreviousPage) {
-            await initialMessages.fetchPreviousPage()
+          if (!initialMessages.isFetching && initialMessages.hasNextPage) {
+            await initialMessages.fetchNextPage()
           }
         }}
       >
