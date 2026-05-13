@@ -37,7 +37,7 @@ export function MessageList({
     return () => {
       observer.disconnect()
     }
-  })
+  }, [onEndReached, isLoading])
 
   return (
     <div
