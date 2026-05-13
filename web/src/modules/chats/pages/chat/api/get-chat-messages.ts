@@ -26,7 +26,6 @@ export async function getMessages({
   before,
 }: GetMessagesQuery): Promise<GetMessagesResult> {
   const endpointURL = new URL(`${API_URL}/chats/${peerUsername}/messages`)
-  console.log({ before })
 
   endpointURL.searchParams.set("limit", limit.toString())
 

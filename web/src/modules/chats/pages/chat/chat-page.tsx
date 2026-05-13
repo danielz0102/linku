@@ -8,7 +8,6 @@ import { getChatMember } from "./api/get-chat-member"
 import { getMessages } from "./api/get-chat-messages"
 import { uploadAttachment } from "./api/upload-attachment"
 import { ChatHeader } from "./components/chat-header"
-import { MessageBubble } from "./components/message-bubble"
 import { MessageForm, type MessageFormData } from "./components/message-form"
 import { MessageList } from "./components/message-list"
 import { useChatEvents } from "./hooks/use-chat-events"
@@ -87,16 +86,13 @@ export default function ChatPage() {
             await initialMessages.fetchNextPage()
           }
         }}
-      >
-        {messages.map((m) => (
-          <MessageBubble
-            key={m.id}
-            text={m.text}
-            attachmentUrl={m.attachmentUrl}
-            belongsToUser={m.senderId === user.id}
-          />
-        ))}
-      </MessageList>
+        messages={messages.map((m) => ({
+          id: m.id,
+          text: m.text,
+          attachmentUrl: m.attachmentUrl,
+          belongsToUser: m.senderId === user.id,
+        }))}
+      />
 
       <div className="flex items-center justify-center *:w-full *:max-w-3xl">
         {!initialMessages.isLoading && <MessageForm onSubmit={handleSubmit} />}

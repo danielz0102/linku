@@ -1,12 +1,19 @@
 export type MessageBubbleProps = {
+  ref?: React.Ref<HTMLElement>
   text?: string | null
   attachmentUrl?: string | null
   belongsToUser?: boolean
 }
 
-export function MessageBubble({ text, attachmentUrl, belongsToUser = true }: MessageBubbleProps) {
+export function MessageBubble({
+  ref,
+  text,
+  attachmentUrl,
+  belongsToUser = true,
+}: MessageBubbleProps) {
   return (
     <article
+      ref={ref}
       className={`flex max-w-[50%] flex-col gap-2 rounded-2xl p-3 wrap-break-word ${
         belongsToUser
           ? "self-end rounded-br-sm bg-blue-300 text-black"
