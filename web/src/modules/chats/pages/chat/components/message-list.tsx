@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react"
+import { useInView } from "react-intersection-observer"
 import { twMerge } from "tailwind-merge"
 
 import { MessageBubble } from "./message-bubble"
@@ -17,29 +18,14 @@ type MessageListProps = {
 
 export function MessageList({ state, className, messages, onEndReached }: MessageListProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const firstMessageRef = useRef<HTMLDivElement | null>(null)
-
-  useEffect(() => {
-    if (state !== "filled" || !containerRef.current || !firstMessageRef.current) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          if (entry.target.id === firstMessageRef.current?.id) {
-            onEndReached()
-          }
-        }
-      },
-      {
-        root: containerRef.current,
-        threshold: 0.1,
+  const { ref } = useInView({
+    threshold: 0.1,
+    onChange: (inView) => {
+      if (inView) {
+        onEndReached()
       }
-    )
-
-    observer.observe(firstMessageRef.current)
-
-    return () => observer.disconnect()
-  }, [onEndReached, state])
+    },
+  })
 
   useEffect(() => {
     if (state === "filled" && containerRef.current) {
@@ -62,7 +48,7 @@ export function MessageList({ state, className, messages, onEndReached }: Messag
       </p>
       {messages.map((message) => (
         <MessageBubble
-          ref={message.id === messages[0]?.id ? firstMessageRef : null}
+          ref={message.id === messages[0]?.id ? ref : null}
           key={message.id}
           text={message.text}
           attachmentUrl={message.attachmentUrl}
