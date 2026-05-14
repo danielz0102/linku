@@ -62,16 +62,15 @@ export default function ChatPage() {
 
     addMessage(newMessage)
 
+    let uploadData: Awaited<ReturnType<typeof uploadAttachment>> | undefined = undefined
     if (data.file) {
-      const { url, public_id } = await uploadAttachment(data.file)
-
-      sendMessage({
-        text: data.message,
-        attachment: { url, public_id },
-      })
-    } else {
-      sendMessage({ text: data.message })
+      uploadData = await uploadAttachment(data.file)
     }
+
+    sendMessage({
+      text: data.message,
+      attachment: uploadData,
+    })
   }
 
   return (
