@@ -43,7 +43,7 @@ export function MessageList({ state, className, messages, onEndReached }: Messag
 
   useEffect(() => {
     if (state === "filled" && containerRef.current) {
-      containerRef.current.scrollTo({ top: containerRef.current.scrollHeight })
+      containerRef.current.scrollTo({ top: containerRef.current.scrollHeight + 1000 })
     }
   }, [state])
 
