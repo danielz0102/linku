@@ -28,9 +28,15 @@ export function MessageList({ state, className, messages, onEndReached }: Messag
   })
 
   useEffect(() => {
-    if (state === "filled" && containerRef.current) {
-      containerRef.current.scrollTo({ top: containerRef.current.scrollHeight + 1000 })
+    if (state !== "filled") return
+
+    const container = containerRef.current
+
+    if (!container) {
+      throw new Error("Container ref is not set")
     }
+
+    container.scrollTo({ top: container.scrollHeight })
   }, [state])
 
   return (
