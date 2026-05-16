@@ -13,6 +13,7 @@ export default function HomePage() {
 
   return (
     <main className="flex size-full flex-col gap-2 overflow-y-auto">
+      <title>Linku - Home</title>
       <h1 className="title p-3">My Chats</h1>
 
       {chats.isLoading && <p className="text-muted m-auto animate-pulse">Loading chats...</p>}
