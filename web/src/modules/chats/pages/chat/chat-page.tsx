@@ -75,6 +75,7 @@ export default function ChatPage() {
 
   return (
     <main className="flex size-full flex-col overflow-y-auto">
+      <title>{`Linku - Chat with ${username}`}</title>
       {peer.data && <ChatHeader user={peer.data} />}
 
       <MessageList

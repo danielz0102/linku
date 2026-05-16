@@ -10,6 +10,7 @@ export default function SignUpPage() {
 
   return (
     <main className="flex size-full flex-col items-center justify-center">
+      <title>Linku - Sign Up</title>
       <div className="bg-surface shadow-foreground/10 space-y-4 rounded-lg px-8 py-8 shadow md:px-16">
         <h1 className="title text-center">Create your account</h1>
         <SignUpForm

@@ -53,6 +53,7 @@ export default function ProfilePage() {
 
   return (
     <main className="flex size-full items-center justify-center">
+      <title>Linku - Profile</title>
       <ProfileCard
         user={user}
         Avatar={
