@@ -1,8 +1,8 @@
-import { env, loadEnvFile } from "node:process"
+import { loadEnvFile, env } from "node:process"
 
 import { z } from "zod"
 
-loadEnvFile(env["VITEST"] ? ".env.test" : ".env")
+loadEnvFile(getEnvPath())
 
 const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
@@ -33,3 +33,11 @@ export const {
   CLOUDINARY_SECRET,
   CLOUDINARY_NAME,
 } = envSchema.parse(process.env)
+
+function getEnvPath() {
+  if (env["ENV_PATH"]) {
+    return env["ENV_PATH"]
+  }
+
+  return ".env"
+}

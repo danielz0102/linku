@@ -79,7 +79,7 @@ export default defineConfig({
       cwd: "../",
     },
     {
-      command: "VITEST=true pnpm dev:api",
+      command: "ENV_PATH=.env.test pnpm dev:api",
       url: "http://localhost:3001/health",
       reuseExistingServer: !process.env.CI,
       cwd: "../",
