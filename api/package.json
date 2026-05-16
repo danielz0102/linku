@@ -15,12 +15,14 @@
   "scripts": {
     "start": "node ./dist/index.js",
     "dev": "NODE_OPTIONS='--conditions=source' tsx --watch ./src/index.ts",
+    "staging": "ENV_PATH=.env.staging pnpm dev",
     "build": "tsc",
     "format": "oxfmt",
     "test": "ENV_PATH=.env.test vitest run",
     "test:watch": "ENV_PATH=.env.test vitest",
     "db:push": "drizzle-kit push",
-    "db:push:test": "ENV_PATH=.env.test drizzle-kit push"
+    "db:push:test": "ENV_PATH=.env.test drizzle-kit push",
+    "db:push:staging": "ENV_PATH=.env.staging drizzle-kit push"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

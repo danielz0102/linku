@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "staging": "vite --mode staging --port 5174",
     "build": "tsc -b && vite build",
     "check-types": "tsc -p tsconfig.app.json --noEmit",
     "format": "oxfmt",
