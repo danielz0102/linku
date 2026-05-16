@@ -23,6 +23,7 @@ export default function PublicProfilePage() {
 
   return (
     <main className="flex size-full items-center justify-center">
+      <title>{`Linku - ${username}`}</title>
       {isLoading && <p className="text-muted animate-pulse">Loading...</p>}
 
       {!user && !isLoading && (

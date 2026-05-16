@@ -10,6 +10,7 @@ export default function LoginPage() {
 
   return (
     <main className="flex size-full flex-col items-center justify-center">
+      <title>Linku - Log In</title>
       <div className="bg-surface shadow-foreground/10 space-y-4 rounded-lg px-16 py-8 shadow">
         <h1 className="title text-center">Welcome back!</h1>
         <LoginForm
