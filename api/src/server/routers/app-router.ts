@@ -7,6 +7,9 @@ import { userRouter } from "./user-router.ts"
 
 export const appRouter = Router()
 
+appRouter.get("/health", (_, res) => {
+  res.sendStatus(200)
+})
 appRouter.use("/session", sessionRouter)
 appRouter.use("/users", userRouter)
 appRouter.use("/chats", chatRouter)
