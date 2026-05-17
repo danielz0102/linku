@@ -2,11 +2,10 @@ import { useRef } from "react"
 
 import { Dialog } from "~/shared/components/dialog"
 import { ProfileAvatar } from "~/shared/components/profile-avatar"
-import { uploadFile } from "~/shared/upload-file"
 
 import { useAuthenticatedUser } from "../../context/user-context"
 import { User } from "../../domain/user"
-import { getProfilePictureUploadSignature } from "./api/get-cloudinary-signature"
+import { uploadProfilePicture } from "./api/get-cloudinary-signature"
 import { updateProfilePicture } from "./api/update-profile-picture"
 import { updateUser } from "./api/update-user"
 import { ProfileCard } from "./components/profile-card"
@@ -33,8 +32,7 @@ export default function ProfilePage() {
   }
 
   const handlePictureSubmit: (file: File) => Promise<void> = async (file) => {
-    const uploadSignature = await getProfilePictureUploadSignature()
-    const { url, public_id } = await uploadFile(file, uploadSignature)
+    const { url, public_id } = await uploadProfilePicture(file)
 
     await updateProfilePicture({ publicId: public_id, publicUrl: url })
 
