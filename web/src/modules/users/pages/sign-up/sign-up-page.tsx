@@ -22,12 +22,11 @@ export default function SignUpPage() {
             })
 
             if (!user) {
-              return false
+              return { error: "USERNAME_TAKEN" }
             }
 
             setUser(user)
             await navigate("/")
-            return true
           }}
         />
         <p className="text-foreground/70 text-center text-sm">
