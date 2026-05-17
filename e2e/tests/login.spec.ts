@@ -14,7 +14,7 @@ test("logs in successfully with valid credentials", async ({ page, registeredUse
   await passwordInput.fill(password)
   await loginButton.click()
 
-  await expect(page).toHaveTitle(/Home/)
+  await expect(page.getByText("My Chats")).toBeVisible()
 })
 
 test("fails to login with invalid credentials", async ({ page }) => {
