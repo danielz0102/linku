@@ -15,6 +15,7 @@ export default defineConfig({
   test: {
     projects: [
       {
+        extends: true,
         test: {
           include: ["./tests/components/**/*.test.tsx"],
           globals: true,
