@@ -9,7 +9,9 @@
     "build": "tsc -b && vite build",
     "check-types": "tsc -p tsconfig.app.json --noEmit",
     "format": "oxfmt",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:browser:watch": "vitest --project components --browser.headless",
+    "test:browser": "vitest run --project components --browser.headless"
   },
   "dependencies": {
     "@fontsource-variable/nunito-sans": "^5.2.7",
@@ -35,9 +37,12 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/browser-playwright": "^4.1.6",
     "babel-plugin-react-compiler": "^1.0.0",
     "tailwindcss": "^4.2.2",
     "typescript": "~5.9.3",
-    "vite": "^8.0.8"
+    "vite": "^8.0.8",
+    "vitest": "^4.1.6",
+    "vitest-browser-react": "^2.2.0"
   }
 }
