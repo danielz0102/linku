@@ -4,7 +4,7 @@ import { RedisStore } from "rate-limit-redis"
 import { redisClient } from "#db/redis/redis-client.ts"
 
 const loginRateLimitStore = new RedisStore({
-  sendCommand: (...args: string[]) => redisClient.sendCommand(args),
+  sendCommand: (...args) => redisClient.sendCommand(args),
 })
 
 export const loginRateLimitMiddleware = rateLimit({
