@@ -1,11 +1,13 @@
 import { API_URL } from "~/env"
+import { Result } from "~/shared/result"
 
 import { User } from "../../domain/user"
+import type { LoginError } from "./login-types"
 
 export async function login(data: {
   username: string
   password: string
-}): Promise<User | undefined> {
+}): Promise<Result<User, LoginError>> {
   const res = await fetch(`${API_URL}/session`, {
     credentials: "include",
     method: "POST",
@@ -17,12 +19,16 @@ export async function login(data: {
 
   if (!res.ok) {
     if (res.status === 401) {
-      return
+      return Result.fail("INVALID_CREDENTIALS")
+    }
+
+    if (res.status === 429) {
+      return Result.fail("RATE_LIMITED")
     }
 
     throw new Error("Failed to login")
   }
 
   const userData = await res.json()
-  return new User(userData)
+  return Result.ok(new User(userData))
 }
