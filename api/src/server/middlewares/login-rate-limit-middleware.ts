@@ -11,7 +11,5 @@ export const loginRateLimitMiddleware = rateLimit({
   windowMs: 1000 * 60 * 5,
   limit: 5,
   store: loginRateLimitStore,
-  handler: (_req, res) => {
-    res.status(429).json({ message: "Too many attempts. Try again later" })
-  },
+  message: "Too many attempts. Try again later",
 })
