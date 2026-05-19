@@ -10,7 +10,6 @@ const loginRateLimitStore = new RedisStore({
 export const loginRateLimitMiddleware = rateLimit({
   windowMs: 1000 * 60 * 5,
   limit: 5,
-  keyGenerator: (req) => req.ip ?? req.socket.remoteAddress ?? "unknown",
   store: loginRateLimitStore,
   handler: (_req, res) => {
     res.status(429).json({ message: "Too many attempts. Try again later" })
