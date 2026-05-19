@@ -11,6 +11,7 @@ const envSchema = z.object({
   SALT: z.coerce.number().default(15),
 
   REDIS_URL: z.url(),
+  RATE_LIMIT_ENABLED: z.coerce.boolean().default(true),
   SESSION_SECRET: z.string().min(32),
   SESSION_COOKIE_IS_HTTPS: z.coerce.boolean().default(true),
 
@@ -26,6 +27,7 @@ export const {
   SALT,
 
   REDIS_URL,
+  RATE_LIMIT_ENABLED,
   SESSION_SECRET,
   SESSION_COOKIE_IS_HTTPS,
 
