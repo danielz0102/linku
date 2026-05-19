@@ -17,12 +17,11 @@ export default function LoginPage() {
             const user = await login(data)
 
             if (!user) {
-              return false
+              return { error: "INVALID_CREDENTIALS" }
             }
 
             setUser(user)
             await navigate("/")
-            return true
           }}
         />
         <p className="text-foreground/70 text-center text-sm">
