@@ -37,12 +37,12 @@ test.describe("Login Page", () => {
     const passwordInput = page.getByLabel("Password")
     const loginButton = page.getByRole("button", { name: "Login" })
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 6; i++) {
       await usernameInput.fill("invalid_user")
       await passwordInput.fill("invalid_password")
       await loginButton.click()
     }
 
-    await expect(page.getByRole("alert")).toContainText(/Too many attempts/i)
+    await expect(page.getByRole("alert")).toContainText("Too many attempts. Try again later")
   })
 })

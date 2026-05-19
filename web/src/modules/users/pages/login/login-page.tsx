@@ -14,13 +14,13 @@ export default function LoginPage() {
         <h1 className="title text-center">Welcome back!</h1>
         <LoginForm
           onSubmit={async (data) => {
-            const user = await login(data)
+            const result = await login(data)
 
-            if (!user) {
-              return { error: "INVALID_CREDENTIALS" }
+            if (!result.ok) {
+              return { error: result.error }
             }
 
-            setUser(user)
+            setUser(result.data)
             await navigate("/")
           }}
         />

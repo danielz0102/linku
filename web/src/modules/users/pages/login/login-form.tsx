@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form"
 import { FormButton } from "~/shared/components/form-button"
 import { FormField } from "~/shared/components/form-field"
 
-type LoginError = "INVALID_CREDENTIALS"
+import type { LoginError } from "./login-types"
 
 interface LoginFormProps {
   onSubmit: (data: {
@@ -33,7 +33,12 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         const result = await onSubmit(data)
 
         if (result?.error) {
-          setError("root", { message: "Invalid credentials" })
+          const message =
+            result.error === "RATE_LIMITED"
+              ? "Too many attempts. Try again later"
+              : "Invalid credentials"
+
+          setError("root", { message })
         }
       })}
     >
