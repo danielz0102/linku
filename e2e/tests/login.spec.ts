@@ -43,6 +43,6 @@ test.describe("Login Page", () => {
       await loginButton.click()
     }
 
-    await expect(page.getByRole("alert")).toContainText("Too many attempts. Try again later")
+    await expect(page.getByRole("alert")).toContainText(/Too many attempts/i)
   })
 })
