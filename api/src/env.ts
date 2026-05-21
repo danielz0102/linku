@@ -13,7 +13,7 @@ const envSchema = z.object({
 
   REDIS_URL: z.url(),
   SESSION_SECRET: z.string().min(32),
-  SESSION_COOKIE_IS_HTTPS: z.stringbool().default(true),
+  SESSION_COOKIE_IS_SECURE: z.stringbool().default(true),
 
   CLOUDINARY_NAME: z.string().nonempty(),
   CLOUDINARY_API_KEY: z.string().nonempty(),
@@ -29,7 +29,7 @@ export const {
 
   REDIS_URL,
   SESSION_SECRET,
-  SESSION_COOKIE_IS_HTTPS,
+  SESSION_COOKIE_IS_SECURE,
 
   CLOUDINARY_API_KEY,
   CLOUDINARY_SECRET,
