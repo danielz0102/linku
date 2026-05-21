@@ -2,7 +2,7 @@
   "name": "e2e",
   "type": "module",
   "scripts": {
-    "test": "RATE_LIMIT_ENABLED= playwright test --project=default",
+    "test": "RATE_LIMIT_ENABLED=false playwright test --project=default",
     "test:rate-limit": "RATE_LIMIT_ENABLED=true playwright test --project=rate-limit"
   },
   "devDependencies": {

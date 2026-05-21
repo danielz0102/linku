@@ -9,11 +9,11 @@ const envSchema = z.object({
   CLIENT_ORIGIN: z.url(),
   DB_URL: z.url(),
   SALT: z.coerce.number().default(15),
-  RATE_LIMIT_ENABLED: z.coerce.boolean().default(true),
+  RATE_LIMIT_ENABLED: z.stringbool().default(true),
 
   REDIS_URL: z.url(),
   SESSION_SECRET: z.string().min(32),
-  SESSION_COOKIE_IS_HTTPS: z.coerce.boolean().default(true),
+  SESSION_COOKIE_IS_HTTPS: z.stringbool().default(true),
 
   CLOUDINARY_NAME: z.string().nonempty(),
   CLOUDINARY_API_KEY: z.string().nonempty(),
