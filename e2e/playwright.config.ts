@@ -27,8 +27,14 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "chromium",
+      name: "default",
       use: { ...devices["Desktop Chrome"] },
+      testIgnore: ["**/*.rate-limit.*"],
+    },
+    {
+      name: "rate-limit",
+      use: { ...devices["Desktop Chrome"] },
+      testMatch: ["**/*.rate-limit.*"],
     },
 
     // {
