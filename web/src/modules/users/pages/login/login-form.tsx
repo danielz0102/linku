@@ -45,7 +45,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
       <div
         role="alert"
         hidden={!errors.root}
-        className="flex items-center justify-center gap-2 rounded bg-red-300 py-1 text-red-700"
+        className="flex items-center justify-center gap-2 rounded bg-red-300 px-2 py-1 text-red-700"
       >
         {errors.root && (
           <>
