@@ -6,7 +6,7 @@ export function useMessages(initialMessages: Message[] = []) {
   const [entryMessages, setEntryMessages] = useState<Message[]>([])
 
   const addMessage = (message: Message) => {
-    setEntryMessages((prev) => [message, ...prev])
+    setEntryMessages((prev) => [...prev, message])
   }
 
   return { messages: [...initialMessages, ...entryMessages], addMessage }
