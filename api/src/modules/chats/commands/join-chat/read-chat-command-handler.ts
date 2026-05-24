@@ -44,7 +44,7 @@ export class ReadChatCommandHandler {
     peerUsername: string
   ): Promise<{ user: MemberLookup | null; peer: MemberLookup | null }> {
     const rows = await this.db
-      .select()
+      .select({ id: users.id, username: users.username })
       .from(users)
       .where(or(eq(users.username, username), eq(users.username, peerUsername)))
 
