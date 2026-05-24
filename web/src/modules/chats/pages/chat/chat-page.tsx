@@ -1,11 +1,10 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { Navigate, useParams } from "react-router"
 
 import { useAuthenticatedUser } from "~/modules/users/context/user-context"
 
 import { Message } from "../../domain/message"
 import { getChatMember } from "./api/get-chat-member"
-import { getMessages } from "./api/get-chat-messages"
 import { uploadAttachment } from "./api/upload-attachment"
 import { ChatHeader } from "./components/chat-header"
 import { MessageForm, type MessageFormData } from "./components/message-form"
@@ -21,30 +20,13 @@ export default function ChatPage() {
   }
 
   const { user } = useAuthenticatedUser()
-
-  const initialMessages = useInfiniteQuery({
-    queryKey: ["messages", username],
-    initialPageParam: undefined as Date | undefined,
-    queryFn: ({ pageParam }) => {
-      return getMessages({ peerUsername: username, before: pageParam })
-    },
-    getNextPageParam: (lastPage) => lastPage.previousCursor,
-    select: (data) => ({
-      pages: [...data.pages].reverse(),
-      pageParams: [...data.pageParams].reverse(),
-    }),
-  })
-
   const peer = useQuery({
     queryKey: ["chat-member", username],
     queryFn: () => getChatMember(username),
     throwOnError: true,
     refetchOnWindowFocus: false,
   })
-
-  const { messages, addMessage } = useMessages(
-    initialMessages.data?.pages.flatMap((p) => p.messages) ?? []
-  )
+  const { messages, addMessage, messagesQuery } = useMessages(username)
   const { sendMessage } = useChatEvents(username, {
     onNewMessage: (msg) => addMessage(msg),
   })
@@ -79,10 +61,10 @@ export default function ChatPage() {
 
       <MessageList
         className="flex-1"
-        state={initialMessages.isLoading ? "loading" : messages.length === 0 ? "empty" : "filled"}
+        state={messagesQuery.isLoading ? "loading" : messages.length === 0 ? "empty" : "filled"}
         onEndReached={async () => {
-          if (!initialMessages.isFetching && initialMessages.hasNextPage) {
-            await initialMessages.fetchNextPage()
+          if (!messagesQuery.isFetching && messagesQuery.hasNextPage) {
+            await messagesQuery.fetchNextPage()
           }
         }}
         messages={messages.map((m) => ({
@@ -94,7 +76,7 @@ export default function ChatPage() {
       />
 
       <div className="flex items-center justify-center *:w-full *:max-w-3xl">
-        {!initialMessages.isLoading && <MessageForm onSubmit={handleSubmit} />}
+        {!messagesQuery.isLoading && <MessageForm onSubmit={handleSubmit} />}
       </div>
     </main>
   )
