@@ -4,9 +4,11 @@ import type { SendMessageEventHandler } from "#modules/chats/commands/send-messa
 import type { MessageData } from "#modules/chats/dtos/message-data.ts"
 
 import type { JoinChatEventHandler } from "../modules/chats/commands/join-chat/join-chat-event-handler.ts"
+import type { ReadChatEventHandler } from "../modules/chats/commands/join-chat/read-chat-event-handler.ts"
 
 export interface ClientToServerEvents {
   join_chat: JoinChatEventHandler
+  read_chat: ReadChatEventHandler
   send_message: SendMessageEventHandler
 }
 

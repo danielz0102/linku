@@ -2,10 +2,17 @@ import io, { type Socket } from "socket.io-client"
 
 import { SOCKET_URL } from "~/env"
 
-import type { ExceptionEvent, JoinChatEvent, NewMessageEvent, SendMessageEvent } from "./events"
+import type {
+  ExceptionEvent,
+  JoinChatEvent,
+  NewMessageEvent,
+  ReadChatEvent,
+  SendMessageEvent,
+} from "./events"
 
 export interface ClientToServerEvents {
   join_chat: JoinChatEvent
+  read_chat: ReadChatEvent
   send_message: SendMessageEvent
 }
 

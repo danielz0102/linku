@@ -6,6 +6,7 @@ type SendMessageError = {
 }
 
 export type JoinChatEvent = (data: { peerUsername: string }) => void
+export type ReadChatEvent = () => void
 export type SendMessageEvent = (
   message: {
     text?: string

@@ -26,6 +26,7 @@ export function useChatEvents(peerUsername: string, { onNewMessage }: UseChatEve
           createdAt: data.createdAt,
         })
       )
+      socket.emit("read_chat")
     })
 
     return () => {
