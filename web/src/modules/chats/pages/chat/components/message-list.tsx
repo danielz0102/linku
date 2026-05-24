@@ -18,7 +18,7 @@ type MessageListProps = {
 
 export function MessageList({ state, className, messages, onEndReached }: MessageListProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const { ref } = useInView({
+  const { ref: topRef } = useInView({
     threshold: 0.1,
     onChange: (inView) => {
       if (inView) {
@@ -54,7 +54,7 @@ export function MessageList({ state, className, messages, onEndReached }: Messag
       </p>
       {messages.map((message) => (
         <MessageBubble
-          ref={message.id === messages[0]?.id ? ref : null}
+          ref={message.id === messages[0]?.id ? topRef : null}
           key={message.id}
           text={message.text}
           attachmentUrl={message.attachmentUrl}
