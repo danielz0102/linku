@@ -13,7 +13,7 @@ type MemberLookup = {
   id: string
 }
 
-export class UpdateChatReadCommandHandler {
+export class ReadChatCommandHandler {
   constructor(private readonly db: NodePgDatabase) {}
 
   async execute(cmd: UpdateChatReadCommand): Promise<void> {

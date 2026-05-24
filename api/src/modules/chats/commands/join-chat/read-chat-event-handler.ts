@@ -4,11 +4,11 @@ import { db } from "#db/drizzle/drizzle-client.ts"
 import { users } from "#db/drizzle/schemas.ts"
 import type { AsyncEventHandlerBuilder } from "#shared/socket-io-server-types.ts"
 
-import { UpdateChatReadCommandHandler } from "./update-chat-read-command-handler.ts"
+import { ReadChatCommandHandler } from "./read-chat-command-handler.ts"
 
 export type ReadChatEventHandler = () => void
 
-const updateChatRead = new UpdateChatReadCommandHandler(db)
+const updateChatRead = new ReadChatCommandHandler(db)
 
 export const onReadChat: AsyncEventHandlerBuilder<ReadChatEventHandler> = async ({ socket }) => {
   const currentUsername = await db
