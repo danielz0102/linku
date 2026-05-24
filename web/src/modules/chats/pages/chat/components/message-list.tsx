@@ -37,7 +37,7 @@ export function MessageList({ state, className, messages, onEndReached }: Messag
     }
 
     container.scrollTo({ top: container.scrollHeight })
-  }, [state])
+  }, [state, messages])
 
   return (
     <div
