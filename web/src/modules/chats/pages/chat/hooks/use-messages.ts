@@ -20,6 +20,7 @@ export function useMessages(username: string) {
       pages: [...data.pages].reverse(),
       pageParams: [...data.pageParams].reverse(),
     }),
+    refetchOnWindowFocus: false,
   })
 
   const { sendMessage } = useChatEvents(username, {
