@@ -9,7 +9,6 @@ import { uploadAttachment } from "./api/upload-attachment"
 import { ChatHeader } from "./components/chat-header"
 import { MessageForm, type MessageFormData } from "./components/message-form"
 import { MessageList } from "./components/message-list"
-import { useChatEvents } from "./hooks/use-chat-events"
 import { useMessages } from "./hooks/use-messages"
 
 export default function ChatPage() {
@@ -26,10 +25,7 @@ export default function ChatPage() {
     throwOnError: true,
     refetchOnWindowFocus: false,
   })
-  const { messages, addMessage, messagesQuery } = useMessages(username)
-  const { sendMessage } = useChatEvents(username, {
-    onNewMessage: (msg) => addMessage(msg),
-  })
+  const { messages, addMessage, sendMessage, messagesQuery } = useMessages(username)
 
   if (peer.data === null) {
     return <Navigate to="/404" replace />

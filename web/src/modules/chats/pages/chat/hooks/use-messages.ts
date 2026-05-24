@@ -4,6 +4,7 @@ import { useState } from "react"
 import type { Message } from "~/modules/chats/domain/message"
 
 import { getMessages } from "../api/get-chat-messages"
+import { useChatEvents } from "./use-chat-events"
 
 export function useMessages(username: string) {
   const [entryMessages, setEntryMessages] = useState<Message[]>([])
@@ -21,11 +22,20 @@ export function useMessages(username: string) {
     }),
   })
 
+  const { sendMessage } = useChatEvents(username, {
+    onNewMessage: (msg) => addMessage(msg),
+  })
+
   const initialMessages = messagesQuery.data?.pages.flatMap((p) => p.messages) ?? []
 
   const addMessage = (message: Message) => {
     setEntryMessages((prev) => [...prev, message])
   }
 
-  return { messages: [...initialMessages, ...entryMessages], addMessage, messagesQuery }
+  return {
+    messages: [...initialMessages, ...entryMessages],
+    addMessage,
+    sendMessage,
+    messagesQuery,
+  }
 }
