@@ -9,7 +9,7 @@ type SaveParams = {
   filePublicId?: string
 }
 
-export class MessageRepository {
+export class MessageStorage {
   constructor(private readonly db: NodePgDatabase) {}
 
   async save({ message, peerId, filePublicId }: SaveParams): Promise<void> {

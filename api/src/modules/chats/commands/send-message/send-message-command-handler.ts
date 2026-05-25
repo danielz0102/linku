@@ -4,7 +4,7 @@ import { findChatId } from "#modules/chats/database/find-chat-id.ts"
 import { Message } from "#modules/chats/domain/message.ts"
 import type { MessageData } from "#modules/chats/dtos/message-data.ts"
 
-import { MessageRepository } from "./message-repository.ts"
+import { MessageStorage } from "./message-storage.ts"
 
 type SendMessageCommand = {
   senderId: string
@@ -17,10 +17,10 @@ type SendMessageCommand = {
 }
 
 export class SendMessageCommandHandler {
-  private messages: MessageRepository
+  private messages: MessageStorage
 
   constructor(private readonly db: NodePgDatabase) {
-    this.messages = new MessageRepository(db)
+    this.messages = new MessageStorage(db)
   }
 
   async execute(cmd: SendMessageCommand): Promise<MessageData> {
