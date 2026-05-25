@@ -10,12 +10,16 @@ type SaveParams = {
 }
 
 export class MessageStorage {
+  private tx: NodePgDatabase | null = null
+
   constructor(private readonly db: NodePgDatabase) {}
 
   async save({ message, peerId, filePublicId }: SaveParams): Promise<void> {
     await this.db.transaction(async (tx) => {
+      this.tx = tx
+
       if (!message.chatId) {
-        message.chatId = await this.createChat(tx, message.senderId, peerId)
+        message.chatId = await this.createChat(message.senderId, peerId)
       }
 
       let attachmentId: string | null = null
@@ -40,14 +44,18 @@ export class MessageStorage {
     })
   }
 
-  private async createChat(db: NodePgDatabase, senderId: string, peerId: string) {
-    const chat = await db
+  private async createChat(senderId: string, peerId: string) {
+    if (!this.tx) {
+      throw new Error("Transaction not initialized")
+    }
+
+    const chat = await this.tx
       .insert(chats)
       .values({})
       .returning({ id: chats.id })
       .then((rows) => rows[0]!)
 
-    await db.insert(chatMembers).values([
+    await this.tx.insert(chatMembers).values([
       { chatId: chat.id, userId: senderId },
       { chatId: chat.id, userId: peerId },
     ])
