@@ -15,7 +15,7 @@ describe("Send Message Command Handler", () => {
 
     const result = await sendMessage.execute({
       senderId: sender.id,
-      peerUsername: peer.username,
+      peerId: peer.id,
       text: "Hello there",
     })
 
@@ -29,16 +29,16 @@ describe("Send Message Command Handler", () => {
     })
   })
 
-  it("fails if peer does not exist", async ({ createUser }) => {
+  it("throws if peer does not exist", async ({ createUser }) => {
     const sender = await createUser()
 
-    const result = await sendMessage.execute({
-      senderId: sender.id,
-      peerUsername: `missing-${randomUUID()}`,
-      text: "Hello",
-    })
-
-    expect(result.ok).toBe(false)
+    await expect(() =>
+      sendMessage.execute({
+        senderId: sender.id,
+        peerId: `missing-${randomUUID()}`,
+        text: "Hello",
+      })
+    ).rejects.toThrow()
   })
 
   it("throws if sender does not exist", async ({ createUser }) => {
@@ -47,7 +47,7 @@ describe("Send Message Command Handler", () => {
     await expect(() =>
       sendMessage.execute({
         senderId: randomUUID(),
-        peerUsername: peer.username,
+        peerId: peer.username,
         text: "Hello",
       })
     ).rejects.toThrow()

@@ -48,7 +48,7 @@ export const onSendMessage: EventHandlerBuilder<SendMessageEventHandler> = ({ so
 
     const result = await sendMessage.execute({
       senderId: socket.data.userId,
-      peerUsername: socket.data.chat.peerUsername,
+      peerId: socket.data.chat.peerId,
       attachment: validation.data.attachment,
       text: validation.data.text,
     })
