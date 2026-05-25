@@ -21,6 +21,9 @@ export const onJoinChat: AsyncEventHandlerBuilder<JoinChatEventHandler> = async 
     const roomId = [currentUsername, peerUsername].sort().join("_")
     socket.data.chat = { roomId, peerUsername }
     await socket.join(roomId)
-    void updateChatRead.execute({ username: currentUsername, peerUsername })
+    void updateChatRead.execute({
+      userId: socket.data.userId,
+      peerUsername,
+    })
   }
 }
