@@ -1,10 +1,9 @@
 import type { Server, Socket } from "socket.io"
 
+import type { JoinChatEventHandler } from "#modules/chats/commands/read-chat/join-chat-event-handler.ts"
+import type { ReadChatEventHandler } from "#modules/chats/commands/read-chat/read-chat-event-handler.ts"
 import type { SendMessageEventHandler } from "#modules/chats/commands/send-message/send-message-event-handler.ts"
 import type { MessageData } from "#modules/chats/dtos/message-data.ts"
-
-import type { JoinChatEventHandler } from "../modules/chats/commands/read-chat/join-chat-event-handler.ts"
-import type { ReadChatEventHandler } from "../modules/chats/commands/read-chat/read-chat-event-handler.ts"
 
 export interface ClientToServerEvents {
   join_chat: JoinChatEventHandler
