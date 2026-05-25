@@ -14,10 +14,7 @@ export class ReadChatCommandHandler {
 
   async execute(cmd: UpdateChatReadCommand): Promise<void> {
     const chatId = await findChatId(this.db, cmd.userId, cmd.peerId)
-
-    if (!chatId) {
-      throw new Error("Chat not found")
-    }
+    if (!chatId) return
 
     await this.db
       .update(chatMembers)
