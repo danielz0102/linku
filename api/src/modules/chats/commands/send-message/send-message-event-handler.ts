@@ -5,17 +5,12 @@ import type { EventHandlerBuilder } from "#shared/socket-io-server-types.ts"
 
 import { SendMessageCommandHandler } from "./send-message-command-handler.ts"
 
-type SendMessageError = {
-  code: "PEER_NOT_FOUND" | "INVALID_MESSAGE"
-  details?: unknown
-}
-
 export type SendMessageEventHandler = (
   message: {
     text?: string
     attachment?: { url: string; public_id: string }
   },
-  callback: (error?: SendMessageError) => void
+  callback: (error?: { code: "INVALID_MESSAGE"; details: unknown }) => void
 ) => void
 
 const sendMessageDataSchema = z
@@ -46,17 +41,13 @@ export const onSendMessage: EventHandlerBuilder<SendMessageEventHandler> = ({ so
       return cb({ code: "INVALID_MESSAGE", details: validation.error.issues })
     }
 
-    const result = await sendMessage.execute({
+    const message = await sendMessage.execute({
       senderId: socket.data.userId,
       peerId: socket.data.chat.peerId,
       attachment: validation.data.attachment,
       text: validation.data.text,
     })
 
-    if (!result.ok) {
-      return cb({ code: "PEER_NOT_FOUND" })
-    }
-
-    socket.to(socket.data.chat.roomId).emit("new_message", result.data)
+    socket.to(socket.data.chat.roomId).emit("new_message", message)
   }
 }

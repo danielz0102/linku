@@ -13,19 +13,18 @@ describe("Send Message Command Handler", () => {
   it("returns the new message when sender and peer exist", async ({ createUser }) => {
     const [sender, peer] = await Promise.all([createUser(), createUser()])
 
-    const result = await sendMessage.execute({
+    const message = await sendMessage.execute({
       senderId: sender.id,
       peerId: peer.id,
       text: "Hello there",
     })
 
-    assert(result.ok)
-    expect(result.data.text).toBe("Hello there")
-    expect(result.data.senderId).toBe(sender.id)
-    expect(result.data.attachmentUrl).toBeNull()
+    expect(message.text).toBe("Hello there")
+    expect(message.senderId).toBe(sender.id)
+    expect(message.attachmentUrl).toBeNull()
 
     onTestFinished(async () => {
-      await db.delete(chats).where(eq(chats.id, result.data.chatId))
+      await db.delete(chats).where(eq(chats.id, message.chatId))
     })
   })
 

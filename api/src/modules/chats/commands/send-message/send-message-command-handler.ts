@@ -5,7 +5,6 @@ import { alias } from "drizzle-orm/pg-core"
 import { chatMembers } from "#db/drizzle/schemas.ts"
 import { Message } from "#modules/chats/domain/message.ts"
 import type { MessageData } from "#modules/chats/dtos/message-data.ts"
-import { Result } from "#shared/result.ts"
 
 import { MessageRepository } from "./message-repository.ts"
 
@@ -19,8 +18,6 @@ type SendMessageCommand = {
   }
 }
 
-type SendMessageError = "PEER_NOT_FOUND"
-
 export class SendMessageCommandHandler {
   private messages: MessageRepository
 
@@ -28,7 +25,7 @@ export class SendMessageCommandHandler {
     this.messages = new MessageRepository(db)
   }
 
-  async execute(cmd: SendMessageCommand): Promise<Result<MessageData, SendMessageError>> {
+  async execute(cmd: SendMessageCommand): Promise<MessageData> {
     const chatId = await this.findChatId(cmd.senderId, cmd.peerId)
     const message = Message.create({
       chatId,
@@ -49,14 +46,14 @@ export class SendMessageCommandHandler {
       })
     }
 
-    return Result.ok({
+    return {
       id: message.id,
       chatId: message.chatId,
       senderId: message.senderId,
       text: message.text,
       attachmentUrl: message.attachmentUrl,
       createdAt: message.createdAt.toISOString(),
-    })
+    }
   }
 
   private async findChatId(senderId: string, peerId: string): Promise<string | null> {
