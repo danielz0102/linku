@@ -46,7 +46,7 @@ describe("Send Message Command Handler", () => {
     await expect(() =>
       sendMessage.execute({
         senderId: randomUUID(),
-        peerId: peer.username,
+        peerId: peer.id,
         text: "Hello",
       })
     ).rejects.toThrow()
