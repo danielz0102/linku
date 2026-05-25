@@ -21,10 +21,8 @@ export const it = base.extend("createUser", async ({}, { onCleanup }) => {
   const pictureIds: string[] = []
 
   onCleanup(async () => {
-    await Promise.all([
-      db.delete(users).where(inArray(users.id, userIds)),
-      db.delete(files).where(inArray(files.id, pictureIds)),
-    ])
+    await db.delete(users).where(inArray(users.id, userIds))
+    await db.delete(files).where(inArray(files.id, pictureIds))
   })
 
   return async (overrides: UserOverrides = {}) => {
