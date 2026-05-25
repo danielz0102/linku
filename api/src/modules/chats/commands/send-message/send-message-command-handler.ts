@@ -1,8 +1,6 @@
-import { and, eq } from "drizzle-orm"
 import type { NodePgDatabase } from "drizzle-orm/node-postgres"
-import { alias } from "drizzle-orm/pg-core"
 
-import { chatMembers } from "#db/drizzle/schemas.ts"
+import { findChatId } from "#modules/chats/database/find-chat-id.ts"
 import { Message } from "#modules/chats/domain/message.ts"
 import type { MessageData } from "#modules/chats/dtos/message-data.ts"
 
@@ -26,7 +24,7 @@ export class SendMessageCommandHandler {
   }
 
   async execute(cmd: SendMessageCommand): Promise<MessageData> {
-    const chatId = await this.findChatId(cmd.senderId, cmd.peerId)
+    const chatId = await findChatId(this.db, cmd.senderId, cmd.peerId)
     const message = Message.create({
       chatId,
       senderId: cmd.senderId,
@@ -54,23 +52,5 @@ export class SendMessageCommandHandler {
       attachmentUrl: message.attachmentUrl,
       createdAt: message.createdAt.toISOString(),
     }
-  }
-
-  private async findChatId(senderId: string, peerId: string): Promise<string | null> {
-    const selfMember = alias(chatMembers, "self_member")
-    const peerMember = alias(chatMembers, "peer_member")
-
-    const row = await this.db
-      .select({ chatId: selfMember.chatId })
-      .from(selfMember)
-      .innerJoin(
-        peerMember,
-        and(eq(peerMember.chatId, selfMember.chatId), eq(peerMember.userId, peerId))
-      )
-      .where(eq(selfMember.userId, senderId))
-      .limit(1)
-      .then((rows) => rows[0])
-
-    return row ? row.chatId : null
   }
 }
