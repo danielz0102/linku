@@ -7,7 +7,7 @@ import { onReadChat } from "../../modules/chats/commands/join-chat/read-chat-eve
 export const onConnection = (io: AppServer) => async (socket: AppSocket) => {
   const ctx = { socket, io }
 
-  socket.on("join_chat", await onJoinChat(ctx))
+  socket.on("join_chat", onJoinChat(ctx))
   socket.on("read_chat", onReadChat(ctx))
   socket.on("send_message", onSendMessage(ctx))
 }

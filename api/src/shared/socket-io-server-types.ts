@@ -19,7 +19,7 @@ export interface ServerToClientEvents {
 
 export interface SocketData {
   userId: string
-  chat?: { roomId: string; peerUsername: string }
+  chat?: { roomId: string; peerId: string; peerUsername: string }
 }
 
 export type AppSocket = Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>
@@ -27,4 +27,3 @@ export type AppServer = Server<ClientToServerEvents, ServerToClientEvents, {}, S
 export type Context = { socket: AppSocket; io: AppServer }
 
 export type EventHandlerBuilder<T> = (ctx: Context) => T
-export type AsyncEventHandlerBuilder<T> = (ctx: Context) => Promise<T>

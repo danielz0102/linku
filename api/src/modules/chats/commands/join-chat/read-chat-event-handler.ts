@@ -15,7 +15,7 @@ export const onReadChat: EventHandlerBuilder<ReadChatEventHandler> = ({ socket }
 
     void updateChatRead.execute({
       userId: socket.data.userId,
-      peerUsername: socket.data.chat.peerUsername,
+      peerUsername: socket.data.chat.peerId,
     })
   }
 }
