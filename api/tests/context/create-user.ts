@@ -27,20 +27,16 @@ export const it = base.extend("createUser", async ({}, { onCleanup }) => {
     ])
   })
 
-  return async (overrides: UserOverrides = {}) => {
-    const data: Required<UserOverrides> = {
-      username: overrides.username ?? faker.internet.username(),
-      password: overrides.password ?? faker.internet.password(),
-      firstName: overrides.firstName ?? faker.person.firstName(),
-      lastName: overrides.lastName ?? faker.person.lastName(),
-      profilePictureUrl: null,
-    }
+  return async (data: UserOverrides = {}) => {
+    data.firstName ??= faker.person.firstName()
+    data.lastName ??= faker.person.lastName()
+    data.username ??= faker.internet.username()
+    data.password ??= faker.internet.password()
 
     let pictureId: string | null = null
 
-    if (overrides.profilePictureUrl === undefined) {
+    if (data.profilePictureUrl === undefined) {
       data.profilePictureUrl = faker.image.avatar()
-
       pictureId = await db
         .insert(files)
         .values({ publicId: randomUUID(), publicUrl: data.profilePictureUrl })
