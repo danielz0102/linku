@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto"
+
 import { faker } from "@faker-js/faker"
 import bcrypt from "bcryptjs"
 import { inArray } from "drizzle-orm"
@@ -41,10 +43,7 @@ export const it = base.extend("createUser", async ({}, { onCleanup }) => {
 
       pictureId = await db
         .insert(files)
-        .values({
-          publicId: faker.string.alphanumeric({ length: { min: 10, max: 20 } }),
-          publicUrl: data.profilePictureUrl,
-        })
+        .values({ publicId: randomUUID(), publicUrl: data.profilePictureUrl })
         .returning({ id: files.id })
         .then((r) => r[0]!.id)
 
