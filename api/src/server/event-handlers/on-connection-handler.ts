@@ -1,8 +1,8 @@
 import { onSendMessage } from "#modules/chats/commands/send-message/send-message-event-handler.ts"
 import type { AppServer, AppSocket } from "#shared/socket-io-server-types.ts"
 
-import { onJoinChat } from "../../modules/chats/commands/join-chat/join-chat-event-handler.ts"
-import { onReadChat } from "../../modules/chats/commands/join-chat/read-chat-event-handler.ts"
+import { onJoinChat } from "../../modules/chats/commands/read-chat/join-chat-event-handler.ts"
+import { onReadChat } from "../../modules/chats/commands/read-chat/read-chat-event-handler.ts"
 
 export const onConnection = (io: AppServer) => async (socket: AppSocket) => {
   const ctx = { socket, io }
