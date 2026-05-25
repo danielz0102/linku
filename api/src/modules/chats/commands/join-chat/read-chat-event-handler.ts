@@ -13,9 +13,6 @@ export const onReadChat: EventHandlerBuilder<ReadChatEventHandler> = ({ socket }
       return socket.emit("exception", { message: "You must join a chat before marking it as read" })
     }
 
-    void updateChatRead.execute({
-      userId: socket.data.userId,
-      peerUsername: socket.data.chat.peerId,
-    })
+    void updateChatRead.execute({ userId: socket.data.userId, peerId: socket.data.chat.peerId })
   }
 }

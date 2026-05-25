@@ -19,7 +19,7 @@ export interface ServerToClientEvents {
 
 export interface SocketData {
   userId: string
-  chat?: { roomId: string; peerId: string; peerUsername: string }
+  chat?: { roomId: string; peerId: string }
 }
 
 export type AppSocket = Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>
