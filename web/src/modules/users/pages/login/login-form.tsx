@@ -22,7 +22,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     setError,
   } = useForm<LoginFormInputs>()
 
@@ -80,7 +80,9 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         )}
       </FormField>
 
-      <FormButton className="mt-4">Login</FormButton>
+      <FormButton className="mt-4" loading={isSubmitting}>
+        Login
+      </FormButton>
     </form>
   )
 }

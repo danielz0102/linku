@@ -18,7 +18,7 @@ type UpdateUserFormInputs = {
 export function UpdateUserForm({ initialData, onSubmit }: UpdateUserFormProps) {
   const {
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     handleSubmit,
     setError,
   } = useForm<UpdateUserFormInputs>({
@@ -79,7 +79,9 @@ export function UpdateUserForm({ initialData, onSubmit }: UpdateUserFormProps) {
         )}
       </FormField>
 
-      <FormButton className="mt-4">Update Profile</FormButton>
+      <FormButton className="mt-4" loading={isSubmitting}>
+        Update Profile
+      </FormButton>
     </form>
   )
 }

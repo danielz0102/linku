@@ -26,7 +26,7 @@ export function SignUpForm({ onSubmit }: SignUpFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     setError,
   } = useForm<SignUpInputs>()
 
@@ -117,7 +117,7 @@ export function SignUpForm({ onSubmit }: SignUpFormProps) {
         )}
       </FormField>
 
-      <FormButton>Sign up</FormButton>
+      <FormButton loading={isSubmitting}>Sign up</FormButton>
     </form>
   )
 }
