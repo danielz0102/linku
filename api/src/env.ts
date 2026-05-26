@@ -1,8 +1,12 @@
-import { loadEnvFile, env } from "node:process"
+import { env, loadEnvFile } from "node:process"
 
 import { z } from "zod"
 
-loadEnvFile(getEnvPath())
+const areEnvVarsLoaded = env["PORT"] !== undefined
+
+if (!areEnvVarsLoaded) {
+  loadEnvFile(getEnvPath())
+}
 
 const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
