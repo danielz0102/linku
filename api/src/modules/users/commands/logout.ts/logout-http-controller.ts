@@ -1,5 +1,6 @@
 import type { RequestHandler } from "express"
 
+import { SESSION_COOKIE_IS_SECURE } from "#env.ts"
 import { SESSION_COOKIE_NAME } from "#shared/session.ts"
 
 export const logoutController: RequestHandler = async (req, res) => {
@@ -10,7 +11,11 @@ export const logoutController: RequestHandler = async (req, res) => {
       console.error("Error destroying session:", error)
     }
 
-    res.clearCookie(SESSION_COOKIE_NAME)
+    res.clearCookie(SESSION_COOKIE_NAME, {
+      httpOnly: true,
+      sameSite: SESSION_COOKIE_IS_SECURE ? "none" : "lax",
+      secure: SESSION_COOKIE_IS_SECURE,
+    })
     res.sendStatus(204)
   })
 }
