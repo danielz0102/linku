@@ -26,7 +26,7 @@ export default function SignUpPage() {
             }
 
             setUser(user)
-            await navigate("/")
+            await navigate("/home")
           }}
         />
         <p className="text-foreground/70 text-center text-sm">

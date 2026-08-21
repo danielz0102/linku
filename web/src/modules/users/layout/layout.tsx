@@ -18,7 +18,7 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="flex size-full">
       <Sidebar open={isSidebarOpen} onClose={() => setIsSidebarOpen(false)}>
-        <Sidebar.Link Icon={IconHome} to="/" current={pathname === "/"}>
+        <Sidebar.Link Icon={IconHome} to="/home" current={pathname === "/home"}>
           Home
         </Sidebar.Link>
         <Sidebar.Link Icon={IconUserCircle} to="/profile" current={pathname === "/profile"}>

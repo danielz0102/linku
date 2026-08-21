@@ -5,6 +5,7 @@ import { ProtectedLayout } from "~/modules/users/layout/protected-layout"
 
 const LoginPage = lazy(() => import("~/modules/users/pages/login/login-page"))
 const SignUpPage = lazy(() => import("~/modules/users/pages/sign-up/sign-up-page"))
+const LandingPage = lazy(() => import("~/modules/landing/landing"))
 const HomePage = lazy(() => import("~/modules/chats/pages/home/home-page"))
 const ChatPage = lazy(() => import("~/modules/chats/pages/chat/chat-page.tsx"))
 const ProfilePage = lazy(() => import("~/modules/users/pages/profile/profile-page"))
@@ -18,14 +19,15 @@ export function Router() {
       <Routes>
         <Route path="/log-in" element={<LoginPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
+        <Route path="/" element={<LandingPage />} />
         <Route
           element={
-            <ProtectedLayout redirectTo={<Navigate to="/log-in" replace />}>
+            <ProtectedLayout redirectTo={<Navigate to="/" replace />}>
               <Outlet />
             </ProtectedLayout>
           }
         >
-          <Route index element={<HomePage />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/chat/:username" element={<ChatPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/profile" element={<ProfilePage />} />

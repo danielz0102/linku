@@ -21,7 +21,7 @@ export default function LoginPage() {
             }
 
             setUser(result.data)
-            await navigate("/")
+            await navigate("/home")
           }}
         />
         <p className="text-foreground/70 text-center text-sm">
