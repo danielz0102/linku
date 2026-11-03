@@ -14,7 +14,7 @@ const envSchema = z.object({
   DB_URL: z.url(),
   SALT: z.coerce.number().default(15),
   RATE_LIMIT_ENABLED: z.stringbool().default(true),
-  NODE_ENV: z.enum(["development", "production"]).default("production"),
+  NODE_ENV: z.enum(["development", "production", "test"]).default("production"),
 
   REDIS_URL: z.url(),
   SESSION_SECRET: z.string().min(32),
