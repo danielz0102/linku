@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:18
+    restart: unless-stopped
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: linku
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: linku
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  db-test:
+    image: postgres:18
+    restart: unless-stopped
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: linku
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: linku_test
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:8
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  redis-test:
+    image: redis:8
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_test_data:/data
+
+volumes:
+  postgres_data:
+  postgres_test_data:
+  redis_data:
+  redis_test_data:
