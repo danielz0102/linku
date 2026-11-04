@@ -22,7 +22,8 @@
     "test:watch": "ENV_PATH=.env.test vitest",
     "db:push": "drizzle-kit push",
     "db:push:test": "ENV_PATH=.env.test drizzle-kit push",
-    "db:push:staging": "ENV_PATH=.env.staging drizzle-kit push"
+    "db:push:staging": "ENV_PATH=.env.staging drizzle-kit push",
+    "db:seed": "NODE_OPTIONS='--conditions=source' tsx ./src/db/seed.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
