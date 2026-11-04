@@ -2,7 +2,7 @@
 
 ![Chat interface of Linku](assets/image.png)
 
-Linku is a real-time chat application made with React and Express. It allows users to create an account, personalize their profile, search for other users, and chat with them in real-time.
+[**Linku**](https://linku-web-eight.vercel.app) is a real-time chat application made with React and Express. It allows users to create an account, personalize their profile, search for other users, and chat with them in real-time.
 
 ## Main Features
 
