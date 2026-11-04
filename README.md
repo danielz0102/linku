@@ -1,6 +1,6 @@
 # Linku
 
-![Chat interface of Linku](assets/image.png)
+![Chat interface of Linku. It has a sidebar menu on the left and a chat on the right, with an image of a cute cat](assets/image.png)
 
 [**Linku**](https://linku-web-eight.vercel.app) is a real-time chat application made with React and Express. It allows users to create an account, personalize their profile, search for other users, and chat with them in real-time.
 
@@ -9,7 +9,7 @@
 ### Real-time Chat
 
 <div align="center">
-  <video src="assets/chat.mp4" autoplay loop muted playsinline width="800"></video>
+  <img src="assets/chat.gif" alt="Two users chatting and sending cat images" width="800" />
 </div>
 
 Users can send messages and images to each other. The app uses [Socket.IO](https://socket.io/) to handle real-time communication between the client and the server. When someone sends a message for the first time in a chat, the server stores a room ID. When the other user connects, they are added to the same room, if it exists, and both users are ready to chat in real-time.
