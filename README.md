@@ -1,6 +1,6 @@
 # Linku
 
-![Home Page](home.png)
+![Chat interface of Linku](assets/image.png)
 
 Linku is a real-time chat application.
 
