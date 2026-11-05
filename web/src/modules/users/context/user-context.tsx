@@ -1,4 +1,6 @@
-import { createContext, use, useState } from "react"
+import { createContext, use, useEffect, useState } from "react"
+
+import { Spinner } from "~/shared/components/spinner"
 
 import type { User } from "../domain/user"
 import { whoami } from "./whoami"
@@ -12,10 +14,30 @@ type UserContextValue =
 
 const UserContext = createContext<UserContextValue>(undefined)
 
-const me = await whoami()
+const meRequest = whoami().catch(() => undefined)
 
 export function UserProvider({ children }: React.PropsWithChildren) {
-  const [user, setUser] = useState<User | undefined>(me)
+  const [user, setUser] = useState<User | undefined>(undefined)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    let isMounted = true
+
+    void meRequest.then((me) => {
+      if (!isMounted) return
+
+      setUser(me)
+      setIsLoading(false)
+    })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  if (isLoading) {
+    return <Spinner />
+  }
 
   return <UserContext value={{ user, setUser }}>{children}</UserContext>
 }
