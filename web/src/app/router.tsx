@@ -1,6 +1,7 @@
 import { lazy } from "react"
 import { BrowserRouter, Route, Routes, Navigate, Outlet } from "react-router"
 
+import { GuestLayout } from "~/modules/users/layout/guest-layout"
 import { ProtectedLayout } from "~/modules/users/layout/protected-layout"
 
 const LoginPage = lazy(() => import("~/modules/users/pages/login/login-page"))
@@ -17,9 +18,17 @@ export function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/log-in" element={<LoginPage />} />
-        <Route path="/sign-up" element={<SignUpPage />} />
-        <Route path="/" element={<LandingPage />} />
+        <Route
+          element={
+            <GuestLayout redirectTo={<Navigate to="/home" replace />}>
+              <Outlet />
+            </GuestLayout>
+          }
+        >
+          <Route path="/log-in" element={<LoginPage />} />
+          <Route path="/sign-up" element={<SignUpPage />} />
+          <Route path="/" element={<LandingPage />} />
+        </Route>
         <Route
           element={
             <ProtectedLayout redirectTo={<Navigate to="/" replace />}>
